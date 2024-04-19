@@ -47,15 +47,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isAvaibleForLaunch: 0
+  _zoomRange: {x: 1.65, y: 13}
   _startPoint: {fileID: 562123562793482823}
   _offsetPoint: {fileID: 975270151183045388}
   _characterToLaunch: {fileID: 5537711776234338616}
-  _forceFactor: 5
+  _forceFactor: 3
   _trajectoryDotPrefab: {fileID: 4246235413054643113, guid: 51409ddd559245f47bb63b58abba0737,
     type: 3}
-  _dotsNumber: 5
-  _zoomSpeed: 0.1
-  _minDistanceForZoom: 2
+  _dotsNumber: 100
+  _zoomSpeed: 100
+  _minDistanceForZoom: 10
 --- !u!1 &7080606034121031811
 GameObject:
   m_ObjectHideFlags: 0
@@ -83,7 +84,7 @@ Transform:
   m_GameObject: {fileID: 7080606034121031811}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.03, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -201,6 +202,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: YBot
+      objectReference: {fileID: 0}
+    - target: {fileID: 8322040185008855113, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

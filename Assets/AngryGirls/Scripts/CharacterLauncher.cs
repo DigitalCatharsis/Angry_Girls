@@ -11,14 +11,15 @@ namespace Angry_Girls
         private Rigidbody _charRigidbody;
 
         private GameObject[] _trajectoryDots;
-        private Vector2 _zoomRange = new Vector2(5f, 10f); // Диапазон зума
+        [SerializeField] private Vector2 _zoomRange = new Vector2(5f, 10f); // Диапазон зума
 
         [Header("Launching Setup")]
         [SerializeField] private Transform _startPoint;
         [SerializeField] private Transform _offsetPoint;
         [Space(10)]
         [SerializeField] private CharacterControl _characterToLaunch;
-        [SerializeField] private float _forceFactor;
+        [SerializeField] private float _forceFactorUp;
+        [SerializeField] private float _forceFactorForward;
 
         [Header("Trajectory")]
         [SerializeField] private GameObject _trajectoryDotPrefab;
@@ -51,10 +52,16 @@ namespace Angry_Girls
 
             if (Input.GetMouseButton(0))
             {
+                // Get character collider center
+                Vector3 characterColliderCenter = _characterToLaunch.GetComponent<BoxCollider>().bounds.center;
+
                 //Calculation
                 var pointerPosition = GetPointerWorldPosition(Camera.main);
                 _offsetEndPostion = new Vector3(0, pointerPosition.y, pointerPosition.z);
                 _directionVector = _offsetEndPostion - _startPoint.position;
+
+                // Center camera on character collider center
+                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, characterColliderCenter.y, characterColliderCenter.z);
 
                 //Visual offset
                 _offsetPoint.position = _offsetEndPostion;
@@ -79,7 +86,8 @@ namespace Angry_Girls
         private void LaunchUnit()
         {
             _charRigidbody.useGravity = true;
-            _charRigidbody.velocity = new Vector3(0, -_directionVector.y * _forceFactor, -_directionVector.z * _forceFactor);
+            _charRigidbody.velocity = new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward);
+            _characterToLaunch.isLaunched = true;
         }
 
         private void DestroyTrajectoryDots()
@@ -93,7 +101,7 @@ namespace Angry_Girls
         private Vector3 CalculateTraectoryPosition(float elapsedTime)
         {
             return new Vector3(0, _startPoint.transform.position.y, _startPoint.transform.position.z)
-                    + new Vector3(0, -_directionVector.y * _forceFactor, -_directionVector.z * _forceFactor) * elapsedTime
+                    + new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward) * elapsedTime
                     + 0.5f * Physics.gravity * elapsedTime * elapsedTime;
         }
 
@@ -113,7 +121,7 @@ namespace Angry_Girls
             float zoomFactor = Mathf.Lerp(_zoomRange.x, _zoomRange.y, distance / _minDistanceForZoom);
 
             // Apply zoom to camera
-            Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, zoomFactor, Time.deltaTime * _zoomSpeed);
+            Camera.main.orthographicSize = zoomFactor;
         }
     }
 }

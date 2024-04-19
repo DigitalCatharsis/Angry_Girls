@@ -741,7 +741,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 1.65
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -766,7 +766,7 @@ Transform:
   m_GameObject: {fileID: 1599083947}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.1, y: 0.32, z: -3.96}
+  m_LocalPosition: {x: -2.31, y: 1.44, z: -3.96}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -968,16 +968,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharacterLauncher
       objectReference: {fileID: 0}
-    - target: {fileID: 562123562793482823, guid: 804897f579e36214eb51534c9f20f6f7,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 975270151183045388, guid: 804897f579e36214eb51534c9f20f6f7,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3108276391359764400, guid: 804897f579e36214eb51534c9f20f6f7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1030,7 +1020,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3876276806648296255, guid: 804897f579e36214eb51534c9f20f6f7,
         type: 3}
-      propertyPath: _dotsNumber
+      propertyPath: _forceFactor
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3876276806648296255, guid: 804897f579e36214eb51534c9f20f6f7,
+        type: 3}
+      propertyPath: _zoomRange.y
+      value: 15.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3876276806648296255, guid: 804897f579e36214eb51534c9f20f6f7,
+        type: 3}
+      propertyPath: _forceFactorUp
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3876276806648296255, guid: 804897f579e36214eb51534c9f20f6f7,
+        type: 3}
+      propertyPath: _forceFactorForward
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3876276806648296255, guid: 804897f579e36214eb51534c9f20f6f7,
+        type: 3}
+      propertyPath: _minDistanceForZoom
       value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
