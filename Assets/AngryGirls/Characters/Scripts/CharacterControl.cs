@@ -4,21 +4,27 @@ namespace Angry_Girls
 {
     public class CharacterControl : MonoBehaviour
     {
-        public Rigidbody rigidBody;
-        public BoxCollider boxcollider;
-        public bool isLaunched;
+        [Header("Setup")]
+        public Animator Animator;
+
+        [Space (15)]
+        public Rigidbody RigidBody;
+        public BoxCollider Boxcollider;
+        public bool IsLaunched;
+        public SubComponentProcessor SubComponentProcessor;
 
         private void Awake()
         {
-            rigidBody = GetComponent<Rigidbody>();
-            boxcollider = gameObject.GetComponent<BoxCollider>();
+            RigidBody = GetComponent<Rigidbody>();
+            Boxcollider = gameObject.GetComponent<BoxCollider>();
+            SubComponentProcessor = GetComponentInChildren<SubComponentProcessor>();
         }
 
         private void LateUpdate()
         {
-            if (isLaunched)
+            if (IsLaunched)
             {
-                CameraManager.Instance.CenterCameraAgainst(boxcollider);
+                CameraManager.Instance.CenterCameraAgainst(Boxcollider);
             }
         }
     }

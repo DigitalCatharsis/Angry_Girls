@@ -1,3 +1,4 @@
+using System.Net;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -7,7 +8,6 @@ namespace Angry_Girls
         private Vector3 _offsetEndPostion;
         private Vector3 _directionVector;
 
-        public bool _isAvaibleForLaunch = false;
         private Rigidbody _charRigidbody;
 
         private GameObject[] _trajectoryDots;
@@ -29,19 +29,40 @@ namespace Angry_Girls
         [SerializeField] private float _zoomSpeed;
         [SerializeField] private float _minDistanceForZoom;
 
+        [Header("Debug")]
+        public bool _isAvaibleForLaunch = false;
 
 
         private void Start()
         {
-            _charRigidbody = _characterToLaunch.rigidBody;
+            _charRigidbody = _characterToLaunch.RigidBody;
             _trajectoryDots = new GameObject[_dotsNumber];
+        }
+
+        private void Awake()
+        {
+            _startPoint.position = new Vector3(0, _startPoint.position.y, _startPoint.position.z);
+
+
         }
 
         private void Update()
         {
             if (Input.GetMouseButtonDown(0))
             {
-                _startPoint.position = new Vector3(0, _startPoint.position.y, _startPoint.position.z);
+                Vector3 mousePosition = Input.mousePosition;
+                Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit))
+                {
+                    if (hit.collider.gameObject == _characterToLaunch.gameObject)
+                    {
+                        _isAvaibleForLaunch = true;
+                    }
+                    else
+                    {
+                        _isAvaibleForLaunch = false;
+                    }
+                }
 
                 //Spawn projectory dots
                 for (int i = 0; i < _dotsNumber; i++)
@@ -50,7 +71,9 @@ namespace Angry_Girls
                 }
             }
 
-            if (Input.GetMouseButton(0))
+            Debug.Log(_isAvaibleForLaunch);
+
+            if (Input.GetMouseButton(0) && _isAvaibleForLaunch)
             {
 
                 //Calculation
@@ -59,7 +82,7 @@ namespace Angry_Girls
                 _directionVector = _offsetEndPostion - _startPoint.position;
 
                 // Center camera on character collider center
-                CameraManager.Instance.CenterCameraAgainst(_characterToLaunch.boxcollider);
+                CameraManager.Instance.CenterCameraAgainst(_characterToLaunch.Boxcollider);
 
                 //Visual offset
                 _offsetPoint.position = _offsetEndPostion;
@@ -74,10 +97,11 @@ namespace Angry_Girls
                 AdjustCameraZoom();
             }
 
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(0) && _isAvaibleForLaunch)
             {
                 LaunchUnit();
                 DestroyTrajectoryDots();
+                _isAvaibleForLaunch = false;
             }
         }
 
@@ -85,7 +109,8 @@ namespace Angry_Girls
         {
             _charRigidbody.useGravity = true;
             _charRigidbody.velocity = new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward);
-            _characterToLaunch.isLaunched = true;
+            Camera.main.orthographicSize /= 1.5f;
+            _characterToLaunch.IsLaunched = true;
         }
 
         private void DestroyTrajectoryDots()

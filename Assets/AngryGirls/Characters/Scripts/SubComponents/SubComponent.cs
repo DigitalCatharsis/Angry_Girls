@@ -5,10 +5,10 @@ namespace Angry_Girls
 
     public class SubComponent : MonoBehaviour
     {
-        public CharacterControl control;
+        public CharacterControl Control;
         public void Awake()
         {
-            control = GetComponentInParent<CharacterControl>();
+            Control = GetComponentInParent<CharacterControl>();
         }
     }
 }
