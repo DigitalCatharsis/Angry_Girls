@@ -92,7 +92,7 @@ namespace Angry_Girls
 
         private Vector3 CalculateTraectoryPosition(float elapsedTime)
         {
-            return new Vector3(0, _offsetEndPostion.y, _offsetEndPostion.z)
+            return new Vector3(0, _startPoint.transform.position.y, _startPoint.transform.position.z)
                     + new Vector3(0, -_directionVector.y * _forceFactor, -_directionVector.z * _forceFactor) * elapsedTime
                     + 0.5f * Physics.gravity * elapsedTime * elapsedTime;
         }
