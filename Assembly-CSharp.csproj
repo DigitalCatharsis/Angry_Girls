@@ -66,14 +66,14 @@
     <Compile Include="Assets\AngryGirls\Scripts\Managers\Singleton.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\DistanceBetweenTwoObjects\DistanceBetweenTwoObjects.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LookAtPoint\LookAtPoint.cs" />
-    <Compile Include="Assets\CorutinesManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts\MousePositionInfo.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ListOfLists\SerializableList.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LayerAdder\LayerChanger.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\Managers\InputManager.cs" />
+    <Compile Include="Assets\AngryGirls\Characters\Scripts\CharacterControl.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LayerAdder\LayerAdder.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ShowOnlyAttribute\ShowOnlyAttribute.cs" />
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts\ExmpleClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

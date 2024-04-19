@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Angry_Girls
 {
 
-public class ExampleClass : MonoBehaviour
+public class MousePositionInfo : MonoBehaviour
 {
     private Camera cam;
 

@@ -69,8 +69,8 @@
     <Compile Include="Assets\Plugins\SerializedCollections\Editor\Scripts\Search\Matchers\Matchers.cs" />
     <Compile Include="Assets\Plugins\SerializedCollections\Editor\Scripts\Utility\SCEditorUtility.cs" />
     <Compile Include="Assets\Plugins\SerializedCollections\Editor\Scripts\Data\ElementSettings.cs" />
-    <Compile Include="Assets\Plugins\SerializedCollections\Editor\Scripts\Search\Matchers\Matcher.cs" />
     <Compile Include="Assets\Plugins\SerializedCollections\Editor\Scripts\PagingElement.cs" />
+    <Compile Include="Assets\Plugins\SerializedCollections\Editor\Scripts\Search\Matchers\Matcher.cs" />
     <Compile Include="Assets\Plugins\SerializedCollections\Editor\Scripts\KeyListGenerators\KeyListGeneratorCache.cs" />
     <Compile Include="Assets\Plugins\SerializedCollections\Editor\Scripts\Utility\GUIEnabledScope.cs" />
     <Compile Include="Assets\Plugins\SerializedCollections\Editor\Scripts\Utility\LabelWidth.cs" />

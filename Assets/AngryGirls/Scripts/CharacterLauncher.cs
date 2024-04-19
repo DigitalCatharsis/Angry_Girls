@@ -4,29 +4,35 @@ namespace Angry_Girls
 {
     public class CharacterLauncher : MonoBehaviour
     {
-        public bool _isAvaibleForLaunch = false;
-
-        private Vector3 _startPos;
-        private Vector3 _endPos;
-
-        private Rigidbody _rigidbody;
-        [SerializeField] private float _forceFactor;
-
-        [SerializeField] private GameObject _trajectoryDotPrefab;
-        private GameObject[] _trajectoryDots;
-        [SerializeField] private int _dotsNumber;
-
-        private Vector2 _zoomRange = new Vector2(5f, 10f); // Диапазон зума
-        [SerializeField] private float _zoomSpeed;
-
+        private Vector3 _offsetEndPostion;
         private Vector3 _directionVector;
 
-        private bool _isZooming;
+        public bool _isAvaibleForLaunch = false;
+        private Rigidbody _charRigidbody;
+
+        private GameObject[] _trajectoryDots;
+        private Vector2 _zoomRange = new Vector2(5f, 10f); // Диапазон зума
+
+        [Header("Launching Setup")]
+        [SerializeField] private Transform _startPoint;
+        [SerializeField] private Transform _offsetPoint;
+        [Space(10)]
+        [SerializeField] private CharacterControl _characterToLaunch;
+        [SerializeField] private float _forceFactor;
+
+        [Header("Trajectory")]
+        [SerializeField] private GameObject _trajectoryDotPrefab;
+        [SerializeField] private int _dotsNumber;
+
+        [Header("Zoom")]
+        [SerializeField] private float _zoomSpeed;
         [SerializeField] private float _minDistanceForZoom;
+
+
 
         private void Start()
         {
-            _rigidbody = GetComponent<Rigidbody>();
+            _charRigidbody = _characterToLaunch.rigidBody;
             _trajectoryDots = new GameObject[_dotsNumber];
         }
 
@@ -34,51 +40,46 @@ namespace Angry_Girls
         {
             if (Input.GetMouseButtonDown(0))
             {
-                OnUnitClick();
+                _startPoint.position = new Vector3(0, _startPoint.position.y, _startPoint.position.z);
+
+                //Spawn projectory dots
+                for (int i = 0; i < _dotsNumber; i++)
+                {
+                    _trajectoryDots[i] = Instantiate(_trajectoryDotPrefab, _startPoint);
+                }
             }
 
             if (Input.GetMouseButton(0))
-            {                
-                OnUnitDrag();
+            {
+                //Calculation
+                var pointerPosition = GetPointerWorldPosition(Camera.main);
+                _offsetEndPostion = new Vector3(0, pointerPosition.y, pointerPosition.z);
+                _directionVector = _offsetEndPostion - _startPoint.position;
+
+                //Visual offset
+                _offsetPoint.position = _offsetEndPostion;
+
+                //Traectory draw
+                for (var i = 0; i < _dotsNumber; ++i)
+                {
+                    _trajectoryDots[i].transform.position = CalculateTraectoryPosition(i * 0.1f);
+                }
+
+                //ZoomCamera
+                ZoomCamera();
             }
 
             if (Input.GetMouseButtonUp(0))
             {
-                _isZooming = false;
                 LaunchUnit();
                 DestroyTrajectoryDots();
-                //NullifyValues();
             }
-        }
-
-        private void OnUnitClick()
-        {
-            _startPos = new Vector3(0, gameObject.transform.position.y, gameObject.transform.position.z);
-            for (int i = 0; i < _dotsNumber; i++)
-            {
-                _trajectoryDots[i] = Instantiate(_trajectoryDotPrefab, gameObject.transform);
-            }
-        }
-
-        private void OnUnitDrag()
-        {
-            _isZooming = true;
-            var pointPosition = GetPointerWorldPosition(Camera.main);
-            _endPos = new Vector3(0, pointPosition.y, pointPosition.z);
-            gameObject.transform.position = _endPos;
-            _directionVector = _endPos - _startPos;
-
-            for (var i = 0; i < _dotsNumber; ++i)
-            {
-                _trajectoryDots[i].transform.position = CalculateTraectoryPosition(i * 0.1f);
-            }
-            ZoomCamera();
         }
 
         private void LaunchUnit()
         {
-            _rigidbody.useGravity = true;
-            _rigidbody.velocity = new Vector3(0, -_directionVector.y * _forceFactor, -_directionVector.z * _forceFactor);
+            _charRigidbody.useGravity = true;
+            _charRigidbody.velocity = new Vector3(0, -_directionVector.y * _forceFactor, -_directionVector.z * _forceFactor);
         }
 
         private void DestroyTrajectoryDots()
@@ -91,7 +92,7 @@ namespace Angry_Girls
 
         private Vector3 CalculateTraectoryPosition(float elapsedTime)
         {
-            return new Vector3(0, _endPos.y, _endPos.z)
+            return new Vector3(0, _offsetEndPostion.y, _offsetEndPostion.z)
                     + new Vector3(0, -_directionVector.y * _forceFactor, -_directionVector.z * _forceFactor) * elapsedTime
                     + 0.5f * Physics.gravity * elapsedTime * elapsedTime;
         }
@@ -105,10 +106,10 @@ namespace Angry_Girls
 
         private void ZoomCamera()
         {
-            if (_isZooming && Vector3.Distance(_endPos, _startPos) > _minDistanceForZoom)
+            if (Vector3.Distance(_offsetEndPostion, _startPoint.position) > _minDistanceForZoom)
             {
                 // Рассчитываем множитель для зума от 0 до 1 в зависимости от оттягивания
-                var zoomMultiplier = Mathf.Clamp01(Vector3.Distance(_endPos, _startPos));
+                var zoomMultiplier = Mathf.Clamp01(Vector3.Distance(_offsetEndPostion, _startPoint.position));
 
                 // Изменяем зум камеры в зависимости от множителя и скорости зума
                 float newZoom = Mathf.Lerp(_zoomRange.x, _zoomRange.y, zoomMultiplier);
