@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 975270151183045388}
-  - {fileID: 8589686393828448507}
+  - {fileID: 7864593600039618202}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3876276806648296255
@@ -48,15 +48,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isAvaibleForLaunch: 0
   _zoomRange: {x: 1.65, y: 13}
-  _startPoint: {fileID: 562123562793482823}
+  _startPoint: {fileID: 0}
   _offsetPoint: {fileID: 975270151183045388}
-  _characterToLaunch: {fileID: 5537711776234338616}
-  _forceFactor: 3
+  _characterToLaunch: {fileID: 0}
+  _forceFactorUp: 2
+  _forceFactorForward: 1
   _trajectoryDotPrefab: {fileID: 4246235413054643113, guid: 51409ddd559245f47bb63b58abba0737,
     type: 3}
   _dotsNumber: 100
   _zoomSpeed: 100
-  _minDistanceForZoom: 10
+  _minDistanceForZoom: 20
 --- !u!1 &7080606034121031811
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,7 +141,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1001 &8408434987347747342
+--- !u!1001 &7971608165426838639
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -203,37 +204,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: YBot
       objectReference: {fileID: 0}
-    - target: {fileID: 8322040185008855113, guid: c03c7eedb934e76448be7b86074461a4,
+    - target: {fileID: 4217465233895893241, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
+      propertyPath: _collidingBlockDistance
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c03c7eedb934e76448be7b86074461a4, type: 3}
---- !u!4 &562123562793482823 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8322040185008855113, guid: c03c7eedb934e76448be7b86074461a4,
-    type: 3}
-  m_PrefabInstance: {fileID: 8408434987347747342}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &5537711776234338616 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
-    type: 3}
-  m_PrefabInstance: {fileID: 8408434987347747342}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d05c2acc13ea674d80c1cbcd8e78951, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &8589686393828448507 stripped
+--- !u!4 &7864593600039618202 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
     type: 3}
-  m_PrefabInstance: {fileID: 8408434987347747342}
+  m_PrefabInstance: {fileID: 7971608165426838639}
   m_PrefabAsset: {fileID: 0}

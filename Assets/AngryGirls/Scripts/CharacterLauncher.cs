@@ -52,8 +52,6 @@ namespace Angry_Girls
 
             if (Input.GetMouseButton(0))
             {
-                // Get character collider center
-                Vector3 characterColliderCenter = _characterToLaunch.GetComponent<BoxCollider>().bounds.center;
 
                 //Calculation
                 var pointerPosition = GetPointerWorldPosition(Camera.main);
@@ -61,7 +59,7 @@ namespace Angry_Girls
                 _directionVector = _offsetEndPostion - _startPoint.position;
 
                 // Center camera on character collider center
-                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, characterColliderCenter.y, characterColliderCenter.z);
+                CameraManager.Instance.CenterCameraAgainst(_characterToLaunch.boxcollider);
 
                 //Visual offset
                 _offsetPoint.position = _offsetEndPostion;

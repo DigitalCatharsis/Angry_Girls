@@ -1,22 +1,25 @@
 using UnityEngine;
 
-public class CharacterControl : MonoBehaviour
+namespace Angry_Girls
 {
-    public Rigidbody rigidBody;
-    public BoxCollider boxcollider;
-    public bool isLaunched;
-
-    private void Awake()
+    public class CharacterControl : MonoBehaviour
     {
-        rigidBody = GetComponent<Rigidbody>();
-        boxcollider = gameObject.GetComponent<BoxCollider>();
-    }
+        public Rigidbody rigidBody;
+        public BoxCollider boxcollider;
+        public bool isLaunched;
 
-    private void LateUpdate()
-    {
-        if (isLaunched)
+        private void Awake()
         {
-                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, boxcollider.bounds.center.y, boxcollider.bounds.center.z);
+            rigidBody = GetComponent<Rigidbody>();
+            boxcollider = gameObject.GetComponent<BoxCollider>();
+        }
+
+        private void LateUpdate()
+        {
+            if (isLaunched)
+            {
+                CameraManager.Instance.CenterCameraAgainst(boxcollider);
+            }
         }
     }
 }
