@@ -358,7 +358,6 @@ GameObject:
   m_Component:
   - component: {fileID: 955558662}
   - component: {fileID: 955558665}
-  - component: {fileID: 955558664}
   - component: {fileID: 955558663}
   m_Layer: 0
   m_Name: RenderOnTopCamera
@@ -426,14 +425,6 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
---- !u!81 &955558664
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 955558661}
-  m_Enabled: 1
 --- !u!20 &955558665
 Camera:
   m_ObjectHideFlags: 0

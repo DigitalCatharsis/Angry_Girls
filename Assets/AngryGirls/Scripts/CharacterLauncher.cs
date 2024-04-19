@@ -66,7 +66,7 @@ namespace Angry_Girls
                 }
 
                 //ZoomCamera
-                ZoomCamera();
+                AdjustCameraZoom();
             }
 
             if (Input.GetMouseButtonUp(0))
@@ -104,17 +104,16 @@ namespace Angry_Girls
             return camera.ScreenToWorldPoint(screenPosition);
         }
 
-        private void ZoomCamera()
+        private void AdjustCameraZoom()
         {
-            if (Vector3.Distance(_offsetEndPostion, _startPoint.position) > _minDistanceForZoom)
-            {
-                // Рассчитываем множитель для зума от 0 до 1 в зависимости от оттягивания
-                var zoomMultiplier = Mathf.Clamp01(Vector3.Distance(_offsetEndPostion, _startPoint.position));
+            // Calculate distance between _offsetEndPostion and _startPoint
+            float distance = Vector3.Distance(_offsetEndPostion, _startPoint.position);
 
-                // Изменяем зум камеры в зависимости от множителя и скорости зума
-                float newZoom = Mathf.Lerp(_zoomRange.x, _zoomRange.y, zoomMultiplier);
-                Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, newZoom, _zoomSpeed * Time.deltaTime);
-            }            
+            // Calculate zoom based on distance
+            float zoomFactor = Mathf.Lerp(_zoomRange.x, _zoomRange.y, distance / _minDistanceForZoom);
+
+            // Apply zoom to camera
+            Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, zoomFactor, Time.deltaTime * _zoomSpeed);
         }
     }
 }
