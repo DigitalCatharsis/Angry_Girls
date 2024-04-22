@@ -4,14 +4,15 @@ namespace Angry_Girls
 {
     public enum MainParameterType
     {
-        IsAirboned
+        IsAirboned,
+        IsAttacking
     }
 
     public class AnimationProcessor : SubComponent
     {
         private void Update()
         {
-            if (Control.SubComponentProcessor.GroundDetector.IsAirboned)
+            if (Control.SubComponentProcessor.groundDetector.IsAirboned)
             {
                 SetTurn();
                 Control.Animator.SetBool(MainParameterType.IsAirboned.ToString(), true);

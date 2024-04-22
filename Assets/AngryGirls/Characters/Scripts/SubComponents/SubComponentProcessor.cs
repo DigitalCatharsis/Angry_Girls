@@ -4,13 +4,15 @@ namespace Angry_Girls
 {
     public class SubComponentProcessor : MonoBehaviour
     {
-        public GroundDetector GroundDetector;
-        public AnimationProcessor AnimationProcessor;
+        public GroundDetector groundDetector;
+        public AnimationProcessor animationProcessor;
+        public LaunchLogic launchLogic;
 
         private void Awake()
         {
-            GroundDetector = GetComponentInChildren<GroundDetector>();
-            AnimationProcessor = GetComponentInChildren<AnimationProcessor>();
+            groundDetector = GetComponentInChildren<GroundDetector>();
+            animationProcessor = GetComponentInChildren<AnimationProcessor>();
+            launchLogic = GetComponentInChildren<LaunchLogic>();
         }
     }
 }

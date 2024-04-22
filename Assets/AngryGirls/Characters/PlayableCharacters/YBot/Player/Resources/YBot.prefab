@@ -726,6 +726,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5924739078427195291}
+  - component: {fileID: 4811752789901092568}
   m_Layer: 0
   m_Name: LaunchLogic
   m_TagString: Untagged
@@ -748,6 +749,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2636539063242073703}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4811752789901092568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2207127051865693614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb86e845b878ea049b2f6cd7bde78b68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hasBeenLaunched: 0
+  hasFinishedLaunch: 0
+  hasUsedAbility: 0
 --- !u!1 &2268399448965009457
 GameObject:
   m_ObjectHideFlags: 0
@@ -937,7 +953,7 @@ Transform:
   m_GameObject: {fileID: 2640689163874789523}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1482,8 +1498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72f82326d3d69bf468af47802bfedd41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Control: {fileID: 0}
-  _collidingBlockDistance: 0.1
+  _collidingBlockDistance: 0.05
   _collidedObject: {fileID: 0}
   _contactPoint: {x: 0, y: 0, z: 0}
   IsAirboned: 0
@@ -1759,8 +1774,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a29945b115fbcd40a8e08741c310ea1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GroundDetector: {fileID: 0}
-  AnimationProcessor: {fileID: 0}
+  groundDetector: {fileID: 0}
+  animationProcessor: {fileID: 0}
+  launchLogic: {fileID: 0}
 --- !u!1 &5456733493903060805
 GameObject:
   m_ObjectHideFlags: 0
@@ -1871,7 +1887,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f1a17158942e1b42a1d6f9bedc78059, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Control: {fileID: 0}
 --- !u!1 &5503316897883994643
 GameObject:
   m_ObjectHideFlags: 0

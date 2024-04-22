@@ -73,7 +73,6 @@
     <Compile Include="Assets\AngryGirls\Scripts\MousePositionInfo.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ListOfLists\SerializableList.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LayerAdder\LayerChanger.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts\Managers\InputManager.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\CharacterControl.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\LaunchLogic.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LayerAdder\LayerAdder.cs" />
