@@ -1,18 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Angry_Girls
 {
-    public enum PlayableCharacters
-    {
-        YBot,
-        YBot_Green,
-        YBot_Red,
-        YBot_Yellow
-    }
 
     public class CharacterLauncher : MonoBehaviour
     {
@@ -29,6 +20,7 @@ namespace Angry_Girls
         [Space(10)]
         [SerializeField] private float _forceFactorUp;
         [SerializeField] private float _forceFactorForward;
+        [SerializeField] private CharacterSelect _charactersListToSpawn;
 
         [Header("Trajectory")]
         [SerializeField] private Transform _offsetPoint;
@@ -41,7 +33,6 @@ namespace Angry_Girls
 
         [Header("Debug")]
         public bool _canProceedLaunch = false;
-        [SerializeField] private List<PlayableCharacters> _tempCharactersListToSpawn;
         [SerializeField] private CharacterControl _characterToLaunch;
         [SerializeField] private List<GameObject> _charactersList;
 
@@ -68,16 +59,16 @@ namespace Angry_Girls
 
         private void UpdateCharacterPositions(Transform[] transforms)
         {
-            for (var i = 0; i < _tempCharactersListToSpawn.Count; i++)
+            for (var i = 0; i < _charactersListToSpawn.selectedCharacters.Count(); i++)
             {
                 _charactersList[i].transform.position = transforms[i].position;
             }
         }
         private void SpawnCharacters()
         {
-            for (var i = 0; i < _tempCharactersListToSpawn.Count; i++)
+            for (var i = 0; i < _charactersListToSpawn.selectedCharacters.Count(); i++)
             {
-                _charactersList[i] = Instantiate(Resources.Load(_tempCharactersListToSpawn[i].ToString())) as GameObject;
+                _charactersList[i] = Instantiate(Resources.Load(_charactersListToSpawn.selectedCharacters[i].ToString())) as GameObject;
             }
         }
 
@@ -153,7 +144,7 @@ namespace Angry_Girls
             _characterToLaunch.RigidBody.useGravity = true;
             _characterToLaunch.RigidBody.velocity = new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward);
             Camera.main.orthographicSize /= 1.5f;
-            _characterToLaunch.IsLaunched = true;
+            _characterToLaunch.SubComponentProcessor.launchLogic.hasBeenLaunched = true;
             StartCoroutine(_characterToLaunch.SubComponentProcessor.launchLogic.ProcessLaunch());
         }
 

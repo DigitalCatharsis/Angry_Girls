@@ -8,9 +8,9 @@ namespace Angry_Girls
         public Animator Animator;
 
         [Space (15)]
+        [Header("Debug")]
         public Rigidbody RigidBody;
-        public BoxCollider Boxcollider;
-        public bool IsLaunched;
+        public BoxCollider Boxcollider;        
         public SubComponentProcessor SubComponentProcessor;
 
         private void Awake()
@@ -18,14 +18,6 @@ namespace Angry_Girls
             RigidBody = GetComponent<Rigidbody>();
             Boxcollider = gameObject.GetComponent<BoxCollider>();
             SubComponentProcessor = GetComponentInChildren<SubComponentProcessor>();
-        }
-
-        private void LateUpdate()
-        {
-            if (IsLaunched)
-            {
-                CameraManager.Instance.CenterCameraAgainst(Boxcollider);
-            }
         }
     }
 }

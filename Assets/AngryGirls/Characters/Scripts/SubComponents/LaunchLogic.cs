@@ -10,6 +10,14 @@ namespace Angry_Girls
         public bool hasUsedAbility = false;
         //TODO: SO abilityType
 
+        private void LateUpdate()
+        {
+            if (hasBeenLaunched == true && hasFinishedLaunch == false)
+            {
+                CameraManager.Instance.CenterCameraAgainst(Control.Boxcollider);
+            }
+        }
+
         public IEnumerator ProcessLaunch()
         {
             yield return StartCoroutine(OnLaunch_Routine());
@@ -22,13 +30,12 @@ namespace Angry_Girls
             while (Control.SubComponentProcessor.groundDetector.IsAirboned)
             {
                 CheckForAbilityUse();
-                Debug.Log("Launch Cycle");
                 yield return null;
             }
-            hasFinishedLaunch = true;            
-            hasUsedAbility = true;
-            Debug.Log("Fniished");
+            CameraManager.Instance.ReturnCameraToStartPosition(1f);
+            hasFinishedLaunch = true;           
         }
+        
 
         private void CheckForAbilityUse()
         {
