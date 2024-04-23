@@ -61,7 +61,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\SubComponentProcessor.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts\Managers\LaunchManager.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\MaterialChaner\MaterialChanger.cs" />
+    <Compile Include="Assets\AngryGirls\Helpers\MousePositionInfo.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\CharacterLauncher.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\CollisionDetection.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ColorDebugLog\ColorDebugLog.cs" />
@@ -71,11 +73,9 @@
     <Compile Include="Assets\AngryGirls\Helpers\DistanceBetweenTwoObjects\DistanceBetweenTwoObjects.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\AnimationProcessor.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LookAtPoint\LookAtPoint.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts\MousePositionInfo.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ListOfLists\SerializableList.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\UI_Control.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LayerAdder\LayerChanger.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts\LevelLogic.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\CharacterControl.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\LaunchLogic.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LayerAdder\LayerAdder.cs" />
@@ -83,7 +83,7 @@
     <Compile Include="Assets\AngryGirls\Scripts\Managers\CameraManager.cs" />
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\SubComponent.cs" />
-    <Compile Include="Assets\AngryGirls\Helpers\MyExtentions.cs" />
+    <Compile Include="Assets\AngryGirls\Helpers\MyExtentions\MyExtentions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

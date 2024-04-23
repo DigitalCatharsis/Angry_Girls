@@ -14,7 +14,7 @@ namespace Angry_Girls
         {
             if (hasBeenLaunched == true && hasFinishedLaunch == false)
             {
-                CameraManager.Instance.CenterCameraAgainst(Control.Boxcollider);
+                Singleton.Instance.ñameraManager.CenterCameraAgainst(Control.Boxcollider);
             }
         }
 
@@ -32,10 +32,9 @@ namespace Angry_Girls
                 CheckForAbilityUse();
                 yield return null;
             }
-            CameraManager.Instance.ReturnCameraToStartPosition(1f);
             hasFinishedLaunch = true;           
-        }
-        
+            Singleton.Instance.launchManager.OnLaunchIsOver();            
+        }        
 
         private void CheckForAbilityUse()
         {

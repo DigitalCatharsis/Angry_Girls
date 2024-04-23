@@ -9,5 +9,9 @@ namespace Angry_Girls
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+        public void NextScene()
+        {
+            SceneManager.LoadScene("test");
+        }
     }
 }

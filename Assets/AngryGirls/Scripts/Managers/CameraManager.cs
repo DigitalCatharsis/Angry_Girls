@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class CameraManager : Singleton<CameraManager>
+    public class CameraManager : MonoBehaviour
     {
         [Header("Setup")]
         [SerializeField] private Vector3 cameraStartPosition = new Vector3(13.25f, 1.44f, -0.00999999f);
-        [SerializeField] private float startTrthographicCameraSize = 1.65f;
+        [SerializeField] private float startOrthographicCameraSize = 1.65f;
 
         // Center camera on character collider center
         public void CenterCameraAgainst(Collider selectedObject)
@@ -22,9 +22,15 @@ namespace Angry_Girls
 
         public void ReturnCameraToStartPosition(float speed)
         {
-            var lerper = gameObject.AddComponent<MyExtentions>();
-            lerper.Lerp_Position(Camera.main.gameObject, startPosition: Camera.main.transform.position, endPosition: cameraStartPosition, speed);
-            lerper.Lerp_OrthographicCamera_Size(Camera.main, startValue: Camera.main.orthographicSize, startTrthographicCameraSize, speed);
+            Singleton.Instance.myExtentions.Lerp_Position(Camera.main.gameObject, startPosition: Camera.main.transform.position, endPosition: cameraStartPosition, speed);
+            Singleton.Instance.myExtentions.Lerp_OrthographicCamera_Size(Camera.main, startValue: Camera.main.orthographicSize, startOrthographicCameraSize, speed);
+        }
+
+        public Vector3 GetPointerWorldPosition(Camera camera)
+        {
+            Vector3 screenPosition = Input.mousePosition;
+            screenPosition.z = camera.nearClipPlane + 1;
+            return camera.ScreenToWorldPoint(screenPosition);
         }
     }
 }

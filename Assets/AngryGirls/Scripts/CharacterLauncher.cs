@@ -1,16 +1,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Angry_Girls
 {
 
     public class CharacterLauncher : MonoBehaviour
     {
+        //Direction
         private Vector3 _offsetEndPostion;
+        private Vector3 _offsetStartPoint;
         private Vector3 _directionVector;
-        private Vector3 _startPoint;
+
+        //Traectory
         private GameObject[] _trajectoryDots;
+
+        //Positions
         private Transform[] _positionTransforms;
 
         [Header("Launching Setup")]
@@ -20,7 +26,6 @@ namespace Angry_Girls
         [Space(10)]
         [SerializeField] private float _forceFactorUp;
         [SerializeField] private float _forceFactorForward;
-        [SerializeField] private CharacterSelect _charactersListToSpawn;
 
         [Header("Trajectory")]
         [SerializeField] private Transform _offsetPoint;
@@ -31,149 +36,113 @@ namespace Angry_Girls
         [SerializeField] private float _zoomSpeed;
         [SerializeField] private float _minDistanceForZoom;
 
-        [Header("Debug")]
-        public bool _canProceedLaunch = false;
-        [SerializeField] private CharacterControl _characterToLaunch;
-        [SerializeField] private List<GameObject> _charactersList;
-
-
-        private void Start()
+        public void InitLauncher()
         {
-            _characterToLaunch = _charactersList[0].GetComponent<CharacterControl>();
-            _trajectoryDots = new GameObject[_dotsNumber];
-        }
-
-        private void Awake()
-        {
-            //Spawn Characters at spawn points
+            //Init spawnPoints
             var transforms = new HashSet<Transform>(_positionsContainer.GetComponentsInChildren<Transform>());
             transforms.Remove(_positionsContainer.transform); //remove position of _positionsContainer itself
             _positionTransforms = transforms.ToArray();
 
-            SpawnCharacters();
-            UpdateCharacterPositions(_positionTransforms);
-
             //Start position for launch
-            _startPoint = _positionTransforms[0].position;
+            _offsetStartPoint = _positionTransforms[0].position;
+
+            //Traectory
+            _trajectoryDots = new GameObject[_dotsNumber];
+            SpawnProjectoryDots(_positionTransforms[0]);
         }
 
-        private void UpdateCharacterPositions(Transform[] transforms)
+        public List<GameObject> SpawnAndGetCharacters(PlayableCharacters[] selectedCharactersList)
         {
-            for (var i = 0; i < _charactersListToSpawn.selectedCharacters.Count(); i++)
+            var charList = new List<GameObject>();
+            for (var i = 0; i < selectedCharactersList.Count(); i++)
             {
-                _charactersList[i].transform.position = transforms[i].position;
+                charList.Add(Instantiate(Resources.Load(selectedCharactersList[i].ToString())) as GameObject);
             }
+            return charList;
         }
-        private void SpawnCharacters()
+
+        public void UpdateCharacterPositions(List<GameObject> charactersToLaunch)
         {
-            for (var i = 0; i < _charactersListToSpawn.selectedCharacters.Count(); i++)
+            for (var i = 0; i < Singleton.Instance.launchManager.charactersToLaunchLeft.Count(); i++)
             {
-                _charactersList[i] = Instantiate(Resources.Load(_charactersListToSpawn.selectedCharacters[i].ToString())) as GameObject;
+                charactersToLaunch[i].transform.position = _positionTransforms[i].position;
             }
         }
 
-        private void Update()
-        { 
-            if (Input.GetMouseButtonDown(0) && !_characterToLaunch.SubComponentProcessor.launchLogic.hasBeenLaunched)
-            {
-                //Check if we switching players
-
-
-                Vector3 mousePosition = Input.mousePosition;
-                Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit))
-                {
-                    if (_charactersList.Contains(hit.collider.gameObject))
-                    {
-                        if (hit.collider.gameObject == _characterToLaunch.gameObject)
-                        {
-                            _canProceedLaunch = true;
-                        }
-                        else
-                        {
-                            SwapCharacters(_charactersList.IndexOf(hit.collider.gameObject), 0);
-                            UpdateCharacterPositions(_positionTransforms);
-                        }
-                    }
-                    else
-                    {
-                        _canProceedLaunch = false;
-                    }
-                }
-
-                //Spawn projectory dots
-                for (int i = 0; i < _dotsNumber; i++)
-                {
-                    _trajectoryDots[i] = Instantiate(_trajectoryDotPrefab, _characterToLaunch.transform);
-                }
-            }
-
-            if (Input.GetMouseButton(0) && _canProceedLaunch)
-            {
-                //Calculation direction
-                var pointerPosition = GetPointerWorldPosition(Camera.main);
-                _offsetEndPostion = new Vector3(0, pointerPosition.y, pointerPosition.z);
-                _directionVector = _offsetEndPostion - _startPoint;
-
-                // Center camera on character collider center
-                CameraManager.Instance.CenterCameraAgainst(_characterToLaunch.Boxcollider);
-
-                //Visual offset
-                _offsetPoint.position = _offsetEndPostion;
-
-                //Traectory draw
-                for (var i = 0; i < _dotsNumber; ++i)
-                {
-                    _trajectoryDots[i].transform.position = CalculateTraectoryPosition(i * 0.1f);
-                }
-
-                //ZoomCamera
-                AdjustCameraZoom();
-            }
-
-            if (Input.GetMouseButtonUp(0) && _canProceedLaunch)
-            {
-                DestroyTrajectoryDots();
-                _canProceedLaunch = false;
-                LaunchUnit();
-            }
-        }
-
-        private void LaunchUnit()
+        private void SpawnProjectoryDots(Transform spawnTransform)
         {
-            _characterToLaunch.RigidBody.useGravity = true;
-            _characterToLaunch.RigidBody.velocity = new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward);
-            Camera.main.orthographicSize /= 1.5f;
-            _characterToLaunch.SubComponentProcessor.launchLogic.hasBeenLaunched = true;
-            StartCoroutine(_characterToLaunch.SubComponentProcessor.launchLogic.ProcessLaunch());
-        }
-
-        private void DestroyTrajectoryDots()
-        {
-            for (int i = 0; i < _trajectoryDots.Length; i++)
+            for (int i = 0; i < _dotsNumber; i++)
             {
-                Destroy(_trajectoryDots[i]);
+                _trajectoryDots[i] = Instantiate(_trajectoryDotPrefab, spawnTransform);
             }
         }
 
+        public void AimingTheLaunch(GameObject characterToLaunch)
+        {
+            CalculateDirection();
+            DrawTraectory();
+            AdjustCameraZoom();
+        }
+
+        private void CalculateDirection()
+        {
+            //Calculation direction
+            var pointerPosition = Singleton.Instance.ñameraManager.GetPointerWorldPosition(Camera.main);
+            _offsetEndPostion = new Vector3(0, pointerPosition.y, pointerPosition.z);
+            _directionVector = _offsetEndPostion - _offsetStartPoint;
+        }
+        private void DrawTraectory()
+        {
+            EnableTrajectoryDots();
+            _offsetPoint.position = _offsetEndPostion;
+
+            for (var i = 0; i < _dotsNumber; ++i)
+            {
+                _trajectoryDots[i].transform.position = CalculateTraectoryPosition(i * 0.1f);
+            }
+        }
         private Vector3 CalculateTraectoryPosition(float elapsedTime)
         {
-            return new Vector3(0, _startPoint.y, _startPoint.z)
+            return new Vector3(0, _offsetStartPoint.y, _offsetStartPoint.z)
                     + new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward) * elapsedTime
                     + 0.5f * Physics.gravity * elapsedTime * elapsedTime;
         }
 
-        private Vector3 GetPointerWorldPosition(Camera camera)
+        public void LaunchUnit(CharacterControl characterToLaunch)
         {
-            Vector3 screenPosition = Input.mousePosition;
-            screenPosition.z = camera.nearClipPlane + 1;
-            return camera.ScreenToWorldPoint(screenPosition);
+            DisableTrajectoryDots();
+            characterToLaunch.RigidBody.useGravity = true;
+            characterToLaunch.RigidBody.velocity = new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward);
+            StartCoroutine(characterToLaunch.SubComponentProcessor.launchLogic.ProcessLaunch());
         }
+
+        private void DisableTrajectoryDots()
+        {
+            for (int i = 0; i < _trajectoryDots.Length; i++)
+            {
+                _trajectoryDots[i].SetActive(false);
+            }
+        } 
+        private void EnableTrajectoryDots()
+        {
+            for (int i = 0; i < _trajectoryDots.Length; i++)
+            {
+                _trajectoryDots[i].SetActive(true);
+            }
+        }
+
+
+        //private Vector3 GetPointerWorldPosition(Camera camera)
+        //{
+        //    Vector3 screenPosition = Input.mousePosition;
+        //    screenPosition.z = camera.nearClipPlane + 1;
+        //    return camera.ScreenToWorldPoint(screenPosition);
+        //}
 
         private void AdjustCameraZoom()
         {
             // Calculate distance between _offsetEndPostion and _startPoint
-            float distance = Vector3.Distance(_offsetEndPostion, _startPoint);
+            float distance = Vector3.Distance(_offsetEndPostion, _offsetStartPoint);
 
             // Calculate zoom based on distance
             float zoomFactor = Mathf.Lerp(_zoomRange.x, _zoomRange.y, distance / _minDistanceForZoom);
@@ -182,13 +151,13 @@ namespace Angry_Girls
             Camera.main.orthographicSize = zoomFactor;
         }
 
-        public void SwapCharacters(int indexA, int indexB)
-        {
-            var tmp= _charactersList[indexA];
-            _charactersList[indexA] = _charactersList[indexB];
-            _charactersList[indexB] = tmp;
+        //public void SwapCharacters(int indexA, int indexB)
+        //{
+        //    var tmp = _charactersList[indexA];
+        //    _charactersList[indexA] = _charactersList[indexB];
+        //    _charactersList[indexB] = tmp;
 
-            _characterToLaunch = _charactersList[0].GetComponent<CharacterControl>();
-        }
+        //    _characterToLaunch = _charactersList[0].GetComponent<CharacterControl>();
+        //}
     }
 }
