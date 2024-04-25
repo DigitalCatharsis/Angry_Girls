@@ -111,9 +111,9 @@ namespace Angry_Girls
         public void LaunchUnit(CharacterControl characterToLaunch)
         {
             DisableTrajectoryDots();
-            characterToLaunch.RigidBody.useGravity = true;
-            characterToLaunch.RigidBody.velocity = new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward);
-            StartCoroutine(characterToLaunch.SubComponentProcessor.launchLogic.ProcessLaunch());
+            characterToLaunch.rigidBody.useGravity = true;
+            characterToLaunch.rigidBody.velocity = new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward);
+            StartCoroutine(characterToLaunch.subComponentProcessor.launchLogic.ProcessLaunch());
         }
 
         private void DisableTrajectoryDots()

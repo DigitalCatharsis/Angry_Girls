@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 78a180b91d3ba3b47bff5c34345be0a2
+guid: 4fd949502d227384790edd55685b1bb1
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -52,11 +52,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Shoryuken
+      name: Shoryuken_DownSmash_Prep
       takeName: Take 001
       internalID: 1827226128182048838
       firstFrame: 16
-      lastFrame: 58
+      lastFrame: 19
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

@@ -7,6 +7,8 @@ public class Singleton : MonoBehaviour
     public MyExtentions myExtentions;
     public CameraManager ñameraManager;
     public LaunchManager launchManager;
+    public HashManager hashManager;
+    public CharacterManager characterManager;
 
     private void Awake()
     {
@@ -18,8 +20,10 @@ public class Singleton : MonoBehaviour
 
         Instance = this;
 
+        characterManager = GetComponentInChildren<CharacterManager>();
         myExtentions = GetComponentInChildren<MyExtentions>();
         ñameraManager = GetComponentInChildren<CameraManager>();
         launchManager = GetComponentInChildren<LaunchManager>();
+        hashManager = GetComponentInChildren<HashManager>();
     }
 }

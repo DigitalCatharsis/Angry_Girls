@@ -5,19 +5,60 @@ namespace Angry_Girls
     public class CharacterControl : MonoBehaviour
     {
         [Header("Setup")]
-        public Animator Animator;
+        [SerializeField] private bool _isPlayer = true;
 
-        [Space (15)]
+        [Space(15)]
         [Header("Debug")]
-        public Rigidbody RigidBody;
-        public BoxCollider Boxcollider;        
-        public SubComponentProcessor SubComponentProcessor;
+        public Animator animator;
+        public Rigidbody rigidBody;
+        public BoxCollider boxCollider;
+        public SubComponentProcessor subComponentProcessor;
 
         private void Awake()
         {
-            RigidBody = GetComponent<Rigidbody>();
-            Boxcollider = gameObject.GetComponent<BoxCollider>();
-            SubComponentProcessor = GetComponentInChildren<SubComponentProcessor>();
+            rigidBody = GetComponent<Rigidbody>();
+            animator = GetComponent<Animator>();
+            boxCollider = gameObject.GetComponent<BoxCollider>();
+            subComponentProcessor = GetComponentInChildren<SubComponentProcessor>();
+
+            subComponentProcessor.OnAwake();
+
+        }
+
+        private void OnCollisionStay(Collision collision)
+        {
+            subComponentProcessor.blockingManager.boxColliderContacts = collision.contacts;
+        }
+
+        private void Update()
+        {
+            subComponentProcessor.OnUpdate();
+        }
+        private void FixedUpdate()
+        {
+            subComponentProcessor.OnFixedUpdate();
+        }
+        private void LateUpdate()
+        {
+            subComponentProcessor.OnLateUpdate();
+        }
+
+        private void Start()
+        {
+            subComponentProcessor.OnStart();
+        }
+        private void OnEnable()
+        {
+            if (_isPlayer == true)
+            {
+                Singleton.Instance.characterManager.playableCharacters.Add(this.gameObject);
+            }
+            else
+            {
+                Singleton.Instance.characterManager.enemyCharacters.Add(this.gameObject);
+            }
+
+            subComponentProcessor.OnComponentEnable();
         }
     }
 }

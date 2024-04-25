@@ -10,12 +10,19 @@ namespace Angry_Girls
         public bool hasUsedAbility = false;
         //TODO: SO abilityType
 
-        private void LateUpdate()
+        public override void OnAwake()
+        {
+        }
+        public override void OnLateUpdate()
         {
             if (hasBeenLaunched == true && hasFinishedLaunch == false)
             {
-                Singleton.Instance.ñameraManager.CenterCameraAgainst(Control.Boxcollider);
+                Singleton.Instance.ñameraManager.CenterCameraAgainst(control.boxCollider);
             }
+        }
+
+        public override void OnStart()
+        {
         }
 
         public IEnumerator ProcessLaunch()
@@ -27,12 +34,13 @@ namespace Angry_Girls
         {
             hasBeenLaunched = true;
             yield return new WaitForSeconds(0.1f);
-            while (Control.SubComponentProcessor.groundDetector.IsAirboned)
+            while (!control.subComponentProcessor.groundDetector.isGrounded)
             {
                 CheckForAbilityUse();
                 yield return null;
             }
-            hasFinishedLaunch = true;           
+            control.animator.SetBool(MainParameterType.IsAttacking.ToString(), false);
+            hasFinishedLaunch = true;                       
             Singleton.Instance.launchManager.OnLaunchIsOver();            
         }        
 
@@ -47,10 +55,24 @@ namespace Angry_Girls
             {
                 //process ability
                 hasUsedAbility = true;
-                Control.Animator.SetBool(MainParameterType.IsAttacking.ToString(), true);
+                control.animator.SetBool(MainParameterType.IsAttacking.ToString(), true);
                 ColorDebugLog.Log("Ability has been used", System.Drawing.KnownColor.Magenta);
             }
         }
+
+        public override void OnUpdate()
+        {
+        }
+
+        public override void OnComponentEnable()
+        {
+            control.subComponentProcessor.launchLogic = this;
+        }
+
+        public override void OnFixedUpdate()
+        {
+        }
+
 
     }
 }

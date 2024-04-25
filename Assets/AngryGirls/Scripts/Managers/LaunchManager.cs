@@ -69,7 +69,7 @@ namespace Angry_Girls
             {
 
                 // Center camera on character collider center
-                Singleton.Instance.ñameraManager.CenterCameraAgainst(charactersToLaunchLeft[0].GetComponent<CharacterControl>().Boxcollider);
+                Singleton.Instance.ñameraManager.CenterCameraAgainst(charactersToLaunchLeft[0].GetComponent<CharacterControl>().boxCollider);
 
                 characterLauncher.AimingTheLaunch(charactersToLaunchLeft[0]);
             }

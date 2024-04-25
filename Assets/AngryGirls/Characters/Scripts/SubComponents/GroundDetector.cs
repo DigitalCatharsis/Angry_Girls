@@ -8,21 +8,82 @@ namespace Angry_Girls
         [SerializeField] private float _collidingBlockDistance;
 
         [Header("Debug")]
-        [SerializeField] private GameObject _collidedObject;
-        [SerializeField] private Vector3 _contactPoint;
-        public bool IsAirboned;
-        private void FixedUpdate()
-        {
-            _collidedObject = CollisionDetection.GetCollidingObject(Control, Control.gameObject, -Vector3.up, _collidingBlockDistance, ref _contactPoint);
+        //[SerializeField] private GameObject _ground;
+        [ShowOnly] public Vector3 landingPosition = Vector3.zero;
+        public bool isGrounded = false;
 
-            if (Mathf.Abs(Control.RigidBody.velocity.y) < 0.001f && _collidedObject != null)
+        public override void OnComponentEnable()
+        {
+            control.subComponentProcessor.groundDetector = this;
+        }
+        public override void OnUpdate()
+        {
+            isGrounded = IsGrounded();
+        }
+
+        private bool IsGrounded()
+        {
+            //Если что-то коллайдит главный BoxCollider
+            if (control.subComponentProcessor.blockingManager.boxColliderContacts != null)
             {
-                IsAirboned = false;
+                foreach (var contact in control.subComponentProcessor.blockingManager.boxColliderContacts)
+                {
+                    var colliderBottom = (control.transform.position.y + control.boxCollider.center.y) - (control.boxCollider.size.y / 2f);
+                    var yDiffirence = Mathf.Abs(contact.point.y - colliderBottom);
+
+                    if (yDiffirence < 0.01f)
+                    {
+                        if (Mathf.Abs(control.rigidBody.velocity.y) < 0.001f)
+                        {
+                            //_ground = contact.otherCollider.transform.gameObject;
+                            landingPosition = new Vector3(0f, contact.point.y, contact.point.z);
+                            return true;
+                        }
+                    }
+                }
             }
-            else
+
+            //Если падаем
+            if (control.rigidBody.velocity.y < 0f)
             {
-                IsAirboned = true;
+                foreach (var bottomSphere in control.subComponentProcessor.collisionSpheres.bottomSpheres)
+                {
+                    var blockingObj = CollisionDetection.GetCollidingObject
+                        (control, bottomSphere.transform.position, -Vector3.up, _collidingBlockDistance, ref control.subComponentProcessor.blockingManager.bottomRaycastContactPoint);
+
+                    if (blockingObj != null)
+                    {
+                        var character = Singleton.Instance.characterManager.GetCharacter(blockingObj.transform.root.gameObject);
+
+                        if (character == null)
+                        {
+                            //_ground = blockingObj.transform.gameObject;
+                            landingPosition = new Vector3(
+                                0f,
+                                control.subComponentProcessor.blockingManager.bottomRaycastContactPoint.y,
+                                control.subComponentProcessor.blockingManager.bottomRaycastContactPoint.z);
+
+                            return true;
+                        }
+                    }
+                }
             }
+            //_ground = null;
+            return false;
+        }
+        public override void OnFixedUpdate()
+        {
+        }
+
+        public override void OnLateUpdate()
+        {
+        }
+
+        public override void OnStart()
+        {
+        }
+        public override void OnAwake()
+        {
         }
     }
 }

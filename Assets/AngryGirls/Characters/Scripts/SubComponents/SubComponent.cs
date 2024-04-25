@@ -2,13 +2,14 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-
-    public class SubComponent : MonoBehaviour
+    public abstract class SubComponent : MonoBehaviour
     {
-        protected CharacterControl Control;
-        public void Awake()
-        {
-            Control = GetComponentInParent<CharacterControl>();
-        }
+        public CharacterControl control;
+        public abstract void OnAwake();
+        public abstract void OnUpdate();
+        public abstract void OnComponentEnable();
+        public abstract void OnFixedUpdate();        
+        public abstract void OnLateUpdate();
+        public abstract void OnStart();
     }
 }
