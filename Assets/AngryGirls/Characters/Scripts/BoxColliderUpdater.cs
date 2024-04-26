@@ -36,7 +36,7 @@ namespace Angry_Girls
 
             if (!_boxColliderUpdater.boxColliderAnimationData.ContainsKey(currentState.currentStateName))
             {
-                ColorDebugLog.Log("No boxColliderAnimationData for state " + currentState.currentStateName, System.Drawing.KnownColor.Red);
+                //ColorDebugLog.Log("No boxColliderAnimationData for state " + currentState.currentStateName, System.Drawing.KnownColor.Red);
                 return;
             }
 

@@ -29,26 +29,27 @@ namespace Angry_Girls
         {
             return Instantiate(Resources.Load("CollisionSphere", typeof(GameObject)), Vector3.zero, Quaternion.identity) as GameObject;
         }
-        private void OnDrawGizmos()
-        {
-            var boxCollider = gameObject.transform.root.GetComponent<BoxCollider>();
 
-            var localBounds = new Bounds(boxCollider.center, boxCollider.size);
+        //private void OnDrawGizmos()
+        //{
+        //    var boxCollider = gameObject.transform.root.GetComponent<BoxCollider>();
 
-            const float radius = 0.1f;
+        //    var localBounds = new Bounds(boxCollider.center, boxCollider.size);
 
-            Gizmos.color = Color.cyan;
+        //    const float radius = 0.1f;
 
-            Gizmos.DrawSphere(transform.TransformPoint(new Vector3(localBounds.min.x, localBounds.min.y, localBounds.min.z)), radius);
-            Gizmos.DrawSphere(transform.TransformPoint(new Vector3(localBounds.min.x, localBounds.min.y, localBounds.max.z)), radius);
-            Gizmos.DrawSphere(transform.TransformPoint(new Vector3(localBounds.max.x, localBounds.min.y, localBounds.max.z)), radius);
-            Gizmos.DrawSphere(transform.TransformPoint(new Vector3(localBounds.max.x, localBounds.min.y, localBounds.min.z)), radius);
+        //    Gizmos.color = Color.cyan;
 
-            Gizmos.DrawSphere(transform.TransformPoint(new Vector3(localBounds.min.x, localBounds.max.y, localBounds.min.z)), radius);
-            Gizmos.DrawSphere(transform.TransformPoint(new Vector3(localBounds.min.x, localBounds.max.y, localBounds.max.z)), radius);
-            Gizmos.DrawSphere(transform.TransformPoint(new Vector3(localBounds.max.x, localBounds.max.y, localBounds.max.z)), radius);
-            Gizmos.DrawSphere(transform.TransformPoint(new Vector3(localBounds.max.x, localBounds.max.y, localBounds.min.z)), radius);
-        }
+        //    Gizmos.DrawSphere(transform.TransformPoint(new Vector3(localBounds.min.x, localBounds.min.y, localBounds.min.z)), radius);
+        //    Gizmos.DrawSphere(transform.TransformPoint(new Vector3(localBounds.min.x, localBounds.min.y, localBounds.max.z)), radius);
+        //    Gizmos.DrawSphere(transform.TransformPoint(new Vector3(localBounds.max.x, localBounds.min.y, localBounds.max.z)), radius);
+        //    Gizmos.DrawSphere(transform.TransformPoint(new Vector3(localBounds.max.x, localBounds.min.y, localBounds.min.z)), radius);
+
+        //    Gizmos.DrawSphere(transform.TransformPoint(new Vector3(localBounds.min.x, localBounds.max.y, localBounds.min.z)), radius);
+        //    Gizmos.DrawSphere(transform.TransformPoint(new Vector3(localBounds.min.x, localBounds.max.y, localBounds.max.z)), radius);
+        //    Gizmos.DrawSphere(transform.TransformPoint(new Vector3(localBounds.max.x, localBounds.max.y, localBounds.max.z)), radius);
+        //    Gizmos.DrawSphere(transform.TransformPoint(new Vector3(localBounds.max.x, localBounds.max.y, localBounds.min.z)), radius);
+        //}
 
         private void SetColliderSpheres()
         {
@@ -56,8 +57,8 @@ namespace Angry_Girls
             for (int i = 0; i < 5; i++)
             {
                 var sphere = LoadCollisionSpheres();
-                bottomSpheres[i] = sphere;
                 sphere.transform.parent = _bottom;
+                bottomSpheres[i] = sphere;
             }
 
             Reposition_BottomSpheres();
@@ -66,8 +67,8 @@ namespace Angry_Girls
             for (int i = 0; i < 5; i++)
             {
                 var sphere = LoadCollisionSpheres();
-                upSpheres[i] = sphere;
                 sphere.transform.parent = _up;
+                upSpheres[i] = sphere;
             }
 
             Reposition_UpSpheres();
@@ -77,8 +78,8 @@ namespace Angry_Girls
             {
                 var sphere = LoadCollisionSpheres();
                 frontSpheres[i] = sphere;
-                //frontOverlapCheckers[i] = sphere.GetComponent<OverlapChecker>();
                 sphere.transform.parent = _front;
+                //frontOverlapCheckers[i] = sphere.GetComponent<OverlapChecker>();
             }
 
             Reposition_FrontSpheres();
@@ -87,8 +88,8 @@ namespace Angry_Girls
             for (int i = 0; i < 10; i++)
             {
                 var sphere = LoadCollisionSpheres();
-                backSpheres[i] = sphere;
                 sphere.transform.parent = _back;
+                backSpheres[i] = sphere;
             }
 
             Reposition_BackSpheres();
@@ -100,7 +101,7 @@ namespace Angry_Girls
 
         public void Reposition_FrontSpheres()
         {
-            var bounds = control.boxCollider.bounds;
+            var bounds = new Bounds(control.boxCollider.center, control.boxCollider.size);
 
             var upPosition = new Vector3(0, bounds.max.y, bounds.max.z);
             var bottomPosition = new Vector3(0, bounds.min.y, bounds.max.z);
@@ -119,7 +120,7 @@ namespace Angry_Girls
 
         public void Reposition_BackSpheres()
         {
-            var bounds = control.boxCollider.bounds;
+            var bounds = new Bounds(control.boxCollider.center, control.boxCollider.size);
 
             var upPosition = new Vector3(0, bounds.max.y, bounds.min.z);
             var bottomPosition = new Vector3(0, bounds.min.y, bounds.min.z);
@@ -139,7 +140,7 @@ namespace Angry_Girls
         public void Reposition_BottomSpheres()
         {
             {
-                var bounds = control.boxCollider.bounds;
+                var bounds = new Bounds(control.boxCollider.center, control.boxCollider.size);
 
                 var frontPosition = new Vector3(0, bounds.min.y, bounds.max.z);
                 var backPosition = new Vector3(0, bounds.min.y, bounds.min.z);
@@ -159,7 +160,8 @@ namespace Angry_Girls
 
         public void Reposition_UpSpheres()
         {
-            var bounds = control.boxCollider.bounds;
+            //var bounds = control.boxCollider.bounds;
+            var bounds = new Bounds(control.boxCollider.center, control.boxCollider.size);
 
             var frontPosition = new Vector3(0, bounds.max.y, bounds.max.z);
             var backPosition = new Vector3(0, bounds.max.y, bounds.min.z);

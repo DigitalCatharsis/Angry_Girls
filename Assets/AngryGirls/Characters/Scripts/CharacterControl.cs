@@ -13,6 +13,7 @@ namespace Angry_Girls
         public Rigidbody rigidBody;
         public BoxCollider boxCollider;
         public SubComponentProcessor subComponentProcessor;
+        public ContactPoint[] boxColliderContacts;
 
         private void Awake()
         {
@@ -27,7 +28,7 @@ namespace Angry_Girls
 
         private void OnCollisionStay(Collision collision)
         {
-            subComponentProcessor.blockingManager.boxColliderContacts = collision.contacts;
+            boxColliderContacts = collision.contacts;
         }
 
         private void Update()

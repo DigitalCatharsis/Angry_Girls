@@ -6,7 +6,7 @@ namespace Angry_Girls
 {
     public enum PlayableCharacters
     {
-        YBot,
+        YBot_Blue,
         YBot_Green,
         YBot_Red,
         YBot_Yellow

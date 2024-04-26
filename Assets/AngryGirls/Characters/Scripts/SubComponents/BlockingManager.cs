@@ -4,8 +4,6 @@ namespace Angry_Girls
 {
     public class BlockingManager : SubComponent
     {
-        public ContactPoint[] boxColliderContacts;
-        public Vector3 bottomRaycastContactPoint;
 
         public override void OnAwake()
         {

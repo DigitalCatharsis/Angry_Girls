@@ -40,8 +40,8 @@ namespace Angry_Girls
 
             if (isLanding == true )
             {
-                if (control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.3f)
-                control.transform.position = control.subComponentProcessor.groundDetector.landingPosition;
+                //if (control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.05f) ;
+                //control.transform.position = control.subComponentProcessor.groundDetector.landingPosition;
             }
 
             if (control.subComponentProcessor.groundDetector.isGrounded)
@@ -92,14 +92,14 @@ namespace Angry_Girls
 
         private void SetTurn()
         {
-            if (control.rigidBody.velocity.z > 0.1f)
-            {
-                control.transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
-            else if (control.rigidBody.velocity.z < 0.1f)
-            {
-                control.transform.rotation = Quaternion.Euler(0, 180, 0);
-            }
+            //if (control.rigidBody.velocity.z > 0.1f)
+            //{
+            //    control.transform.rotation = Quaternion.Euler(0, 0, 0);
+            //}
+            //else if (control.rigidBody.velocity.z < 0.1f)
+            //{
+            //    control.transform.rotation = Quaternion.Euler(0, 180, 0);
+            //}
         }
 
         private bool CheckForLanding()

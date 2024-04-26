@@ -5,12 +5,12 @@ namespace Angry_Girls
 {
     public enum SubComponentType
     {
-        groundDetector,
-        animationProcessor,
-        launchLogic,
         collisionSpheres,
+        animationProcessor,
+        BlockingManager,
         boxColliderUpdater,
-        BlockingManager
+        groundDetector,
+        launchLogic,
     }
     public class SubComponentProcessor : MonoBehaviour
     {
