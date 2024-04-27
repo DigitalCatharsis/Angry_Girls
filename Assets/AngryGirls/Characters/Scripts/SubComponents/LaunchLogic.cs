@@ -34,13 +34,14 @@ namespace Angry_Girls
         {
             hasBeenLaunched = true;
             yield return new WaitForSeconds(0.1f);
-            while (!control.subComponentProcessor.groundDetector.isGrounded)
+            while (control.subComponentProcessor.animationProcessor.isGrounded == false)
             {
                 CheckForAbilityUse();
                 yield return null;
             }
-            control.animator.SetBool(MainParameterType.IsAttacking.ToString(), false);
-            hasFinishedLaunch = true;                       
+
+            hasFinishedLaunch = true;
+            control.subComponentProcessor.animationProcessor.isAttacking = false;
             Singleton.Instance.launchManager.OnLaunchIsOver();            
         }        
 
@@ -55,7 +56,7 @@ namespace Angry_Girls
             {
                 //process ability
                 hasUsedAbility = true;
-                control.animator.SetBool(MainParameterType.IsAttacking.ToString(), true);
+                control.subComponentProcessor.animationProcessor.isAttacking = true;
                 ColorDebugLog.Log("Ability has been used", System.Drawing.KnownColor.Magenta);
             }
         }

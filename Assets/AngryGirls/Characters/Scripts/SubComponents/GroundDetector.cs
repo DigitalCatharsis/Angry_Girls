@@ -10,7 +10,6 @@ namespace Angry_Girls
         [Header("Debug")]
         //[SerializeField] private GameObject _ground;
         [ShowOnly] public Vector3 landingPosition = Vector3.zero;
-        public bool isGrounded = false;
         public Vector3 bottomRaycastContactPoint;
 
         public override void OnComponentEnable()
@@ -19,7 +18,7 @@ namespace Angry_Girls
         }
         public override void OnUpdate()
         {
-            isGrounded = IsGrounded();
+            control.subComponentProcessor.animationProcessor.isGrounded = IsGrounded();
         }
 
         private bool IsGrounded()

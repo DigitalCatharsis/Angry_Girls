@@ -1658,7 +1658,6 @@ MonoBehaviour:
   control: {fileID: 0}
   _collidingBlockDistance: 0.05
   landingPosition: {x: 0, y: 0, z: 0}
-  isGrounded: 0
   bottomRaycastContactPoint: {x: 0, y: 0, z: 0}
 --- !u!1 &4770912022852876395
 GameObject:
@@ -2051,9 +2050,16 @@ MonoBehaviour:
     currentStateName: 0
     hash: 0
   isLanding: 0
+  isAttacking: 0
+  lockTransition: 0
+  isGrounded: 0
   stateNamesDictionary:
     _serializedList: []
   landingNamesDictionary:
+    _serializedList: []
+  attackNamesDictionary:
+    _serializedList: []
+  airbonedNamesDictionary:
     _serializedList: []
 --- !u!1 &5503316897883994643
 GameObject:
@@ -2688,7 +2694,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4889219240122694951
 Transform:
   m_ObjectHideFlags: 0
