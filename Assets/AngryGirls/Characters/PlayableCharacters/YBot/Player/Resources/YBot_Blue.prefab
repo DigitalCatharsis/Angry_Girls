@@ -2051,8 +2051,9 @@ MonoBehaviour:
     hash: 0
   isLanding: 0
   isAttacking: 0
-  lockTransition: 0
   isGrounded: 0
+  _isAttackStateOver: 0
+  _isLandingStateOver: 0
   stateNamesDictionary:
     _serializedList: []
   landingNamesDictionary:
@@ -2694,7 +2695,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4889219240122694951
 Transform:
   m_ObjectHideFlags: 0
@@ -2723,6 +2724,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   control: {fileID: 0}
+  isUpdatingSpheres: 0
+  isUpdateColliderCondition: 0
   _boxColliderUpdater: {fileID: 11400000, guid: 2697f8a1822d97d4597139c6fdf4cb34,
     type: 2}
 --- !u!1 &7792407306361366937

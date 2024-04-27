@@ -39,9 +39,7 @@ namespace Angry_Girls
                 CheckForAbilityUse();
                 yield return null;
             }
-
             hasFinishedLaunch = true;
-            control.subComponentProcessor.animationProcessor.isAttacking = false;
             Singleton.Instance.launchManager.OnLaunchIsOver();            
         }        
 

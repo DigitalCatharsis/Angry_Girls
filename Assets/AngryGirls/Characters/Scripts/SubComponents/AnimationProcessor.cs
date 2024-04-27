@@ -39,8 +39,10 @@ namespace Angry_Girls
 
         public bool isLanding = false;
         public bool isAttacking = false;
-        public bool lockTransition = false;
         public bool isGrounded = false;
+
+        [SerializeField] private bool _isAttackStateOver = false;
+        [SerializeField] private bool _isLandingStateOver = false;
 
         [SerializeField] private SerializedDictionary<StateNames, int> stateNamesDictionary;
         [SerializeField] private SerializedDictionary<LandingStates, int> landingNamesDictionary;
@@ -64,10 +66,12 @@ namespace Angry_Girls
             currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(stateNamesDictionary, currentStateData.hash);
         }
 
-        public override void OnUpdate()
+        public override void OnFixedUpdate()
         {
             //isGrounded updates in GroundDetector
             isLanding = CheckForLanding();
+            _isAttackStateOver = IsAttackStateOver();
+            _isLandingStateOver = IsLandingStateOver();
 
             //GROUNDED
             if (isGrounded == true)
@@ -75,14 +79,17 @@ namespace Angry_Girls
                 if (isAttacking == true)
                 {
                     //GROUNDED-ATTACK
+                    control.animator.StopPlayback();
                     ChangeAnimationState(stateNamesDictionary[StateNames.A_Shoryuken_DownSmash_Finish], 0, 0f);
                 }
                 else
                 {
-                    if (IsInAttackState() == true)
+                    if (_isAttackStateOver == false)
                     {
                         return;
                     }
+
+                    isAttacking = false;
 
                     //LANDING (Air state + Grounded)
                     if (isLanding == true)
@@ -92,7 +99,7 @@ namespace Angry_Girls
                     }
                     else
                     {
-                        if(IsInLandingState() == true)
+                        if(_isLandingStateOver == false)
                         {
                             return;
                         }
@@ -108,6 +115,11 @@ namespace Angry_Girls
                 //AIRBONED
                 if (isAttacking == true)
                 {
+                    if (_isAttackStateOver == false)
+                    {
+                        return;
+                    }
+
                     ChangeAnimationState_CrossFade(stateNamesDictionary[StateNames.A_Shoryuken_DownSmash_Prep], 0.5f);
                 }
                 else
@@ -127,21 +139,21 @@ namespace Angry_Girls
             return false;
         }
 
-        private bool IsInAttackState()
+        private bool IsAttackStateOver()
         {
             if (attackNamesDictionary.ContainsValue(currentStateData.hash) && control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
             {
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
-        private bool IsInLandingState()
+        private bool IsLandingStateOver()
         {
             if (landingNamesDictionary.ContainsValue(currentStateData.hash) && control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
             {
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
 
         private void ChangeAnimationState_CrossFade(int newStateHash, float transitionDuration, int layer = 0, float normalizedTimeOffset = 0.0f, float normalizedTransitionTime = 0.0f)
@@ -154,6 +166,8 @@ namespace Angry_Girls
 
             currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(stateNamesDictionary, newStateHash);
             currentStateData.hash = newStateHash;
+
+            //control.subComponentProcessor.boxColliderUpdater.UpdateCollider();
         }
         private void ChangeAnimationState_CrossFadeInFixedTime(int newStateHash, float transitionDuration, int layer = 0, float normalizedTimeOffset = 0.0f, float normalizedTransitionTime = 0.0f)
         {
@@ -165,6 +179,7 @@ namespace Angry_Girls
 
             currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(stateNamesDictionary, newStateHash);
             currentStateData.hash = newStateHash;
+            //control.subComponentProcessor.boxColliderUpdater.UpdateCollider();
         }
         private void ChangeAnimationState(int newStateHash, int layer = 0, float transitionDuration = 0f)
         {
@@ -176,12 +191,13 @@ namespace Angry_Girls
 
             currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(stateNamesDictionary, newStateHash);
             currentStateData.hash = newStateHash;
+            //control.subComponentProcessor.boxColliderUpdater.UpdateCollider();
         }
 
         public override void OnAwake()
         {
         }
-        public override void OnFixedUpdate()
+        public override void OnUpdate()
         {
         }
 
