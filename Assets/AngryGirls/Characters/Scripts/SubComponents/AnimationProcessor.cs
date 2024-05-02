@@ -41,13 +41,14 @@ namespace Angry_Girls
         public bool isAttacking = false;
         public bool isGrounded = false;
 
+
         [SerializeField] private bool _isAttackStateOver = false;
         [SerializeField] private bool _isLandingStateOver = false;
 
-        [SerializeField] private SerializedDictionary<StateNames, int> stateNamesDictionary;
-        [SerializeField] private SerializedDictionary<LandingStates, int> landingNamesDictionary;
-        [SerializeField] private SerializedDictionary<AttackStates, int> attackNamesDictionary;
-        [SerializeField] private SerializedDictionary<AirbonedStates, int> airbonedNamesDictionary;
+        [SerializeField] private SerializedDictionary<StateNames, int> _stateNamesDictionary;
+        [SerializeField] private SerializedDictionary<LandingStates, int> _landingNamesDictionary;
+        [SerializeField] private SerializedDictionary<AttackStates, int> _attackNamesDictionary;
+        [SerializeField] private SerializedDictionary<AirbonedStates, int> _airbonedNamesDictionary;
 
         public override void OnComponentEnable()
         {
@@ -55,84 +56,88 @@ namespace Angry_Girls
             control.subComponentProcessor.animationProcessor = this;
 
             //Init Dictionaries
-            stateNamesDictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<StateNames>(this.gameObject);
-            landingNamesDictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<LandingStates>(this.gameObject);
-            attackNamesDictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<AttackStates>(this.gameObject);
-            airbonedNamesDictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<AirbonedStates>(this.gameObject);
+            _stateNamesDictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<StateNames>(this.gameObject);
+            _landingNamesDictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<LandingStates>(this.gameObject);
+            _attackNamesDictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<AttackStates>(this.gameObject);
+            _airbonedNamesDictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<AirbonedStates>(this.gameObject);
 
             //Init start Animation
             AnimatorStateInfo stateInfo = control.animator.GetCurrentAnimatorStateInfo(0);
             currentStateData.hash = stateInfo.shortNameHash;
-            currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(stateNamesDictionary, currentStateData.hash);
+            currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(_stateNamesDictionary, currentStateData.hash);
         }
 
         public override void OnFixedUpdate()
         {
-            //isGrounded updates in GroundDetector
             isLanding = CheckForLanding();
             _isAttackStateOver = IsAttackStateOver();
             _isLandingStateOver = IsLandingStateOver();
+            //isGrounded updates in GroundDetector
 
-            //GROUNDED
-            if (isGrounded == true)
+            if (control.subComponentProcessor.blockingManager.IsFrontBlocked() == true)
             {
-                if (isAttacking == true)
+                control.rigidBody.velocity = new Vector3(0, control.rigidBody.velocity.y, 0);
+            }
+
+            //Grounded + Attack
+            if (isGrounded == true && isAttacking == true)
+            {
+                control.animator.StopPlayback();
+                ChangeAnimationState(_stateNamesDictionary[StateNames.A_Shoryuken_DownSmash_Finish], 0, 0f);
+            }
+
+            //Grounded
+            if (isGrounded == true && isAttacking == false)
+            {
+                //Is in attack state?
+                if (_isAttackStateOver == false)
                 {
-                    //GROUNDED-ATTACK
-                    control.animator.StopPlayback();
-                    ChangeAnimationState(stateNamesDictionary[StateNames.A_Shoryuken_DownSmash_Finish], 0, 0f);
+                    return;
                 }
-                else
+
+                //LANDING
+                if (isLanding == true)
                 {
-                    if (_isAttackStateOver == false)
+                    control.rigidBody.velocity = Vector3.zero;
+                    ChangeAnimationState(_stateNamesDictionary[StateNames.A_Fall_Landing], 0, 0f);
+                }
+
+                //IDLE
+                if (isLanding == false)
+                {
+                    if (_isLandingStateOver == false)
                     {
                         return;
                     }
-
-                    isAttacking = false;
-
-                    //LANDING (Air state + Grounded)
-                    if (isLanding == true)
-                    {
-                        //We are Landing
-                        ChangeAnimationState(stateNamesDictionary[StateNames.A_Fall_Landing], 0, 0f);
-                    }
-                    else
-                    {
-                        if(_isLandingStateOver == false)
-                        {
-                            return;
-                        }
-                        //IDLE
-                        control.rigidBody.velocity = Vector3.zero;
-                        control.animator.StopPlayback();
-                        ChangeAnimationState_CrossFadeInFixedTime(stateNamesDictionary[StateNames.A_Idle], 0.25f);
-                    }
+                    control.rigidBody.velocity = Vector3.zero;
+                    control.animator.StopPlayback();
+                    ChangeAnimationState_CrossFadeInFixedTime(_stateNamesDictionary[StateNames.A_Idle], 0.25f);
                 }
             }
-            else
-            {
-                //AIRBONED
-                if (isAttacking == true)
-                {
-                    if (_isAttackStateOver == false)
-                    {
-                        return;
-                    }
 
-                    ChangeAnimationState_CrossFade(stateNamesDictionary[StateNames.A_Shoryuken_DownSmash_Prep], 0.5f);
-                }
-                else
+            //Airboned + attack
+            if (isGrounded == false && isAttacking == true)
+            {
+                if (_isAttackStateOver == false)
                 {
-                    control.animator.StopPlayback();
-                    ChangeAnimationState_CrossFadeInFixedTime(stateNamesDictionary[StateNames.A_Falling_Idle], 0.1f);
+                    return;
                 }
+
+                ChangeAnimationState_CrossFade(_stateNamesDictionary[StateNames.A_Shoryuken_DownSmash_Prep], 0.5f);
+            }
+
+            //Airboned
+            if (isGrounded == false && isAttacking == false)
+            {
+                SetRotation();
+                control.animator.StopPlayback();
+                ChangeAnimationState_CrossFadeInFixedTime(_stateNamesDictionary[StateNames.A_Falling_Idle], 0.1f);
             }
         }
 
         private bool CheckForLanding()
         {
-            if (airbonedNamesDictionary.ContainsValue(currentStateData.hash) && isGrounded)
+            if (_airbonedNamesDictionary.ContainsValue(currentStateData.hash) && isGrounded)
             {
                 return true;
             }
@@ -141,7 +146,7 @@ namespace Angry_Girls
 
         private bool IsAttackStateOver()
         {
-            if (attackNamesDictionary.ContainsValue(currentStateData.hash) && control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
+            if (_attackNamesDictionary.ContainsValue(currentStateData.hash) && control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
             {
                 return false;
             }
@@ -149,7 +154,7 @@ namespace Angry_Girls
         }
         private bool IsLandingStateOver()
         {
-            if (landingNamesDictionary.ContainsValue(currentStateData.hash) && control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
+            if (_landingNamesDictionary.ContainsValue(currentStateData.hash) && control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
             {
                 return false;
             }
@@ -164,10 +169,8 @@ namespace Angry_Girls
             }
             control.animator.CrossFade(newStateHash, transitionDuration, layer, normalizedTimeOffset, normalizedTransitionTime);
 
-            currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(stateNamesDictionary, newStateHash);
+            currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(_stateNamesDictionary, newStateHash);
             currentStateData.hash = newStateHash;
-
-            //control.subComponentProcessor.boxColliderUpdater.UpdateCollider();
         }
         private void ChangeAnimationState_CrossFadeInFixedTime(int newStateHash, float transitionDuration, int layer = 0, float normalizedTimeOffset = 0.0f, float normalizedTransitionTime = 0.0f)
         {
@@ -177,9 +180,8 @@ namespace Angry_Girls
             }
             control.animator.CrossFadeInFixedTime(newStateHash, transitionDuration, layer, normalizedTimeOffset, normalizedTransitionTime);
 
-            currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(stateNamesDictionary, newStateHash);
+            currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(_stateNamesDictionary, newStateHash);
             currentStateData.hash = newStateHash;
-            //control.subComponentProcessor.boxColliderUpdater.UpdateCollider();
         }
         private void ChangeAnimationState(int newStateHash, int layer = 0, float transitionDuration = 0f)
         {
@@ -189,14 +191,14 @@ namespace Angry_Girls
             }
             control.animator.Play(newStateHash, layer, transitionDuration);
 
-            currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(stateNamesDictionary, newStateHash);
+            currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(_stateNamesDictionary, newStateHash);
             currentStateData.hash = newStateHash;
-            //control.subComponentProcessor.boxColliderUpdater.UpdateCollider();
         }
 
         public override void OnAwake()
         {
         }
+
         public override void OnUpdate()
         {
         }
@@ -209,19 +211,22 @@ namespace Angry_Girls
         {
         }
 
-        //private void SetTurn()
-        //{
-        //    Debug.Log(control.rigidBody.velocity.z);
+        public void SetRotation()
+        {
+            if (control.rigidBody.velocity.z > 0f)
+            {
+                control.transform.rotation = Quaternion.Euler(0, 0, 0);
+                //return true;
+            }
 
-        //    if (control.rigidBody.velocity.z > 113f)
-        //    {
-        //        control.transform.rotation = Quaternion.Euler(0, 0, 0);
-        //    }
-        //    else if (control.rigidBody.velocity.z < 0.1f)
-        //    {
-        //        control.transform.rotation = Quaternion.Euler(0, 180, 0);
-        //    }
-        //}
+            if (control.rigidBody.velocity.z < 0f)
+            {
+                control.transform.rotation = Quaternion.Euler(0, 180, 0);
+                //return false;
+            }
+
+            //return false;
+        }
     }
 
     [Serializable]

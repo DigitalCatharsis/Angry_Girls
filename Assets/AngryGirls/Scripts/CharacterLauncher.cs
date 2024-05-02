@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.VFX;
 
 namespace Angry_Girls
 {
-
     public class CharacterLauncher : MonoBehaviour
     {
         //Direction

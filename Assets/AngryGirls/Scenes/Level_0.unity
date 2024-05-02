@@ -1656,7 +1656,7 @@ PrefabInstance:
     - target: {fileID: 2640689163874789523, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_Name
-      value: YBot_Blue
+      value: Test_Blue
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
