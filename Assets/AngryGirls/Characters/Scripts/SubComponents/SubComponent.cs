@@ -8,8 +8,8 @@ namespace Angry_Girls
         public abstract void OnAwake();
         public abstract void OnUpdate();
         public abstract void OnComponentEnable();
-        public abstract void OnFixedUpdate();        
-        public abstract void OnLateUpdate();
+        public abstract void OnFixedUpdate(); 
         public abstract void OnStart();
+        public abstract void OnLateUpdate();
     }
 }

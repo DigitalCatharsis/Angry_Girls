@@ -16,7 +16,6 @@ namespace Angry_Girls
 
         public override void OnFixedUpdate()
         {
-            UpdateCollider();
         }
 
         public void UpdateCollider()
@@ -94,15 +93,16 @@ namespace Angry_Girls
         public override void OnAwake()
         {
         }
-        public override void OnLateUpdate()
-        {
-        }
-
         public override void OnStart()
         {
         }
 
         public override void OnUpdate()
+        {
+            UpdateCollider();
+        }
+
+        public override void OnLateUpdate()
         {
         }
     }

@@ -32,13 +32,6 @@ namespace Angry_Girls
 
             return false;
         }
-
-        public override void OnFixedUpdate()
-        {
-            DefineFrontSpheres();
-            CheckFrontBlocking();
-        }
-
         private void DefineFrontSpheres()
         {
             if (IsForwardReversed() == true)
@@ -132,16 +125,21 @@ namespace Angry_Girls
         {
 
         }
-
-        public override void OnLateUpdate()
-        {
-        }
-
         public override void OnStart()
         {
         }
 
         public override void OnUpdate()
+        {
+        }
+
+        public override void OnFixedUpdate()
+        {
+            DefineFrontSpheres();
+            CheckFrontBlocking();
+        }
+
+        public override void OnLateUpdate()
         {
         }
     }

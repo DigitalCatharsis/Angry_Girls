@@ -71,6 +71,7 @@
     <Compile Include="Assets\AngryGirls\Helpers\ColorDebugLog\ColorDebugLog.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\GroundDetector.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\Managers\Singleton.cs" />
+    <Compile Include="Assets\AngryGirls\Helpers\Settings\PhysicsSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\CharacterSelect.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleSprite.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\CollisionSpheres.cs" />
@@ -82,8 +83,10 @@
     <Compile Include="Assets\AngryGirls\Scripts\UI_Control.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LayerAdder\LayerChanger.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUI.cs" />
+    <Compile Include="Assets\AngryGirls\Helpers\Settings\FrameSettings.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\HashManager.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleEPOOutline.cs" />
+    <Compile Include="Assets\AngryGirls\Helpers\Settings\Settings.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\BlockingManager.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\CharacterControl.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\LaunchLogic.cs" />

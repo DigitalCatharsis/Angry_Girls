@@ -185,12 +185,11 @@ namespace Angry_Girls
         public override void OnFixedUpdate()
         {
         }
-
-        public override void OnLateUpdate()
+        public override void OnStart()
         {
         }
 
-        public override void OnStart()
+        public override void OnLateUpdate()
         {
         }
 

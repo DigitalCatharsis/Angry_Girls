@@ -75,14 +75,14 @@ namespace Angry_Girls
         {
         }
 
-        public override void OnLateUpdate()
-        {
-        }
-
         public override void OnStart()
         {
         }
         public override void OnAwake()
+        {
+        }
+
+        public override void OnLateUpdate()
         {
         }
     }

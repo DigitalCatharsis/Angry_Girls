@@ -13,13 +13,6 @@ namespace Angry_Girls
         public override void OnAwake()
         {
         }
-        public override void OnLateUpdate()
-        {
-            if (hasBeenLaunched == true && hasFinishedLaunch == false)
-            {
-                Singleton.Instance.ñameraManager.CenterCameraAgainst(control.boxCollider);
-            }
-        }
 
         public override void OnStart()
         {
@@ -69,6 +62,14 @@ namespace Angry_Girls
         }
 
         public override void OnFixedUpdate()
+        {
+            if (hasBeenLaunched == true && hasFinishedLaunch == false)
+            {
+                Singleton.Instance.ñameraManager.CenterCameraAgainst(control.boxCollider);
+            }
+        }
+
+        public override void OnLateUpdate()
         {
         }
     }

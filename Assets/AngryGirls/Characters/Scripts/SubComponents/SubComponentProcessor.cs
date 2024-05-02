@@ -75,5 +75,12 @@ namespace Angry_Girls
                 component.OnComponentEnable();
             }
         }
+        public void OnComponentLateUpdate()
+        {
+            foreach (var component in arrSubComponents)
+            {
+                component.OnComponentEnable();
+            }
+        }
     }
 }

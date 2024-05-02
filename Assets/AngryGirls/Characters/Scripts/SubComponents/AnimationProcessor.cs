@@ -62,6 +62,11 @@ namespace Angry_Girls
             _airbonedNamesDictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<AirbonedStates>(this.gameObject);
 
             //Init start Animation
+            UpdateCurrentState();
+        }
+
+        private void UpdateCurrentState()
+        {
             AnimatorStateInfo stateInfo = control.animator.GetCurrentAnimatorStateInfo(0);
             currentStateData.hash = stateInfo.shortNameHash;
             currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(_stateNamesDictionary, currentStateData.hash);
@@ -84,6 +89,7 @@ namespace Angry_Girls
             {
                 control.animator.StopPlayback();
                 ChangeAnimationState(_stateNamesDictionary[StateNames.A_Shoryuken_DownSmash_Finish], 0, 0f);
+                control.rigidBody.velocity = new Vector3(0, 0, 0);
             }
 
             //Grounded
@@ -203,10 +209,6 @@ namespace Angry_Girls
         {
         }
 
-        public override void OnLateUpdate()
-        {
-        }
-
         public override void OnStart()
         {
         }
@@ -226,6 +228,10 @@ namespace Angry_Girls
             }
 
             //return false;
+        }
+
+        public override void OnLateUpdate()
+        {
         }
     }
 
