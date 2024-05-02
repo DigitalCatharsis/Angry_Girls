@@ -1,5 +1,6 @@
 using AYellowpaper.SerializedCollections;
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -29,6 +30,14 @@ namespace Angry_Girls
 
             return newDic;
         }
+
+        //public void AddToDictionary<T>(SerializedDictionary<T, int> dict, T[] val)
+        //{
+        //    foreach (var item in val)
+        //    {
+        //        dict.Add((T)item, Animator.StringToHash(item.ToString()));
+        //    }
+        //}
 
         public int GetHash<T>(T enumType, SerializedDictionary<T, int> dictionary) where T : Enum
         {

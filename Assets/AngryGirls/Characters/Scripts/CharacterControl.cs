@@ -6,6 +6,7 @@ namespace Angry_Girls
     {
         [Header("Setup")]
         [SerializeField] private bool _isPlayer = true;
+        public CharacterSettings characterSettings;
 
         [Space(15)]
         [Header("Debug")]

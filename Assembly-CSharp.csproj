@@ -80,6 +80,7 @@
     <Compile Include="Assets\AngryGirls\Helpers\LookAtPoint\LookAtPoint.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ListOfLists\SerializableList.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\BoxColliderUpdater_Data.cs" />
+    <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\CharacterMovement.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\UI_Control.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LayerAdder\LayerChanger.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUI.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Assets\AngryGirls\Helpers\ShowOnlyAttribute\ShowOnlyAttribute.cs" />
     <Compile Include="Assets\AngryGirls\Characters\CollisionSpheres\OverlapChecker.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\Managers\CameraManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts\CharacterSettings.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\BoxColliderUpdater.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUnityVersion.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\Managers\CharacterManager.cs" />

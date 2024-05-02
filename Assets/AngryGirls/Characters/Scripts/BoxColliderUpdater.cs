@@ -7,8 +7,6 @@ namespace Angry_Girls
         public bool isUpdatingSpheres = false;
         public bool isUpdateColliderCondition = false;
 
-        [SerializeField] private BoxColliderUpdater_Container _boxColliderUpdater;
-
         public override void OnComponentEnable()
         {
             control.subComponentProcessor.boxColliderUpdater = this;
@@ -20,10 +18,10 @@ namespace Angry_Girls
 
         public void UpdateCollider()
         {
-            ColorDebugLog.Log("Updating", System.Drawing.KnownColor.Green);
+            //ColorDebugLog.Log("Updating", System.Drawing.KnownColor.Green);
             var currentState = control.subComponentProcessor.animationProcessor.currentStateData;
 
-            if (!_boxColliderUpdater.boxColliderAnimationData.ContainsKey(currentState.currentStateName))
+            if (!control.characterSettings.boxcolliderContainer.boxColliderAnimationData.ContainsKey(currentState.currentStateName))
             {
                 return;
             }
@@ -59,7 +57,7 @@ namespace Angry_Girls
                 return;
             }
 
-            var data = _boxColliderUpdater.boxColliderAnimationData[currentState.currentStateName];
+            var data = control.characterSettings.boxcolliderContainer.boxColliderAnimationData[currentState.currentStateName];
             if (Vector3.SqrMagnitude(control.boxCollider.size - data.boxColliderSize) > 0.00001f || Vector3.SqrMagnitude(control.boxCollider.size - data.boxColliderSize) < 0.00001f)
             {
                 control.boxCollider.size = Vector3.Lerp(
@@ -78,7 +76,7 @@ namespace Angry_Girls
                 return;
             }
 
-            var data = _boxColliderUpdater.boxColliderAnimationData[currentState.currentStateName];
+            var data = control.characterSettings.boxcolliderContainer.boxColliderAnimationData[currentState.currentStateName];
             if (Vector3.SqrMagnitude(control.boxCollider.center - data.boxColliderCenter) > 0.00001f || Vector3.SqrMagnitude(control.boxCollider.center - data.boxColliderCenter) < 0.00001f)
             {
                 control.boxCollider.center = Vector3.Lerp(
