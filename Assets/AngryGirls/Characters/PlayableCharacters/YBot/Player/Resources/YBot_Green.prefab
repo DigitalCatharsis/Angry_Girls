@@ -66,8 +66,14 @@ PrefabInstance:
     - target: {fileID: 2640689163874789523, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_Name
-      value: YBot - Green Variant
+      value: YBot_Green
       objectReference: {fileID: 0}
+    - target: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: characterSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 02aa6b36c76a8d7438cf83b50f435809,
+        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

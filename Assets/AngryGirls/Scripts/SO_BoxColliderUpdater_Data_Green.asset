@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15963802f5549d9468c8e87836c03000, type: 3}
+  m_Name: SO_BoxColliderUpdater_Data_Green
+  m_EditorClassIdentifier: 
+  boxColliderAnimationData:
+    _serializedList:
+    - Key: 7
+      Value:
+        boxColliderCenter: {x: 0.00000004470348, y: 0.4552352, z: 0.01009538}
+        boxColliderSize: {x: 0.2461494, y: 0.942835, z: 0.2152416}
+        changeSpeed: 50
+    - Key: 6
+      Value:
+        boxColliderCenter: {x: 0.00000004470348, y: 0.028983, z: 0.08440912}
+        boxColliderSize: {x: 0.2461494, y: 0.722738, z: 0.4560578}
+        changeSpeed: 10
+    - Key: 5
+      Value:
+        boxColliderCenter: {x: 0.00000004470348, y: 0.4552352, z: 0.01009538}
+        boxColliderSize: {x: 0.2461494, y: 0.942835, z: 0.2152416}
+        changeSpeed: 50

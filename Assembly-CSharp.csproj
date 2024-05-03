@@ -86,6 +86,7 @@
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUI.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\Settings\FrameSettings.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\HashManager.cs" />
+    <Compile Include="Assets\AngryGirls\TODO.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleEPOOutline.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\Settings\Settings.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\BlockingManager.cs" />

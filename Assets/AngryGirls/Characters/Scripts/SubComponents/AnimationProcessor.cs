@@ -4,26 +4,26 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public enum MainParameterType
-    {
-        IsGrounded,
-        IsAttacking
-    }
     public enum StateNames
     {
         A_Idle,
         A_Falling_Idle,
         A_Shoryuken_DownSmash_Finish,
         A_Shoryuken_DownSmash_Prep,
-        A_Fall_Landing
+        A_Fall_Landing,
+        A_AirbonedRolling_Landing,
+        A_AirbonedRolling,
+        A_Idle_HeadSpin,
     }
     public enum GroundIdle_States
     {
         A_Idle,
+        A_Idle_HeadSpin,
     }
-    public enum AirbonedIdle_States
+    public enum AirbonedFlying_States
     {
         A_Falling_Idle,
+        A_AirbonedRolling,
     }
     public enum AirbonedAttack_States
     {
@@ -36,6 +36,8 @@ namespace Angry_Girls
     public enum Landing_States
     {
         A_Fall_Landing,
+        A_AirbonedRolling_Landing,
+        A_Idle_HeadSpin,
     }
 
     public class AnimationProcessor : SubComponent
@@ -52,7 +54,7 @@ namespace Angry_Girls
 
         [SerializeField] private SerializedDictionary<StateNames, int> _stateNames_Dictionary;
         [SerializeField] private SerializedDictionary<GroundIdle_States, int> _groundIdle_Dictionary;
-        [SerializeField] private SerializedDictionary<AirbonedIdle_States, int> _airbonedIdle_Dictionary;
+        [SerializeField] private SerializedDictionary<AirbonedFlying_States, int> _airbonedFlying_Dictionary;
         [SerializeField] private SerializedDictionary<AirbonedAttack_States, int> _airbonedAttack_Dictionary;
         [SerializeField] private SerializedDictionary<GroundedAttack_States, int> _groundedAttack_Dictionary;
         [SerializeField] private SerializedDictionary<Landing_States, int> _landingNames_Dictionary;
@@ -65,7 +67,7 @@ namespace Angry_Girls
             //Init Dictionaries
             _stateNames_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<StateNames>(this.gameObject);
             _groundIdle_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<GroundIdle_States>(this.gameObject);
-            _airbonedIdle_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<AirbonedIdle_States>(this.gameObject);
+            _airbonedFlying_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<AirbonedFlying_States>(this.gameObject);
             _airbonedAttack_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<AirbonedAttack_States>(this.gameObject);
             _groundedAttack_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<GroundedAttack_States>(this.gameObject);
             _landingNames_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<Landing_States>(this.gameObject);
@@ -97,7 +99,8 @@ namespace Angry_Girls
             if (isGrounded == true && isAttacking == true)
             {
                 control.animator.StopPlayback();
-                ChangeAnimationState(_groundedAttack_Dictionary[control.characterSettings.groundedAttack_State], 0, 0f);
+                ChangeAnimationState_CrossFadeInFixedTime(_groundedAttack_Dictionary[control.characterSettings.groundedAttack_State.animation], control.characterSettings.groundedAttack_State.transitionDuration);
+                //ChangeAnimationState(_groundedAttack_Dictionary[control.characterSettings.groundedAttack_State.animation], 0, control.characterSettings.groundedAttack_State.transitionDuration);
                 control.rigidBody.velocity = control.characterSettings.groundAttackMovementSpeed;
             }
 
@@ -113,8 +116,9 @@ namespace Angry_Girls
                 //LANDING
                 if (isLanding == true)
                 {
-                    control.rigidBody.velocity = control.characterSettings.landingAttackMovementSpeed;
-                    ChangeAnimationState(_landingNames_Dictionary[control.characterSettings.landing_State], 0, 0f);
+                    control.rigidBody.velocity = control.characterSettings.landingMovementSpeed;
+                    ChangeAnimationState_CrossFadeInFixedTime(_landingNames_Dictionary[control.characterSettings.landing_State.animation], control.characterSettings.landing_State.transitionDuration);
+                    //ChangeAnimationState(_landingNames_Dictionary[control.characterSettings.landing_State.animation], 0, control.characterSettings.landing_State.transitionDuration);
                 }
 
                 //IDLE
@@ -126,7 +130,7 @@ namespace Angry_Girls
                     }
                     control.rigidBody.velocity = Vector3.zero;
                     control.animator.StopPlayback();
-                    ChangeAnimationState_CrossFadeInFixedTime(_groundIdle_Dictionary[control.characterSettings.idle_State], 0.25f);
+                    ChangeAnimationState_CrossFadeInFixedTime(_groundIdle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
                 }
             }
 
@@ -138,7 +142,8 @@ namespace Angry_Girls
                     return;
                 }
 
-                ChangeAnimationState_CrossFade(_airbonedAttack_Dictionary[control.characterSettings.airbonedAttack_State], 0.5f);
+                ChangeAnimationState_CrossFadeInFixedTime(_airbonedAttack_Dictionary[control.characterSettings.airbonedAttack_State.animation], control.characterSettings.airbonedAttack_State.transitionDuration);
+                control.rigidBody.velocity = control.characterSettings.airbonedAttackMovementSpeed;
             }
 
             //Airboned
@@ -146,13 +151,13 @@ namespace Angry_Girls
             {
                 SetRotation();
                 control.animator.StopPlayback();
-                ChangeAnimationState_CrossFadeInFixedTime(_airbonedIdle_Dictionary[control.characterSettings.airbonedIdle_State], 0.1f);
+                ChangeAnimationState_CrossFadeInFixedTime(_airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], control.characterSettings.airbonedFlying_States.transitionDuration);
             }
         }
 
         private bool CheckForLanding()
         {
-            if ((_airbonedIdle_Dictionary.ContainsValue(currentStateData.hash) || _airbonedAttack_Dictionary.ContainsValue(currentStateData.hash)) 
+            if ((_airbonedFlying_Dictionary.ContainsValue(currentStateData.hash) || _airbonedAttack_Dictionary.ContainsValue(currentStateData.hash)) 
                 && isGrounded)
             {
                 return true;
