@@ -15,6 +15,8 @@ namespace Angry_Girls
         public Vector3 airbonedAttackMovementSpeed = new Vector3(0, -2, 0);
         public Vector3 groundAttackMovementSpeed = new Vector3(0, 0, 0);
         public Vector3 landingMovementSpeed = new Vector3(0, 0, 0);
+        [Space(5)]
+        public float attackDamage = 25f;
 
         [Header("BoxColliders")]
         public BoxColliderUpdater_Container boxcolliderContainer;

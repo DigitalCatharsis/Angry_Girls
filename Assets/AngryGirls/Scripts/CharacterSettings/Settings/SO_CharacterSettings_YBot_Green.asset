@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: SO_CharacterSettings_YBot_Green
   m_EditorClassIdentifier: 
   atHittingObstacle_Speed: {x: 0, y: -4, z: 0}
-  airbonedAttackMovementSpeed: {x: 0, y: -9, z: 1.5}
+  airbonedAttackMovementSpeed: {x: 0, y: -9, z: 0}
   groundAttackMovementSpeed: {x: 0, y: 0, z: 0}
   landingMovementSpeed: {x: 0, y: 0, z: 0}
+  attackDamage: 25
   boxcolliderContainer: {fileID: 11400000, guid: 2697f8a1822d97d4597139c6fdf4cb34,
     type: 2}
   idle_State:

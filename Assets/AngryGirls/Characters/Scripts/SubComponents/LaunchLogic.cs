@@ -8,7 +8,6 @@ namespace Angry_Girls
         public bool hasBeenLaunched = false;
         public bool hasFinishedLaunch = false;
         public bool hasUsedAbility = false;
-        //TODO: SO abilityType
 
         public override void OnAwake()
         {
@@ -26,6 +25,7 @@ namespace Angry_Girls
         private IEnumerator OnLaunch_Routine()
         {
             hasBeenLaunched = true;
+            Camera.main.orthographicSize -= (Camera.main.orthographicSize / 5f);  //TODO: replace
             yield return new WaitForSeconds(0.1f);
             while (control.subComponentProcessor.animationProcessor.isGrounded == false)
             {

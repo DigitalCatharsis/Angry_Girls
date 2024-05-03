@@ -61,9 +61,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\SubComponentProcessor.cs" />
+    <Compile Include="Assets\AngryGirls\Characters\Scripts\EnemyControl.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUtils.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts\CharacterSettings\CharacterSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\Managers\LaunchManager.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\MaterialChaner\MaterialChanger.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts\CharacterSettings\BoxColliderUpdater_Data.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\MousePositionInfo.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModulePhysics2D.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\CharacterLauncher.cs" />
@@ -72,14 +75,12 @@
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\GroundDetector.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\Managers\Singleton.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\Settings\PhysicsSettings.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts\CharacterSelect.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleSprite.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\CollisionSpheres.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\DistanceBetweenTwoObjects\DistanceBetweenTwoObjects.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\AnimationProcessor.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LookAtPoint\LookAtPoint.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ListOfLists\SerializableList.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts\BoxColliderUpdater_Data.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\CharacterMovement.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\UI_Control.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LayerAdder\LayerChanger.cs" />
@@ -96,10 +97,11 @@
     <Compile Include="Assets\AngryGirls\Helpers\ShowOnlyAttribute\ShowOnlyAttribute.cs" />
     <Compile Include="Assets\AngryGirls\Characters\CollisionSpheres\OverlapChecker.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\Managers\CameraManager.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts\CharacterSettings.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts\CharacterSelect\CharacterSelect.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\BoxColliderUpdater.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUnityVersion.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\Managers\CharacterManager.cs" />
+    <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\AttackSystem.cs" />
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModulePhysics.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleAudio.cs" />
