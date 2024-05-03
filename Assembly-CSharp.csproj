@@ -70,8 +70,10 @@
     <Compile Include="Assets\AngryGirls\Helpers\MousePositionInfo.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModulePhysics2D.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\CharacterLauncher.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts\StateBehaviors\Landing_Behavior.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\CollisionDetection.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ColorDebugLog\ColorDebugLog.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts\StateBehaviors\Attack_Prep_Behavior.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\GroundDetector.cs" />
     <Compile Include="Assets\AngryGirls\Scripts\Managers\Singleton.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\Settings\PhysicsSettings.cs" />
@@ -107,6 +109,8 @@
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleAudio.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\SubComponent.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\MyExtentions\MyExtentions.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts\StateBehaviors\GroundIdle_Behavior.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts\StateBehaviors\Attack_Fininsh_Behavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

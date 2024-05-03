@@ -1,0 +1,43 @@
+using UnityEngine;
+
+namespace Angry_Girls
+{
+    public class Landing_Behavior : StateMachineBehaviour
+    {
+        private CharacterControl _control;
+
+        override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            if (_control == null)
+            {
+                _control = animator.transform.root.GetComponent<CharacterControl>();
+            }
+
+            _control.isLanding = true;
+            _control.isAttacking = false;
+        }
+
+        override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+
+        }
+
+        override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            _control.isLanding = false;
+        }
+
+        // OnStateMove is called right after Animator.OnAnimatorMove()
+        //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        //{
+        //    // Implement code that processes and affects root motion
+        //}
+
+        // OnStateIK is called right after Animator.OnAnimatorIK()
+        //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        //{
+        //    // Implement code that sets up animation IK (inverse kinematics)
+        //}
+    }
+
+}

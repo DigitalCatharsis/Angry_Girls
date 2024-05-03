@@ -22,23 +22,34 @@ namespace Angry_Girls
             yield return StartCoroutine(OnLaunch_Routine());
         }
 
-        private IEnumerator OnLaunch_Routine()
+        private IEnumerator OnLaunch_Routine()        
         {
+            var temp = control;
+
             hasBeenLaunched = true;
             Camera.main.orthographicSize -= (Camera.main.orthographicSize / 5f);  //TODO: replace
             yield return new WaitForSeconds(0.1f);
-            while (control.subComponentProcessor.animationProcessor.isGrounded == false)
+            while (!hasUsedAbility)
             {
+                if (hasFinishedLaunch)
+                {
+                    break;
+                }
+
                 CheckForAbilityUse();
                 yield return null;
             }
-            hasFinishedLaunch = true;
-            Singleton.Instance.launchManager.OnLaunchIsOver();            
-        }        
+
+            while (!hasFinishedLaunch)
+            {
+                yield return null;
+            }
+            Singleton.Instance.launchManager.OnLaunchIsOver();
+        }
 
         private void CheckForAbilityUse()
         {
-            if (hasUsedAbility) 
+            if (hasUsedAbility)
             {
                 return;
             }
@@ -47,7 +58,6 @@ namespace Angry_Girls
             {
                 //process ability
                 hasUsedAbility = true;
-                control.subComponentProcessor.animationProcessor.isAttacking = true;
                 ColorDebugLog.Log("Ability has been used", System.Drawing.KnownColor.Magenta);
             }
         }

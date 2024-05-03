@@ -18,7 +18,7 @@ namespace Angry_Girls
         }
         public override void OnUpdate()
         {
-            control.subComponentProcessor.animationProcessor.isGrounded = IsGrounded();
+            control.isGrounded = IsGrounded();
         }
 
         private bool IsGrounded()

@@ -12,6 +12,7 @@ namespace Angry_Girls
         LgroundDetector,
         LaunchLogic,
         CharacterMovement,
+        AttackSystem,
     }
     public class SubComponentProcessor : MonoBehaviour
     {
@@ -26,6 +27,7 @@ namespace Angry_Girls
         public BoxColliderUpdater boxColliderUpdater;
         public BlockingManager blockingManager;
         public CharacterMovement characterMovement;
+        public AttackSystem attackSystem;
 
         public void OnAwake()
         {

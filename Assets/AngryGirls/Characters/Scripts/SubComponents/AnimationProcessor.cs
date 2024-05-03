@@ -14,11 +14,13 @@ namespace Angry_Girls
         A_AirbonedRolling_Landing,
         A_AirbonedRolling,
         A_Idle_HeadSpin,
+        A_ShootArrow,
     }
     public enum GroundIdle_States
     {
         A_Idle,
         A_Idle_HeadSpin,
+        A_Floating,
     }
     public enum AirbonedFlying_States
     {
@@ -28,6 +30,7 @@ namespace Angry_Girls
     public enum AirbonedAttack_States
     {
         A_Shoryuken_DownSmash_Prep,
+        A_ShootArrow,
     }
     public enum GroundedAttack_States
     {
@@ -53,14 +56,8 @@ namespace Angry_Girls
     public class AnimationProcessor : SubComponent
     {
         public CurrentStateData currentStateData = new();
-
-        public bool isLanding = false;
-        public bool isAttacking = false;
-        public bool isGrounded = false;
-
-
-        [SerializeField] private bool _isAttackStateOver = false;
-        [SerializeField] private bool _isLandingStateOver = false;
+        //[SerializeField] private bool _isAttackStateOver = false;
+        //[SerializeField] private bool _isLandingStateOver = false;
 
         [SerializeField] private SerializedDictionary<StateNames, int> _stateNames_Dictionary;
         [SerializeField] private SerializedDictionary<GroundIdle_States, int> _groundIdle_Dictionary;
@@ -99,80 +96,92 @@ namespace Angry_Girls
 
         public override void OnFixedUpdate()
         {
-            isLanding = CheckForLanding();
-            _isAttackStateOver = IsAttackStateOver();
-            _isLandingStateOver = IsLandingStateOver();
-            //isGrounded updates in GroundDetector
-
-            if (control.subComponentProcessor.blockingManager.IsFrontBlocked() == true)
+            if (control.subComponentProcessor.launchLogic.hasFinishedLaunch)
             {
-                control.rigidBody.velocity = control.characterSettings.atHittingObstacle_Speed;
+                return;
             }
 
-            //Grounded + Attack
-            if (isGrounded == true && isAttacking == true)
+            //back fuckin Air unit to idle
+            if (control.characterSettings.unitType == UnitType.Air)
             {
-                control.animator.StopPlayback();
-                ChangeAnimationState_CrossFadeInFixedTime(groundedAttack_Dictionary[control.characterSettings.groundedAttack_State.animation], control.characterSettings.groundedAttack_State.transitionDuration);
-                //ChangeAnimationState(_groundedAttack_Dictionary[control.characterSettings.groundedAttack_State.animation], 0, control.characterSettings.groundedAttack_State.transitionDuration);
-                control.rigidBody.velocity = control.characterSettings.groundAttackMovementSpeed;
+                if (!control.subComponentProcessor.launchLogic.hasBeenLaunched)
+                {
+                    control.animator.StopPlayback();
+                    ChangeAnimationState_CrossFadeInFixedTime(_groundIdle_Dictionary[control.characterSettings.idle_State.animation], control.characterSettings.idle_State.transitionDuration);
+                }
+
+                //if (control.subComponentProcessor.launchLogic.hasFinishedLaunch)
+                //{
+                //    if (!IsIdleStateOver())
+                //    {
+                //        return;
+                //    }
+                //    control.animator.StopPlayback();
+                //    ChangeAnimationState_CrossFadeInFixedTime(_groundIdle_Dictionary[control.characterSettings.idle_State.animation], control.characterSettings.idle_State.transitionDuration);
+                //}
             }
 
-            //Grounded
-            if (isGrounded == true && isAttacking == false)
+            //Just Airboned
+            if (!control.isGrounded
+                && !control.isAttacking)
             {
-                //Is in attack state?
-                if (_isAttackStateOver == false)
+                //control.animator.StopPlayback();
+                ChangeAnimationState_CrossFadeInFixedTime(_airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], control.characterSettings.airbonedFlying_States.transitionDuration);
+            }
+
+            //Airboned + Attack  (AttackPrep)
+            if (control.subComponentProcessor.launchLogic.hasUsedAbility)
+            {
+                if (IsAttackStateOver() == false)
                 {
                     return;
                 }
 
-                //LANDING
-                if (isLanding == true)
+                control.subComponentProcessor.attackSystem.TryProcessAttack();
+                ChangeAnimationState_CrossFadeInFixedTime(airbonedAttack_Dictionary[control.characterSettings.airbonedAttack_State.animation], control.characterSettings.airbonedAttack_State.transitionDuration);
+                control.rigidBody.velocity = control.characterSettings.airbonedAttackMovementSpeed;
+            }
+
+            //Landing
+            if (control.isGrounded
+                && !control.isAttacking
+                && control.characterSettings.unitType != UnitType.Air)
+            {
+                if (IsLandingCondition())
                 {
                     control.rigidBody.velocity = control.characterSettings.landingMovementSpeed;
                     ChangeAnimationState_CrossFadeInFixedTime(_landingNames_Dictionary[control.characterSettings.landing_State.animation], control.characterSettings.landing_State.transitionDuration);
-                    //ChangeAnimationState(_landingNames_Dictionary[control.characterSettings.landing_State.animation], 0, control.characterSettings.landing_State.transitionDuration);
                 }
+            }
 
-                //IDLE
-                if (isLanding == false)
+            //AttackFinish
+            if (control.characterSettings.unitType == UnitType.Ground)
+            {
+                if(control.isAttacking && control.isGrounded)
                 {
-                    if (_isLandingStateOver == false)
-                    {
-                        return;
-                    }
+                    control.animator.StopPlayback();
+                    ChangeAnimationState_CrossFadeInFixedTime(groundedAttack_Dictionary[control.characterSettings.groundedAttack_State.animation], control.characterSettings.groundedAttack_State.transitionDuration);
+                    control.rigidBody.velocity = control.characterSettings.groundAttackMovementSpeed;
+                }
+            }
+
+            //Airboned at ground. No attack
+            if (control.characterSettings.unitType == UnitType.Air && control.subComponentProcessor.launchLogic.hasBeenLaunched)
+            {
+                if (control.isGrounded)
+                {
+                    control.subComponentProcessor.launchLogic.hasFinishedLaunch = true;
                     control.rigidBody.velocity = Vector3.zero;
                     control.animator.StopPlayback();
                     ChangeAnimationState_CrossFadeInFixedTime(_groundIdle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
                 }
             }
-
-            //Airboned + attack
-            if (isGrounded == false && isAttacking == true)
-            {
-                if (_isAttackStateOver == false)
-                {
-                    return;
-                }
-
-                ChangeAnimationState_CrossFadeInFixedTime(airbonedAttack_Dictionary[control.characterSettings.airbonedAttack_State.animation], control.characterSettings.airbonedAttack_State.transitionDuration);
-                control.rigidBody.velocity = control.characterSettings.airbonedAttackMovementSpeed;
-            }
-
-            //Airboned
-            if (isGrounded == false && isAttacking == false)
-            {
-                SetRotation();
-                control.animator.StopPlayback();
-                ChangeAnimationState_CrossFadeInFixedTime(_airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], control.characterSettings.airbonedFlying_States.transitionDuration);
-            }
         }
 
-        private bool CheckForLanding()
+        private bool IsLandingCondition()
         {
-            if ((_airbonedFlying_Dictionary.ContainsValue(currentStateData.hash) || airbonedAttack_Dictionary.ContainsValue(currentStateData.hash)) 
-                && isGrounded)
+            if ((_airbonedFlying_Dictionary.ContainsValue(currentStateData.hash) || airbonedAttack_Dictionary.ContainsValue(currentStateData.hash))
+                && control.isGrounded)
             {
                 return true;
             }
@@ -188,9 +197,19 @@ namespace Angry_Girls
             }
             return true;
         }
-        private bool IsLandingStateOver()
+
+        //private bool IsLandingStateOver()
+        //{
+        //    if (_landingNames_Dictionary.ContainsValue(currentStateData.hash) 
+        //        && control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
+        //    {
+        //        return false;
+        //    }
+        //    return true;
+        //}
+        private bool IsIdleStateOver()
         {
-            if (_landingNames_Dictionary.ContainsValue(currentStateData.hash) 
+            if (_groundIdle_Dictionary.ContainsValue(currentStateData.hash) 
                 && control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
             {
                 return false;
@@ -198,18 +217,18 @@ namespace Angry_Girls
             return true;
         }
 
-        private void ChangeAnimationState_CrossFade(int newStateHash, float transitionDuration, int layer = 0, float normalizedTimeOffset = 0.0f, float normalizedTransitionTime = 0.0f)
-        {
-            if (currentStateData.hash == newStateHash)
-            {
-                return;
-            }
-            control.animator.CrossFade(newStateHash, transitionDuration, layer, normalizedTimeOffset, normalizedTransitionTime);
+        //private void ChangeAnimationState_CrossFade(int newStateHash, float transitionDuration, int layer = 0, float normalizedTimeOffset = 0.0f, float normalizedTransitionTime = 0.0f)
+        //{
+        //    if (currentStateData.hash == newStateHash)
+        //    {
+        //        return;
+        //    }
+        //    control.animator.CrossFade(newStateHash, transitionDuration, layer, normalizedTimeOffset, normalizedTransitionTime);
 
-            currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(_stateNames_Dictionary, newStateHash);
-            currentStateData.hash = newStateHash;
-        }
-        private void ChangeAnimationState_CrossFadeInFixedTime(int newStateHash, float transitionDuration, int layer = 0, float normalizedTimeOffset = 0.0f, float normalizedTransitionTime = 0.0f)
+        //    currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(_stateNames_Dictionary, newStateHash);
+        //    currentStateData.hash = newStateHash;
+        //}
+        public void ChangeAnimationState_CrossFadeInFixedTime(int newStateHash, float transitionDuration, int layer = 0, float normalizedTimeOffset = 0.0f, float normalizedTransitionTime = 0.0f)
         {
             if (currentStateData.hash == newStateHash)
             {
@@ -220,17 +239,17 @@ namespace Angry_Girls
             currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(_stateNames_Dictionary, newStateHash);
             currentStateData.hash = newStateHash;
         }
-        private void ChangeAnimationState(int newStateHash, int layer = 0, float transitionDuration = 0f)
-        {
-            if (currentStateData.hash == newStateHash)
-            {
-                return;
-            }
-            control.animator.Play(newStateHash, layer, transitionDuration);
+        //private void ChangeAnimationState(int newStateHash, int layer = 0, float transitionDuration = 1f)
+        //{
+        //    if (currentStateData.hash == newStateHash)
+        //    {
+        //        return;
+        //    }
+        //    control.animator.Play(newStateHash, layer, transitionDuration);
 
-            currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(_stateNames_Dictionary, newStateHash);
-            currentStateData.hash = newStateHash;
-        }
+        //    currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(_stateNames_Dictionary, newStateHash);
+        //    currentStateData.hash = newStateHash;
+        //}
 
         public override void OnAwake()
         {

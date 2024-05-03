@@ -39,7 +39,7 @@ namespace Angry_Girls
             if (other.gameObject.GetComponent<CharacterControl>() != null)
             {
                 var character = other.gameObject.GetComponent<CharacterControl>();
-                if (character.subComponentProcessor.animationProcessor.isAttacking)
+                if (character.isAttacking)
                 {
                     ApplyDamage(character);
 

@@ -1,10 +1,15 @@
 using System;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace Angry_Girls
 {
+    public enum UnitType
+    {
+        Ground, //Damage till grounded.
+        AirToGround, //Damage in air and then fall down
+        Air,
+    }
+
     [CreateAssetMenu(fileName = "Settings", menuName = "Angry_Girls/CharacterAbilities/CharacterAbilities")]
     public class CharacterSettings: ScriptableObject
     {
@@ -17,6 +22,8 @@ namespace Angry_Girls
         public Vector3 landingMovementSpeed = new Vector3(0, 0, 0);
         [Space(5)]
         public float attackDamage = 25f;
+        [Space(5)]
+        public UnitType unitType;
 
         [Header("BoxColliders")]
         public BoxColliderUpdater_Container boxcolliderContainer;

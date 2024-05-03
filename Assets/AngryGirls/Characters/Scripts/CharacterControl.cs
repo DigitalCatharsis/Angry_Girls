@@ -4,6 +4,10 @@ namespace Angry_Girls
 {
     public class CharacterControl : MonoBehaviour
     {
+        public bool isLanding = false;
+        public bool isGrounded = false;
+        public bool isAttacking = false;
+
         [Header("Setup")]
         [SerializeField] private bool _isPlayer = true;
         public CharacterSettings characterSettings;
