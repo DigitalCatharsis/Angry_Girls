@@ -13,10 +13,10 @@ namespace Angry_Girls
         public override void OnFixedUpdate()
         {
 
-            if (control.subComponentProcessor.blockingManager.IsFrontBlocked() == true)
-            {
-                control.rigidBody.velocity = control.characterSettings.atHittingObstacle_Speed;
-            }
+            //if (control.subComponentProcessor.blockingManager.IsFrontBlocked() == true)
+            //{
+            //    control.rigidBody.velocity = control.characterSettings.atHittingObstacle_Speed;
+            //}
 
             if (control.isGrounded == false)
             {

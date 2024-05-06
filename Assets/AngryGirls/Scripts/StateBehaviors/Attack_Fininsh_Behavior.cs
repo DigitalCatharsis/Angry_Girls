@@ -16,19 +16,21 @@ namespace Angry_Girls
                 _control = animator.transform.root.GetComponent<CharacterControl>();
             }
 
+            _control.rigidBody.velocity = _control.characterSettings.groundAttackMovementSpeed;
             _control.isAttacking = true;
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-
+            if (stateInfo.normalizedTime >= 1)
+            {
+                _control.isAttacking = false;
+                _control.subComponentProcessor.launchLogic.hasFinishedTurn = true;
+            }
         }
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            _control.isAttacking = false;
-            _control.subComponentProcessor.attackSystem.DisableAttackTrigger();
-            _control.subComponentProcessor.launchLogic.hasFinishedLaunch = true;
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()

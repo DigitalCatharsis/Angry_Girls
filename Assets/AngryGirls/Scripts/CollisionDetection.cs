@@ -7,6 +7,9 @@ namespace Angry_Girls
     {
         public static GameObject GetCollidingObject(CharacterControl control, Vector3 start, Vector3 dir, float blockDistance, ref Vector3 collisionPoint)
         {
+            // Bit shift the index of the layer (9) to get a bit mask
+            int layerMask = 1 << 9;
+
             collisionPoint = Vector3.zero;
 
             //draw DebugLine
@@ -14,7 +17,7 @@ namespace Angry_Girls
 
             //check collision
             RaycastHit hit;
-            if (Physics.Raycast(start, dir, out hit, blockDistance))
+            if (Physics.Raycast(start, dir, out hit, blockDistance, ~layerMask))
             {
                 if (!IsOwnBodyPart(control, hit.collider)                   )
                 {

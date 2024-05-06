@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15963802f5549d9468c8e87836c03000, type: 3}
-  m_Name: SO_BoxColliderUpdater_Data_YbotBlue
+  m_Name: SO_BoxColliderUpdater_Data_Red
   m_EditorClassIdentifier: 
   boxColliderAnimationData:
     _serializedList:
-    - Key: 0
+    - Key: 7
       Value:
-        boxColliderCenter: {x: 0.00000004470348, y: 0.4552352, z: 0.01009538}
-        boxColliderSize: {x: 0.2461494, y: 0.942835, z: 0.2152416}
+        boxColliderCenter: {x: 0.000000044703484, y: 0.36979246, z: -0.009551652}
+        boxColliderSize: {x: 0.24614942, y: 0.6764749, z: 0.51194155}
         changeSpeed: 50
-    - Key: 3
+    - Key: 6
       Value:
-        boxColliderCenter: {x: 0.00000004470348, y: 0.8384988, z: 0.03671619}
-        boxColliderSize: {x: 0.2461494, y: 0.6854944, z: 0.2725739}
+        boxColliderCenter: {x: 0.00000004470348, y: 0.3573987, z: 0.01009524}
+        boxColliderSize: {x: 0.2461494, y: 0.6865579, z: 0.5529058}
         changeSpeed: 10
-    - Key: 2
+    - Key: 5
       Value:
-        boxColliderCenter: {x: 0.00000004470348, y: 0.4552352, z: 0.01009538}
-        boxColliderSize: {x: 0.2461494, y: 0.942835, z: 0.2152416}
+        boxColliderCenter: {x: 0.000000044703484, y: 0.36979246, z: -0.009551652}
+        boxColliderSize: {x: 0.24614942, y: 0.6764749, z: 0.51194155}
         changeSpeed: 50

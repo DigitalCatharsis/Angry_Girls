@@ -16,7 +16,11 @@ MonoBehaviour:
   airbonedAttackMovementSpeed: {x: 0, y: -9, z: 0}
   groundAttackMovementSpeed: {x: 0, y: 0, z: 0}
   landingMovementSpeed: {x: 0, y: 0, z: 0}
+  airbonedAttackMovementForce: {x: 0, y: 0, z: 0}
   attackDamage: 25
+  attackTimeDuration: 0
+  useAnimationNormalizedTimeDuration: 0
+  unitType: 0
   boxcolliderContainer: {fileID: 11400000, guid: 2697f8a1822d97d4597139c6fdf4cb34,
     type: 2}
   idle_State:
@@ -27,7 +31,7 @@ MonoBehaviour:
     transitionDuration: 0.1
   airbonedAttack_State:
     animation: 0
-    transitionDuration: 0.5
+    transitionDuration: 0
   groundedAttack_State:
     animation: 0
     transitionDuration: 0

@@ -6,6 +6,7 @@ namespace Angry_Girls
     {
         private CharacterControl _control;
 
+        //Air units does not land
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             if (_control == null)
@@ -13,18 +14,28 @@ namespace Angry_Girls
                 _control = animator.transform.root.GetComponent<CharacterControl>();
             }
 
+            _control.rigidBody.velocity = _control.characterSettings.landingMovementSpeed;
             _control.isLanding = true;
-            _control.isAttacking = false;
+
+
+
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-
+            if (_control.characterSettings.unitType == UnitType.AirToGround)
+            {
+                if (stateInfo.normalizedTime >= 1)
+                {
+                    _control.subComponentProcessor.launchLogic.hasFinishedTurn = true;
+                }
+            }
         }
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             _control.isLanding = false;
+            _control.subComponentProcessor.launchLogic.hasFinishedTurn = true;
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()

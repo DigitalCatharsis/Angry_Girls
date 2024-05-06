@@ -13,10 +13,10 @@ namespace Angry_Girls
                 _control = animator.transform.root.GetComponent<CharacterControl>();
             }
 
-            if (_control.subComponentProcessor.launchLogic.hasBeenLaunched)
-            {
-                _control.subComponentProcessor.launchLogic.hasFinishedLaunch = true;
-            }
+            //if (_control.subComponentProcessor.launchLogic.hasBeenLaunched)
+            //{
+            //    _control.subComponentProcessor.launchLogic.hasFinishedTurn = true;
+            //}
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

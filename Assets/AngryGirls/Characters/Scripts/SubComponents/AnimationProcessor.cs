@@ -15,6 +15,7 @@ namespace Angry_Girls
         A_AirbonedRolling,
         A_Idle_HeadSpin,
         A_ShootArrow,
+        A_HeadSpin_Attack,
     }
     public enum GroundIdle_States
     {
@@ -31,6 +32,7 @@ namespace Angry_Girls
     {
         A_Shoryuken_DownSmash_Prep,
         A_ShootArrow,
+        A_HeadSpin_Attack,
     }
     public enum GroundedAttack_States
     {
@@ -68,6 +70,8 @@ namespace Angry_Girls
         [SerializeField] private SerializedDictionary<HitReaction_States, int> _hitReaction_Dictionary;
         [SerializeField] private SerializedDictionary<Death_States, int> _death_States_Dictionary;
 
+        public bool airToGroundFinishedAbility = false;
+
         public override void OnComponentEnable()
         {
             //Its me, lol
@@ -96,84 +100,176 @@ namespace Angry_Girls
 
         public override void OnFixedUpdate()
         {
-            if (control.subComponentProcessor.launchLogic.hasFinishedLaunch)
+            if (control.subComponentProcessor.launchLogic.hasBeenLaunched == false)
             {
                 return;
             }
 
-            //back fuckin Air unit to idle
-            if (control.characterSettings.unitType == UnitType.Air)
-            {
-                if (!control.subComponentProcessor.launchLogic.hasBeenLaunched)
-                {
-                    control.animator.StopPlayback();
-                    ChangeAnimationState_CrossFadeInFixedTime(_groundIdle_Dictionary[control.characterSettings.idle_State.animation], control.characterSettings.idle_State.transitionDuration);
-                }
 
-                //if (control.subComponentProcessor.launchLogic.hasFinishedLaunch)
-                //{
-                //    if (!IsIdleStateOver())
-                //    {
-                //        return;
-                //    }
-                //    control.animator.StopPlayback();
-                //    ChangeAnimationState_CrossFadeInFixedTime(_groundIdle_Dictionary[control.characterSettings.idle_State.animation], control.characterSettings.idle_State.transitionDuration);
-                //}
+            switch (control.characterSettings.unitType)
+            {
+                case UnitType.Air:
+                    CheckAirUnit();
+                    break;
+                case UnitType.AirToGround:
+                    CheckAirToGround();
+                    break;
+                case UnitType.Ground:
+                    CheckGroundUnit();
+                    break;
+            }            
+        }
+
+        //control.gameObject.name == "YBot_Green(Clone)"
+        private void CheckAirUnit()
+        {
+            //Idle
+            if (control.subComponentProcessor.launchLogic.hasFinishedTurn)
+            {
+                ChangeAnimationState_CrossFadeInFixedTime(_groundIdle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+                return;
             }
 
-            //Just Airboned
+            //Airboned
             if (!control.isGrounded
                 && !control.isAttacking)
             {
-                //control.animator.StopPlayback();
+                control.animator.StopPlayback();
                 ChangeAnimationState_CrossFadeInFixedTime(_airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], control.characterSettings.airbonedFlying_States.transitionDuration);
             }
 
             //Airboned + Attack  (AttackPrep)
             if (control.subComponentProcessor.launchLogic.hasUsedAbility)
             {
-                if (IsAttackStateOver() == false)
+                if (IsAttackStateOver(control.characterSettings.timesToRepeat_AirbonedAttack_State) == false)
                 {
                     return;
                 }
 
                 control.subComponentProcessor.attackSystem.TryProcessAttack();
                 ChangeAnimationState_CrossFadeInFixedTime(airbonedAttack_Dictionary[control.characterSettings.airbonedAttack_State.animation], control.characterSettings.airbonedAttack_State.transitionDuration);
-                control.rigidBody.velocity = control.characterSettings.airbonedAttackMovementSpeed;
-            }
-
-            //Landing
-            if (control.isGrounded
-                && !control.isAttacking
-                && control.characterSettings.unitType != UnitType.Air)
-            {
-                if (IsLandingCondition())
-                {
-                    control.rigidBody.velocity = control.characterSettings.landingMovementSpeed;
-                    ChangeAnimationState_CrossFadeInFixedTime(_landingNames_Dictionary[control.characterSettings.landing_State.animation], control.characterSettings.landing_State.transitionDuration);
-                }
-            }
-
-            //AttackFinish
-            if (control.characterSettings.unitType == UnitType.Ground)
-            {
-                if(control.isAttacking && control.isGrounded)
-                {
-                    control.animator.StopPlayback();
-                    ChangeAnimationState_CrossFadeInFixedTime(groundedAttack_Dictionary[control.characterSettings.groundedAttack_State.animation], control.characterSettings.groundedAttack_State.transitionDuration);
-                    control.rigidBody.velocity = control.characterSettings.groundAttackMovementSpeed;
-                }
             }
 
             //Airboned at ground. No attack
-            if (control.characterSettings.unitType == UnitType.Air && control.subComponentProcessor.launchLogic.hasBeenLaunched)
+            if (control.isGrounded)
             {
-                if (control.isGrounded)
+                control.subComponentProcessor.launchLogic.hasFinishedTurn = true;
+                control.animator.StopPlayback();
+                ChangeAnimationState_CrossFadeInFixedTime(_groundIdle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+            }
+        }
+
+        private void CheckAirToGround()
+        {
+            //Idle
+            if (control.subComponentProcessor.launchLogic.hasFinishedTurn
+                && control.isGrounded)
+            {
+                ChangeAnimationState_CrossFadeInFixedTime(_groundIdle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+                return;
+            }
+
+            //Airboned + Attack  (AttackPrep)
+            if (control.subComponentProcessor.launchLogic.hasUsedAbility
+                && !control.subComponentProcessor.launchLogic.hasFinishedTurn
+                && !control.isGrounded
+                && !control.isAttacking
+                && !airToGroundFinishedAbility)
+            {
+                if (airbonedAttack_Dictionary.ContainsValue(currentStateData.hash))
                 {
-                    control.subComponentProcessor.launchLogic.hasFinishedLaunch = true;
-                    control.rigidBody.velocity = Vector3.zero;
-                    control.animator.StopPlayback();
-                    ChangeAnimationState_CrossFadeInFixedTime(_groundIdle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+                    return;
+                }
+
+                control.subComponentProcessor.attackSystem.TryProcessAttack();
+                control.animator.StopPlayback();
+                ChangeAnimationState_CrossFadeInFixedTime(airbonedAttack_Dictionary[control.characterSettings.airbonedAttack_State.animation], control.characterSettings.airbonedAttack_State.transitionDuration);
+            }
+
+            //Just Airboned
+            if (!control.isGrounded
+                && !control.isAttacking)
+            {
+                if (IsAttackStateOver(control.characterSettings.timesToRepeat_AirbonedAttack_State) == false)
+                {
+                    return;
+                }
+
+                if (_airbonedFlying_Dictionary.ContainsValue(currentStateData.hash))
+                {
+                    return;
+                }
+                control.animator.StopPlayback();
+                ChangeAnimationState_CrossFadeInFixedTime(_airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], control.characterSettings.airbonedFlying_States.transitionDuration);
+            }
+
+            //Landing
+            if (control.isGrounded && !control.isAttacking)
+            {
+                if (IsLandingCondition())
+                {
+                    ChangeAnimationState_CrossFadeInFixedTime(_landingNames_Dictionary[control.characterSettings.landing_State.animation], control.characterSettings.landing_State.transitionDuration);
+                }
+            }
+        }
+
+        private void CheckGroundUnit()
+        {
+            //Idle
+            if (control.subComponentProcessor.launchLogic.hasFinishedTurn
+                && control.isGrounded)
+            {
+                ChangeAnimationState_CrossFadeInFixedTime(_groundIdle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+                return;
+            }
+
+            //Just Airboned
+            if (!control.isGrounded
+                && !control.isAttacking
+                && !control.subComponentProcessor.launchLogic.hasFinishedTurn)
+            {
+
+                if (groundedAttack_Dictionary.ContainsValue(currentStateData.hash))
+                {
+                    return;
+                }
+
+                ChangeAnimationState_CrossFadeInFixedTime(_airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], control.characterSettings.airbonedFlying_States.transitionDuration);
+            }
+
+            //Ground attack
+            if (control.isAttacking
+                && control.isGrounded
+                && !control.subComponentProcessor.launchLogic.hasFinishedTurn)
+            {
+                control.animator.StopPlayback();
+                ChangeAnimationState_CrossFadeInFixedTime(groundedAttack_Dictionary[control.characterSettings.groundedAttack_State.animation], transitionDuration: control.characterSettings.groundedAttack_State.transitionDuration);
+            }
+
+            //Airboned + Attack  (AttackPrep)
+            if (control.subComponentProcessor.launchLogic.hasUsedAbility
+                && !control.subComponentProcessor.launchLogic.hasFinishedTurn)
+            {
+                if (IsAttackStateOver(control.characterSettings.timesToRepeat_AirbonedAttack_State) == false)
+                {
+                    return;
+                }
+
+                if (groundedAttack_Dictionary.ContainsValue(currentStateData.hash))
+                {
+                    return;
+                }
+
+                control.subComponentProcessor.attackSystem.TryProcessAttack();
+                ChangeAnimationState_CrossFadeInFixedTime(airbonedAttack_Dictionary[control.characterSettings.airbonedAttack_State.animation], control.characterSettings.airbonedAttack_State.transitionDuration);
+            }
+
+            //Landing
+            if (control.isGrounded && !control.isAttacking)
+            {
+                if (IsLandingCondition())
+                {
+                    ChangeAnimationState_CrossFadeInFixedTime(_landingNames_Dictionary[control.characterSettings.landing_State.animation], control.characterSettings.landing_State.transitionDuration);
                 }
             }
         }
@@ -188,10 +284,10 @@ namespace Angry_Girls
             return false;
         }
 
-        public bool IsAttackStateOver()
+        public bool IsAttackStateOver(float attackAnimationRepeatRate)
         {
             if ((airbonedAttack_Dictionary.ContainsValue(currentStateData.hash) || groundedAttack_Dictionary.ContainsValue(currentStateData.hash))
-                && control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
+                && control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= attackAnimationRepeatRate)
             {
                 return false;
             }
@@ -209,7 +305,7 @@ namespace Angry_Girls
         //}
         private bool IsIdleStateOver()
         {
-            if (_groundIdle_Dictionary.ContainsValue(currentStateData.hash) 
+            if (_groundIdle_Dictionary.ContainsValue(currentStateData.hash)
                 && control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
             {
                 return false;
@@ -239,17 +335,17 @@ namespace Angry_Girls
             currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(_stateNames_Dictionary, newStateHash);
             currentStateData.hash = newStateHash;
         }
-        //private void ChangeAnimationState(int newStateHash, int layer = 0, float transitionDuration = 1f)
-        //{
-        //    if (currentStateData.hash == newStateHash)
-        //    {
-        //        return;
-        //    }
-        //    control.animator.Play(newStateHash, layer, transitionDuration);
+        private void ChangeAnimationState(int newStateHash, int layer = 0, float transitionDuration = 1f)
+        {
+            if (currentStateData.hash == newStateHash)
+            {
+                return;
+            }
+            control.animator.Play(newStateHash, layer, transitionDuration);
 
-        //    currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(_stateNames_Dictionary, newStateHash);
-        //    currentStateData.hash = newStateHash;
-        //}
+            currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(_stateNames_Dictionary, newStateHash);
+            currentStateData.hash = newStateHash;
+        }
 
         public override void OnAwake()
         {
@@ -261,6 +357,7 @@ namespace Angry_Girls
 
         public override void OnStart()
         {
+            ChangeAnimationState_CrossFadeInFixedTime(_groundIdle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
         }
 
         public void SetRotation()
