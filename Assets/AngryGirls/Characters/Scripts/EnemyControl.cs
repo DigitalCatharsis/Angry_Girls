@@ -36,9 +36,9 @@ namespace Angry_Girls
                 return;
             }
 
-            if (other.gameObject.GetComponent<CharacterControl>() != null)
+            if (other.gameObject.transform.root.gameObject.GetComponent<CharacterControl>() != null)
             {
-                var character = other.gameObject.GetComponent<CharacterControl>();
+                var character = other.gameObject.transform.root.GetComponent<CharacterControl>();
                 if (character.isAttacking)
                 {
                     ApplyDamage(character);

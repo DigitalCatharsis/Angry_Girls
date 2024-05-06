@@ -17,7 +17,7 @@ MonoBehaviour:
   groundAttackMovementSpeed: {x: 0, y: 0, z: 0}
   landingMovementSpeed: {x: 0, y: 0, z: 0}
   airbonedAttackMovementForce: {x: 0, y: 0, z: 0}
-  attackDamage: 25
+  attackDamage: 30
   attackTimeDuration: 0
   useAnimationNormalizedTimeDuration: 0
   unitType: 0
@@ -32,6 +32,7 @@ MonoBehaviour:
   airbonedAttack_State:
     animation: 0
     transitionDuration: 0
+  timesToRepeat_AirbonedAttack_State: 1
   groundedAttack_State:
     animation: 0
     transitionDuration: 0

@@ -10,6 +10,12 @@ namespace Angry_Girls
         Air,
     }
 
+    public enum VFX_Type
+    {
+        VFX_Damage_White,
+        VFX_Shouryken,
+    }
+
     [CreateAssetMenu(fileName = "Settings", menuName = "Angry_Girls/CharacterAbilities/CharacterAbilities")]
     public class CharacterSettings: ScriptableObject
     {

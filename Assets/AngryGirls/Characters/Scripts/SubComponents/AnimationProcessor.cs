@@ -146,8 +146,8 @@ namespace Angry_Girls
                     return;
                 }
 
-                control.subComponentProcessor.attackSystem.TryProcessAttack();
                 ChangeAnimationState_CrossFadeInFixedTime(airbonedAttack_Dictionary[control.characterSettings.airbonedAttack_State.animation], control.characterSettings.airbonedAttack_State.transitionDuration);
+                control.subComponentProcessor.attackSystem.TryProcessAttack();
             }
 
             //Airboned at ground. No attack
@@ -181,9 +181,9 @@ namespace Angry_Girls
                     return;
                 }
 
-                control.subComponentProcessor.attackSystem.TryProcessAttack();
                 control.animator.StopPlayback();
                 ChangeAnimationState_CrossFadeInFixedTime(airbonedAttack_Dictionary[control.characterSettings.airbonedAttack_State.animation], control.characterSettings.airbonedAttack_State.transitionDuration);
+                control.subComponentProcessor.attackSystem.TryProcessAttack();
             }
 
             //Just Airboned
@@ -260,8 +260,8 @@ namespace Angry_Girls
                     return;
                 }
 
-                control.subComponentProcessor.attackSystem.TryProcessAttack();
                 ChangeAnimationState_CrossFadeInFixedTime(airbonedAttack_Dictionary[control.characterSettings.airbonedAttack_State.animation], control.characterSettings.airbonedAttack_State.transitionDuration);
+                control.subComponentProcessor.attackSystem.TryProcessAttack();
             }
 
             //Landing

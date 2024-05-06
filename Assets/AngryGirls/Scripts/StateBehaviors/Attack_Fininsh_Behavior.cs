@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -18,6 +19,10 @@ namespace Angry_Girls
 
             _control.rigidBody.velocity = _control.characterSettings.groundAttackMovementSpeed;
             _control.isAttacking = true;
+
+            //TODO: vfx spawner
+            var vfx = Instantiate(Resources.Load(VFX_Type.VFX_Shouryken.ToString())) as GameObject;
+            vfx.gameObject.transform.position = _control.transform.position;
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
