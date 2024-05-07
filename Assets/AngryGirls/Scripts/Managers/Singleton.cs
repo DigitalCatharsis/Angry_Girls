@@ -9,6 +9,7 @@ public class Singleton : MonoBehaviour
     public LaunchManager launchManager;
     public HashManager hashManager;
     public CharacterManager characterManager;
+    public SpawnManager spawnManager;
 
     private void Awake()
     {
@@ -25,5 +26,6 @@ public class Singleton : MonoBehaviour
         ñameraManager = GetComponentInChildren<CameraManager>();
         launchManager = GetComponentInChildren<LaunchManager>();
         hashManager = GetComponentInChildren<HashManager>();
+        spawnManager = GetComponentInChildren<SpawnManager>();
     }
 }

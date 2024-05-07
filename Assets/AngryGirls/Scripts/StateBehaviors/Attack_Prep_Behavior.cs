@@ -1,4 +1,6 @@
+using DG.Tweening;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -9,6 +11,8 @@ namespace Angry_Girls
         private CharacterControl _control;
         private float _curentAttackTimer;
 
+        private int _attackCount = 0;
+
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             if (_control == null)
@@ -16,6 +20,7 @@ namespace Angry_Girls
                 _control = animator.transform.root.GetComponent<CharacterControl>();
             }
 
+            _attackCount = 0;
             _curentAttackTimer = 0f;
             _control.isAttacking = true;
 
@@ -25,6 +30,9 @@ namespace Angry_Girls
                 _control.rigidBody.useGravity = false;
                 _control.rigidBody.velocity = _control.characterSettings.airbonedAttackMovementSpeed;
                 _control.rigidBody.AddForce(_control.characterSettings.airbonedAttackMovementForce);
+
+
+                Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_TestProjectile, _control.transform.position, Quaternion.identity);
             }
 
             //AirToGround
@@ -43,9 +51,19 @@ namespace Angry_Girls
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            //ColorDebugLog.Log(stateInfo.normalizedTime.ToString(), System.Drawing.KnownColor.Azure);
             //Air
             if (_control.characterSettings.unitType == UnitType.Air)
             {
+                //stateInfo.
+                if (_attackCount < ((int)stateInfo.normalizedTime))
+                {
+                    //ColorDebugLog.Log(stateInfo.normalizedTime.ToString(), System.Drawing.KnownColor.Aqua);
+                    _attackCount = (int)stateInfo.normalizedTime;
+                    //ColorDebugLog.Log(_attackCount.ToString(), System.Drawing.KnownColor.Aquamarine);
+                    Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_TestProjectile, _control.transform.position, Quaternion.identity);
+                }
+
                 if (_control.characterSettings.useAnimationNormalizedTimeDuration)
                 {
                     if (stateInfo.normalizedTime >= _control.characterSettings.timesToRepeat_AirbonedAttack_State)
@@ -62,7 +80,7 @@ namespace Angry_Girls
                         _control.isAttacking = false;
                         _control.subComponentProcessor.launchLogic.hasFinishedTurn = true;
                     }
-                }                
+                }
             }
             //AirToGround
             if (_control.characterSettings.unitType == UnitType.AirToGround)
@@ -83,7 +101,7 @@ namespace Angry_Girls
                         _control.isAttacking = false;
                         _control.subComponentProcessor.animationProcessor.airToGroundFinishedAbility = true;
                     }
-                }                
+                }
             }
         }
 
@@ -102,6 +120,7 @@ namespace Angry_Girls
                 _control.isAttacking = false;
                 //will go to fall in AnimationProcessor
             }
+
 
         }
 

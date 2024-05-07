@@ -29,6 +29,16 @@ namespace Angry_Girls
             enemyAnimator.Play(newStateHash, layer, transitionDuration);
         }
 
+        public void ChangeAnimationState_CrossFadeInFixedTime(int newStateHash, float transitionDuration, int layer = 0, float normalizedTimeOffset = 0.0f, float normalizedTransitionTime = 0.0f)
+        {
+            if (enemyAnimator.GetCurrentAnimatorClipInfo(0).GetHashCode() == newStateHash)
+            {
+                return;
+            }
+
+            enemyAnimator.CrossFadeInFixedTime(newStateHash, transitionDuration, layer, normalizedTimeOffset, normalizedTransitionTime);
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (isDead)
@@ -41,24 +51,40 @@ namespace Angry_Girls
                 var character = other.gameObject.transform.root.GetComponent<CharacterControl>();
                 if (character.isAttacking)
                 {
-                    ApplyDamage(character);
+                    ApplyDamage(character.characterSettings.attackDamage);
 
                     if (health <= 0)
                     {
                         isDead = true;
-                        ChangeAnimationState(_death_States_Dictionary[Death_States.A_Sweep_Fall], -1, 1f);
+                        ChangeAnimationState_CrossFadeInFixedTime(_death_States_Dictionary[Death_States.A_Sweep_Fall], 0.05f);
 
                         return;
                     }
 
-                    ChangeAnimationState(_hitReaction_Dictionary[HitReaction_States.A_HitReaction], 0,1f);
+                    ChangeAnimationState_CrossFadeInFixedTime(_hitReaction_Dictionary[HitReaction_States.A_HitReaction], 0.05f);
                 }
+            }
+            if (other.gameObject.transform.root.GetComponent<VFX>() != null)
+            {
+                var vfx = other.gameObject.transform.root.GetComponent<VFX>();
+
+                ApplyDamage(vfx.projectileDamage);
+
+                if (health <= 0)
+                {
+                    isDead = true;
+                    ChangeAnimationState_CrossFadeInFixedTime(_death_States_Dictionary[Death_States.A_Sweep_Fall], 0.05f);
+
+                    return;
+                }
+
+                ChangeAnimationState_CrossFadeInFixedTime(_hitReaction_Dictionary[HitReaction_States.A_HitReaction], 0.05f);
             }
         }
 
-        private void ApplyDamage(CharacterControl control)
+        private void ApplyDamage(float damage)
         {
-            health -= control.characterSettings.attackDamage;
+            health -= damage;
         }
 
         private void Update()

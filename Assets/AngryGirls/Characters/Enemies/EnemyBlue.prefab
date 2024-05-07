@@ -1377,7 +1377,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   control: {fileID: 0}
   hasBeenLaunched: 0
-  hasFinishedLaunch: 0
+  hasFinishedTurn: 0
   hasUsedAbility: 0
 --- !u!1 &4195892079190666739
 GameObject:
@@ -1741,6 +1741,7 @@ GameObject:
   m_Component:
   - component: {fileID: 877961832503943635}
   - component: {fileID: 705194294999963878}
+  - component: {fileID: 3837155828575119643}
   - component: {fileID: 7993322067945683237}
   - component: {fileID: 933560596262290560}
   - component: {fileID: 7015334824703449331}
@@ -1785,6 +1786,27 @@ BoxCollider:
     m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.24614942, y: 0.94283503, z: 0.21524163}
+  m_Center: {x: 0.000000044703484, y: 0.45523515, z: 0.010095384}
+--- !u!65 &3837155828575119643
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5700113173220352612}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1851,6 +1873,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  isDead: 0
+  _hitReaction_Dictionary:
+    _serializedList: []
+  _death_States_Dictionary:
+    _serializedList: []
 --- !u!1 &5788893111174925711
 GameObject:
   m_ObjectHideFlags: 0
@@ -2068,6 +2095,7 @@ MonoBehaviour:
   boxColliderUpdater: {fileID: 0}
   blockingManager: {fileID: 0}
   characterMovement: {fileID: 0}
+  attackSystem: {fileID: 0}
 --- !u!1 &6088413736098399417
 GameObject:
   m_ObjectHideFlags: 0
@@ -2650,23 +2678,23 @@ MonoBehaviour:
   currentStateData:
     currentStateName: 0
     hash: 0
-  isLanding: 0
-  isAttacking: 0
-  isGrounded: 0
-  _isAttackStateOver: 0
-  _isLandingStateOver: 0
   _stateNames_Dictionary:
     _serializedList: []
   _groundIdle_Dictionary:
     _serializedList: []
   _airbonedFlying_Dictionary:
     _serializedList: []
-  _airbonedAttack_Dictionary:
+  airbonedAttack_Dictionary:
     _serializedList: []
-  _groundedAttack_Dictionary:
+  groundedAttack_Dictionary:
     _serializedList: []
   _landingNames_Dictionary:
     _serializedList: []
+  _hitReaction_Dictionary:
+    _serializedList: []
+  _death_States_Dictionary:
+    _serializedList: []
+  airToGroundFinishedAbility: 0
 --- !u!1 &7135799092227091248
 GameObject:
   m_ObjectHideFlags: 0
