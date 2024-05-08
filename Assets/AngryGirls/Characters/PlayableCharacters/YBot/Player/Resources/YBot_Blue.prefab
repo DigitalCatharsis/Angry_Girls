@@ -872,7 +872,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   control: {fileID: 0}
   hasBeenLaunched: 0
-  hasFinishedLaunch: 0
+  hasFinishedTurn: 0
   hasUsedAbility: 0
 --- !u!1 &2268399448965009457
 GameObject:
@@ -1123,6 +1123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   control: {fileID: 0}
+  projectileSpawnPosition: {fileID: 253452075603770101}
 --- !u!65 &5150265483639079448
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1242,6 +1243,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d05c2acc13ea674d80c1cbcd8e78951, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isLanding: 0
+  isGrounded: 0
+  isAttacking: 0
   _isPlayer: 1
   characterSettings: {fileID: 11400000, guid: 28afea81c95372d4fb753c0287980f6c, type: 2}
   animator: {fileID: 0}
@@ -2053,6 +2057,7 @@ MonoBehaviour:
   boxColliderUpdater: {fileID: 0}
   blockingManager: {fileID: 0}
   characterMovement: {fileID: 0}
+  attackSystem: {fileID: 0}
 --- !u!1 &5456733493903060805
 GameObject:
   m_ObjectHideFlags: 0
@@ -2165,23 +2170,23 @@ MonoBehaviour:
   currentStateData:
     currentStateName: 0
     hash: 0
-  isLanding: 0
-  isAttacking: 0
-  isGrounded: 0
-  _isAttackStateOver: 0
-  _isLandingStateOver: 0
   _stateNames_Dictionary:
     _serializedList: []
   _groundIdle_Dictionary:
     _serializedList: []
   _airbonedFlying_Dictionary:
     _serializedList: []
-  _airbonedAttack_Dictionary:
+  attackPrep_Dictionary:
     _serializedList: []
-  _groundedAttack_Dictionary:
+  attackFinish_Dictionary:
     _serializedList: []
   _landingNames_Dictionary:
     _serializedList: []
+  _hitReaction_Dictionary:
+    _serializedList: []
+  _death_States_Dictionary:
+    _serializedList: []
+  airToGroundFinishedAbility: 0
 --- !u!1 &5503316897883994643
 GameObject:
   m_ObjectHideFlags: 0
@@ -2611,6 +2616,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3791344501394643045}
+  - {fileID: 992239447163821941}
   m_Father: {fileID: 6905280517228828535}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6901069369787216282
@@ -2740,6 +2746,37 @@ Transform:
   m_Children:
   - {fileID: 9090298530428897221}
   m_Father: {fileID: 2871628683330621025}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7571578393211836001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 992239447163821941}
+  m_Layer: 9
+  m_Name: FireBallSpawnPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &992239447163821941
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7571578393211836001}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.05028814, y: 0.07477146, z: -0.094138585, w: 0.9914728}
+  m_LocalPosition: {x: 0.376973, y: -0.043973, z: -0.02555311}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5114169040246962210}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7582894198519077483
 GameObject:

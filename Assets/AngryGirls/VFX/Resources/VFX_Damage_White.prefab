@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1002927016429086475}
   - component: {fileID: 7157611654289593842}
   - component: {fileID: 6258773909187902597}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: flare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4740,7 +4740,7 @@ GameObject:
   - component: {fileID: 735591262512472441}
   - component: {fileID: 3264531764730854967}
   - component: {fileID: 5406377696594901112}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: impact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9469,7 +9469,7 @@ GameObject:
   - component: {fileID: 4016400856074338629}
   - component: {fileID: 6773353554478999525}
   - component: {fileID: 7791019495693631953}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: lines-1-big
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14243,7 +14243,7 @@ GameObject:
   - component: {fileID: 2005509141182799197}
   - component: {fileID: 2096512103883591159}
   - component: {fileID: 3841447610668085017}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19116,7 +19116,7 @@ GameObject:
   - component: {fileID: 792539988556503490}
   - component: {fileID: 2841976406782248661}
   - component: {fileID: 6715153727560497069}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: lines-1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23890,7 +23890,7 @@ GameObject:
   - component: {fileID: 2378206423565369131}
   - component: {fileID: 7182269997993030875}
   - component: {fileID: 6934435031078156694}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: lines-1&2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28602,7 +28602,7 @@ GameObject:
   - component: {fileID: 6845568401284637879}
   - component: {fileID: 2856694958892417096}
   - component: {fileID: 6048308684481631739}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: VFX_Damage_White
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33392,7 +33392,7 @@ GameObject:
   - component: {fileID: 1569071270765950175}
   - component: {fileID: 3520961845240235861}
   - component: {fileID: 1453402324302461558}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Smoke_Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}

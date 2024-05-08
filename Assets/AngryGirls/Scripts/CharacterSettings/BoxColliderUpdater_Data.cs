@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    [CreateAssetMenu(fileName = "BoxColliderUpdater_Data", menuName = "Angry_Girls/BoxColliderUpdater/BoxColliderUpdater_Data")]
+    [CreateAssetMenu(fileName = "BoxColliderUpdater_Data", menuName = "Angry_Girls/CharacterSettings/BoxColliderUpdater_Data")]
     public class BoxColliderUpdater_Container : ScriptableObject
     {
         //Key = Center, Value = Size

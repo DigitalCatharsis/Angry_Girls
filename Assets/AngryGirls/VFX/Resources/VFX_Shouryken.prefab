@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8221907675006263978}
   - component: {fileID: 6607344324825731704}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: VFX_Shouryken
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,6 +48,7 @@ MonoBehaviour:
   _timeToLive: 1
   _isTimeToLiveIsNormilizedTime: 1
   _particleSystem: {fileID: 6220422225713749368}
+  projectileDamage: 10
 --- !u!1 &3363848729867003103
 GameObject:
   m_ObjectHideFlags: 0
@@ -59,7 +60,7 @@ GameObject:
   - component: {fileID: 4949134984204512113}
   - component: {fileID: 4527532959673624036}
   - component: {fileID: 1784808830286247462}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Smoke_Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4914,7 +4915,7 @@ GameObject:
   - component: {fileID: 7466828850589273275}
   - component: {fileID: 2408076100790391131}
   - component: {fileID: 1744632289211354299}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Smoke_Dark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9769,7 +9770,7 @@ GameObject:
   - component: {fileID: 945837993086509709}
   - component: {fileID: 8222970725065807665}
   - component: {fileID: 2774742666254690967}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14634,7 +14635,7 @@ GameObject:
   - component: {fileID: 260432429952908217}
   - component: {fileID: 5007486823705009708}
   - component: {fileID: 3097009414152136498}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19507,7 +19508,7 @@ GameObject:
   - component: {fileID: 8043780897932288517}
   - component: {fileID: 6220422225713749368}
   - component: {fileID: 8744010704809763276}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: VFX_Shouryken_Particle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24357,7 +24358,7 @@ GameObject:
   - component: {fileID: 4677618946365246658}
   - component: {fileID: 2842395198329076276}
   - component: {fileID: 1889297336615052467}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Shockwave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29221,7 +29222,7 @@ GameObject:
   - component: {fileID: 3939178834932870551}
   - component: {fileID: 3469372530157008819}
   - component: {fileID: 2736457643482668295}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Impact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34085,7 +34086,7 @@ GameObject:
   - component: {fileID: 5243168305057681969}
   - component: {fileID: 7618625765158372064}
   - component: {fileID: 8915292275492397834}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Shock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38949,7 +38950,7 @@ GameObject:
   - component: {fileID: 5910322269661801999}
   - component: {fileID: 1843840653938344428}
   - component: {fileID: 4604865566031753456}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Swing
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -51,7 +51,7 @@ namespace Angry_Girls
                 var character = other.gameObject.transform.root.GetComponent<CharacterControl>();
                 if (character.isAttacking)
                 {
-                    ApplyDamage(character.characterSettings.attackDamage);
+                    ApplyDamage(character.characterSettings.attackPrepAbility.attackDamage);
 
                     if (health <= 0)
                     {

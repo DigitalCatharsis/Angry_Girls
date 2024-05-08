@@ -4,11 +4,10 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
+        //ONLY FOR GROUND
     public class Attack_Fininsh_Behavior : StateMachineBehaviour
     {
         private CharacterControl _control;
-
-        //ONLY FOR GROUND
 
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
@@ -17,25 +16,17 @@ namespace Angry_Girls
                 _control = animator.transform.root.GetComponent<CharacterControl>();
             }
 
-            _control.rigidBody.velocity = _control.characterSettings.groundAttackMovementSpeed;
-            _control.isAttacking = true;
-
-            //TODO: vfx spawner
-            var vfx = Instantiate(Resources.Load(VFX_Type.VFX_Shouryken.ToString())) as GameObject;
-            vfx.gameObject.transform.position = _control.transform.position;
+            _control.subComponentProcessor.attackSystem.attackFinishLogic.OnStateEnter(_control, animator, stateInfo);
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (stateInfo.normalizedTime >= 1)
-            {
-                _control.isAttacking = false;
-                _control.subComponentProcessor.launchLogic.hasFinishedTurn = true;
-            }
+            _control.subComponentProcessor.attackSystem.attackFinishLogic.OnStateUpdate(_control, animator, stateInfo);
         }
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            _control.subComponentProcessor.attackSystem.attackFinishLogic.OnStateExit(_control, animator, stateInfo);
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()

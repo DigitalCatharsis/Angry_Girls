@@ -10,32 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5712a747d1a17fc42b72503a7509d404, type: 3}
-  m_Name: SO_CharacterSettings_YBot_Red
+  m_Name: SO_CharacterSettings_YBot_Green
   m_EditorClassIdentifier: 
+  unitType: 2
   atHittingObstacle_Speed: {x: 0, y: -4, z: 0}
-  airbonedAttackMovementSpeed: {x: 0, y: 0, z: 0}
   groundAttackMovementSpeed: {x: 0, y: 0, z: 0}
   landingMovementSpeed: {x: 0, y: 0, z: 0}
-  airbonedAttackMovementForce: {x: 0, y: 15000, z: 0}
-  attackDamage: 25
-  attackTimeDuration: 1
-  useAnimationNormalizedTimeDuration: 1
-  unitType: 1
   boxcolliderContainer: {fileID: 11400000, guid: 2697f8a1822d97d4597139c6fdf4cb34,
     type: 2}
   idle_State:
-    animation: 1
-    transitionDuration: 0.2
+    animation: 2
+    transitionDuration: 0.25
   airbonedFlying_States:
     animation: 1
     transitionDuration: 0.1
-  airbonedAttack_State:
-    animation: 2
-    transitionDuration: 0.1
-  timesToRepeat_AirbonedAttack_State: 2.5
   groundedAttack_State:
     animation: 0
     transitionDuration: 0
   landing_State:
-    animation: 1
-    transitionDuration: 0.1
+    animation: 2
+    transitionDuration: 0.5
+  attackPrepAbility: {fileID: 11400000, guid: 8230bc02d932fdb4890b9296e4aa8250, type: 2}
