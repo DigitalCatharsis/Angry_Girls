@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Angry_Girls
 {
@@ -7,8 +6,8 @@ namespace Angry_Girls
     {
         public static GameObject GetCollidingObject(CharacterControl control, Vector3 start, Vector3 dir, float blockDistance, ref Vector3 collisionPoint)
         {
-            // Bit shift the index of the layer (9) to get a bit mask
-            int layerMask = 1 << 9;
+            // Игнор рейкастом слоя 9 (character) и 13 (projectile)
+            int layerMask = 1 << 9 | 1 << 13;
 
             collisionPoint = Vector3.zero;
 

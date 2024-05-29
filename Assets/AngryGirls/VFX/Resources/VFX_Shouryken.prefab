@@ -47,8 +47,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _timeToLive: 1
   _isTimeToLiveIsNormilizedTime: 1
+  _destroyOnCollision: 0
   _particleSystem: {fileID: 6220422225713749368}
-  projectileDamage: 10
+  projectileDamage: 0
 --- !u!1 &3363848729867003103
 GameObject:
   m_ObjectHideFlags: 0

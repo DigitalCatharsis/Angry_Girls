@@ -1,5 +1,3 @@
-using UnityEditor;
-using UnityEditor.ShaderGraph;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -8,6 +6,8 @@ namespace Angry_Girls
     {
         public float currentAttackTimer;
         public int attacksCount;
+
+        private Vector3 _finalProjectileRotation = new Vector3(45f, 0, 0);
 
         public override void OnStateEnter(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
@@ -20,7 +20,7 @@ namespace Angry_Girls
             control.rigidBody.AddForce(control.characterSettings.attackPrepAbility.attackPrepMovementForce);
 
             var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_TestProjectile, control.transform.position, Quaternion.identity);
-            projectile.GetComponent<VFX>().SendProjectile_Fireball(control.subComponentProcessor.attackSystem.projectileSpawnPosition.position, new Vector3(45f,0,0));
+            projectile.GetComponent<VFX>().SendProjectile_Fireball__TweenMove(control.subComponentProcessor.attackSystem.projectileSpawnPosition.position, _finalProjectileRotation, control.characterSettings.attackPrepAbility.attackDamage);
 
         }
         public override void OnStateUpdate(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
@@ -29,7 +29,7 @@ namespace Angry_Girls
             {
                 attacksCount = (int)stateInfo.normalizedTime;
                 var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_TestProjectile, control.transform.position, Quaternion.identity);
-                projectile.GetComponent<VFX>().SendProjectile_Fireball(control.subComponentProcessor.attackSystem.projectileSpawnPosition.position, new Vector3(45f, 0, 0));
+                projectile.GetComponent<VFX>().SendProjectile_Fireball__TweenMove(control.subComponentProcessor.attackSystem.projectileSpawnPosition.position, _finalProjectileRotation, control.characterSettings.attackPrepAbility.attackDamage);
             }
 
             if (control.characterSettings.attackPrepAbility.useAnimationNormalizedTimeDuration)

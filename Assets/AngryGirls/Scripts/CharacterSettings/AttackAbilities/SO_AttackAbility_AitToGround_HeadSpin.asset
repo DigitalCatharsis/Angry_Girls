@@ -20,6 +20,6 @@ MonoBehaviour:
   attackPrepMovementForce: {x: 0, y: 15000, z: 0}
   attackPrep_Projectile: {fileID: 0}
   attackPrep_Projectile_LifeDuration: 1
-  attackDamage: 15
+  attackDamage: 1
   attackTimeDuration: 1
   useAnimationNormalizedTimeDuration: 1

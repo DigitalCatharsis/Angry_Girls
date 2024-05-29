@@ -1,11 +1,13 @@
-using UnityEditor;
-using UnityEditor.ShaderGraph;
+using System;
 using UnityEngine;
 
 namespace Angry_Girls
 {
     public class AttackLogic_HeadSpinAttack : AttackAbilityLogic
     {
+        private float _impulseY = 7f;
+        private float _impulseZ = 5f;
+        private Vector3 _finalProjectileRotation = new Vector3(75f, 0, 0);
         public float currentAttackTimer;
         public int attacksCount;
         public override void OnStateEnter(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
@@ -26,12 +28,9 @@ namespace Angry_Girls
                   new Vector3(230f,-180f,0)
             };
 
-            for (var i = 0; i < angles.Length; i++)
-            {
-                var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_TestProjectile, control.transform.position, Quaternion.Euler(angles[i]));
-                projectile.GetComponent<VFX>().SendProjectile_Fireball(control.subComponentProcessor.attackSystem.projectileSpawnPosition.position, new Vector3(90f,0,0));
-            }
+            ProcessFireballs(control, angles);
         }
+
         public override void OnStateUpdate(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             if (control.characterSettings.attackPrepAbility.useAnimationNormalizedTimeDuration)
@@ -55,12 +54,36 @@ namespace Angry_Girls
 
         public override void OnStateExit(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
+            Vector3[] angles = {
+                  new Vector3(-205f,0,0),
+                  new Vector3(-225f,0,0),
+                  new Vector3(-270f,0,0),
+                  new Vector3(-305f,0,0),
+                  new Vector3(-325f,0,0),
+            };
 
-            Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_TestProjectile, control.transform.position, Quaternion.identity);
-            Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_TestProjectile, control.transform.position, Quaternion.identity);
-            Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_TestProjectile, control.transform.position, Quaternion.identity);
-            Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_TestProjectile, control.transform.position, Quaternion.identity);
+            ProcessFireballs(control, angles);
+
             control.isAttacking = false;
+        }
+
+        private void ProcessFireballs(CharacterControl control, Vector3[] angles)
+        {
+            for (var i = 0; i < angles.Length; i++)
+            {
+                //spawn
+                var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_TestProjectile, control.transform.position, Quaternion.Euler(angles[i]));
+
+                //set final rotation
+                var rotation = _finalProjectileRotation;
+                if (Math.Sign(projectile.transform.forward.z) < 0)
+                {
+                    rotation.y += 180f;
+                }
+                
+                //add impulse and rotate
+                projectile.GetComponent<VFX>().SendProjectile_Fireball(new Vector3(0, _impulseY * projectile.transform.forward.y, _impulseZ * projectile.transform.forward.z), rotation, control.characterSettings.attackPrepAbility.attackDamage);
+            }
         }
     }
 }

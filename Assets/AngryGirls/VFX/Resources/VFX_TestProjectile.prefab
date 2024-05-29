@@ -9675,6 +9675,7 @@ GameObject:
   - component: {fileID: 7606574144781759138}
   - component: {fileID: 2069930466965192653}
   - component: {fileID: -5860992727677275382}
+  - component: {fileID: 8380759687567671478}
   m_Layer: 13
   m_Name: VFX_TestProjectile
   m_TagString: Untagged
@@ -9710,10 +9711,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49d18267dcc029e4fac167ae161938d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timeToLive: 3
+  _timeToLive: 99
   _isTimeToLiveIsNormilizedTime: 0
+  _destroyOnCollision: 1
   _particleSystem: {fileID: 5921108591417898}
-  projectileDamage: 30
+  projectileDamage: 0
 --- !u!65 &2069930466965192653
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9756,6 +9758,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.4415976, y: 0.6357298, z: 1.1143938}
   m_Center: {x: -0.02348423, y: -0.0013899803, z: -0.010591924}
+--- !u!54 &8380759687567671478
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5238815803969079422}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 1
 --- !u!1 &5553841013541593787
 GameObject:
   m_ObjectHideFlags: 0

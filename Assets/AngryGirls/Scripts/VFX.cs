@@ -11,10 +11,11 @@ namespace Angry_Girls
         [Header("Setup")]
         [SerializeField] private float _timeToLive = 1;
         [SerializeField] private bool _isTimeToLiveIsNormilizedTime = false;
+        [SerializeField] private bool _destroyOnCollision = false;
 
         [Space(10)]
         [SerializeField] private ParticleSystem _particleSystem;
-        public float projectileDamage = 10f;
+        [ShowOnly] public float projectileDamage = 0f;
 
 
         private void OnEnable()
@@ -30,8 +31,10 @@ namespace Angry_Girls
             StartCoroutine(VFXLiving_Routine());
         }
 
-        public void SendProjectile_Fireball(Vector3 startPoint, Vector3 finalRotationDegree, float moveDuration = 1.5f)
+        public void SendProjectile_Fireball__TweenMove(Vector3 startPoint, Vector3 finalRotationDegree, float damage, float moveDuration = 1.5f)
         {
+            projectileDamage = damage;
+
             Vector3 frontDistance = new Vector3(0, 0, 2.2f);
             Vector3 gravityDistance = new Vector3(0, 2.8f, 8f);
 
@@ -43,13 +46,25 @@ namespace Angry_Girls
             };
 
 
-
             transform.DOPath(waypoints, moveDuration, pathType: PathType.Linear, pathMode: PathMode.Full3D, resolution: 10, gizmoColor: UnityEngine.Color.green);
             transform.DORotate(endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * this.gameObject.transform.forward.z), duration: moveDuration, mode: RotateMode.Fast);
         }
 
+        public void SendProjectile_Fireball(Vector3 impulse, Vector3 finalRotationDegree, float damage, float moveDuration = 1.5f)
+        {
+            projectileDamage = damage;
+
+            this.gameObject.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.Impulse);
+            transform.DORotate(endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * this.gameObject.transform.forward.z), duration: moveDuration, mode: RotateMode.Fast);
+        }
+
         private void OnCollisionEnter(Collision collision)
-        { 
+        {
+            if (_destroyOnCollision == false)
+            {
+                return;
+            }
+
             if (collision.gameObject.GetComponent<CharacterControl>())
             {
                 return;

@@ -28602,6 +28602,7 @@ GameObject:
   - component: {fileID: 6845568401284637879}
   - component: {fileID: 2856694958892417096}
   - component: {fileID: 6048308684481631739}
+  - component: {fileID: 7267831022188360813}
   m_Layer: 13
   m_Name: VFX_Damage_White
   m_TagString: Untagged
@@ -33381,6 +33382,23 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &7267831022188360813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8535787800293781277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49d18267dcc029e4fac167ae161938d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _timeToLive: 1
+  _isTimeToLiveIsNormilizedTime: 0
+  _destroyOnCollision: 0
+  _particleSystem: {fileID: 0}
+  projectileDamage: 0
 --- !u!1 &8880755726145212491
 GameObject:
   m_ObjectHideFlags: 0
