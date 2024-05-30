@@ -72,7 +72,7 @@ namespace Angry_Girls
             for (var i = 0; i < angles.Length; i++)
             {
                 //spawn
-                var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_TestProjectile, control.transform.position, Quaternion.Euler(angles[i]));
+                var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_FireBall, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.Euler(angles[i]));
 
                 //set final rotation
                 var rotation = _finalProjectileRotation;

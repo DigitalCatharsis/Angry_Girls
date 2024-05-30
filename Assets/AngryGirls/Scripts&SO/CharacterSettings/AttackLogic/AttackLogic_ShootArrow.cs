@@ -19,8 +19,8 @@ namespace Angry_Girls
             control.rigidBody.velocity = control.characterSettings.attackPrepAbility.attackPrepMovementSpeed;
             control.rigidBody.AddForce(control.characterSettings.attackPrepAbility.attackPrepMovementForce);
 
-            var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_TestProjectile, control.transform.position, Quaternion.identity);
-            projectile.GetComponent<VFX>().SendProjectile_Fireball__TweenMove(control.subComponentProcessor.attackSystem.projectileSpawnPosition.position, _finalProjectileRotation, control.characterSettings.attackPrepAbility.attackDamage);
+            var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_FireBall, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.identity);
+            projectile.GetComponent<VFX>().SendProjectile_Fireball__TweenMove(control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, _finalProjectileRotation, control.characterSettings.attackPrepAbility.attackDamage);
 
         }
         public override void OnStateUpdate(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
@@ -28,8 +28,8 @@ namespace Angry_Girls
             if (attacksCount < ((int)stateInfo.normalizedTime))
             {
                 attacksCount = (int)stateInfo.normalizedTime;
-                var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_TestProjectile, control.transform.position, Quaternion.identity);
-                projectile.GetComponent<VFX>().SendProjectile_Fireball__TweenMove(control.subComponentProcessor.attackSystem.projectileSpawnPosition.position, _finalProjectileRotation, control.characterSettings.attackPrepAbility.attackDamage);
+                var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_FireBall, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.identity);
+                projectile.GetComponent<VFX>().SendProjectile_Fireball__TweenMove(control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, _finalProjectileRotation, control.characterSettings.attackPrepAbility.attackDamage);
             }
 
             if (control.characterSettings.attackPrepAbility.useAnimationNormalizedTimeDuration)

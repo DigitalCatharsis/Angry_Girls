@@ -9,7 +9,8 @@ namespace Angry_Girls
     {
         VFX_Damage_White,
         VFX_Shouryken,
-        VFX_TestProjectile,
+        VFX_FireBall,
+        VFX_Flame,
     }
     public class SpawnManager : MonoBehaviour
     {

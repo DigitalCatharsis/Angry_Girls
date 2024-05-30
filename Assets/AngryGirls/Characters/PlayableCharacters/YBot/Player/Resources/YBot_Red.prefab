@@ -85,6 +85,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7121561051254715629, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: projectileSpawnTransform
+      value: 
+      objectReference: {fileID: 464290289296872469}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -94,6 +99,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 3739052570898081000}
   m_SourcePrefab: {fileID: 100100000, guid: c03c7eedb934e76448be7b86074461a4, type: 3}
+--- !u!4 &464290289296872469 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2066009735122893324, guid: c03c7eedb934e76448be7b86074461a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1935014461455445529}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3790040499886461820 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3333332947172867429, guid: c03c7eedb934e76448be7b86074461a4,

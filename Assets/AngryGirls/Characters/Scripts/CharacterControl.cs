@@ -2,19 +2,13 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class CharacterControl : MonoBehaviour
+    public class CharacterControl : CContol
     {
-        public bool isLanding = false;
-        public bool isGrounded = false;
-        public bool isAttacking = false;
-
         [Header("Setup")]
-        [SerializeField] private bool _isPlayer = true;
         public CharacterSettings characterSettings;
 
         [Space(15)]
         [Header("Debug")]
-        public Animator animator;
         public Rigidbody rigidBody;
         public BoxCollider boxCollider;
         public SubComponentProcessor subComponentProcessor;
@@ -28,7 +22,6 @@ namespace Angry_Girls
             subComponentProcessor = GetComponentInChildren<SubComponentProcessor>();
 
             subComponentProcessor.OnAwake();
-
         }
 
         private void OnCollisionStay(Collision collision)
@@ -55,14 +48,7 @@ namespace Angry_Girls
         }
         private void OnEnable()
         {
-            if (_isPlayer == true)
-            {
-                Singleton.Instance.characterManager.playableCharacters.Add(this.gameObject);
-            }
-            else
-            {
-                Singleton.Instance.characterManager.enemyCharacters.Add(this.gameObject);
-            }
+            Singleton.Instance.characterManager.playableCharacters.Add(this.gameObject);
 
             subComponentProcessor.OnComponentEnable();
         }

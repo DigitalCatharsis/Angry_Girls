@@ -9677,7 +9677,7 @@ GameObject:
   - component: {fileID: -5860992727677275382}
   - component: {fileID: 8380759687567671478}
   m_Layer: 13
-  m_Name: VFX_TestProjectile
+  m_Name: VFX_FireBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

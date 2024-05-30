@@ -10,7 +10,7 @@ namespace Angry_Girls
     public class AttackSystem : SubComponent
     {
         [Header("Setup")]
-        public Transform projectileSpawnPosition;
+        public Transform projectileSpawnTransform;
 
 
         private BoxCollider _attackTriggerCollider;
