@@ -1,8 +1,5 @@
 using DG.Tweening;
 using System.Collections;
-using System.Diagnostics;
-using System.Drawing;
-using UnityEditor.ShaderGraph;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -32,9 +29,9 @@ namespace Angry_Girls
             StartCoroutine(VFXLiving_Routine());
         }
 
-        public void CastFlame(CContol control)
+        public void ApplyFlame(float damageAmount)
         {
-
+            projectileDamage = damageAmount;
         }
 
         public void SendProjectile_Fireball__TweenMove(Vector3 startPoint, Vector3 finalRotationDegree, float damage, float moveDuration = 1.5f)

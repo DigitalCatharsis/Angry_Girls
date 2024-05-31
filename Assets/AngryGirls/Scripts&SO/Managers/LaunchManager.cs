@@ -11,7 +11,6 @@ namespace Angry_Girls
         [SerializeField] private CharacterSelect characterSelectSO;
         [SerializeField] private CharacterLauncher characterLauncher;
         [SerializeField] private Transform characterLauncherStartTransform;
-        [SerializeField] private float secondsCameraWaitsAfterAttack = 1.5f;
 
         [Space(10)]
         [Header("Conditions")]
@@ -24,7 +23,7 @@ namespace Angry_Girls
         public List<GameObject> launchedCharacters;
 
         //Characters
-        [SerializeField]public PlayableCharacters[] SelectedCharactersList => characterSelectSO.selectedCharacters;
+        [SerializeField] public PlayableCharacters[] SelectedCharactersList => characterSelectSO.selectedCharacters;
 
         private void Start()
         {
@@ -106,17 +105,29 @@ namespace Angry_Girls
 
         public void OnLaunchIsOver()
         {
-            StartCoroutine(OnLaunchIsOver_Routine(secondsCameraWaitsAfterAttack));
+            StartCoroutine(OnLaunchIsOver_Routine(Singleton.Instance.ñameraManager.secondsCameraWaitsAfterAttack));
         }
 
         private IEnumerator OnLaunchIsOver_Routine(float secondsToWaitAfterAttack)
         {
+            Singleton.Instance.turnManager.AddCharacterToTurnList(charactersToLaunchLeft[0]);
+
             yield return new WaitForSeconds(charactersToLaunchLeft[0].GetComponent<CharacterControl>().animator.GetCurrentAnimatorStateInfo(0).length);
             UpdateCharactersLists(charactersToLaunchLeft[0]);
             yield return new WaitForSeconds(secondsToWaitAfterAttack);
-            Singleton.Instance.ñameraManager.ReturnCameraToStartPosition(1f);
             characterLauncher.UpdateCharacterPositions(charactersToLaunchLeft);
-            canPressAtCharacters = true;
+
+            if (Singleton.Instance.turnManager.currentTurn < 1)
+            {
+                Singleton.Instance.ñameraManager.ReturnCameraToStartPosition(1f);
+                canPressAtCharacters = true;
+                Singleton.Instance.turnManager.currentTurn++;
+            }
+            else
+            {
+                Singleton.Instance.turnManager.isLaunchingPhaseOver = true;
+            }
+
         }
     }
 }

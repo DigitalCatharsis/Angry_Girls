@@ -7,6 +7,7 @@ namespace Angry_Girls
         [Header("Setup")]
         [SerializeField] private Vector3 cameraStartPosition = new Vector3(13.25f, 1.44f, -0.00999999f);
         [SerializeField] private float startOrthographicCameraSize = 1.65f;
+        public float secondsCameraWaitsAfterAttack = 1.5f;
 
         // Center camera on character collider center
         public void CenterCameraAgainst(Collider selectedObject)
@@ -15,9 +16,10 @@ namespace Angry_Girls
             Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, boundsCenter.y, boundsCenter.z);
         }
 
-        public void MoveCameraTo(Vector3 placeToMove, float time)
+        public void MoveCameraTo(Vector3 placeToMove, float speed)
         {
-            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, placeToMove, time);
+            Singleton.Instance.myExtentions.Lerp_Position(Camera.main.gameObject, startPosition: Camera.main.transform.position, endPosition: placeToMove, speed);
+            Singleton.Instance.myExtentions.Lerp_OrthographicCamera_Size(Camera.main, startValue: Camera.main.orthographicSize, startOrthographicCameraSize, speed);
         }
 
         public void ReturnCameraToStartPosition(float speed)

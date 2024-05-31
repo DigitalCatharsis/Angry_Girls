@@ -11,8 +11,6 @@ namespace Angry_Girls
         [Header("Debug")]
         public Rigidbody rigidBody;
         public BoxCollider boxCollider;
-        public SubComponentProcessor subComponentProcessor;
-        public ContactPoint[] boxColliderContacts;
 
         private void Awake()
         {

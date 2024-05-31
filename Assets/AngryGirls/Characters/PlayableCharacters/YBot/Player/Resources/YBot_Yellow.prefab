@@ -66,7 +66,27 @@ PrefabInstance:
     - target: {fileID: 2640689163874789523, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_Name
-      value: YBot Variant
+      value: YBot_Yellow
+      objectReference: {fileID: 0}
+    - target: {fileID: 7121561051254715629, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: VFX_Color.a
+      value: 0.59607846
+      objectReference: {fileID: 0}
+    - target: {fileID: 7121561051254715629, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: VFX_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7121561051254715629, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: VFX_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7121561051254715629, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: VFX_Color.r
+      value: 0.9722222
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

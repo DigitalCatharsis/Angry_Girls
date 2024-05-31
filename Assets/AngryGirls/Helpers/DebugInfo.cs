@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class MousePositionInfo : MonoBehaviour
+    public class DebugInfo : MonoBehaviour
     {
         private Camera cam;
 
@@ -27,10 +27,17 @@ namespace Angry_Girls
 
             point = cam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, cam.nearClipPlane));
 
-            GUILayout.BeginArea(new Rect(20, 20, 250, 120));
+            GUILayout.BeginArea(new Rect(20, 20, 250, 600));
+
+            //pointer position
+            GUILayout.Label("==Pointer==");
             GUILayout.Label("Screen pixels: " + cam.pixelWidth + ":" + cam.pixelHeight);
             GUILayout.Label("Mouse position: " + mousePos);
             GUILayout.Label("World position: " + point.ToString("F3"));
+
+            //Enemy:
+            GUILayout.Label("==Enemy==");
+            GUILayout.Label("Enemy HP: " + Singleton.Instance.characterManager.enemyCharacters[0].GetComponent<EnemyControl>().currentHealth);
             GUILayout.EndArea();
         }
     }

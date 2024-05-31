@@ -72,7 +72,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CharacterSettings\CharacterSettings\CharacterSettings.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\MaterialChaner\MaterialChanger.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Managers\SpawnManager.cs" />
-    <Compile Include="Assets\AngryGirls\Helpers\MousePositionInfo.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModulePhysics2D.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CharacterSettings\CharacterSelect\CharacterSelect.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ColorDebugLog\ColorDebugLog.cs" />
@@ -104,6 +103,7 @@
     <Compile Include="Assets\AngryGirls\Helpers\LayerAdder\LayerAdder.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ShowOnlyAttribute\ShowOnlyAttribute.cs" />
     <Compile Include="Assets\AngryGirls\Characters\CollisionSpheres\OverlapChecker.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Managers\TurnManager.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\BoxColliderUpdater.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Managers\Singleton.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUnityVersion.cs" />
@@ -114,6 +114,7 @@
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModulePhysics.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleAudio.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\VFX.cs" />
+    <Compile Include="Assets\AngryGirls\Helpers\DebugInfo.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CharacterSettings\AttackLogic\AttackLogic_ShoryukenDownSmash_Prep.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts\SubComponents\SubComponent.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\MyExtentions\MyExtentions.cs" />

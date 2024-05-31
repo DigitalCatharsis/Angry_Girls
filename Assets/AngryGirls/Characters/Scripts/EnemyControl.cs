@@ -12,14 +12,24 @@ namespace Angry_Girls
         [SerializeField] private SerializedDictionary<HitReaction_States, int> _hitReaction_Dictionary;
         [SerializeField] private SerializedDictionary<Death_States, int> _death_States_Dictionary;
 
+        private void Awake()
+        {
+            subComponentProcessor = GetComponentInChildren<SubComponentProcessor>();
+            subComponentProcessor.OnAwake();
+        }
+
         private void OnEnable()
         {
+            Singleton.Instance.characterManager.playableCharacters.Add(this.gameObject);
             Singleton.Instance.characterManager.enemyCharacters.Add(this.gameObject);
 
             animator = GetComponent<Animator>();
+            subComponentProcessor.OnComponentEnable();
 
             _hitReaction_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<HitReaction_States>(this.gameObject);
             _death_States_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<Death_States>(this.gameObject);
+
+            currentHealth = health;
         }
 
         //private void ChangeAnimationState(int newStateHash, int layer = 0, float transitionDuration = 1f)
@@ -44,32 +54,13 @@ namespace Angry_Girls
                 return;
             }
 
-            if (other.gameObject.transform.root.gameObject.GetComponent<CharacterControl>() != null)
+            if (other.gameObject.transform.GetComponent<VFX>() != null)
             {
-                var character = other.gameObject.transform.root.GetComponent<CharacterControl>();
-                if (character.isAttacking)
-                {
-                    ApplyDamage(character.characterSettings.attackPrepAbility.attackDamage);
-
-                    if (health <= 0)
-                    {
-                        isDead = true;
-                        ChangeAnimationState_CrossFadeInFixedTime(_death_States_Dictionary[Death_States.A_Sweep_Fall], 0.05f);
-
-                        return;
-                    }
-
-                    ChangeAnimationState_CrossFadeInFixedTime(_hitReaction_Dictionary[HitReaction_States.A_HitReaction], 0.05f);
-                }
-            }
-
-            if (other.gameObject.transform.root.GetComponent<VFX>() != null)
-            {
-                var vfx = other.gameObject.transform.root.GetComponent<VFX>();
+                var vfx = other.gameObject.transform.GetComponent<VFX>();
 
                 ApplyDamage(vfx.projectileDamage);
 
-                if (health <= 0)
+                if (currentHealth <= 0)
                 {
                     isDead = true;
                     ChangeAnimationState_CrossFadeInFixedTime(_death_States_Dictionary[Death_States.A_Sweep_Fall], 0.05f);
@@ -83,15 +74,35 @@ namespace Angry_Girls
 
         private void ApplyDamage(float damage)
         {
-            health -= damage;
+            currentHealth -= damage;
         }
 
         private void Update()
         {
+            subComponentProcessor.OnUpdate();
+
             if (isDead)
             {
                 Debug.Log("Dead");
             }
+        }
+
+        private void OnCollisionStay(Collision collision)
+        {
+            boxColliderContacts = collision.contacts;
+        }
+        private void FixedUpdate()
+        {
+            subComponentProcessor.OnFixedUpdate();
+        }
+        private void LateUpdate()
+        {
+            subComponentProcessor.OnLateUpdate();
+        }
+
+        private void Start()
+        {
+            subComponentProcessor.OnStart();
         }
     }
 }

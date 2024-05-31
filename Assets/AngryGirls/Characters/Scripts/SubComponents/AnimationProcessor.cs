@@ -146,7 +146,7 @@ namespace Angry_Girls
                 }
 
                 ChangeAnimationState_CrossFadeInFixedTime(attackPrep_Dictionary[control.characterSettings.attackPrepAbility.attackPrep_State.animation], control.characterSettings.attackPrepAbility.attackPrep_State.transitionDuration);
-                control.subComponentProcessor.attackSystem.TryProcessAttack();
+                //control.subComponentProcessor.attackSystem.TryProcessAttack();
             }
 
             //Airboned at ground. No attack
@@ -182,7 +182,7 @@ namespace Angry_Girls
 
                 control.animator.StopPlayback();
                 ChangeAnimationState_CrossFade(attackPrep_Dictionary[control.characterSettings.attackPrepAbility.attackPrep_State.animation], control.characterSettings.attackPrepAbility.attackPrep_State.transitionDuration);
-                control.subComponentProcessor.attackSystem.TryProcessAttack();
+                //control.subComponentProcessor.attackSystem.TryProcessAttack();
                 return;
             }
 
@@ -261,7 +261,7 @@ namespace Angry_Girls
                 }
 
                 ChangeAnimationState_CrossFade(attackPrep_Dictionary[control.characterSettings.attackPrepAbility.attackPrep_State.animation], control.characterSettings.attackPrepAbility.attackPrep_State.transitionDuration);
-                control.subComponentProcessor.attackSystem.TryProcessAttack();
+                //control.subComponentProcessor.attackSystem.TryProcessAttack();
             }
 
             //Landing

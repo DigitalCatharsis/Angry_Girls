@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -9,8 +7,14 @@ namespace Angry_Girls
         public bool isLanding = false;
         public bool isGrounded = false;
         public bool isAttacking = false;
-
         public bool isDead = false;
+
+        public float currentHealth;
+
         public Animator animator;
+        public SubComponentProcessor subComponentProcessor;
+        public ContactPoint[] boxColliderContacts;
+
+
     }
 }

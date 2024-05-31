@@ -11,6 +11,7 @@ namespace Angry_Girls
         VFX_Shouryken,
         VFX_FireBall,
         VFX_Flame,
+        VFX_Flame2,
     }
     public class SpawnManager : MonoBehaviour
     {

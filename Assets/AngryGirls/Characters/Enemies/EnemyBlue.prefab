@@ -628,7 +628,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3190318192328145087
 Transform:
   m_ObjectHideFlags: 0
@@ -1260,7 +1260,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &662455638710351924
 Transform:
   m_ObjectHideFlags: 0
@@ -1347,7 +1347,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7179199014489704663
 Transform:
   m_ObjectHideFlags: 0
@@ -1872,8 +1872,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b32dce3e0c48b9d4db3fe995187cbdc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  isLanding: 0
+  isGrounded: 0
+  isAttacking: 0
   isDead: 0
+  currentHealth: 0
+  animator: {fileID: 0}
+  subComponentProcessor: {fileID: 0}
+  health: 100
   _hitReaction_Dictionary:
     _serializedList: []
   _death_States_Dictionary:
@@ -2052,7 +2058,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5495363890903350
 Transform:
   m_ObjectHideFlags: 0
@@ -2112,7 +2118,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8659347859971887416
 Transform:
   m_ObjectHideFlags: 0
@@ -2504,7 +2510,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3070076519710919005
 Transform:
   m_ObjectHideFlags: 0
@@ -2646,7 +2652,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &982284742859489181
 Transform:
   m_ObjectHideFlags: 0
@@ -2684,9 +2690,9 @@ MonoBehaviour:
     _serializedList: []
   _airbonedFlying_Dictionary:
     _serializedList: []
-  airbonedAttack_Dictionary:
+  attackPrep_Dictionary:
     _serializedList: []
-  groundedAttack_Dictionary:
+  attackFinish_Dictionary:
     _serializedList: []
   _landingNames_Dictionary:
     _serializedList: []
@@ -3139,7 +3145,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2074599593401334287
 Transform:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ namespace Angry_Girls
     {
         [Header("Setup")]
         public Transform projectileSpawnTransform;
+        public Color VFX_Color;
 
 
         private BoxCollider _attackTriggerCollider;
@@ -59,21 +60,21 @@ namespace Angry_Girls
 
         }
 
-        public void TryProcessAttack()
-        {
-            EnableAttackTrigger();
-        }
+        //public void TryProcessAttack()
+        //{
+        //    EnableAttackTrigger();
+        //}
 
-        public void DisableAttackTrigger()
-        {
-            _attackTriggerCollider.center = new Vector3(0f, 0.56f, 0f);
-            _attackTriggerCollider.size = new Vector3(0f, 0f, 0f);
-        }
-        public void EnableAttackTrigger()
-        {
-            _attackTriggerCollider.center = new Vector3(4.470348e-08f, 0.4552352f, 0.06810474f);
-            _attackTriggerCollider.size = new Vector3(0.2461494f, 0.942835f, 1.462443f);
-        }
+        //public void DisableAttackTrigger()
+        //{
+        //    _attackTriggerCollider.center = new Vector3(0f, 0.56f, 0f);
+        //    _attackTriggerCollider.size = new Vector3(0f, 0f, 0f);
+        //}
+        //public void EnableAttackTrigger()
+        //{
+        //    _attackTriggerCollider.center = new Vector3(4.470348e-08f, 0.4552352f, 0.06810474f);
+        //    _attackTriggerCollider.size = new Vector3(0.2461494f, 0.942835f, 1.462443f);
+        //}
 
         public override void OnAwake()
         {

@@ -1087,7 +1087,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3263918520103965866}
   - component: {fileID: 7121561051254715629}
-  - component: {fileID: 5150265483639079448}
   m_Layer: 9
   m_Name: AttackSystem
   m_TagString: Untagged
@@ -1124,27 +1123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   control: {fileID: 0}
   projectileSpawnTransform: {fileID: 7260981478403319719}
---- !u!65 &5150265483639079448
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2617458720339333509}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0, y: 0, z: 0}
-  m_Center: {x: 0, y: 0.56, z: 0}
+  VFX_Color: {r: 0, g: 0.5211234, b: 1, a: 1}
 --- !u!1 &2640689163874789523
 GameObject:
   m_ObjectHideFlags: 0
@@ -1181,7 +1160,6 @@ Transform:
   - {fileID: 3190839930693420652}
   - {fileID: 8322040185008855113}
   - {fileID: 2636539063242073703}
-  - {fileID: 7260981478403319719}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &4452714583161221528
@@ -1248,6 +1226,7 @@ MonoBehaviour:
   isGrounded: 0
   isAttacking: 0
   isDead: 0
+  currentHealth: 0
   animator: {fileID: 0}
   characterSettings: {fileID: 11400000, guid: 28afea81c95372d4fb753c0287980f6c, type: 2}
   rigidBody: {fileID: 0}
@@ -2358,12 +2337,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6050039227792400111}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.28, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 253452075603770101}
+  m_Father: {fileID: 3190839930693420652}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6096101145964420622
 GameObject:
@@ -3121,6 +3100,7 @@ Transform:
   - {fileID: 3931108645904056376}
   - {fileID: 124190122342104723}
   - {fileID: 625756058259321743}
+  - {fileID: 7260981478403319719}
   m_Father: {fileID: 253452075603770101}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &8110769739320832574
