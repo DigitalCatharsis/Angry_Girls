@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class CharacterControl : CContol
+    public class CharacterControl : CControl
     {
         [Header("Setup")]
         public CharacterSettings characterSettings;

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class EnemyControl : CContol
+    public class EnemyControl : CControl
     {
         [Header("Setup")]
         [SerializeField] private float health = 100f;

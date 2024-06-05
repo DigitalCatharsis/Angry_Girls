@@ -127,7 +127,6 @@ namespace Angry_Girls
             {
                 Singleton.Instance.turnManager.isLaunchingPhaseOver = true;
             }
-
         }
     }
 }

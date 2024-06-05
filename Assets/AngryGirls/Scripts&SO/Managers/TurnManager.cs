@@ -17,7 +17,7 @@ namespace Angry_Girls
         public bool isLaunchingPhaseOver = false;
         public bool isAttackingPhaseOver = true;
 
-        [SerializeField] CurrentPhase currentPhase = CurrentPhase.LaunchingPhase;
+        public CurrentPhase currentPhase = CurrentPhase.LaunchingPhase;
 
         [SerializeField] private List<GameObject> _charactersTurn_List = new();
 
@@ -40,24 +40,16 @@ namespace Angry_Girls
                     return;
                 }
 
-                currentPhase = CurrentPhase.AttackingPhase;
-                isAttackingPhaseOver = false;
+                SwitchToAttackingPhase();
 
                 //Adding enemies to attack list after 2 launches
                 if (currentTurn == 1)
                 {
-                    var temp = _charactersTurn_List[_charactersTurn_List.Count-1];
-                    _charactersTurn_List.RemoveAt(_charactersTurn_List.Count-1);
-                    foreach (var character in Singleton.Instance.characterManager.enemyCharacters)
-                    {
-
-                        _charactersTurn_List.Add(character.gameObject);
-                    }
-                    _charactersTurn_List.Add(temp);
+                    _charactersTurn_List.InsertRange(_charactersTurn_List.Count - 1, Singleton.Instance.characterManager.enemyCharacters);
                 }
 
-                // wait untill everyone do its turn
-                StartCoroutine(ProcessEachTurn_Routine());
+                // wait untill everyone do its turn then switch to LaunchimgPhase
+                StartCoroutine(OnEachTurn_Routine());
             }
 
             if (currentPhase == CurrentPhase.AttackingPhase)
@@ -66,18 +58,69 @@ namespace Angry_Girls
                 {
                     return;
                 }
-                ColorDebugLog.Log("Is AttackingPhase", System.Drawing.KnownColor.GhostWhite);
             }
         }
 
-        private IEnumerator ProcessEachTurn_Routine()
+        private IEnumerator OnEachTurn_Routine()
         {            
             for (var i = 0; i < _charactersTurn_List.Count -1; i++)
             {
+                if (_charactersTurn_List[i].GetComponent<CControl>().isDead == true)
+                {
+                    continue;
+                }
+
                 Singleton.Instance.ñameraManager.CenterCameraAgainst(_charactersTurn_List[i].GetComponent<BoxCollider>());
                 ColorDebugLog.Log(_charactersTurn_List[i].name.ToString(), KnownColor.Tan);
+                //TEMP
+                _charactersTurn_List[i].GetComponent<CControl>().animator.Play("A_Shoryuken_DownSmash_Finish", 0);
+
                 yield return new WaitForSeconds(2);
             }
+            Singleton.Instance.ñameraManager.ReturnCameraToStartPosition(1f);
+            SwitchToLaunchingPhase();
+        }
+
+        private void SwitchToAttackingPhase()
+        {
+            isLaunchingPhaseOver = true;
+            currentPhase = CurrentPhase.AttackingPhase;
+            isAttackingPhaseOver = false;
+        }
+
+        private void SwitchToLaunchingPhase()
+        {
+            Singleton.Instance.turnManager.currentTurn++;
+            isAttackingPhaseOver = true;
+            SortCharactersTurnList();
+            currentPhase = CurrentPhase.LaunchingPhase;
+            isLaunchingPhaseOver = false;
+            Singleton.Instance.launchManager.canPressAtCharacters = true;
+        }
+
+        private void SortCharactersTurnList()
+        {
+            var tempCharacters = new List<GameObject>();
+            var tempEnemies = new List<GameObject>();
+
+            foreach ( var character in _charactersTurn_List )
+            {
+                if (character.GetComponent<CControl>().isDead)
+                {
+                    continue;
+                }
+                if (character.GetComponent<CharacterControl>())
+                {
+                    tempCharacters.Add(character);
+                }
+                else if (character.GetComponent<EnemyControl>())
+                {
+                    tempEnemies.Add(character);
+                }
+            }
+            _charactersTurn_List.Clear();
+            _charactersTurn_List.AddRange(tempCharacters);
+            _charactersTurn_List.AddRange(tempEnemies);
         }
     }
 }

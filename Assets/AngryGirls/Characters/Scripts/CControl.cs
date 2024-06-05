@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public abstract class CContol : MonoBehaviour
+    public abstract class CControl : MonoBehaviour
     {
         public bool isLanding = false;
         public bool isGrounded = false;
