@@ -4,7 +4,7 @@ namespace Angry_Girls
 {
     public class CollisionDetection : MonoBehaviour
     {
-        public static GameObject GetCollidingObject(CharacterControl control, Vector3 start, Vector3 dir, float blockDistance, ref Vector3 collisionPoint)
+        public static GameObject GetCollidingObject(CControl control, Vector3 start, Vector3 dir, float blockDistance, ref Vector3 collisionPoint)
         {
             // Игнор рейкастом слоя 9 (character) и 13 (projectile)
             int layerMask = 1 << 9 | 1 << 13;
@@ -34,7 +34,7 @@ namespace Angry_Girls
             }
         }
 
-        public static bool IsOwnBodyPart(CharacterControl control, Collider col)
+        public static bool IsOwnBodyPart(CControl control, Collider col)
         {
             if (col.transform.root.gameObject == control.gameObject)
             {

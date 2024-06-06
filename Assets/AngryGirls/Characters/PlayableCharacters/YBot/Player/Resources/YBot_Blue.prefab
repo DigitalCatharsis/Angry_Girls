@@ -872,7 +872,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   control: {fileID: 0}
   hasBeenLaunched: 0
-  hasFinishedTurn: 0
+  hasFinishedaunLaunchingTurn: 0
   hasUsedAbility: 0
 --- !u!1 &2268399448965009457
 GameObject:
@@ -1124,6 +1124,7 @@ MonoBehaviour:
   control: {fileID: 0}
   projectileSpawnTransform: {fileID: 7260981478403319719}
   VFX_Color: {r: 0, g: 0.5211234, b: 1, a: 1}
+  hasFinishedStaticAttackTurn: 1
 --- !u!1 &2640689163874789523
 GameObject:
   m_ObjectHideFlags: 0
@@ -1227,11 +1228,11 @@ MonoBehaviour:
   isAttacking: 0
   isDead: 0
   currentHealth: 0
-  animator: {fileID: 0}
-  characterSettings: {fileID: 11400000, guid: 28afea81c95372d4fb753c0287980f6c, type: 2}
   rigidBody: {fileID: 0}
   boxCollider: {fileID: 0}
+  animator: {fileID: 0}
   subComponentProcessor: {fileID: 0}
+  characterSettings: {fileID: 11400000, guid: 28afea81c95372d4fb753c0287980f6c, type: 2}
 --- !u!95 &3541158604538972460
 Animator:
   serializedVersion: 5
@@ -1749,11 +1750,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4674259014324178179}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72f82326d3d69bf468af47802bfedd41, type: 3}
+  m_Script: {fileID: 11500000, guid: 398a9031c5b8dff4e921fa7629630b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   control: {fileID: 0}
-  _collidingBlockDistance: 0.05
+  _collidingBlockDistance: 0.2
   landingPosition: {x: 0, y: 0, z: 0}
   bottomRaycastContactPoint: {x: 0, y: 0, z: 0}
 --- !u!1 &4770912022852876395
@@ -2162,9 +2163,7 @@ MonoBehaviour:
     _serializedList: []
   _landingNames_Dictionary:
     _serializedList: []
-  _hitReaction_Dictionary:
-    _serializedList: []
-  _death_States_Dictionary:
+  _staticAttack_States_Dictionary:
     _serializedList: []
   airToGroundFinishedAbility: 0
 --- !u!1 &5503316897883994643

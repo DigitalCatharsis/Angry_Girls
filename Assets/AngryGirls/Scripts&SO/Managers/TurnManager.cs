@@ -7,7 +7,7 @@ namespace Angry_Girls
 {
     public enum CurrentPhase
     {
-        AttackingPhase,
+        StaticAttackingPhase,
         LaunchingPhase,
     }
 
@@ -52,7 +52,7 @@ namespace Angry_Girls
                 StartCoroutine(OnEachTurn_Routine());
             }
 
-            if (currentPhase == CurrentPhase.AttackingPhase)
+            if (currentPhase == CurrentPhase.StaticAttackingPhase)
             {
                 if (isAttackingPhaseOver == false)
                 {
@@ -71,9 +71,12 @@ namespace Angry_Girls
                 }
 
                 Singleton.Instance.ñameraManager.CenterCameraAgainst(_charactersTurn_List[i].GetComponent<BoxCollider>());
-                ColorDebugLog.Log(_charactersTurn_List[i].name.ToString(), KnownColor.Tan);
-                //TEMP
-                _charactersTurn_List[i].GetComponent<CControl>().animator.Play("A_Shoryuken_DownSmash_Finish", 0);
+                ColorDebugLog.Log(_charactersTurn_List[i].name.ToString() + " is attacking.", KnownColor.Aqua);
+
+                //Attack
+
+                //_charactersTurn_List[i].GetComponent<CControl>().animator.Play("A_Shoryuken_DownSmash_Finish", 0);
+                _charactersTurn_List[i].GetComponent<CControl>().isAttacking = true;
 
                 yield return new WaitForSeconds(2);
             }
@@ -84,8 +87,12 @@ namespace Angry_Girls
         private void SwitchToAttackingPhase()
         {
             isLaunchingPhaseOver = true;
-            currentPhase = CurrentPhase.AttackingPhase;
             isAttackingPhaseOver = false;
+            currentPhase = CurrentPhase.StaticAttackingPhase;
+            foreach (var character in _charactersTurn_List)
+            {
+                character.GetComponent<CControl>().subComponentProcessor.attackSystem.hasFinishedStaticAttackTurn = false;
+            }
         }
 
         private void SwitchToLaunchingPhase()
