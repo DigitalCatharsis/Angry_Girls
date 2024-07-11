@@ -19,7 +19,9 @@ namespace Angry_Girls
             control.rigidBody.velocity = control.characterSettings.launchedAttackPrepAbility.attackPrepMovementSpeed;
             control.rigidBody.AddForce(control.characterSettings.launchedAttackPrepAbility.attackPrepMovementForce);
 
-            var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_FireBall, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.identity);
+            //var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_FireBall, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.identity); OLD!
+            var poolManager = Singleton.Instance.poolManager;
+            var projectile = poolManager.GetObject<VFX_Type>(VFX_Type.VFX_FireBall, poolManager.vfxPoolDictionary, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.identity);
             projectile.GetComponent<VFX>().SendProjectile_Fireball__TweenMove(control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, _finalProjectileRotation, control.characterSettings.launchedAttackPrepAbility.attackDamage);
 
         }
@@ -28,7 +30,9 @@ namespace Angry_Girls
             if (attacksCount < ((int)stateInfo.normalizedTime))
             {
                 attacksCount = (int)stateInfo.normalizedTime;
-                var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_FireBall, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.identity);
+                //var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_FireBall, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.identity); OLD!
+                var poolManager = Singleton.Instance.poolManager;
+                var projectile = poolManager.GetObject<VFX_Type>(VFX_Type.VFX_FireBall, poolManager.vfxPoolDictionary, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.identity);
                 projectile.GetComponent<VFX>().SendProjectile_Fireball__TweenMove(control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, _finalProjectileRotation, control.characterSettings.launchedAttackPrepAbility.attackDamage);
             }
 

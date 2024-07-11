@@ -72,12 +72,14 @@ namespace Angry_Girls
             {
                 return;
             }
-            Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_Damage_White, transform.position, Quaternion.identity);
-            DestroySelf();
+            var poolManager = Singleton.Instance.poolManager;
+            poolManager.GetObject(VFX_Type.VFX_Damage_White, poolManager.vfxPoolDictionary, transform.position, Quaternion.identity);
+            this.gameObject.SetActive(false);
         }
 
         private IEnumerator VFXLiving_Routine()
         {
+            //yield return new WaitForSeconds(scheduledOffTime); try this later!
             var time = 0f;
 
             while (time <= _timeToLive)
@@ -86,11 +88,6 @@ namespace Angry_Girls
                 yield return null;
             }
 
-            DestroySelf();
-        }
-
-        private void DestroySelf()
-        {
             this.gameObject.SetActive(false);
         }
     }

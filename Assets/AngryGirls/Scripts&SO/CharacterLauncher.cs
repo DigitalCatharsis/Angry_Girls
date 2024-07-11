@@ -49,12 +49,14 @@ namespace Angry_Girls
             SpawnProjectoryDots(_positionTransforms[0]);
         }
 
-        public List<GameObject> SpawnAndGetCharacters(PlayableCharacters[] selectedCharactersList)
+        public List<GameObject> SpawnAndGetCharacters(CharacterType[] selectedCharactersList)
         {
             var charList = new List<GameObject>();
             for (var i = 0; i < selectedCharactersList.Count(); i++)
             {
-                charList.Add(Instantiate(Resources.Load(selectedCharactersList[i].ToString())) as GameObject);
+                //charList.Add(Instantiate(Resources.Load(selectedCharactersList[i].ToString())) as GameObject); //old
+                charList.Add(Singleton.Instance.poolManager.GetObject<CharacterType>
+                    (selectedCharactersList[i], Singleton.Instance.poolManager.characterPoolDictionary, Vector3.zero, Quaternion.identity));
             }
             return charList;
         }

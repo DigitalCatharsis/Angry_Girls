@@ -4,13 +4,6 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public enum PlayableCharacters
-    {
-        YBot_Blue,
-        YBot_Green,
-        YBot_Red,
-        YBot_Yellow
-    }
 
     public class CharacterManager : MonoBehaviour
     {

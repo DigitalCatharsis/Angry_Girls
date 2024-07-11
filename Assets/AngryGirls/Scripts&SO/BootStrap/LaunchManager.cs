@@ -23,7 +23,7 @@ namespace Angry_Girls
         public List<GameObject> launchedCharacters;
 
         //Characters
-        [SerializeField] public PlayableCharacters[] SelectedCharactersList => characterSelectSO.selectedCharacters;
+        [SerializeField] public CharacterType[] SelectedCharactersList => characterSelectSO.selectedCharacters;
 
         private void Start()
         {

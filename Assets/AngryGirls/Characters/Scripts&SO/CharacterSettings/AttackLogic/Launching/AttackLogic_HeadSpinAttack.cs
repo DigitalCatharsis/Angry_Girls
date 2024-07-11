@@ -72,7 +72,9 @@ namespace Angry_Girls
             for (var i = 0; i < angles.Length; i++)
             {
                 //spawn
-                var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_FireBall, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.Euler(angles[i]));
+                //var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_FireBall, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.Euler(angles[i])); //old
+                var poolManager = Singleton.Instance.poolManager;
+                var projectile = poolManager.GetObject<VFX_Type>(VFX_Type.VFX_FireBall, poolManager.vfxPoolDictionary, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.Euler(angles[i]));
 
                 //set final rotation
                 var rotation = _finalProjectileRotation;
@@ -80,7 +82,7 @@ namespace Angry_Girls
                 {
                     rotation.y += 180f;
                 }
-                
+
                 //add impulse and rotate
                 projectile.GetComponent<VFX>().SendProjectile_Fireball(new Vector3(0, _impulseY * projectile.transform.forward.y, _impulseZ * projectile.transform.forward.z), rotation, control.characterSettings.launchedAttackPrepAbility.attackDamage);
             }

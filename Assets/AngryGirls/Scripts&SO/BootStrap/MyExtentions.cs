@@ -66,6 +66,4 @@ namespace Angry_Girls
         }
         #endregion
     }
-
-
 }
