@@ -4,12 +4,12 @@ using UnityEngine.VFX;
 
 public class AttackLogic_Static_Shoryuken_Prep : AttackAbilityLogic
 {
-    public override void OnStateEnter(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
+    public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
     {
         CastFlameVFX(control);
     }
 
-    public override void OnStateUpdate(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
+    public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
     {
         if (stateInfo.normalizedTime >= 1
             && control.isGrounded)
@@ -20,11 +20,11 @@ public class AttackLogic_Static_Shoryuken_Prep : AttackAbilityLogic
         }
     }
 
-    public override void OnStateExit(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
+    public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
     {
     }
 
-    private GameObject CastFlameVFX(CharacterControl control)
+    private GameObject CastFlameVFX(CControl control)
     {
         //var vfx = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_Flame2, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.identity); !old
         var poolManager = Singleton.Instance.poolManager;

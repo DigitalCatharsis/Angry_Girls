@@ -1872,7 +1872,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!65 &1832184630
 BoxCollider:
@@ -1981,7 +1981,7 @@ PrefabInstance:
     - target: {fileID: 3711684987824727529, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.47
+      value: 3.392
       objectReference: {fileID: 0}
     - target: {fileID: 3711684987824727529, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
@@ -2022,6 +2022,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6881014822654614173, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2407,6 +2412,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6881014822654614173, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

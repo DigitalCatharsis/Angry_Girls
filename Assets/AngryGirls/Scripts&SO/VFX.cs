@@ -79,14 +79,14 @@ namespace Angry_Girls
 
         private IEnumerator VFXLiving_Routine()
         {
-            //yield return new WaitForSeconds(scheduledOffTime); try this later!
-            var time = 0f;
+            yield return new WaitForSeconds(_timeToLive); //try this later!
+            //var time = 0f;
 
-            while (time <= _timeToLive)
-            {
-                time += Time.deltaTime;
-                yield return null;
-            }
+            //while (time <= _timeToLive)
+            //{
+            //    time += Time.deltaTime;
+            //    yield return null;
+            //}
 
             this.gameObject.SetActive(false);
         }

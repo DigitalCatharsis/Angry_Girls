@@ -61,10 +61,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\AngryGirls\Helpers\InsperctorHierarchyLabel\Editor\HierarchyLabel.cs" />
+    <Compile Include="Assets\AngryGirls\Helpers\LayerAdder\Editor\LayerChangerEditor.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LayerAdder\Editor\LayerAdderEditor.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LookAtPoint\Editor\LookAtPointEditor.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ShowOnlyAttribute\Editor\ShowOnlyDrawer.cs" />
-    <Compile Include="Assets\AngryGirls\Helpers\LayerAdder\Editor\LayerChangerEditor.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\MaterialChaner\Editor\MaterialChangerEditor.cs" />
   </ItemGroup>
   <ItemGroup>

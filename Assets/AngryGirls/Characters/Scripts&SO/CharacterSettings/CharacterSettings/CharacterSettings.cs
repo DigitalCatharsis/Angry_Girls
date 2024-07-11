@@ -34,6 +34,7 @@ namespace Angry_Girls
         public CharAnimationData<Landing_States> landing_State;
 
         [Header("Launched Attack Ability")]
+        [SerializeReference]
         public AttackAbility launchedAttackPrepAbility;
         [Header("Static Attack Ability")]
         public StaticAttackAbility staticAttackAbility;

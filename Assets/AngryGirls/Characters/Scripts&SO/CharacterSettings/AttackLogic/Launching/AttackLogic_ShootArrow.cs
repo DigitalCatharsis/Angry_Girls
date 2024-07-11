@@ -9,7 +9,7 @@ namespace Angry_Girls
 
         private Vector3 _finalProjectileRotation = new Vector3(45f, 0, 0);
 
-        public override void OnStateEnter(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
+        public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             currentAttackTimer = 0;
             attacksCount = 0;
@@ -25,7 +25,7 @@ namespace Angry_Girls
             projectile.GetComponent<VFX>().SendProjectile_Fireball__TweenMove(control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, _finalProjectileRotation, control.characterSettings.launchedAttackPrepAbility.attackDamage);
 
         }
-        public override void OnStateUpdate(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
+        public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             if (attacksCount < ((int)stateInfo.normalizedTime))
             {
@@ -55,7 +55,7 @@ namespace Angry_Girls
             }
         }
 
-        public override void OnStateExit(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
+        public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             control.rigidBody.velocity = Vector3.zero;
         }

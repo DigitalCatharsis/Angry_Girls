@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8221907675006263978}
   - component: {fileID: 6607344324825731704}
   - component: {fileID: 3829810582608407739}
-  - component: {fileID: -1231867061798532161}
   m_Layer: 13
   m_Name: VFX_Shouryken
   m_TagString: Untagged
@@ -48,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _timeToLive: 1
-  _isTimeToLiveIsNormilizedTime: 1
+  _isTimeToLiveIsNormilizedTime: 0
   _destroyOnCollision: 0
   _particleSystem: {fileID: 6220422225713749368}
   projectileDamage: 0
@@ -65,19 +64,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolObjectType: 0
---- !u!114 &-1231867061798532161
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2002145631487320986}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56fd5ac9cc2e53249a9150122e0cac4c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  poolObjectType: 1
 --- !u!1 &3363848729867003103
 GameObject:
   m_ObjectHideFlags: 0

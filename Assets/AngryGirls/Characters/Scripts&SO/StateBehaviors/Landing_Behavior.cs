@@ -4,14 +4,14 @@ namespace Angry_Girls
 {
     public class Landing_Behavior : StateMachineBehaviour
     {
-        private CharacterControl _control;
+        private CControl _control;
 
         //Air units does not land
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             if (_control == null)
             {
-                _control = animator.transform.root.GetComponent<CharacterControl>();
+                _control = animator.transform.root.GetComponent<CControl>();
             }
 
             _control.rigidBody.velocity = _control.characterSettings.landingMovementSpeed;

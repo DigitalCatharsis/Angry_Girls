@@ -4,6 +4,7 @@ using UnityEngine;
 namespace Angry_Girls
 {
     [CreateAssetMenu(fileName = "Settings", menuName = "Angry_Girls/CharacterSettings/AttackAbility")]
+    [System.Serializable]
     public class AttackAbility : ScriptableObject
     {
         [Header("Setup")]

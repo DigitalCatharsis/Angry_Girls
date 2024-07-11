@@ -6,7 +6,7 @@ namespace Angry_Girls
     public class AttackLogic_ShoryukenDownSmash_Prep : AttackAbilityLogic
     {
         private GameObject _vfx;
-        public override void OnStateEnter(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
+        public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             control.isAttacking = true;
             control.rigidBody.velocity = control.characterSettings.launchedAttackPrepAbility.attackPrepMovementSpeed;
@@ -15,18 +15,18 @@ namespace Angry_Girls
 
 
         }
-        public override void OnStateUpdate(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
+        public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
 
         }
 
-        public override void OnStateExit(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
+        public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             //_projectile.GetComponentInChildren<VisualEffect>().pause = true;
             _vfx.GetComponentInChildren<VisualEffect>().Stop();
         }
 
-        private GameObject CastFlameVFX(CharacterControl control)
+        private GameObject CastFlameVFX(CControl control)
         {
             //var vfx = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_Flame2, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.identity); !old
             var poolManager = Singleton.Instance.poolManager;            

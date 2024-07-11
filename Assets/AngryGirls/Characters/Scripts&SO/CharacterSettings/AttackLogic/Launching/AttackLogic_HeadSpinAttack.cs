@@ -10,7 +10,7 @@ namespace Angry_Girls
         private Vector3 _finalProjectileRotation = new Vector3(75f, 0, 0);
         public float currentAttackTimer;
         public int attacksCount;
-        public override void OnStateEnter(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
+        public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             currentAttackTimer = 0;
             attacksCount = 0;
@@ -31,7 +31,7 @@ namespace Angry_Girls
             ProcessFireballs(control, angles);
         }
 
-        public override void OnStateUpdate(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
+        public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             if (control.characterSettings.launchedAttackPrepAbility.useAnimationNormalizedTimeDuration)
             {
@@ -52,7 +52,7 @@ namespace Angry_Girls
             }
         }
 
-        public override void OnStateExit(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
+        public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             Vector3[] angles = {
                   new Vector3(-205f,0,0),
@@ -67,7 +67,7 @@ namespace Angry_Girls
             control.isAttacking = false;
         }
 
-        private void ProcessFireballs(CharacterControl control, Vector3[] angles)
+        private void ProcessFireballs(CControl control, Vector3[] angles)
         {
             for (var i = 0; i < angles.Length; i++)
             {

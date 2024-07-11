@@ -2,9 +2,13 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
+    public enum PlayerOrAi
+    {
+        Player,
+        Ai,
+    }
     public abstract class CControl : MonoBehaviour
     {
-
         [Space(15)]
         [Header("Debug")]
         
@@ -23,7 +27,7 @@ namespace Angry_Girls
         public ContactPoint[] boxColliderContacts;
 
         [Header("Setup")]
+        public PlayerOrAi playerOrAi;
         public CharacterSettings characterSettings;
-
     }
 }

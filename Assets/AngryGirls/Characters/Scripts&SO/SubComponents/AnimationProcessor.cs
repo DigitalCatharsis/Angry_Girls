@@ -18,13 +18,15 @@ namespace Angry_Girls
         A_HeadSpin_Attack,
         A_Shoryuken_Static_Prep,
         A_Shoryuken_Landing_Static,
-        A_Shoryuken_Rise_Static
+        A_Shoryuken_Rise_Static,
+        A_Axe_Idle
     }
     public enum GroundIdle_States
     {
         A_Idle,
         A_Idle_HeadSpin,
         A_Floating,
+        A_Axe_Idle,
     }
     public enum AirbonedFlying_States
     {
@@ -114,7 +116,8 @@ namespace Angry_Girls
 
         public override void OnFixedUpdate()
         {
-            if (control.subComponentProcessor.launchLogic.hasBeenLaunched == false)
+            if (control.subComponentProcessor.launchLogic.hasBeenLaunched == false
+                && control.playerOrAi == PlayerOrAi.Player)
             {
                 return;
             }
@@ -302,7 +305,7 @@ namespace Angry_Girls
                 }
             }
         }
-#endregion
+        #endregion
 
         #region Static Check
         private void CheckAirUnit_Static()
