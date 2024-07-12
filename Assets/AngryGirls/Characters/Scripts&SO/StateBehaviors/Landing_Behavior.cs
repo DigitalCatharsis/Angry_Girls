@@ -16,9 +16,6 @@ namespace Angry_Girls
 
             _control.rigidBody.velocity = _control.characterSettings.landingMovementSpeed;
             _control.isLanding = true;
-
-
-
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

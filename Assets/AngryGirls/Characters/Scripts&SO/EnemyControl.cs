@@ -69,10 +69,10 @@ namespace Angry_Girls
         {
             subComponentProcessor.OnUpdate();
 
-            if (isDead)
-            {
-                Debug.Log("Dead");
-            }
+            //if (isDead)
+            //{
+            //    Debug.Log("Dead");
+            //}
         }
 
         private void OnCollisionStay(Collision collision)

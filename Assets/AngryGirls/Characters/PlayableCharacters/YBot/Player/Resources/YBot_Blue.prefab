@@ -1124,7 +1124,7 @@ MonoBehaviour:
   control: {fileID: 0}
   projectileSpawnTransform: {fileID: 7260981478403319719}
   VFX_Color: {r: 0, g: 0.5211234, b: 1, a: 1}
-  hasFinishedStaticAttackTurn: 1
+  hasFinishedStaticAttackTurn: 0
 --- !u!1 &2640689163874789523
 GameObject:
   m_ObjectHideFlags: 0
@@ -1232,6 +1232,7 @@ MonoBehaviour:
   boxCollider: {fileID: 0}
   animator: {fileID: 0}
   subComponentProcessor: {fileID: 0}
+  playerOrAi: 0
   characterSettings: {fileID: 11400000, guid: 28afea81c95372d4fb753c0287980f6c, type: 2}
 --- !u!95 &3541158604538972460
 Animator:
@@ -2148,6 +2149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   control: {fileID: 0}
+  airToGroundFinishedAbility: 0
   currentStateData:
     currentStateName: 0
     hash: 0
@@ -2165,7 +2167,6 @@ MonoBehaviour:
     _serializedList: []
   _staticAttack_States_Dictionary:
     _serializedList: []
-  airToGroundFinishedAbility: 0
 --- !u!1 &5503316897883994643
 GameObject:
   m_ObjectHideFlags: 0

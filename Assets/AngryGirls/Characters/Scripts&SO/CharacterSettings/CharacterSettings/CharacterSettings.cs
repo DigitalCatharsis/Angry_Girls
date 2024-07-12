@@ -28,7 +28,7 @@ namespace Angry_Girls
         public BoxColliderUpdater_Container boxcolliderContainer;
 
         [Header("Animations")]
-        public CharAnimationData<GroundIdle_States> idle_State;
+        public CharAnimationData<Idle_States> idle_State;
         public CharAnimationData<AirbonedFlying_States> airbonedFlying_States;
         public CharAnimationData<AttackFinish_States> attackFininsh_State;
         public CharAnimationData<Landing_States> landing_State;
