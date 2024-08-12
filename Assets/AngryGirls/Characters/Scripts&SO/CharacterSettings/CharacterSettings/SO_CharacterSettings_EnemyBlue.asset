@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5712a747d1a17fc42b72503a7509d404, type: 3}
   m_Name: SO_CharacterSettings_EnemyBlue
   m_EditorClassIdentifier: 
+  _notifyAboutNONEStates: 0
   unitType: 0
   atHittingObstacle_Speed: {x: 0, y: -4, z: 0}
   groundAttackMovementSpeed: {x: 0, y: 0, z: 0}

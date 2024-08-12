@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -10,9 +11,12 @@ namespace Angry_Girls
         Air,
     }
 
-    [CreateAssetMenu(fileName = "Settings", menuName = "Angry_Girls/CharacterSettings/CharacterAbilities")]
-    public class CharacterSettings: ScriptableObject
+    [CreateAssetMenu(fileName = "Settings", menuName = "Angry_Girls/CharacterSettings/CharacterSettings")]
+    public class CharacterSettings : ScriptableObject
     {
+        [Header("Debug")]
+        [SerializeField] private bool _notifyAboutNONEStates = true;
+
         [Header("Setup")]
         [Space(10)]
         [Header("Unit type")]
@@ -39,9 +43,25 @@ namespace Angry_Girls
         [Header("Static Attack Ability")]
         public StaticAttackAbility staticAttackAbility;
 
-        private void Awake()
+        private void  NotifyForNONE_Value<T>(CharAnimationData<T> charAnimationData, CControl control) where T : Enum
         {
-            
+            if (charAnimationData.animation.ToString() == "NONE")
+            {
+                ColorDebugLog.Log(control.name + "'s " + charAnimationData + " is NONE", System.Drawing.KnownColor.Yellow);
+            }
+        }
+
+        public void CheckForNoneValues(CControl control)
+        {
+            if (_notifyAboutNONEStates == false)
+            {
+                return;
+            }
+
+            NotifyForNONE_Value(idle_State, control);
+            NotifyForNONE_Value(airbonedFlying_States, control);
+            NotifyForNONE_Value(attackFininsh_State, control);
+            NotifyForNONE_Value(landing_State, control);
         }
     }
 

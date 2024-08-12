@@ -1,4 +1,8 @@
+using System;
 using System.Collections;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -64,6 +68,48 @@ namespace Angry_Girls
             }
             Camera.orthographicSize = endValue;
         }
+        #endregion
+
+        #region reflection
+
+        //тут можно выдрать имя вызывающих методов
+        public MethodBase ReturnCallingMethodBase(int index = 2)
+        {
+            // Получаем информацию о вызывающем методе
+            var stackFrame = new StackFrame(index);
+            var callingMethod = stackFrame.GetMethod();
+
+            // Выводим имя вызывающего метода
+            if (callingMethod != null)
+            {
+                return  callingMethod;
+            }
+            else
+            {
+                throw new Exception("failed to return callingMethod");
+            }
+        }
+
+        //здесь можно выдрать имя параметра метода
+        public string GetMethodParameterName(MethodBase methodBase)
+        {
+            //Get the caller method information
+            //var caller = new StackFrame(StackFrameIndex).GetMethod();
+            var caller = methodBase;
+
+            // Get the parameter information for the caller method
+            var parameter = caller.GetParameters().FirstOrDefault();
+
+            if (parameter != null && parameter.Name != null)
+            {
+                return parameter.Name;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
         #endregion
     }
 }

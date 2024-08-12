@@ -1,11 +1,13 @@
 using AYellowpaper.SerializedCollections;
 using System;
+using System.Threading;
 using UnityEngine;
 
 namespace Angry_Girls
 {
     public enum StateNames
     {
+        NONE,
         A_Idle,
         A_Falling_Idle,
         A_Shoryuken_DownSmash_Finish,
@@ -23,6 +25,7 @@ namespace Angry_Girls
     }
     public enum Idle_States
     {
+        NONE,
         A_Idle,
         A_Idle_HeadSpin,
         A_Floating,
@@ -30,27 +33,32 @@ namespace Angry_Girls
     }
     public enum AirbonedFlying_States
     {
+        NONE,
         A_Falling_Idle,
         A_AirbonedRolling,
     }
     public enum AttackPrep_States
     {
+        NONE,
         A_Shoryuken_DownSmash_Prep,
         A_ShootArrow,
         A_HeadSpin_Attack,
     }
     public enum StaticAttack_States
     {
+        NONE,
         A_Shoryuken_Static_Prep,
         A_Shoryuken_Landing_Static,
         A_Shoryuken_Rise_Static,
     }
     public enum AttackFinish_States
     {
+        NONE,
         A_Shoryuken_DownSmash_Finish,
     }
     public enum Landing_States
     {
+        NONE,
         A_Fall_Landing,
         A_AirbonedRolling_Landing,
         A_Idle_HeadSpin,
@@ -58,11 +66,13 @@ namespace Angry_Girls
 
     public enum HitReaction_States
     {
+        NONE,
         A_HitReaction,
     }
 
     public enum Death_States
     {
+        NONE,
         A_Sweep_Fall,
     }
 
@@ -108,6 +118,7 @@ namespace Angry_Girls
         }
         public override void OnStart()
         {
+            control.characterSettings.CheckForNoneValues(control);
             ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
         }
 
@@ -124,18 +135,19 @@ namespace Angry_Girls
                 && control.playerOrAi == PlayerOrAi.Player
                 && control.subComponentProcessor.launchLogic.hasBeenLaunched == true)
             {
-                switch (control.characterSettings.unitType)
-                {
-                    case UnitType.Air:
-                        CheckAirUnit_LaunchingPhase();
-                        break;
-                    case UnitType.AirToGround:
-                        CheckAirToGround_LaunchingPhase();
-                        break;
-                    case UnitType.Ground:
-                        CheckGroundUnit_LaunchingPhase();
-                        break;
-                }
+                CheckUnit_LaunchingPhase();
+                //switch (control.characterSettings.unitType)
+                //{
+                //    case UnitType.Air:
+                //        CheckAirUnit_LaunchingPhase();
+                //        break;
+                //    case UnitType.AirToGround:
+                //        CheckAirToGround_LaunchingPhase();
+                //        break;
+                //    case UnitType.Ground:
+                //        CheckUnit_LaunchingPhase();
+                //        break;
+                //}
             }
 
             if (Singleton.Instance.turnManager.currentPhase == CurrentPhase.StaticAttackingPhase)
@@ -247,74 +259,130 @@ namespace Angry_Girls
             }
         }
 
-        private void CheckGroundUnit_LaunchingPhase()
+        private void CheckUnit_LaunchingPhase()
         {
-            //Idle
-            if (control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn
-                && control.isGrounded)
+            //Check Idle
+            CheckAndProcced_Idle();
+
+            //Check Ground attack (ground Unit Only)
+            if (control.characterSettings.unitType == UnitType.Ground)
             {
-                ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+                CheckAndProcess_GroundAttack();
+            }
+
+            //CheckAttackPrep
+            if (control.subComponentProcessor.launchLogic.hasUsedAbility)
+            {
+                CheckAndProcess_AttackPrep();
+            }
+
+            //Check just Airboned
+            if (!control.isGrounded && !control.isAttacking)
+            {
+                CheckAndProcess_AirbonedState();
+            }
+
+            //Check Landing
+            if (control.isGrounded && !control.isAttacking)
+            {
+                CheckAndProcess_Landing();
+            }
+
+
+
+            // isAirboned
+            // landing
+
+            ////Idle
+            //if (control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn
+            //    && control.isGrounded)
+            //{
+            //    ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+            //    return;
+            //}
+
+
+
+            ////Ground attack
+            //if (control.isAttacking
+            //    && control.isGrounded
+            //    && !control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
+            //{
+            //    control.animator.StopPlayback();
+            //    ChangeAnimationState_CrossFadeInFixedTime(attackFinish_Dictionary[control.characterSettings.attackFininsh_State.animation], transitionDuration: control.characterSettings.attackFininsh_State.transitionDuration);
+            //}
+
+            ////Airboned + Attack  (AttackPrep)
+            //if (control.subComponentProcessor.launchLogic.hasUsedAbility
+            //    && !control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
+            //{
+            //    if (IsLauchingAttackStateOver(control.characterSettings.launchedAttackPrepAbility.timesToRepeat_AttackPrep_State) == false)
+            //    {
+            //        return;
+            //    }
+
+            //    if (attackFinish_Dictionary.ContainsValue(currentStateData.hash))
+            //    {
+            //        return;
+            //    }
+
+            //    ChangeAnimationState_CrossFade(attackPrep_Dictionary[control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation], control.characterSettings.launchedAttackPrepAbility.attackPrep_State.transitionDuration);
+            //}
+
+            ////Landing
+            //if (control.isGrounded && !control.isAttacking)
+            //{
+            //    if (IsLandingCondition())
+            //    {
+            //        ChangeAnimationState_CrossFadeInFixedTime(_landingNames_Dictionary[control.characterSettings.landing_State.animation], control.characterSettings.landing_State.transitionDuration);
+            //    }
+            //}
+        }
+
+        private void CheckAndProcess_Landing()
+        {
+            //no landing phase for air units
+            if (control.characterSettings.unitType == UnitType.Air)
+            {
                 return;
             }
 
-            //Just Airboned
-            if (!control.isGrounded
-                && !control.isAttacking
-                && !control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
+            if (IsLandingCondition())
             {
-                if (attackFinish_Dictionary.ContainsValue(currentStateData.hash))
-                {
-                    return;
-                }
+                ChangeAnimationState_CrossFadeInFixedTime(_landingNames_Dictionary[control.characterSettings.landing_State.animation], control.characterSettings.landing_State.transitionDuration);
+            }
+        }
 
-                ChangeAnimationState_CrossFadeInFixedTime(_airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], control.characterSettings.airbonedFlying_States.transitionDuration);
+        private void CheckAndProcess_AirbonedState()
+        {
+            //Cant be airboned after finished attack for ground unit for now...
+            if (control.characterSettings.unitType == UnitType.Ground 
+                && control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
+            {
+                return;
             }
 
-            //Ground attack
-            if (control.isAttacking
-                && control.isGrounded
-                && !control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
+            //everyones logic
+            if (attackFinish_Dictionary.ContainsValue(currentStateData.hash))
             {
-                control.animator.StopPlayback();
-                ChangeAnimationState_CrossFadeInFixedTime(attackFinish_Dictionary[control.characterSettings.attackFininsh_State.animation], transitionDuration: control.characterSettings.attackFininsh_State.transitionDuration);
+                return;
             }
 
-            //Airboned + Attack  (AttackPrep)
-            if (control.subComponentProcessor.launchLogic.hasUsedAbility
-                && !control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
-            {
-                if (IsLauchingAttackStateOver(control.characterSettings.launchedAttackPrepAbility.timesToRepeat_AttackPrep_State) == false)
-                {
-                    return;
-                }
-
-                if (attackFinish_Dictionary.ContainsValue(currentStateData.hash))
-                {
-                    return;
-                }
-
-                ChangeAnimationState_CrossFade(attackPrep_Dictionary[control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation], control.characterSettings.launchedAttackPrepAbility.attackPrep_State.transitionDuration);
-            }
-
-            //Landing
-            if (control.isGrounded && !control.isAttacking)
-            {
-                if (IsLandingCondition())
-                {
-                    ChangeAnimationState_CrossFadeInFixedTime(_landingNames_Dictionary[control.characterSettings.landing_State.animation], control.characterSettings.landing_State.transitionDuration);
-                }
-            }
+            ChangeAnimationState_CrossFadeInFixedTime(_airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], control.characterSettings.airbonedFlying_States.transitionDuration);
         }
         #endregion
 
+
         private bool CheckAndProcced_Idle()
         {
-            if (control.characterSettings.unitType != UnitType.Air && !control.isGrounded)
+            if (control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
             {
-                return false;
+                ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+                return true;
             }
 
-            if (control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
+            //Exctra condition for an air unit
+            if (control.characterSettings.unitType == UnitType.Air && control.isGrounded)
             {
                 ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
                 return true;
@@ -322,7 +390,42 @@ namespace Angry_Girls
 
             return false;
         }
+        private bool CheckAndProcess_GroundAttack()
+        {
+            //Ground attack
+            if (control.isAttacking
+                && control.isGrounded
+                && !control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
+            {
+                control.animator.StopPlayback();
+                ChangeAnimationState_CrossFadeInFixedTime(attackFinish_Dictionary[control.characterSettings.attackFininsh_State.animation], transitionDuration: control.characterSettings.attackFininsh_State.transitionDuration);
+                return true;
+            }
+            return false;
+        }
 
+        private bool CheckAndProcess_AttackPrep()
+        {
+            //Airboned + Attack  (AttackPrep)
+            if (!control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
+            {
+                if (IsLauchingAttackStateOver(control.characterSettings.launchedAttackPrepAbility.timesToRepeat_AttackPrep_State) == false)
+                {
+                    return false;
+                }
+
+                if (attackFinish_Dictionary.ContainsValue(currentStateData.hash))
+                {
+                    return false;
+                }
+
+                ChangeAnimationState_CrossFade(attackPrep_Dictionary[control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation], control.characterSettings.launchedAttackPrepAbility.attackPrep_State.transitionDuration);
+                control.isAttacking = true;
+                return true;
+            }
+
+            return false;
+        }
 
         #region Static Check
 
@@ -550,6 +653,15 @@ namespace Angry_Girls
 
         public void ChangeAnimationState_CrossFadeInFixedTime(int newStateHash, float transitionDuration, int layer = 0, float normalizedTimeOffset = 0.0f, float normalizedTransitionTime = 0.0f)
         {
+            if (Singleton.Instance.hashManager.GetName(_stateNames_Dictionary, newStateHash) == StateNames.NONE)
+            {
+                //var methodBase = Singleton.Instance.myExtentions.ReturnCallingMethodBase(2);
+                //ColorDebugLog.Log(methodBase.Name, System.Drawing.KnownColor.Yellow);
+                //ColorDebugLog.Log(Singleton.Instance.myExtentions.GetMethodParameterName(methodBase), System.Drawing.KnownColor.Yellow);
+
+                return;
+            }
+
             if (currentStateData.hash == newStateHash)
             {
                 return;
