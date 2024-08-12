@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SO_StaticAttackAbility_Shoryken
   m_EditorClassIdentifier: 
   staticAttack_State:
-    animation: 0
+    animation: 2
     transitionDuration: 0
   timesToRepeat_AttackState: 1
   attackDamage: 25

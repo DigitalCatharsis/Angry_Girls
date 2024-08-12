@@ -17,19 +17,19 @@ MonoBehaviour:
   atHittingObstacle_Speed: {x: 0, y: -4, z: 0}
   groundAttackMovementSpeed: {x: 0, y: 0, z: 0}
   landingMovementSpeed: {x: 0, y: 0, z: 0}
-  boxcolliderContainer: {fileID: 11400000, guid: 2697f8a1822d97d4597139c6fdf4cb34,
+  boxcolliderContainer: {fileID: 11400000, guid: 885dc0bee0ea850419bf57136690a4ee,
     type: 2}
   idle_State:
-    animation: 2
+    animation: 3
     transitionDuration: 0.25
   airbonedFlying_States:
-    animation: 1
+    animation: 2
     transitionDuration: 0.1
   attackFininsh_State:
     animation: 0
     transitionDuration: 0
   landing_State:
-    animation: 2
+    animation: 0
     transitionDuration: 0.5
   launchedAttackPrepAbility: {fileID: 11400000, guid: 8230bc02d932fdb4890b9296e4aa8250,
     type: 2}

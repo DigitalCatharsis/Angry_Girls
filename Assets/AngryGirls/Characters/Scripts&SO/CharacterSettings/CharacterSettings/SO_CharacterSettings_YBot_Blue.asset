@@ -20,16 +20,16 @@ MonoBehaviour:
   boxcolliderContainer: {fileID: 11400000, guid: 2697f8a1822d97d4597139c6fdf4cb34,
     type: 2}
   idle_State:
-    animation: 0
+    animation: 1
     transitionDuration: 0.25
   airbonedFlying_States:
-    animation: 0
+    animation: 1
     transitionDuration: 0.1
   attackFininsh_State:
-    animation: 0
+    animation: 1
     transitionDuration: 0
   landing_State:
-    animation: 0
+    animation: 1
     transitionDuration: 0
   launchedAttackPrepAbility: {fileID: 11400000, guid: bada94d1a62ddf448aca8b765c91f4a2,
     type: 2}

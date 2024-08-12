@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: SO_AttackAbility_AitToGround_HeadSpin
   m_EditorClassIdentifier: 
   attackPrep_State:
-    animation: 2
+    animation: 3
     transitionDuration: 0.1
   timesToRepeat_AttackPrep_State: 2.5
-  attackPrepMovementSpeed: {x: 0, y: 0, z: 0}
-  attackPrepMovementForce: {x: 0, y: 15000, z: 0}
-  attackPrep_Projectile: {fileID: 0}
-  attackPrep_Projectile_LifeDuration: 1
   attackDamage: 1
   attackTimeDuration: 1
   useAnimationNormalizedTimeDuration: 1
+  attackPrep_Projectile: {fileID: 0}
+  attackPrep_Projectile_LifeDuration: 1
+  attackPrepMovementSpeed: {x: 0, y: 0, z: 0}
+  attackPrepMovementForce: {x: 0, y: 15000, z: 0}

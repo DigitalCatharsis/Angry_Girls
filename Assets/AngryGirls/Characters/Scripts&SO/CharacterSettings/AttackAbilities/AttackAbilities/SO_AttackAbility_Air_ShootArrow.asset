@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: SO_AttackAbility_Air_ShootArrow
   m_EditorClassIdentifier: 
   attackPrep_State:
-    animation: 1
+    animation: 2
     transitionDuration: 0.1
   timesToRepeat_AttackPrep_State: 3
-  attackPrepMovementSpeed: {x: 0, y: 0, z: 0}
-  attackPrepMovementForce: {x: 0, y: 0, z: -1000}
-  attackPrep_Projectile: {fileID: 0}
-  attackPrep_Projectile_LifeDuration: 1
   attackDamage: 1
   attackTimeDuration: 0
   useAnimationNormalizedTimeDuration: 1
+  attackPrep_Projectile: {fileID: 0}
+  attackPrep_Projectile_LifeDuration: 1
+  attackPrepMovementSpeed: {x: 0, y: 0, z: 0}
+  attackPrepMovementForce: {x: 0, y: 0, z: -1000}

@@ -1,6 +1,5 @@
 using AYellowpaper.SerializedCollections;
 using System;
-using System.Threading;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -8,20 +7,23 @@ namespace Angry_Girls
     public enum StateNames
     {
         NONE,
-        A_Idle,
-        A_Falling_Idle,
-        A_Shoryuken_DownSmash_Finish,
-        A_Shoryuken_DownSmash_Prep,
-        A_Fall_Landing,
-        A_AirbonedRolling_Landing,
         A_AirbonedRolling,
+        A_AirbonedRolling_Landing,
+        A_Axe_Idle,
+        A_Fall_Landing,
+        A_Falling_Idle,
+        A_Floating,
+        A_HeadSpin_Attack,
+        A_HitReaction,
+        A_Idle,
         A_Idle_HeadSpin,
         A_ShootArrow,
-        A_HeadSpin_Attack,
-        A_Shoryuken_Static_Prep,
+        A_Shoryuken_DownSmash_Finish,
+        A_Shoryuken_DownSmash_Prep,
         A_Shoryuken_Landing_Static,
         A_Shoryuken_Rise_Static,
-        A_Axe_Idle
+        A_Shoryuken_Static_Prep,
+        A_Sweep_Fall,
     }
     public enum Idle_States
     {
@@ -319,7 +321,7 @@ namespace Angry_Girls
         private void CheckAndProcess_AirbonedState()
         {
             //Cant be airboned after finished attack for ground unit for now...
-            if (control.characterSettings.unitType == UnitType.Ground 
+            if (control.characterSettings.unitType == UnitType.Ground
                 && control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
             {
                 return;
@@ -351,7 +353,7 @@ namespace Angry_Girls
                 {
                     ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
                     return true;
-                }                
+                }
             }
 
             return false;
