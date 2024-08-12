@@ -300,43 +300,6 @@ namespace Angry_Girls
             //    ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
             //    return;
             //}
-
-
-
-            ////Ground attack
-            //if (control.isAttacking
-            //    && control.isGrounded
-            //    && !control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
-            //{
-            //    control.animator.StopPlayback();
-            //    ChangeAnimationState_CrossFadeInFixedTime(attackFinish_Dictionary[control.characterSettings.attackFininsh_State.animation], transitionDuration: control.characterSettings.attackFininsh_State.transitionDuration);
-            //}
-
-            ////Airboned + Attack  (AttackPrep)
-            //if (control.subComponentProcessor.launchLogic.hasUsedAbility
-            //    && !control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
-            //{
-            //    if (IsLauchingAttackStateOver(control.characterSettings.launchedAttackPrepAbility.timesToRepeat_AttackPrep_State) == false)
-            //    {
-            //        return;
-            //    }
-
-            //    if (attackFinish_Dictionary.ContainsValue(currentStateData.hash))
-            //    {
-            //        return;
-            //    }
-
-            //    ChangeAnimationState_CrossFade(attackPrep_Dictionary[control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation], control.characterSettings.launchedAttackPrepAbility.attackPrep_State.transitionDuration);
-            //}
-
-            ////Landing
-            //if (control.isGrounded && !control.isAttacking)
-            //{
-            //    if (IsLandingCondition())
-            //    {
-            //        ChangeAnimationState_CrossFadeInFixedTime(_landingNames_Dictionary[control.characterSettings.landing_State.animation], control.characterSettings.landing_State.transitionDuration);
-            //    }
-            //}
         }
 
         private void CheckAndProcess_Landing()
@@ -382,10 +345,13 @@ namespace Angry_Girls
             }
 
             //Exctra condition for an air unit
-            if (control.characterSettings.unitType == UnitType.Air && control.isGrounded)
+            if (control.characterSettings.unitType == UnitType.Air)
             {
-                ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
-                return true;
+                if (control.isGrounded || control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
+                {
+                    ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+                    return true;
+                }                
             }
 
             return false;
@@ -655,10 +621,6 @@ namespace Angry_Girls
         {
             if (Singleton.Instance.hashManager.GetName(_stateNames_Dictionary, newStateHash) == StateNames.NONE)
             {
-                //var methodBase = Singleton.Instance.myExtentions.ReturnCallingMethodBase(2);
-                //ColorDebugLog.Log(methodBase.Name, System.Drawing.KnownColor.Yellow);
-                //ColorDebugLog.Log(Singleton.Instance.myExtentions.GetMethodParameterName(methodBase), System.Drawing.KnownColor.Yellow);
-
                 return;
             }
 
