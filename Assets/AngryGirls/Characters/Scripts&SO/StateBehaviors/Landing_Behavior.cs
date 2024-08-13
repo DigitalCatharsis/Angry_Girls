@@ -24,7 +24,7 @@ namespace Angry_Girls
             {
                 if (stateInfo.normalizedTime >= 1)
                 {
-                    _control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn = true;
+                    _control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn = true;
                 }
             }
         }
@@ -32,7 +32,7 @@ namespace Angry_Girls
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             _control.isLanding = false;
-            _control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn = true;
+            _control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn = true;
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()

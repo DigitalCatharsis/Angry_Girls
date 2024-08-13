@@ -38,7 +38,7 @@ namespace Angry_Girls
                 if (stateInfo.normalizedTime >= control.characterSettings.launchedAttackPrepAbility.timesToRepeat_AttackPrep_State)
                 {
                     control.isAttacking = false;
-                    control.subComponentProcessor.animationProcessor.airToGroundFinishedAbility = true;
+                    control.subComponentProcessor.animationProcessor.airToGroundUnit_FinishedAbility = true;
                 }
             }
             else
@@ -47,7 +47,7 @@ namespace Angry_Girls
                 if (currentAttackTimer >= control.characterSettings.launchedAttackPrepAbility.attackTimeDuration)
                 {
                     control.isAttacking = false;
-                    control.subComponentProcessor.animationProcessor.airToGroundFinishedAbility = true;
+                    control.subComponentProcessor.animationProcessor.airToGroundUnit_FinishedAbility = true;
                 }
             }
         }
@@ -62,6 +62,7 @@ namespace Angry_Girls
                   new Vector3(-325f,0,0),
             };
 
+            control.rigidBody.AddForce(control.characterSettings.launchedAttackPrepAbility.attackPrepMovementForce);
             ProcessFireballs(control, angles);
 
             control.isAttacking = false;

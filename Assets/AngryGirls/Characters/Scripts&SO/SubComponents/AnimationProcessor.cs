@@ -80,7 +80,7 @@ namespace Angry_Girls
 
     public class AnimationProcessor : SubComponent
     {
-        public bool airToGroundFinishedAbility = false;
+        public bool airToGroundUnit_FinishedAbility = false;
         public CurrentStateData currentStateData = new();
         //[SerializeField] private bool _isAttackStateOver = false;
         //[SerializeField] private bool _isLandingStateOver = false;
@@ -173,7 +173,7 @@ namespace Angry_Girls
         private void CheckAirUnit_LaunchingPhase()
         {
             //Idle
-            if (control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
+            if (control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn)
             {
                 ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
                 return;
@@ -201,7 +201,7 @@ namespace Angry_Girls
             //Airboned at ground. No attack
             if (control.isGrounded)
             {
-                control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn = true;
+                control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn = true;
                 control.animator.StopPlayback();
                 ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
             }
@@ -210,7 +210,7 @@ namespace Angry_Girls
         private void CheckAirToGround_LaunchingPhase()
         {
             //Idle
-            if (control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn
+            if (control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn
                 && control.isGrounded)
             {
                 ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
@@ -219,10 +219,10 @@ namespace Angry_Girls
 
             //Airboned + Attack  (AttackPrep)
             if (control.subComponentProcessor.launchLogic.hasUsedAbility
-                && !control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn
+                && !control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn
                 && !control.isGrounded
                 && !control.isAttacking
-                && !airToGroundFinishedAbility)
+                && !airToGroundUnit_FinishedAbility)
             {
                 if (attackPrep_Dictionary.ContainsValue(currentStateData.hash))
                 {
@@ -264,7 +264,10 @@ namespace Angry_Girls
         private void CheckUnit_LaunchingPhase()
         {
             //Check Idle
-            CheckAndProcced_Idle();
+            if (control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn)
+            {
+                CheckAndProcced_Idle();
+            }
 
             //Check Ground attack (ground Unit Only)
             if (control.characterSettings.unitType == UnitType.Ground)
@@ -306,9 +309,10 @@ namespace Angry_Girls
 
         private void CheckAndProcess_Landing()
         {
-            //no landing phase for air units
+            //no landing phase for air units. The Launch is over
             if (control.characterSettings.unitType == UnitType.Air)
             {
+                control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn = true;
                 return;
             }
 
@@ -320,11 +324,11 @@ namespace Angry_Girls
 
         private void CheckAndProcess_AirbonedState()
         {
-            //Cant be airboned after finished attack for ground unit for now...
-            if (control.characterSettings.unitType == UnitType.Ground
-                && control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
+            //Cant be airboned after finished attack for ground and Air unit for now...
+            if (control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn)
             {
-                return;
+                if (control.characterSettings.unitType == UnitType.Ground || control.characterSettings.unitType == UnitType.Air)
+                    return;
             }
 
             //everyones logic
@@ -340,7 +344,7 @@ namespace Angry_Girls
 
         private bool CheckAndProcced_Idle()
         {
-            if (control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
+            if (control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn)
             {
                 ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
                 return true;
@@ -349,7 +353,7 @@ namespace Angry_Girls
             //Exctra condition for an air unit
             if (control.characterSettings.unitType == UnitType.Air)
             {
-                if (control.isGrounded || control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
+                if (control.isGrounded || control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn)
                 {
                     ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
                     return true;
@@ -363,7 +367,7 @@ namespace Angry_Girls
             //Ground attack
             if (control.isAttacking
                 && control.isGrounded
-                && !control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
+                && !control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn)
             {
                 control.animator.StopPlayback();
                 ChangeAnimationState_CrossFadeInFixedTime(attackFinish_Dictionary[control.characterSettings.attackFininsh_State.animation], transitionDuration: control.characterSettings.attackFininsh_State.transitionDuration);
@@ -372,27 +376,45 @@ namespace Angry_Girls
             return false;
         }
 
-        private bool CheckAndProcess_AttackPrep()
+        private void CheckAndProcess_AttackPrep()
         {
             //Airboned + Attack  (AttackPrep)
-            if (!control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
+            if (!control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn)
             {
-                if (IsLauchingAttackStateOver(control.characterSettings.launchedAttackPrepAbility.timesToRepeat_AttackPrep_State) == false)
+                //AirToGround unit personal condition
+                if (control.characterSettings.unitType == UnitType.AirToGround)
                 {
-                    return false;
+                    if (control.isGrounded 
+                        || control.isAttacking
+                        || airToGroundUnit_FinishedAbility)
+                    {
+                        return;
+                    }
+
+                    if (attackPrep_Dictionary.ContainsValue(currentStateData.hash))
+                    {
+                        return;
+                    }
                 }
 
+                //for ground unit
                 if (attackFinish_Dictionary.ContainsValue(currentStateData.hash))
                 {
-                    return false;
+                    return;
                 }
 
-                ChangeAnimationState_CrossFade(attackPrep_Dictionary[control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation], control.characterSettings.launchedAttackPrepAbility.attackPrep_State.transitionDuration);
+                //Everyones logic
+                if (IsLauchingAttackStateOver(control.characterSettings.launchedAttackPrepAbility.timesToRepeat_AttackPrep_State) == false)
+                {
+                    return;
+                }
+
                 control.isAttacking = true;
-                return true;
+                ChangeAnimationState_CrossFade(attackPrep_Dictionary[control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation], control.characterSettings.launchedAttackPrepAbility.attackPrep_State.transitionDuration);
+                return;
             }
 
-            return false;
+            return;
         }
 
         #region Static Check
@@ -401,7 +423,7 @@ namespace Angry_Girls
         private void CheckAirUnit_Static()
         {
             //Idle
-            if (control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn)
+            if (control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn)
             {
                 ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
                 return;
@@ -429,7 +451,7 @@ namespace Angry_Girls
             //Airboned at ground. No attack
             if (control.isGrounded)
             {
-                control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn = true;
+                control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn = true;
                 control.animator.StopPlayback();
                 ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
             }
@@ -439,7 +461,7 @@ namespace Angry_Girls
         private void CheckAirToGround_Static()
         {
             //Idle
-            if (control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn
+            if (control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn
                 && control.isGrounded)
             {
                 ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
@@ -448,10 +470,10 @@ namespace Angry_Girls
 
             //Airboned + Attack  (AttackPrep)
             if (control.subComponentProcessor.launchLogic.hasUsedAbility
-                && !control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn
+                && !control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn
                 && !control.isGrounded
                 && !control.isAttacking
-                && !airToGroundFinishedAbility)
+                && !airToGroundUnit_FinishedAbility)
             {
                 if (attackPrep_Dictionary.ContainsValue(currentStateData.hash))
                 {

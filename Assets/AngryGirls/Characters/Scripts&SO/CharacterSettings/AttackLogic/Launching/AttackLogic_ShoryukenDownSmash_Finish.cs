@@ -21,7 +21,7 @@ namespace Angry_Girls
             if (stateInfo.normalizedTime >= 1)
             {
                 control.isAttacking = false;
-                control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn = true;
+                control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn = true;
             }
         }
 

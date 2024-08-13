@@ -6,7 +6,7 @@ namespace Angry_Girls
     public class LaunchLogic : SubComponent
     {
         public bool hasBeenLaunched = false;
-        public bool hasFinishedaunLaunchingTurn = false;
+        public bool hasFinishedLaunchingTurn = false;
         public bool hasUsedAbility = false;
 
         public override void OnAwake()
@@ -25,12 +25,12 @@ namespace Angry_Girls
         private IEnumerator OnLaunch_Routine()
         {
             hasBeenLaunched = true;
-            hasFinishedaunLaunchingTurn = false;
+            hasFinishedLaunchingTurn = false;
             Camera.main.orthographicSize -= (Camera.main.orthographicSize / 5f);  //TODO: replace
             yield return new WaitForSeconds(0.1f);
             while (!hasUsedAbility)
             {
-                if (hasFinishedaunLaunchingTurn)
+                if (hasFinishedLaunchingTurn)
                 {
                     break;
                 }
@@ -39,7 +39,7 @@ namespace Angry_Girls
                 yield return null;
             }
 
-            while (!hasFinishedaunLaunchingTurn)
+            while (!hasFinishedLaunchingTurn)
             {
                 yield return null;
             }
@@ -72,7 +72,7 @@ namespace Angry_Girls
 
         public override void OnFixedUpdate()
         {
-            if (hasBeenLaunched == true && hasFinishedaunLaunchingTurn == false)
+            if (hasBeenLaunched == true && hasFinishedLaunchingTurn == false)
             {
                 Singleton.Instance.ñameraManager.CenterCameraAgainst(control.boxCollider);
             }
