@@ -22,7 +22,7 @@ namespace Angry_Girls
         A_Shoryuken_DownSmash_Prep,
         A_Shoryuken_Landing_Static,
         A_Shoryuken_Rise_Static,
-        A_Shoryuken_Static_Prep,
+        A_Shoryuken_Prep_Static,
         A_Sweep_Fall,
     }
     public enum Idle_States
@@ -49,7 +49,7 @@ namespace Angry_Girls
     public enum StaticAttack_States
     {
         NONE,
-        A_Shoryuken_Static_Prep,
+        A_Shoryuken_Prep_Static,
         A_Shoryuken_Landing_Static,
         A_Shoryuken_Rise_Static,
     }
@@ -118,11 +118,6 @@ namespace Angry_Girls
             //Init start Animation
             UpdateCurrentStateData_Value();
         }
-        public override void OnStart()
-        {
-            control.characterSettings.CheckForNoneValues(control);
-            ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
-        }
 
         private void UpdateCurrentStateData_Value()
         {
@@ -131,183 +126,63 @@ namespace Angry_Girls
             currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(_stateNames_Dictionary, currentStateData.hash);
         }
 
+        public override void OnStart()
+        {
+            control.characterSettings.CheckForNoneValues(control);
+            ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+        }
+
         public override void OnFixedUpdate()
         {
+            //On Launching behavior phase
             if (Singleton.Instance.turnManager.currentPhase == CurrentPhase.LaunchingPhase
                 && control.playerOrAi == PlayerOrAi.Player
                 && control.subComponentProcessor.launchLogic.hasBeenLaunched == true)
             {
-                CheckUnit_LaunchingPhase();
-                //switch (control.characterSettings.unitType)
-                //{
-                //    case UnitType.Air:
-                //        CheckAirUnit_LaunchingPhase();
-                //        break;
-                //    case UnitType.AirToGround:
-                //        CheckAirToGround_LaunchingPhase();
-                //        break;
-                //    case UnitType.Ground:
-                //        CheckUnit_LaunchingPhase();
-                //        break;
-                //}
+                LaunchingPhase_Logic();
             }
 
-            if (Singleton.Instance.turnManager.currentPhase == CurrentPhase.StaticAttackingPhase)
+            //On Static behavior phase
+            if (Singleton.Instance.turnManager.currentPhase == CurrentPhase.StaticPhase)
             {
-                switch (control.characterSettings.unitType)
-                {
-                    case UnitType.Air:
-                        CheckAirUnit_Static();
-                        break;
-                    case UnitType.AirToGround:
-                        CheckAirToGround_Static();
-                        break;
-                    case UnitType.Ground:
-                        CheckGroundUnit_Static();
-                        break;
-                }
+                CheckUnit_StaticPhase();
             }
         }
-
-        #region Launching Check
-        private void CheckAirUnit_LaunchingPhase()
-        {
-            //Idle
-            if (control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn)
-            {
-                ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
-                return;
-            }
-
-            //Airboned
-            if (!control.isGrounded
-                && !control.isAttacking)
-            {
-                control.animator.StopPlayback();
-                ChangeAnimationState_CrossFadeInFixedTime(_airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], control.characterSettings.airbonedFlying_States.transitionDuration);
-            }
-
-            //Airboned + Attack  (AttackPrep)
-            if (control.subComponentProcessor.launchLogic.hasUsedAbility)
-            {
-                if (IsLauchingAttackStateOver(control.characterSettings.launchedAttackPrepAbility.timesToRepeat_AttackPrep_State) == false)
-                {
-                    return;
-                }
-
-                ChangeAnimationState_CrossFadeInFixedTime(attackPrep_Dictionary[control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation], control.characterSettings.launchedAttackPrepAbility.attackPrep_State.transitionDuration);
-            }
-
-            //Airboned at ground. No attack
-            if (control.isGrounded)
-            {
-                control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn = true;
-                control.animator.StopPlayback();
-                ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
-            }
-        }
-
-        private void CheckAirToGround_LaunchingPhase()
-        {
-            //Idle
-            if (control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn
-                && control.isGrounded)
-            {
-                ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
-                return;
-            }
-
-            //Airboned + Attack  (AttackPrep)
-            if (control.subComponentProcessor.launchLogic.hasUsedAbility
-                && !control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn
-                && !control.isGrounded
-                && !control.isAttacking
-                && !airToGroundUnit_FinishedAbility)
-            {
-                if (attackPrep_Dictionary.ContainsValue(currentStateData.hash))
-                {
-                    return;
-                }
-
-                control.animator.StopPlayback();
-                ChangeAnimationState_CrossFade(attackPrep_Dictionary[control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation], control.characterSettings.launchedAttackPrepAbility.attackPrep_State.transitionDuration);
-                return;
-            }
-
-            //Just Airboned
-            if (!control.isGrounded
-                && !control.isAttacking)
-            {
-                if (IsLauchingAttackStateOver(control.characterSettings.launchedAttackPrepAbility.timesToRepeat_AttackPrep_State) == false)
-                {
-                    return;
-                }
-
-                if (_airbonedFlying_Dictionary.ContainsValue(currentStateData.hash))
-                {
-                    return;
-                }
-                //control.animator.StopPlayback();
-                ChangeAnimationState_CrossFadeInFixedTime(_airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], control.characterSettings.airbonedFlying_States.transitionDuration);
-            }
-
-            //Landing
-            if (control.isGrounded && !control.isAttacking)
-            {
-                if (IsLandingCondition())
-                {
-                    ChangeAnimationState_CrossFadeInFixedTime(_landingNames_Dictionary[control.characterSettings.landing_State.animation], control.characterSettings.landing_State.transitionDuration);
-                }
-            }
-        }
-
-        private void CheckUnit_LaunchingPhase()
+        #region Launching behavior methods
+        private void LaunchingPhase_Logic()
         {
             //Check Idle
             if (control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn)
             {
-                CheckAndProcced_Idle();
+                Launching_CheckAndProcess_Idle();
             }
 
             //Check Ground attack (ground Unit Only)
             if (control.characterSettings.unitType == UnitType.Ground)
             {
-                CheckAndProcess_GroundAttack();
+                Launching_CheckAndProcess_GroundAttack();
             }
 
             //CheckAttackPrep
             if (control.subComponentProcessor.launchLogic.hasUsedAbility)
             {
-                CheckAndProcess_AttackPrep();
+                Launching_CheckAndProcess_AttackPrep();
             }
 
             //Check just Airboned
             if (!control.isGrounded && !control.isAttacking)
             {
-                CheckAndProcess_AirbonedState();
+                Launching_CheckAndProcess_AirbonedState();
             }
 
             //Check Landing
             if (control.isGrounded && !control.isAttacking)
             {
-                CheckAndProcess_Landing();
+                Launching_CheckAndProcess_Landing();
             }
-
-
-
-            // isAirboned
-            // landing
-
-            ////Idle
-            //if (control.subComponentProcessor.launchLogic.hasFinishedaunLaunchingTurn
-            //    && control.isGrounded)
-            //{
-            //    ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
-            //    return;
-            //}
         }
 
-        private void CheckAndProcess_Landing()
+        private void Launching_CheckAndProcess_Landing()
         {
             //no landing phase for air units. The Launch is over
             if (control.characterSettings.unitType == UnitType.Air)
@@ -322,7 +197,7 @@ namespace Angry_Girls
             }
         }
 
-        private void CheckAndProcess_AirbonedState()
+        private void Launching_CheckAndProcess_AirbonedState()
         {
             //Cant be airboned after finished attack for ground and Air unit for now...
             if (control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn)
@@ -339,10 +214,8 @@ namespace Angry_Girls
 
             ChangeAnimationState_CrossFadeInFixedTime(_airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], control.characterSettings.airbonedFlying_States.transitionDuration);
         }
-        #endregion
 
-
-        private bool CheckAndProcced_Idle()
+        private bool Launching_CheckAndProcess_Idle()
         {
             if (control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn)
             {
@@ -362,7 +235,8 @@ namespace Angry_Girls
 
             return false;
         }
-        private bool CheckAndProcess_GroundAttack()
+
+        private bool Launching_CheckAndProcess_GroundAttack()
         {
             //Ground attack
             if (control.isAttacking
@@ -376,7 +250,7 @@ namespace Angry_Girls
             return false;
         }
 
-        private void CheckAndProcess_AttackPrep()
+        private void Launching_CheckAndProcess_AttackPrep()
         {
             //Airboned + Attack  (AttackPrep)
             if (!control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn)
@@ -384,7 +258,7 @@ namespace Angry_Girls
                 //AirToGround unit personal condition
                 if (control.characterSettings.unitType == UnitType.AirToGround)
                 {
-                    if (control.isGrounded 
+                    if (control.isGrounded
                         || control.isAttacking
                         || airToGroundUnit_FinishedAbility)
                     {
@@ -416,8 +290,55 @@ namespace Angry_Girls
 
             return;
         }
+        #endregion
 
-        #region Static Check
+        #region Static behavior methods
+        private void CheckUnit_StaticPhase()
+        {
+            if (!control.subComponentProcessor.attackSystem.hasFinishedStaticAttackTurn
+                && control.isAttacking)
+            {
+                Static_CheckAndProcessAttack();
+            }
+            //Static_CheckAndProcess_GroundAttack();
+            //Static_CheckAndProcess_AttackPrep();
+            //Static_CheckAndProcess_AirbonedState();
+            //Static_CheckAndProcess_Landing();
+            if (control.subComponentProcessor.attackSystem.hasFinishedStaticAttackTurn)
+            {
+                Static_CheckAndProcess_Idle();
+            }
+        }
+
+        private void Static_CheckAndProcess_Landing()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Static_CheckAndProcess_AirbonedState()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Static_CheckAndProcess_AttackPrep()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Static_CheckAndProcessAttack()
+        {
+            if (attackFinish_Dictionary.ContainsValue(currentStateData.hash))
+            {
+                return;
+            }
+
+            ChangeAnimationState_CrossFadeInFixedTime(staticAttack_States_Dictionary[control.characterSettings.staticAttackAbility.staticAttack_State.animation], transitionDuration: control.characterSettings.staticAttackAbility.attackTimeDuration);
+        }
+
+        private void Static_CheckAndProcess_Idle()
+        {
+            ChangeAnimationState_CrossFadeInFixedTime(_idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+        }
 
         //TODO not implemented
         private void CheckAirUnit_Static()
@@ -616,15 +537,6 @@ namespace Angry_Girls
             }
             return true;
         }
-        private bool IsIdleStateOver()
-        {
-            if (_idle_Dictionary.ContainsValue(currentStateData.hash)
-                && control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
-            {
-                return false;
-            }
-            return true;
-        }
         #endregion
 
         #region Change State
@@ -696,7 +608,6 @@ namespace Angry_Girls
         public override void OnUpdate()
         {
         }
-
 
         public override void OnLateUpdate()
         {

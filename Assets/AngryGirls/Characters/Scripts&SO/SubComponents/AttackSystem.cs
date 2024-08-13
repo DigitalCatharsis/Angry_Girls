@@ -3,10 +3,6 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public enum AttackTypes
-    {
-        A_Shoryuken_DownSmash_Finish,
-    }
     public class AttackSystem : SubComponent
     {
         [Header("Setup")]
@@ -61,7 +57,7 @@ namespace Angry_Girls
             //StaticAttack
             switch (control.characterSettings.staticAttackAbility.staticAttack_State.animation)
             {
-                case StaticAttack_States.A_Shoryuken_Static_Prep:
+                case StaticAttack_States.A_Shoryuken_Prep_Static:
                     staticAttackLogic_Prep = new AttackLogic_Static_Shoryuken_Prep();
                     staticAttackLogic_Landing = new AttackLogic_Static_Shoryuken_Landing();
                     staticAttackLogic_OnGround = new AttackLogic_Static_Shoryuken_Rise();
@@ -75,22 +71,6 @@ namespace Angry_Girls
         {
 
         }
-
-        //public void TryProcessAttack()
-        //{
-        //    EnableAttackTrigger();
-        //}
-
-        //public void DisableAttackTrigger()
-        //{
-        //    _attackTriggerCollider.center = new Vector3(0f, 0.56f, 0f);
-        //    _attackTriggerCollider.size = new Vector3(0f, 0f, 0f);
-        //}
-        //public void EnableAttackTrigger()
-        //{
-        //    _attackTriggerCollider.center = new Vector3(4.470348e-08f, 0.4552352f, 0.06810474f);
-        //    _attackTriggerCollider.size = new Vector3(0.2461494f, 0.942835f, 1.462443f);
-        //}
 
         public override void OnAwake()
         {

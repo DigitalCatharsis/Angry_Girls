@@ -7,7 +7,7 @@ namespace Angry_Girls
 {
     public enum CurrentPhase
     {
-        StaticAttackingPhase,
+        StaticPhase,
         LaunchingPhase,
     }
 
@@ -15,7 +15,7 @@ namespace Angry_Girls
     {
         public int currentTurn = 0;
         public bool isLaunchingPhaseOver = false;
-        public bool isAttackingPhaseOver = true;
+        public bool isStaticPhaseOver = true;
 
         public CurrentPhase currentPhase = CurrentPhase.LaunchingPhase;
 
@@ -52,9 +52,9 @@ namespace Angry_Girls
                 StartCoroutine(OnEachTurn_Routine());
             }
 
-            if (currentPhase == CurrentPhase.StaticAttackingPhase)
+            if (currentPhase == CurrentPhase.StaticPhase)
             {
-                if (isAttackingPhaseOver == false)
+                if (isStaticPhaseOver == false)
                 {
                     return;
                 }
@@ -74,8 +74,6 @@ namespace Angry_Girls
                 ColorDebugLog.Log(_charactersTurn_List[i].name.ToString() + " is attacking.", KnownColor.Aqua);
 
                 //Attack
-
-                //_charactersTurn_List[i].GetComponent<CControl>().animator.Play("A_Shoryuken_DownSmash_Finish", 0);
                 _charactersTurn_List[i].GetComponent<CControl>().isAttacking = true;
 
                 yield return new WaitForSeconds(2);
@@ -87,8 +85,8 @@ namespace Angry_Girls
         private void SwitchToAttackingPhase()
         {
             isLaunchingPhaseOver = true;
-            isAttackingPhaseOver = false;
-            currentPhase = CurrentPhase.StaticAttackingPhase;
+            isStaticPhaseOver = false;
+            currentPhase = CurrentPhase.StaticPhase;
             foreach (var character in _charactersTurn_List)
             {
                 character.GetComponent<CControl>().subComponentProcessor.attackSystem.hasFinishedStaticAttackTurn = false;
@@ -98,7 +96,7 @@ namespace Angry_Girls
         private void SwitchToLaunchingPhase()
         {
             Singleton.Instance.turnManager.currentTurn++;
-            isAttackingPhaseOver = true;
+            isStaticPhaseOver = true;
             SortCharactersTurnList();
             currentPhase = CurrentPhase.LaunchingPhase;
             isLaunchingPhaseOver = false;
