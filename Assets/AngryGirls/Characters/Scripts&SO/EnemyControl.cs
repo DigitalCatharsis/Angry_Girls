@@ -7,9 +7,9 @@ namespace Angry_Girls
     {
         [Header("Setup")]
         [SerializeField] private float health = 100f;
-        [Header("Debug")]
 
-        [SerializeField] private SerializedDictionary<HitReaction_States, int> _hitReaction_Dictionary;
+        [Header("Debug")]
+        //TODO: replace
         [SerializeField] private SerializedDictionary<Death_States, int> _death_States_Dictionary;
 
         private void Awake()
@@ -29,7 +29,6 @@ namespace Angry_Girls
             animator = GetComponent<Animator>();
             subComponentProcessor.OnComponentEnable();
 
-            _hitReaction_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<HitReaction_States>(this.gameObject);
             _death_States_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<Death_States>(this.gameObject);
 
             currentHealth = health;
@@ -56,7 +55,8 @@ namespace Angry_Girls
                     return;
                 }
 
-                subComponentProcessor.animationProcessor.ChangeAnimationState_CrossFadeInFixedTime(_hitReaction_Dictionary[HitReaction_States.A_HitReaction], 0.05f);
+                //subComponentProcessor.animationProcessor.ChangeAnimationState_CrossFadeInFixedTime(_hitReaction_Dictionary[HitReaction_States.A_HitReaction], 0.05f);
+                subComponentProcessor.animationProcessor.unitGotHit = true;
             }
         }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -36,6 +37,8 @@ namespace Angry_Girls
         public CharAnimationData<AirbonedFlying_States> airbonedFlying_States;
         public CharAnimationData<AttackFinish_States> attackFininsh_State;
         public CharAnimationData<Landing_States> landing_State;
+        [Space(5)]
+        public List<CharAnimationData<HitReaction_States>> hitReaction_States;
 
         [Header("Launched Attack Ability")]
         [SerializeReference]

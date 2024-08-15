@@ -17,10 +17,15 @@ namespace Angry_Girls
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            if (stateInfo.normalizedTime >= 1)
+            {
+                _control.subComponentProcessor.animationProcessor.unitGotHit = false;
+            }
         }
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            _control.subComponentProcessor.animationProcessor.unitGotHit = false;
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()

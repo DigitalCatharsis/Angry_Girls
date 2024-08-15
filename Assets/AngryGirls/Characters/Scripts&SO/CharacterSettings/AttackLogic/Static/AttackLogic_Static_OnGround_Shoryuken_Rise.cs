@@ -1,9 +1,8 @@
-using Angry_Girls;
 using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class AttackLogic_Static_Shoryuken_Rise : AttackAbilityLogic
+    public class AttackLogic_Static_OnGround_Shoryuken_Rise : AttackAbilityLogic
     {
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {

@@ -2,7 +2,7 @@ using Angry_Girls;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class AttackLogic_Static_Shoryuken_Prep : AttackAbilityLogic
+public class AttackLogic_Static_Prep_Shoryuken : AttackAbilityLogic
 {
     public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
     {
@@ -15,7 +15,8 @@ public class AttackLogic_Static_Shoryuken_Prep : AttackAbilityLogic
             && control.isGrounded)
         {
             var ap = control.subComponentProcessor.animationProcessor;
-            //ap.ChangeAnimationState_CrossFadeInFixedTime(ap._staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+
+            //TODO: fuck...
             ap.ChangeAnimationState(ap.staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], 0, transitionDuration: control.characterSettings.idle_State.transitionDuration);
         }
     }

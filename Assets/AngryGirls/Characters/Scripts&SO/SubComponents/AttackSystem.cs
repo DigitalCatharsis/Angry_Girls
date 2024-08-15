@@ -58,9 +58,9 @@ namespace Angry_Girls
             switch (control.characterSettings.staticAttackAbility.staticAttack_State.animation)
             {
                 case StaticAttack_States.A_Shoryuken_Prep_Static:
-                    staticAttackLogic_Prep = new AttackLogic_Static_Shoryuken_Prep();
-                    staticAttackLogic_Landing = new AttackLogic_Static_Shoryuken_Landing();
-                    staticAttackLogic_OnGround = new AttackLogic_Static_Shoryuken_Rise();
+                    staticAttackLogic_Prep = new AttackLogic_Static_Prep_Shoryuken();
+                    staticAttackLogic_Landing = new AttackLogic_Static_Landing_Shoryuken();
+                    staticAttackLogic_OnGround = new AttackLogic_Static_OnGround_Shoryuken_Rise();
                     break;
                     //default:
                     //    throw new Exception("No logic for state like " + control.characterSettings.attackPrepAbility.attackPrep_State.animation.ToString());

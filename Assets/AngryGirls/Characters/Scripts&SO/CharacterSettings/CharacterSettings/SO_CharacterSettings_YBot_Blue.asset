@@ -31,6 +31,7 @@ MonoBehaviour:
   landing_State:
     animation: 1
     transitionDuration: 0
+  hitReaction_States: 0100000000000000
   launchedAttackPrepAbility: {fileID: 11400000, guid: bada94d1a62ddf448aca8b765c91f4a2,
     type: 2}
   staticAttackAbility: {fileID: 11400000, guid: d3e3d0be744d1f340a843ac743d9b222,
