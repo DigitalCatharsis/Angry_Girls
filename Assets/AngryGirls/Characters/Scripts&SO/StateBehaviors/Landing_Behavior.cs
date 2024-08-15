@@ -20,12 +20,18 @@ namespace Angry_Girls
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (_control.characterSettings.unitType == UnitType.AirToGround)
+            //if (_control.characterSettings.unitType == UnitType.AirToGround)
+            //{
+            //    if (stateInfo.normalizedTime >= 1)
+            //    {
+            //        _control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn = true;
+            //    }
+            //}
+
+            if (stateInfo.normalizedTime >= 1)
             {
-                if (stateInfo.normalizedTime >= 1)
-                {
-                    _control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn = true;
-                }
+                _control.isLanding = false;
+                _control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn = true;
             }
         }
 

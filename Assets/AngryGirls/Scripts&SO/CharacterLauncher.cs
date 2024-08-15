@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -66,6 +67,14 @@ namespace Angry_Girls
             for (var i = 0; i < Singleton.Instance.launchManager.charactersToLaunchLeft.Count(); i++)
             {
                 charactersToLaunch[i].transform.position = _positionTransforms[i].position;
+            }
+        }
+
+        public void SetLaunchableCharactersBehavior(List<GameObject> charactersToLaunchLeft)
+        {
+            foreach (var character in charactersToLaunchLeft)
+            {
+                character.GetComponent<CControl>().subComponentProcessor.animationProcessor.unitBehaviorIsStatic = false;
             }
         }
 
@@ -150,6 +159,8 @@ namespace Angry_Girls
             // Apply zoom to camera
             Camera.main.orthographicSize = zoomFactor;
         }
+
+
 
         //public void SwapCharacters(int indexA, int indexB)
         //{

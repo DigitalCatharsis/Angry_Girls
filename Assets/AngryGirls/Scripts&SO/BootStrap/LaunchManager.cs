@@ -30,6 +30,7 @@ namespace Angry_Girls
             characterLauncher.InitLauncher();
             charactersToLaunchLeft = characterLauncher.SpawnAndGetCharacters(SelectedCharactersList);
             characterLauncher.UpdateCharacterPositions(charactersToLaunchLeft);
+            characterLauncher.SetLaunchableCharactersBehavior(charactersToLaunchLeft);
             canPressAtCharacters = true;
         }
 

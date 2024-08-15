@@ -68,6 +68,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: YBot_Yellow
       objectReference: {fileID: 0}
+    - target: {fileID: 3481811570341924799, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: finishedGotHitAnimation
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7121561051254715629, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: VFX_Color.a

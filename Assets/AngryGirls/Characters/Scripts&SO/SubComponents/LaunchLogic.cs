@@ -25,6 +25,7 @@ namespace Angry_Girls
         private IEnumerator OnLaunch_Routine()
         {
             hasBeenLaunched = true;
+            control.subComponentProcessor.animationProcessor.checkGlobalBehavior = true;
             hasFinishedLaunchingTurn = false;
             Camera.main.orthographicSize -= (Camera.main.orthographicSize / 5f);  //TODO: replace
             yield return new WaitForSeconds(0.1f);

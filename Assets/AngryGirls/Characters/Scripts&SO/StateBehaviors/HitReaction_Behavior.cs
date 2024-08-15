@@ -2,26 +2,21 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class GroundIdle_Behavior : StateMachineBehaviour
+    public class HitReaction_Behavior : StateMachineBehaviour
     {
-        private CharacterControl _control;
+        private CControl _control;
 
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             if (_control == null)
             {
-                _control = animator.transform.root.GetComponent<CharacterControl>();
+                _control = animator.transform.root.GetComponent<CControl>();
             }
 
-            //if (_control.subComponentProcessor.launchLogic.hasBeenLaunched)
-            //{
-            //    _control.subComponentProcessor.launchLogic.hasFinishedTurn = true;
-            //}
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-
         }
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
