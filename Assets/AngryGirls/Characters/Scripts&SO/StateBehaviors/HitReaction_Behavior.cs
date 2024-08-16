@@ -17,10 +17,11 @@ namespace Angry_Girls
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (stateInfo.normalizedTime >= 1)
-            {
-                _control.subComponentProcessor.animationProcessor.unitGotHit = false;
-            }
+            //No need in this, cause of no crossfade
+            //if (stateInfo.normalizedTime >= 1)
+            //{
+            //    _control.subComponentProcessor.animationProcessor.unitGotHit = false;
+            //}
         }
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

@@ -29,3 +29,8 @@ MonoBehaviour:
         boxColliderCenter: {x: 0.00000004470348, y: 0.4552352, z: 0.01009538}
         boxColliderSize: {x: 0.2461494, y: 0.942835, z: 0.2152416}
         changeSpeed: 50
+    - Key: 17
+      Value:
+        boxColliderCenter: {x: 0.00000004470348, y: -0.01338433, z: -0.1855023}
+        boxColliderSize: {x: 0.2461494, y: 0.005595952, z: 0.9487329}
+        changeSpeed: 50

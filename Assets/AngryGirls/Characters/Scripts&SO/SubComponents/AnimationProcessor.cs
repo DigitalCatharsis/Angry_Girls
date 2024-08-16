@@ -91,13 +91,17 @@ namespace Angry_Girls
     #endregion
     public class AnimationProcessor : SubComponent
     {
-        public float testFloat = 1f;
+        [Header("Debug")]
+        [Header("Conditions")]
         public bool airToGroundUnit_FinishedAbility = false;
         public bool checkGlobalBehavior = false;
         public bool unitBehaviorIsStatic = true;
         public bool unitGotHit = false;
+
+        [Header("State Data")]
         public CurrentStateData currentStateData = new();
 
+        [Header("State Dictionaries")]
         public SerializedDictionary<AttackPrep_States, int> attackPrep_Dictionary;
         public SerializedDictionary<AttackFinish_States, int> attackFinish_Dictionary;
         public SerializedDictionary<StaticAttack_States, int> staticAttack_States_Dictionary;
@@ -106,8 +110,7 @@ namespace Angry_Girls
         [SerializeField] private SerializedDictionary<AirbonedFlying_States, int> _airbonedFlying_Dictionary;
         [SerializeField] private SerializedDictionary<Landing_States, int> _landingNames_Dictionary;
         [SerializeField] private SerializedDictionary<HitReaction_States, int> _hitReaction_Dictionary;
-
-        //[SerializeField] private SerializedDictionary<Death_States, int> _death_States_Dictionary;
+        [SerializeField] private SerializedDictionary<Death_States, int> _death_States_Dictionary;
 
 
         public override void OnComponentEnable()
@@ -124,8 +127,7 @@ namespace Angry_Girls
             _landingNames_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<Landing_States>(this.gameObject);
             staticAttack_States_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<StaticAttack_States>(this.gameObject);
             _hitReaction_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<HitReaction_States>(this.gameObject);
-
-            //_death_States_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<Death_States>(this.gameObject);
+            _death_States_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<Death_States>(this.gameObject);
 
             //Init start Animation
             UpdateCurrentStateData_Value();
@@ -274,6 +276,12 @@ namespace Angry_Girls
                 return;
             }
 
+            if (control.isDead)
+            {
+                Global_Process_Death();
+                return;
+            }
+
             if (unitGotHit)
             {
                 Global_CheckAndProcess_HitReaction();
@@ -281,7 +289,7 @@ namespace Angry_Girls
             }
 
             //Check just Airboned
-            if (!control.isGrounded && !control.isAttacking)
+            if (!control.isGrounded && !control.isAttacking && !control.isLanding)
             {
                 Global_CheckAndProcess_AirbonedState();
             }
@@ -299,20 +307,51 @@ namespace Angry_Girls
             }
         }
 
-        private void Global_CheckAndProcess_HitReaction()
+        private void Global_Process_Death()
         {
-            //everyones logic
-            if (_hitReaction_Dictionary.ContainsValue(currentStateData.hash))
+            if (control.characterSettings.deathByAnimation == true)
             {
-                if (control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= testFloat)
-                {
-                    return;
-                }
+                var randomDeathAnimation = control.characterSettings.death_States[UnityEngine.Random.Range(0, control.characterSettings.death_States.Count)].animation; //0 = none            
+                                                                                                                                                                        //no crossFade for instant animations changes at fast damage recive
+                ChangeAnimationState(_death_States_Dictionary[randomDeathAnimation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+                return;
+            }
+            else
+            {
+                //TODO: Implement
+                //TriggerRagroll();
+            }            
+        }
+
+        private void TriggerRagroll()
+        {
+            //change components layers from character to DeadBody to prevent unnessesary collisions.
+            var bodypartsTransforms_Array = control.gameObject.GetComponentsInChildren<Transform>();
+            foreach (var transform in bodypartsTransforms_Array)
+            {
+                transform.gameObject.layer = LayerMask.NameToLayer("DeadBody");
             }
 
+            //turn off animator, avatar
+            control.animator.enabled = false;
+            control.animator.avatar = null;
+        }
 
-            var randomHitAnimation = control.characterSettings.hitReaction_States[UnityEngine.Random.Range(0, control.characterSettings.hitReaction_States.Count)].animation; //0 = none
-            ChangeAnimationState_CrossFadeInFixedTime(_hitReaction_Dictionary[randomHitAnimation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+        private void Global_CheckAndProcess_HitReaction()
+        {
+            ////everyones logic
+            //if (_hitReaction_Dictionary.ContainsValue(currentStateData.hash))
+            //{
+            //    if (control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= testFloat)
+            //    {
+            //        return;
+            //    }
+            //}
+
+
+            var randomHitAnimation = control.characterSettings.hitReaction_States[UnityEngine.Random.Range(0, control.characterSettings.hitReaction_States.Count)].animation; //0 = none            
+            //no crossFade for instant animations changes at fast damage recive
+            ChangeAnimationState(_hitReaction_Dictionary[randomHitAnimation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
             unitGotHit = false;
             return;
         }
@@ -458,14 +497,15 @@ namespace Angry_Girls
 
         #endregion
 
+        //TODO: implement. Its buged af
         public void SetRotation()
         {
-            if (control.rigidBody.velocity.z > 0f)
+            if (control.rigidBody.velocity.z > 0.00001f)
             {
                 control.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
 
-            if (control.rigidBody.velocity.z < 0f)
+            if (control.rigidBody.velocity.z < 0.00001f)
             {
                 control.transform.rotation = Quaternion.Euler(0, 180, 0);
             }

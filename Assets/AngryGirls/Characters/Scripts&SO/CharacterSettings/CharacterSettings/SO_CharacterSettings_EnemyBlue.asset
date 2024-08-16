@@ -42,6 +42,10 @@ MonoBehaviour:
     transitionDuration: 0.1
   - animation: 4
     transitionDuration: 0.1
+  death_States:
+  - animation: 1
+    transitionDuration: 0
+  deathByAnimation: 1
   launchedAttackPrepAbility: {fileID: 11400000, guid: bada94d1a62ddf448aca8b765c91f4a2,
     type: 2}
   staticAttackAbility: {fileID: 11400000, guid: d3e3d0be744d1f340a843ac743d9b222,

@@ -1,16 +1,9 @@
-using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
 namespace Angry_Girls
 {
     public class EnemyControl : CControl
     {
-        [Header("Setup")]
-        [SerializeField] private float health = 100f;
-
-        [Header("Debug")]
-        //TODO: replace
-        [SerializeField] private SerializedDictionary<Death_States, int> _death_States_Dictionary;
 
         private void Awake()
         {
@@ -21,17 +14,12 @@ namespace Angry_Girls
 
             subComponentProcessor.OnAwake();
         }
-
         private void OnEnable()
         {
             Singleton.Instance.characterManager.enemyCharacters.Add(this.gameObject);
 
             animator = GetComponent<Animator>();
             subComponentProcessor.OnComponentEnable();
-
-            _death_States_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<Death_States>(this.gameObject);
-
-            currentHealth = health;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -41,38 +29,12 @@ namespace Angry_Girls
                 return;
             }
 
-            if (other.gameObject.transform.GetComponent<VFX>() != null)
-            {
-                var vfx = other.gameObject.transform.GetComponent<VFX>();
-
-                ApplyDamage(vfx.projectileDamage);
-
-                if (currentHealth <= 0)
-                {
-                    isDead = true;
-                    subComponentProcessor.animationProcessor.ChangeAnimationState_CrossFadeInFixedTime(_death_States_Dictionary[Death_States.A_Sweep_Fall], 0.05f);
-
-                    return;
-                }
-
-                //subComponentProcessor.animationProcessor.ChangeAnimationState_CrossFadeInFixedTime(_hitReaction_Dictionary[HitReaction_States.A_HitReaction], 0.05f);
-                subComponentProcessor.animationProcessor.unitGotHit = true;
-            }
-        }
-
-        private void ApplyDamage(float damage)
-        {
-            currentHealth -= damage;
+            subComponentProcessor.damageProcessor.CheckForDamage(other);
         }
 
         private void Update()
         {
             subComponentProcessor.OnUpdate();
-
-            //if (isDead)
-            //{
-            //    Debug.Log("Dead");
-            //}
         }
 
         private void OnCollisionStay(Collision collision)

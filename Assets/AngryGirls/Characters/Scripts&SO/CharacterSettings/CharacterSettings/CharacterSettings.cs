@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -39,6 +38,9 @@ namespace Angry_Girls
         public CharAnimationData<Landing_States> landing_State;
         [Space(5)]
         public List<CharAnimationData<HitReaction_States>> hitReaction_States;
+        public List<CharAnimationData<Death_States>> death_States;
+
+        public bool deathByAnimation = true;
 
         [Header("Launched Attack Ability")]
         [SerializeReference]
@@ -53,6 +55,21 @@ namespace Angry_Girls
                 ColorDebugLog.Log(control.name + "'s " + charAnimationData + " is NONE", System.Drawing.KnownColor.Yellow);
             }
         }
+        private void  NotifyForNONE_Value<T>(List<CharAnimationData<T>> charAnimationData, CControl control) where T : Enum
+        {
+            if (charAnimationData.Count == 0)
+            {
+                ColorDebugLog.Log(control.name + "'s " + charAnimationData + " is empty", System.Drawing.KnownColor.Yellow);
+            }
+
+            foreach (var elem in charAnimationData)
+            {
+                if (elem.animation.ToString() == "NONE")
+                {
+                    ColorDebugLog.Log(control.name + "'s " + elem + " is NONE", System.Drawing.KnownColor.Yellow);
+                }
+            }
+        }
 
         public void CheckForNoneValues(CControl control)
         {
@@ -61,10 +78,13 @@ namespace Angry_Girls
                 return;
             }
 
+            //debug
             NotifyForNONE_Value(idle_State, control);
             NotifyForNONE_Value(airbonedFlying_States, control);
             NotifyForNONE_Value(attackFininsh_State, control);
             NotifyForNONE_Value(landing_State, control);
+            NotifyForNONE_Value(hitReaction_States, control);
+            NotifyForNONE_Value(death_States, control);
         }
     }
 

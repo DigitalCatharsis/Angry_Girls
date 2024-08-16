@@ -6,13 +6,14 @@ namespace Angry_Girls
     public class AttackSystem : SubComponent
     {
         [Header("Setup")]
+        [Header("VFX")]
         public Transform projectileSpawnTransform;
         public Color VFX_Color;
 
-        [Header("Launched Logic")]
+        //Logic
         public AttackAbilityLogic attackPrepLogic;
         public AttackAbilityLogic attackFinishLogic;
-        [Header("Static Logic")]
+
         public AttackAbilityLogic staticAttackLogic_Prep;
         public AttackAbilityLogic staticAttackLogic_Landing;
         public AttackAbilityLogic staticAttackLogic_OnGround;
@@ -69,7 +70,6 @@ namespace Angry_Girls
 
         public override void OnUpdate()
         {
-
         }
 
         public override void OnAwake()

@@ -13,6 +13,7 @@ namespace Angry_Girls
         LaunchLogic,
         CharacterMovement,
         AttackSystem,
+        DamageProcessor,
     }
     public class SubComponentProcessor : MonoBehaviour
     {
@@ -28,6 +29,7 @@ namespace Angry_Girls
         public BlockingManager blockingManager;
         public CharacterMovement characterMovement;
         public AttackSystem attackSystem;
+        public DamageProcessor damageProcessor;
 
         public void OnAwake()
         {

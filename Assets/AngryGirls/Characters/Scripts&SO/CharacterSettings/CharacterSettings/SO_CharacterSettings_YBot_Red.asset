@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5712a747d1a17fc42b72503a7509d404, type: 3}
   m_Name: SO_CharacterSettings_YBot_Red
   m_EditorClassIdentifier: 
-  _notifyAboutNONEStates: 0
+  _notifyAboutNONEStates: 1
   unitType: 1
   atHittingObstacle_Speed: {x: 0, y: -4, z: 0}
   groundAttackMovementSpeed: {x: 0, y: 0, z: 0}
@@ -31,6 +31,21 @@ MonoBehaviour:
   landing_State:
     animation: 2
     transitionDuration: 0.1
+  hitReaction_States:
+  - animation: 1
+    transitionDuration: 0
+  - animation: 2
+    transitionDuration: 0
+  - animation: 3
+    transitionDuration: 0
+  - animation: 4
+    transitionDuration: 0
+  - animation: 5
+    transitionDuration: 0
+  death_States:
+  - animation: 1
+    transitionDuration: 0
+  deathByAnimation: 1
   launchedAttackPrepAbility: {fileID: 11400000, guid: e35d5a6e8a68115488c24f09ded5e324,
     type: 2}
   staticAttackAbility: {fileID: 11400000, guid: d3e3d0be744d1f340a843ac743d9b222,
