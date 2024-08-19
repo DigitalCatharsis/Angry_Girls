@@ -130,6 +130,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\BootStrap\SpawnManager\SpawnManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\BootStrap\MyExtentions.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts&amp;SO\CharacterSettings\AttackLogic\Static\AttackLogic_Static_Landing_Shoryuken.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\BootStrap\VFXManager.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUnityVersion.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts&amp;SO\CharacterSettings\AttackLogic\Launching\AttackLogic_HeadSpinAttack.cs" />
     <Compile Include="Assets\AngryGirls\Characters\Scripts&amp;SO\CharacterSettings\AttackLogic\Launching\AttackLogic_ShoryukenDownSmash_Prep.cs" />

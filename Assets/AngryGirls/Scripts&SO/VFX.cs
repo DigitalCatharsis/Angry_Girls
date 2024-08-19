@@ -1,15 +1,16 @@
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Angry_Girls
 {
     public class VFX : MonoBehaviour
     {
-        [Header("Setup")]
-        [SerializeField] private float _timeToLive = 1;
-        [SerializeField] private bool _isTimeToLiveIsNormilizedTime = false;
-        [SerializeField] private bool _destroyOnCollision = false;
+        //[Header("Setup")]
+        [SerializeField] private float _timeToLive;
+        [SerializeField] private bool _isTimeToLiveIsNormilizedTime;
+        [SerializeField] private bool _destroyOnCollision;
 
         [Space(10)]
         [SerializeField] private ParticleSystem _particleSystem;
@@ -21,17 +22,41 @@ namespace Angry_Girls
             int LayerIgnoreRaycast = LayerMask.NameToLayer("Projectile");
             gameObject.layer = LayerIgnoreRaycast;
 
-            if (_isTimeToLiveIsNormilizedTime)
-            {
-                _timeToLive = _particleSystem.main.duration;
-            }
-
-            StartCoroutine(VFXLiving_Routine());
         }
 
-        public void ApplyFlame(float damageAmount)
+        public void InitAndRunVFX(float timeToLive, bool isTimeToLiveIsNormilizedTime, bool destroyOnCollision, float damage, bool enableCollider, bool enableTrigger)
         {
-            projectileDamage = damageAmount;
+            //Set lifetime
+            _isTimeToLiveIsNormilizedTime = isTimeToLiveIsNormilizedTime;
+
+            if (_isTimeToLiveIsNormilizedTime)
+            {
+                //TODO: не работает :c. Duration = 0
+                _timeToLive = _particleSystem.main.duration;
+            }
+            else
+            {
+                _timeToLive = timeToLive;
+            }
+            
+            _destroyOnCollision = destroyOnCollision;
+
+            //Set VfxDamage
+            projectileDamage = damage;
+
+            //Set Triggers and colliders
+            GetComponent<Collider>().enabled = enableCollider;
+
+            foreach (var collider in (GetComponents<Collider>()))
+            {
+                if (collider.isTrigger == true)
+                {
+                    collider.enabled = enableTrigger;
+                }
+            }
+
+            //Start Living Routine
+            StartCoroutine(VFXLiving_Routine());
         }
 
         public void SendProjectile_Fireball__TweenMove(Vector3 startPoint, Vector3 finalRotationDegree, float damage, float moveDuration = 1.5f)
@@ -68,7 +93,7 @@ namespace Angry_Girls
                 return;
             }
 
-            if (collision.gameObject.GetComponent<CharacterControl>())
+            if (collision.gameObject.GetComponent<CharacterControl>()) //TODO: set for both sides 
             {
                 return;
             }
@@ -79,16 +104,14 @@ namespace Angry_Girls
 
         private IEnumerator VFXLiving_Routine()
         {
-            yield return new WaitForSeconds(_timeToLive); //try this later!
-            //var time = 0f;
-
-            //while (time <= _timeToLive)
-            //{
-            //    time += Time.deltaTime;
-            //    yield return null;
-            //}
+            yield return new WaitForSeconds(_timeToLive);
 
             this.gameObject.SetActive(false);
+        }
+
+        public VFX_Type GetVFXType()
+        {
+            return GetComponent<VFXPoolObject>().poolObjectType;
         }
     }
 }

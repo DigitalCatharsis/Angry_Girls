@@ -1,0 +1,84 @@
+using Unity.Mathematics;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.VFX;
+
+namespace Angry_Girls
+{
+    public class VFXManager : MonoBehaviour
+    {
+        public GameObject SpawnVFX(
+            Transform parentsTransform, 
+            VFX_Type vfx_Type, 
+            Color VFXColor, 
+            Vector3 spawnPosition, 
+            Quaternion spawnRotation, 
+            float timeToLive,
+            bool isTimeToLiveIsNormilizedTime,
+            bool destroyOnCollision,
+            float VFXDamage, 
+            bool enableCollider = false, 
+            bool enableTrigger = false
+            )
+        {
+            //Spawn (taking from pool)
+            var poolManager = Singleton.Instance.poolManager;
+            var vfx = poolManager.GetObject(vfx_Type, poolManager.vfxPoolDictionary, spawnPosition, spawnRotation);
+
+            //Set Color
+            if (vfx.GetComponentInChildren<VisualEffect>() != null)
+            {
+                vfx.GetComponentInChildren<VisualEffect>().SetVector4("Color", VFXColor);
+            }
+
+            //Set parent
+            vfx.transform.parent = parentsTransform;
+
+            //Init and run VFX
+            GetComponent<VFX>().InitAndRunVFX(timeToLive,isTimeToLiveIsNormilizedTime,destroyOnCollision,VFXDamage, enableCollider, enableTrigger);
+            return vfx;
+        }
+
+        public GameObject SpawnVFX(CControl control, VFX_Type vfx_Type)
+        {
+            var characterAttackSystem = control.subComponentProcessor.attackSystem;
+
+            //spawn 
+            var poolManager = Singleton.Instance.poolManager;
+            var vfx = poolManager.GetObject(vfx_Type, poolManager.vfxPoolDictionary, characterAttackSystem.projectileSpawnTransform.position, Quaternion.identity);
+
+            //set color
+            if (vfx.GetComponentInChildren<VisualEffect>() != null)
+            {
+                vfx.GetComponentInChildren<VisualEffect>().SetVector4("Color", characterAttackSystem.VFX_Color);
+            }
+
+            //set parent and position
+            vfx.transform.parent = control.transform;
+
+            var vfxComponent = vfx.GetComponent<VFX>();
+
+            //Init and Run VFX
+            if (Singleton.Instance.turnManager.currentPhase == CurrentPhase.StaticPhase)
+            {
+                var staticAbility = control.characterSettings.staticAttackAbility;
+                vfxComponent.InitAndRunVFX(staticAbility.timeToLive, staticAbility.isTimeToLiveIsNormilizedTime, staticAbility.destroyOnCollision, staticAbility.attackDamage, staticAbility.enableCollider, staticAbility.enableTrigger );
+            }
+            else
+            {
+                var launchingAbility = control.characterSettings.launchedAttackPrepAbility;
+                vfxComponent.InitAndRunVFX(launchingAbility.timeToLive, launchingAbility.isTimeToLiveIsNormilizedTime, launchingAbility.destroyOnCollision, launchingAbility.attackDamage, launchingAbility.enableCollider, launchingAbility.enableTrigger);
+            }           
+
+            return vfx;
+        }
+
+        public GameObject SpawnVFX_AtPosition(VFX_Type vfx_Type, Vector3 spawnPosition, Quaternion spawnRotation)
+        {
+            //Spawn (taking from pool)
+            var poolManager = Singleton.Instance.poolManager;
+            var vfx = poolManager.GetObject(vfx_Type, poolManager.vfxPoolDictionary, spawnPosition, spawnRotation);
+            return vfx;
+        }
+    }
+}

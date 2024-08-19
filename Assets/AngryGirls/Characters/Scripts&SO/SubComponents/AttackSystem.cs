@@ -87,6 +87,5 @@ namespace Angry_Girls
         public override void OnStart()
         {
         }
-
     }
 }

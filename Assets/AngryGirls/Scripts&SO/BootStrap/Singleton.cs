@@ -15,6 +15,7 @@ namespace Angry_Girls
         public TurnManager turnManager;
         public PoolManager poolManager;
         public PoolObjectLoader poolObjectLoader;
+        public VFXManager VFXManager;
 
         private void Awake()
         {
@@ -35,6 +36,7 @@ namespace Angry_Girls
             turnManager = GetComponentInChildren<TurnManager>();
             poolManager = GetComponentInChildren<PoolManager>();
             poolObjectLoader = GetComponentInChildren<PoolObjectLoader>();
+            VFXManager = GetComponentInChildren<VFXManager>();
         }
     }
 }

@@ -92,6 +92,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7121561051254715629, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
+      propertyPath: VFX_Color.b
+      value: 0.0674386
+      objectReference: {fileID: 0}
+    - target: {fileID: 7121561051254715629, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: VFX_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7121561051254715629, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: VFX_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7121561051254715629, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
       propertyPath: projectileSpawnTransform
       value: 
       objectReference: {fileID: 464290289296872469}

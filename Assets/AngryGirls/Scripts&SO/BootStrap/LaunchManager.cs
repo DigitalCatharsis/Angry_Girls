@@ -42,7 +42,10 @@ namespace Angry_Girls
                 Vector3 mousePosition = Input.mousePosition;
                 Ray ray = Camera.main.ScreenPointToRay(mousePosition);
 
-                if (Physics.Raycast(ray, out RaycastHit hit))
+                //CharacterToLaunch layer
+                int layerMask = 1 << 14;
+
+                if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
                 {
                     if (charactersToLaunchLeft.Contains(hit.collider.gameObject))
                     {

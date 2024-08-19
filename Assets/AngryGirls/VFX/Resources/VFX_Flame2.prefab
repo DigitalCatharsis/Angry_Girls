@@ -121,6 +121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8605815401143103994}
   - component: {fileID: 8911861566619651337}
+  - component: {fileID: 8686846544495162357}
   - component: {fileID: 5050141673919490702}
   - component: {fileID: -6469101212335982458}
   m_Layer: 13
@@ -163,6 +164,27 @@ MonoBehaviour:
   _destroyOnCollision: 1
   _particleSystem: {fileID: 0}
   projectileDamage: 0
+--- !u!65 &8686846544495162357
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4078025661996777973}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 0.24614942, y: 2.104647, z: 2.0004644}
+  m_Center: {x: 0.000000044703484, y: 0.3277192, z: 0.052600622}
 --- !u!65 &5050141673919490702
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -180,7 +202,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.24614942, y: 2.104647, z: 2.0004644}
   m_Center: {x: 0.000000044703484, y: 0.3277192, z: 0.052600622}

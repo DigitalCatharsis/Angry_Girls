@@ -21,11 +21,23 @@ namespace Angry_Girls
         [Space(15)]
         [Header("Projectile")]
         [Space(5)]
-        public GameObject attack_Projectile;
-        public float attack_Projectile_LifeDuration = 1f;
+        [Header("VFX")]
+        public GameObject AttackVFX;
+
+        [Header("Lifetime")]
+        [Space(5)]
+        public float timeToLive = 1f;
+        public bool isTimeToLiveIsNormilizedTime = false;
+
         [Space(5)]
         [Header("Projectile Phyciscs")]
         public Vector3 attackMovementSpeed = new Vector3(0, -2, 0);
         public Vector3 attackMovementForce = new Vector3(0, 0, 0);
+        public bool destroyOnCollision = false;
+
+        [Space(5)]
+        [Header("Projectile Colliders")]
+        public bool enableCollider = false;
+        public bool enableTrigger = false;
     }
 }

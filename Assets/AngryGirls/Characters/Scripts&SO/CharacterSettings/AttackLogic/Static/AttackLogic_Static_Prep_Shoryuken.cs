@@ -1,40 +1,44 @@
-using Angry_Girls;
 using UnityEngine;
-using UnityEngine.VFX;
 
-public class AttackLogic_Static_Prep_Shoryuken : AttackAbilityLogic
+namespace Angry_Girls
 {
-    public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
+    public class AttackLogic_Static_Prep_Shoryuken : AttackAbilityLogic
     {
-        CastFlameVFX(control);
-    }
-
-    public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
-    {
-        if (stateInfo.normalizedTime >= 1
-            && control.isGrounded)
+        private GameObject runningVFX;
+        public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            var ap = control.subComponentProcessor.animationProcessor;
+            //runningVFX = Singleton.Instance.VFXManager.SpawnVFX(
+            //    parentsTransform: control.gameObject.transform,
+            //    vfx_Type: control.characterSettings.staticAttackAbility.AttackVFX.GetComponent<VFXPoolObject>().poolObjectType,
+            //    VFXColor: control.subComponentProcessor.attackSystem.VFX_Color,
+            //    spawnPosition: control.subComponentProcessor.attackSystem.projectileSpawnTransform.position,
+            //    spawnRotation: Quaternion.identity,
+            //    timeToLive: control.characterSettings.staticAttackAbility.timeToLive,
+            //    isTimeToLiveIsNormilizedTime: true,
+            //    destroyOnCollision: true,
+            //    VFXDamage: control.characterSettings.launchedAttackPrepAbility.attackDamage,
+            //    enableCollider: false,
+            //    enableTrigger: true
+            //    );
 
-            //TODO: fuck...
-            ap.ChangeAnimationState(ap.staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], 0, transitionDuration: control.characterSettings.idle_State.transitionDuration);
+            //Второй вариант с перегрузкой
+            //runningVFX = Singleton.Instance.VFXManager.SpawnVFX(control, control.characterSettings.staticAttackAbility.AttackVFX.GetComponent<VFXPoolObject>().poolObjectType);
+        }
+        public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
+        {
+            if (stateInfo.normalizedTime >= 1
+                && control.isGrounded)
+            {
+                var ap = control.subComponentProcessor.animationProcessor;
+                //TODO: fuck...
+                ap.ChangeAnimationState(ap.staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], 0, transitionDuration: control.characterSettings.idle_State.transitionDuration);
+            }
+        }
+
+        public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
+        {
+
         }
     }
-
-    public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
-    {
-    }
-
-    private GameObject CastFlameVFX(CControl control)
-    {
-        //var vfx = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_Flame2, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.identity); !old
-        var poolManager = Singleton.Instance.poolManager;
-        var vfx = poolManager.GetObject(VFX_Type.VFX_Flame2,poolManager.vfxPoolDictionary, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.identity);
-        vfx.GetComponentInChildren<VisualEffect>().SetVector4("Color", control.subComponentProcessor.attackSystem.VFX_Color);
-        vfx.transform.parent = control.transform;
-        vfx.transform.position = control.subComponentProcessor.attackSystem.projectileSpawnTransform.position;
-        vfx.GetComponent<VFX>().ApplyFlame(control.characterSettings.launchedAttackPrepAbility.attackDamage);
-
-        return vfx;
-    }
 }
+

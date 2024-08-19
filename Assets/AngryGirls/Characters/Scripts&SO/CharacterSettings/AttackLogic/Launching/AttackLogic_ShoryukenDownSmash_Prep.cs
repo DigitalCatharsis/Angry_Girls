@@ -11,10 +11,10 @@ namespace Angry_Girls
             control.isAttacking = true;
             control.rigidBody.velocity = control.characterSettings.launchedAttackPrepAbility.attackPrepMovementSpeed;
 
-            _vfx = CastFlameVFX(control);
 
-
+            _vfx = Singleton.Instance.VFXManager.SpawnVFX(control, control.characterSettings.launchedAttackPrepAbility.AttackVFX.GetComponent<VFX>().GetVFXType());
         }
+
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
 
@@ -22,21 +22,7 @@ namespace Angry_Girls
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            //_projectile.GetComponentInChildren<VisualEffect>().pause = true;
-            _vfx.GetComponentInChildren<VisualEffect>().Stop();
-        }
-
-        private GameObject CastFlameVFX(CControl control)
-        {
-            //var vfx = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_Flame2, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.identity); !old
-            var poolManager = Singleton.Instance.poolManager;            
-            var vfx = poolManager.GetObject(VFX_Type.VFX_Flame2, poolManager.vfxPoolDictionary, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.identity);
-            vfx.GetComponentInChildren<VisualEffect>().SetVector4("Color", control.subComponentProcessor.attackSystem.VFX_Color);
-            vfx.transform.parent = control.transform;
-            vfx.transform.position = control.subComponentProcessor.attackSystem.projectileSpawnTransform.position;
-            vfx.GetComponent<VFX>().ApplyFlame(control.characterSettings.launchedAttackPrepAbility.attackDamage);
-
-            return vfx;
+            _vfx.GetComponentInChildren<VisualEffect>().Stop(); //TODO не забудь в остальных стейтах
         }
     }
 }

@@ -25,6 +25,11 @@ namespace Angry_Girls
         private IEnumerator OnLaunch_Routine()
         {
             hasBeenLaunched = true;
+
+            //Changing layer from CharacterToLaunch to Character
+            int characterLayer = LayerMask.NameToLayer("Character");
+            transform.root.gameObject.layer = characterLayer;
+
             control.subComponentProcessor.animationProcessor.checkGlobalBehavior = true;
             hasFinishedLaunchingTurn = false;
             Camera.main.orthographicSize -= (Camera.main.orthographicSize / 5f);  //TODO: replace
