@@ -1,5 +1,3 @@
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -18,7 +16,8 @@ namespace Angry_Girls
             bool destroyOnCollision,
             float VFXDamage, 
             bool enableCollider = false, 
-            bool enableTrigger = false
+            bool enableTrigger = false,
+            GameObject owner = null
             )
         {
             //Spawn (taking from pool)
@@ -35,7 +34,7 @@ namespace Angry_Girls
             vfx.transform.parent = parentsTransform;
 
             //Init and run VFX
-            GetComponent<VFX>().InitAndRunVFX(timeToLive,isTimeToLiveIsNormilizedTime,destroyOnCollision,VFXDamage, enableCollider, enableTrigger);
+            GetComponent<VFX>().InitAndRunVFX(timeToLive,isTimeToLiveIsNormilizedTime,destroyOnCollision,VFXDamage, enableCollider, enableTrigger, owner: owner);
             return vfx;
         }
 
@@ -62,12 +61,28 @@ namespace Angry_Girls
             if (Singleton.Instance.turnManager.currentPhase == CurrentPhase.StaticPhase)
             {
                 var staticAbility = control.characterSettings.staticAttackAbility;
-                vfxComponent.InitAndRunVFX(staticAbility.timeToLive, staticAbility.isTimeToLiveIsNormilizedTime, staticAbility.destroyOnCollision, staticAbility.attackDamage, staticAbility.enableCollider, staticAbility.enableTrigger );
+                vfxComponent.InitAndRunVFX(
+                    staticAbility.timeToLive, 
+                    staticAbility.isTimeToLiveIsNormilizedTime, 
+                    staticAbility.destroyOnCollision, 
+                    staticAbility.attackDamage,
+                    staticAbility.enableCollider, 
+                    staticAbility.enableTrigger, 
+                    owner: control.gameObject
+                    );
             }
             else
             {
                 var launchingAbility = control.characterSettings.launchedAttackPrepAbility;
-                vfxComponent.InitAndRunVFX(launchingAbility.timeToLive, launchingAbility.isTimeToLiveIsNormilizedTime, launchingAbility.destroyOnCollision, launchingAbility.attackDamage, launchingAbility.enableCollider, launchingAbility.enableTrigger);
+                vfxComponent.InitAndRunVFX(
+                    launchingAbility.timeToLive, 
+                    launchingAbility.isTimeToLiveIsNormilizedTime,
+                    launchingAbility.destroyOnCollision,
+                    launchingAbility.attackDamage,
+                    launchingAbility.enableCollider, 
+                    launchingAbility.enableTrigger,
+                    owner: control.gameObject
+                    );
             }           
 
             return vfx;

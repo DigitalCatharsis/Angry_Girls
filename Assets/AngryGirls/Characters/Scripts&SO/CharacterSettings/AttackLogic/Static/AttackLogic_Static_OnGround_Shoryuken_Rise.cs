@@ -4,12 +4,20 @@ namespace Angry_Girls
 {
     public class AttackLogic_Static_OnGround_Shoryuken_Rise : AttackAbilityLogic
     {
+        private GameObject _vfx;
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            var poolManager = Singleton.Instance.poolManager;
-            poolManager.GetObject(VFX_Type.VFX_Shouryken, poolManager.vfxPoolDictionary, control.transform.position, Quaternion.identity);
-            //TODO: vfx spawner 
-            //Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_Shouryken, control.transform.position, Quaternion.identity); // OLD!
+
+            _vfx = Singleton.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Shouryken, control.transform.position, Quaternion.identity);
+            _vfx.GetComponent<VFX>().InitAndRunVFX(
+                1, 
+                false, 
+                destroyOnCollision: false, 
+                control.characterSettings.launchedAttackPrepAbility.attackDamage, 
+                enableCollider: false, 
+                enableTrigger: true, //TODO: бага в анимации из-за урона самому себе
+                owner: control.gameObject
+                ); 
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)

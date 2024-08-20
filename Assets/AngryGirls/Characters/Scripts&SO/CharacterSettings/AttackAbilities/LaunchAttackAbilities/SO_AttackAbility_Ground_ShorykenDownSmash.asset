@@ -16,7 +16,7 @@ MonoBehaviour:
     animation: 1
     transitionDuration: 0
   timesToRepeat_AttackPrep_State: 1
-  attackDamage: 50
+  attackDamage: 1
   attackTimeDuration: 0
   useAnimationNormalizedTimeDuration: 0
   attackPrepMovementSpeed: {x: 0, y: -9, z: 0}
@@ -29,4 +29,4 @@ MonoBehaviour:
   attackMovementForce: {x: 0, y: 0, z: 0}
   destroyOnCollision: 0
   enableCollider: 0
-  enableTrigger: 0
+  enableTrigger: 1

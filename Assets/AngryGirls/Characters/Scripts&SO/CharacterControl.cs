@@ -19,6 +19,16 @@ namespace Angry_Girls
             boxColliderContacts = collision.contacts;
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            if (isDead)
+            {
+                return;
+            }
+
+            subComponentProcessor.damageProcessor.CheckForDamage(other);
+        }
+
         private void Update()
         {
             subComponentProcessor.OnUpdate();

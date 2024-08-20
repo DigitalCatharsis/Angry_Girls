@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Angry_Girls
 {
@@ -7,6 +8,7 @@ namespace Angry_Girls
         private GameObject runningVFX;
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
+            //Первый вариант
             //runningVFX = Singleton.Instance.VFXManager.SpawnVFX(
             //    parentsTransform: control.gameObject.transform,
             //    vfx_Type: control.characterSettings.staticAttackAbility.AttackVFX.GetComponent<VFXPoolObject>().poolObjectType,
@@ -22,7 +24,8 @@ namespace Angry_Girls
             //    );
 
             //Второй вариант с перегрузкой
-            //runningVFX = Singleton.Instance.VFXManager.SpawnVFX(control, control.characterSettings.staticAttackAbility.AttackVFX.GetComponent<VFXPoolObject>().poolObjectType);
+            runningVFX = Singleton.Instance.VFXManager.SpawnVFX(control, control.characterSettings.staticAttackAbility.AttackVFX.GetComponent<VFXPoolObject>().poolObjectType);
+
         }
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
@@ -31,13 +34,13 @@ namespace Angry_Girls
             {
                 var ap = control.subComponentProcessor.animationProcessor;
                 //TODO: fuck...
-                ap.ChangeAnimationState(ap.staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], 0, transitionDuration: control.characterSettings.idle_State.transitionDuration);
+                ap.ChangeAnimationState(ap.staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], 0, transitionDuration: 1);
             }
         }
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-
+            runningVFX.GetComponentInChildren<VisualEffect>().Stop(); //TODO не забудь в остальных стейтах
         }
     }
 }

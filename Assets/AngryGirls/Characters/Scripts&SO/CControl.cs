@@ -26,5 +26,15 @@ namespace Angry_Girls
         [Header("Setup")]
         public PlayerOrAi playerOrAi;
         public CharacterSettings characterSettings;
+
+        //private void OnTriggerEnter(Collider other)
+        //{
+        //    if (isDead)
+        //    {
+        //        return;
+        //    }
+
+        //    subComponentProcessor.damageProcessor.CheckForDamage(other);
+        //}
     }
 }

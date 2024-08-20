@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ namespace Angry_Girls
             attacksCount = 0;
 
             control.isAttacking = true;
+
+            //Move character when casting ability
             control.rigidBody.velocity = control.characterSettings.launchedAttackPrepAbility.attackPrepMovementSpeed;
             control.rigidBody.AddForce(control.characterSettings.launchedAttackPrepAbility.attackPrepMovementForce);
 
@@ -62,6 +65,7 @@ namespace Angry_Girls
                   new Vector3(-325f,0,0),
             };
 
+            //Second cast, second character move
             control.rigidBody.AddForce(control.characterSettings.launchedAttackPrepAbility.attackPrepMovementForce);
             ProcessFireballs(control, angles);
 
@@ -70,22 +74,38 @@ namespace Angry_Girls
 
         private void ProcessFireballs(CControl control, Vector3[] angles)
         {
+            //spawn
             for (var i = 0; i < angles.Length; i++)
             {
-                //spawn
-                //var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_FireBall, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.Euler(angles[i])); //old
-                var poolManager = Singleton.Instance.poolManager;
-                var projectile = poolManager.GetObject<VFX_Type>(VFX_Type.VFX_FireBall, poolManager.vfxPoolDictionary, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.Euler(angles[i]));
+                var projectile = Singleton.Instance.VFXManager.SpawnVFX_AtPosition(
+                    vfx_Type: control.characterSettings.launchedAttackPrepAbility.AttackVFX.GetComponent<VFX>().GetVFXType(), 
+                    control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, 
+                    Quaternion.Euler(angles[i]));
 
-                //set final rotation
-                var rotation = _finalProjectileRotation;
+                //set final rotation value 
+                var finalRotationDegree = _finalProjectileRotation;
                 if (Math.Sign(projectile.transform.forward.z) < 0)
                 {
-                    rotation.y += 180f;
+                    finalRotationDegree.y += 180f;
                 }
 
+                var impulse = new Vector3(0, _impulseY * projectile.transform.forward.y, _impulseZ * projectile.transform.forward.z);
+                var moveDuration = 1.5f;
+
                 //add impulse and rotate
-                projectile.GetComponent<VFX>().SendProjectile_Fireball(new Vector3(0, _impulseY * projectile.transform.forward.y, _impulseZ * projectile.transform.forward.z), rotation, control.characterSettings.launchedAttackPrepAbility.attackDamage);
+                projectile.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.Impulse);
+                projectile.transform.DORotate(endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * projectile.transform.forward.z), duration: moveDuration, mode: RotateMode.Fast);
+
+                //init and run
+                projectile.GetComponent<VFX>().InitAndRunVFX(
+                    timeToLive: control.characterSettings.launchedAttackPrepAbility.timeToLive,
+                    isTimeToLiveIsNormilizedTime: control.characterSettings.launchedAttackPrepAbility.isTimeToLiveIsNormilizedTime,
+                    destroyOnCollision: control.characterSettings.launchedAttackPrepAbility.destroyOnCollision,
+                    damage: control.characterSettings.launchedAttackPrepAbility.attackDamage,
+                    enableCollider: control.characterSettings.launchedAttackPrepAbility.enableCollider,
+                    enableTrigger: control.characterSettings.launchedAttackPrepAbility.enableTrigger,
+                    owner: control.gameObject
+                    );
             }
         }
     }
