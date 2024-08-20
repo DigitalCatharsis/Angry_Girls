@@ -34,7 +34,7 @@ namespace Angry_Girls
             {
                 var ap = control.subComponentProcessor.animationProcessor;
                 //TODO: fuck...
-                ap.ChangeAnimationState(ap.staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], 0, transitionDuration: 1);
+                ap.ChangeAnimationState(Singleton.Instance.statesDispatcher.staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], 0, transitionDuration: 1);
             }
         }
 

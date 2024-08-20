@@ -19,7 +19,14 @@ MonoBehaviour:
   attackDamage: 1
   attackTimeDuration: 0
   useAnimationNormalizedTimeDuration: 1
-  attackPrep_Projectile: {fileID: 0}
-  attackPrep_Projectile_LifeDuration: 1
   attackPrepMovementSpeed: {x: 0, y: 0, z: 0}
   attackPrepMovementForce: {x: 0, y: 0, z: -1000}
+  AttackVFX: {fileID: 5238815803969079422, guid: 3e9f49843884c504281b8bcdb82a7cdb,
+    type: 3}
+  timeToLive: 1
+  isTimeToLiveIsNormilizedTime: 0
+  attackMovementSpeed: {x: 0, y: -2, z: 0}
+  attackMovementForce: {x: 0, y: 0, z: 0}
+  destroyOnCollision: 0
+  enableCollider: 0
+  enableTrigger: 0

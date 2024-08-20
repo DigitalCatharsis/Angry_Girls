@@ -32,7 +32,7 @@ MonoBehaviour:
     animation: 0
     transitionDuration: 0.5
   hitReaction_States:
-  - animation: 2
+  - animation: 3
     transitionDuration: 0
   death_States:
   - animation: 1

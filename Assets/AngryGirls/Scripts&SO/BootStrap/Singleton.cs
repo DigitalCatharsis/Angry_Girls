@@ -16,6 +16,7 @@ namespace Angry_Girls
         public PoolManager poolManager;
         public PoolObjectLoader poolObjectLoader;
         public VFXManager VFXManager;
+        public StatesDispatcher statesDispatcher;
 
         private void Awake()
         {
@@ -37,6 +38,7 @@ namespace Angry_Girls
             poolManager = GetComponentInChildren<PoolManager>();
             poolObjectLoader = GetComponentInChildren<PoolObjectLoader>();
             VFXManager = GetComponentInChildren<VFXManager>();
+            statesDispatcher = GetComponentInChildren<StatesDispatcher>();
         }
     }
 }
