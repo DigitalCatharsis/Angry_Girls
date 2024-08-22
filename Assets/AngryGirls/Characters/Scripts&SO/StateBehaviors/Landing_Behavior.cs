@@ -5,8 +5,6 @@ namespace Angry_Girls
     public class Landing_Behavior : StateMachineBehaviour
     {
         private CControl _control;
-
-        //Air units does not land
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             if (_control == null)
@@ -20,25 +18,17 @@ namespace Angry_Girls
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            //if (_control.characterSettings.unitType == UnitType.AirToGround)
-            //{
-            //    if (stateInfo.normalizedTime >= 1)
-            //    {
-            //        _control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn = true;
-            //    }
-            //}
-
             if (stateInfo.normalizedTime >= 1)
             {
                 _control.isLanding = false;
-                _control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn = true;
+                _control.subComponentProcessor.launchLogic.control.hasFinishedLaunchingTurn = true;
             }
         }
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             _control.isLanding = false;
-            _control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn = true;
+            _control.subComponentProcessor.launchLogic.control.hasFinishedLaunchingTurn = true;
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()

@@ -11,11 +11,21 @@ namespace Angry_Girls
     {
         [Space(15)]
         [Header("Debug")]       
-
         public bool isLanding = false;
         public bool isGrounded = false;
         public bool isAttacking = false;
         public bool isDead = false;
+        public bool unitGotHit = false;
+
+        [Space(5)]
+        public bool hasUsedAbility = false;
+        public bool hasBeenLaunched = false;
+        public bool airToGroundUnit_FinishedAbility = false;
+        public bool hasFinishedLaunchingTurn = false;
+
+        [Space(5)]
+        public bool unitBehaviorIsStatic = true; 
+        public bool checkGlobalBehavior = false;
 
         public Rigidbody rigidBody;
         public BoxCollider boxCollider;
@@ -26,15 +36,5 @@ namespace Angry_Girls
         [Header("Setup")]
         public PlayerOrAi playerOrAi;
         public CharacterSettings characterSettings;
-
-        //private void OnTriggerEnter(Collider other)
-        //{
-        //    if (isDead)
-        //    {
-        //        return;
-        //    }
-
-        //    subComponentProcessor.damageProcessor.CheckForDamage(other);
-        //}
     }
 }

@@ -74,7 +74,7 @@ namespace Angry_Girls
         {
             foreach (var character in charactersToLaunchLeft)
             {
-                character.GetComponent<CControl>().subComponentProcessor.animationProcessor.unitBehaviorIsStatic = false;
+                character.GetComponent<CControl>().unitBehaviorIsStatic = false;
             }
         }
 

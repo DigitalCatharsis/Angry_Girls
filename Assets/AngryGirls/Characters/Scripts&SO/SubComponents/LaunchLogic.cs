@@ -5,10 +5,6 @@ namespace Angry_Girls
 {
     public class LaunchLogic : SubComponent
     {
-        public bool hasBeenLaunched = false;
-        public bool hasFinishedLaunchingTurn = false;
-        public bool hasUsedAbility = false;
-
         public override void OnAwake()
         {
         }
@@ -24,19 +20,19 @@ namespace Angry_Girls
 
         private IEnumerator OnLaunch_Routine()
         {
-            hasBeenLaunched = true;
+            control.hasBeenLaunched = true;
 
             //Changing layer from CharacterToLaunch to Character
             int characterLayer = LayerMask.NameToLayer("Character");
             transform.root.gameObject.layer = characterLayer;
 
-            control.subComponentProcessor.animationProcessor.checkGlobalBehavior = true;
-            hasFinishedLaunchingTurn = false;
+            control.checkGlobalBehavior = true;
+            control.hasFinishedLaunchingTurn = false;
             Camera.main.orthographicSize -= (Camera.main.orthographicSize / 5f);  //TODO: replace
             yield return new WaitForSeconds(0.1f);
-            while (!hasUsedAbility)
+            while (!control.hasUsedAbility)
             {
-                if (hasFinishedLaunchingTurn)
+                if (control.hasFinishedLaunchingTurn)
                 {
                     break;
                 }
@@ -45,7 +41,7 @@ namespace Angry_Girls
                 yield return null;
             }
 
-            while (!hasFinishedLaunchingTurn)
+            while (!control.hasFinishedLaunchingTurn)
             {
                 yield return null;
             }
@@ -54,7 +50,7 @@ namespace Angry_Girls
 
         private void CheckForAbilityUse()
         {
-            if (hasUsedAbility)
+            if (control.hasUsedAbility)
             {
                 return;
             }
@@ -62,7 +58,7 @@ namespace Angry_Girls
             if (Input.GetMouseButtonDown(0))
             {
                 //process ability
-                hasUsedAbility = true;
+                control.hasUsedAbility = true;
                 ColorDebugLog.Log("Ability has been used", System.Drawing.KnownColor.Magenta);
             }
         }
@@ -78,7 +74,7 @@ namespace Angry_Girls
 
         public override void OnFixedUpdate()
         {
-            if (hasBeenLaunched == true && hasFinishedLaunchingTurn == false)
+            if (control.hasBeenLaunched == true && control.hasFinishedLaunchingTurn == false)
             {
                 Singleton.Instance.ñameraManager.CenterCameraAgainst(control.boxCollider);
             }

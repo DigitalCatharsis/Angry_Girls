@@ -4,16 +4,8 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-
     public class AnimationProcessor : SubComponent
     {
-        [Header("Debug")]
-        [Header("Conditions")]
-        public bool airToGroundUnit_FinishedAbility = false;
-        public bool checkGlobalBehavior = false;
-        public bool unitBehaviorIsStatic = true;
-        public bool unitGotHit = false;
-
         [Header("State Data")]
         public CurrentStateData currentStateData = new();
         public override void OnComponentEnable()
@@ -40,7 +32,7 @@ namespace Angry_Girls
             //have to disable Global behavior for launching units (done by default), untill they are launched, and enable for AI
             if (control.playerOrAi == PlayerOrAi.Ai)
             {
-                checkGlobalBehavior = true;
+                control.checkGlobalBehavior = true;
             }
 
             //should start from idle when the game starts
@@ -52,7 +44,7 @@ namespace Angry_Girls
             //On Launching behavior phase
             if (Singleton.Instance.turnManager.currentPhase == CurrentPhase.LaunchingPhase
                 //&& control.playerOrAi == PlayerOrAi.Player
-                && control.subComponentProcessor.launchLogic.hasBeenLaunched == true)
+                && control.hasBeenLaunched == true)
             {
                 LaunchingPhase_Logic();
             }
@@ -70,6 +62,11 @@ namespace Angry_Girls
         #region Launching behavior methods
         private void LaunchingPhase_Logic()
         {
+            if (control.hasFinishedLaunchingTurn)
+            {
+                return;
+            }
+
             //Check Ground attack (ground Unit Only)
             if (control.characterSettings.unitType == UnitType.Ground)
             {
@@ -77,63 +74,57 @@ namespace Angry_Girls
             }
 
             //CheckAttackPrep
-            if (control.subComponentProcessor.launchLogic.hasUsedAbility)
+            if (control.subComponentProcessor.launchLogic.control.hasUsedAbility
+                && !control.isLanding)
             {
                 Launching_CheckAndProcess_AttackPrep();
             }
         }
-        private bool Launching_CheckAndProcess_GroundAttack()
+        private void Launching_CheckAndProcess_GroundAttack()
         {
             //Ground attack
-            if (control.isAttacking
-                && control.isGrounded
-                && !control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn)
+            if (control.isAttacking && control.isGrounded)
             {
                 control.animator.StopPlayback();
-                ChangeAnimationState_CrossFadeInFixedTime(Singleton.Instance.statesDispatcher.attackFinish_Dictionary[control.characterSettings.attackFininsh_State.animation], transitionDuration: control.characterSettings.attackFininsh_State.transitionDuration);
-                return true;
+                //ChangeAnimationState_CrossFadeInFixedTime(Singleton.Instance.statesDispatcher.attackFinish_Dictionary[control.characterSettings.attackFininsh_State.animation], transitionDuration: control.characterSettings.attackFininsh_State.transitionDuration);
+                ChangeAnimationState(Singleton.Instance.statesDispatcher.attackFinish_Dictionary[control.characterSettings.attackFininsh_State.animation], transitionDuration: control.characterSettings.attackFininsh_State.transitionDuration);
             }
-            return false;
         }
 
         private void Launching_CheckAndProcess_AttackPrep()
         {
             //Airboned + Attack  (AttackPrep)
-            if (!control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn)
+
+            //AirToGround unit personal condition
+            if (control.characterSettings.unitType == UnitType.AirToGround)
             {
-                //AirToGround unit personal condition
-                if (control.characterSettings.unitType == UnitType.AirToGround)
-                {
-                    if (control.isGrounded
-                        || control.isAttacking
-                        || airToGroundUnit_FinishedAbility)
-                    {
-                        return;
-                    }
-
-                    if (Singleton.Instance.statesDispatcher.attackPrep_Dictionary.ContainsValue(currentStateData.hash))
-                    {
-                        return;
-                    }
-                }
-
-                //for ground unit
-                if (Singleton.Instance.statesDispatcher.attackFinish_Dictionary.ContainsValue(currentStateData.hash))
+                if (control.isGrounded
+                    || control.isAttacking
+                    || control.airToGroundUnit_FinishedAbility)
                 {
                     return;
                 }
 
-                //Everyones logic
-                if (IsLauchingAttackStateOver(control.characterSettings.launchedAttackPrepAbility.timesToRepeat_AttackPrep_State) == false)
+                if (Singleton.Instance.statesDispatcher.attackPrep_Dictionary.ContainsValue(currentStateData.hash))
                 {
                     return;
                 }
+            }
 
-                control.isAttacking = true;
-                ChangeAnimationState_CrossFade(Singleton.Instance.statesDispatcher.attackPrep_Dictionary[control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation], control.characterSettings.launchedAttackPrepAbility.attackPrep_State.transitionDuration);
+            //for ground unit
+            if (Singleton.Instance.statesDispatcher.attackFinish_Dictionary.ContainsValue(currentStateData.hash))
+            {
                 return;
             }
 
+            //Everyones logic
+            if (IsLauchingAttackStateOver(control.characterSettings.launchedAttackPrepAbility.timesToRepeat_AttackPrep_State) == false)
+            {
+                return;
+            }
+
+            control.isAttacking = true;
+            ChangeAnimationState_CrossFade(Singleton.Instance.statesDispatcher.attackPrep_Dictionary[control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation], control.characterSettings.launchedAttackPrepAbility.attackPrep_State.transitionDuration);
             return;
         }
         #endregion
@@ -163,7 +154,7 @@ namespace Angry_Girls
 
         private void CheckUnit_GlobalPhase()
         {
-            if (checkGlobalBehavior == false)
+            if (control.checkGlobalBehavior == false)
             {
                 return;
             }
@@ -174,7 +165,7 @@ namespace Angry_Girls
                 return;
             }
 
-            if (unitGotHit)
+            if (control.unitGotHit)
             {
                 Global_CheckAndProcess_HitReaction();
                 return;
@@ -189,7 +180,11 @@ namespace Angry_Girls
             //Check Landing
             if (control.isGrounded && !control.isAttacking)
             {
-                Global_CheckAndProcess_Landing();
+                if (Global_CheckAndProcess_Landing() == true)
+                {
+                    //без return не успеет перейти в State Behavior
+                    return;
+                }
             }
 
             if (!control.isAttacking
@@ -212,7 +207,7 @@ namespace Angry_Girls
             {
                 //TODO: Implement
                 //TriggerRagroll();
-            }            
+            }
         }
 
         private void TriggerRagroll()
@@ -231,45 +226,40 @@ namespace Angry_Girls
 
         private void Global_CheckAndProcess_HitReaction()
         {
-            ////everyones logic
-            //if (_hitReaction_Dictionary.ContainsValue(currentStateData.hash))
-            //{
-            //    if (control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= testFloat)
-            //    {
-            //        return;
-            //    }
-            //}
-
-
-            var randomHitAnimation = control.characterSettings.hitReaction_States[UnityEngine.Random.Range(0, control.characterSettings.hitReaction_States.Count)].animation; //0 = none            
+            var randomHitAnimation = control.characterSettings.hitReaction_States[UnityEngine.Random.Range(0, control.characterSettings.hitReaction_States.Count)].animation;        
             //no crossFade for instant animations changes at fast damage recive
             ChangeAnimationState(Singleton.Instance.statesDispatcher.hitReaction_Dictionary[randomHitAnimation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
-            unitGotHit = false;
+            control.unitGotHit = false;
             return;
         }
 
-        private void Global_CheckAndProcess_Landing()
+        private bool Global_CheckAndProcess_Landing()
         {
             //no landing phase for air units. The Launch is over
             if (control.characterSettings.unitType == UnitType.Air)
             {
-                control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn = true;
-                return;
+                control.hasFinishedLaunchingTurn = true;
+                return false;
             }
 
-            if (IsLandingCondition())
+            if ((Singleton.Instance.statesDispatcher.airbonedFlying_Dictionary.ContainsValue(currentStateData.hash))
+                && control.isGrounded
+                && control.isAttacking == false)
             {
-                //Этот Landing вызывает баг при попытке атаки сразу же во время запуска, так как отрабатывается раньше Attack == true.
-                //Это не проблема, потому что в будущем сделаю минимальную длинну оттягивания для запуска, и проблема ммоентального Landing должна решиться
-                control.isLanding = true; // эта срань не успеет отработать, если запихать в OnStateEnter
-                ChangeAnimationState_CrossFadeInFixedTime(Singleton.Instance.statesDispatcher.landingNames_Dictionary[control.characterSettings.landing_State.animation], control.characterSettings.landing_State.transitionDuration);
+                ChangeAnimationState_CrossFadeInFixedTime(
+                    Singleton.Instance.statesDispatcher.landingNames_Dictionary[control.characterSettings.landing_State.animation],
+                    control.characterSettings.landing_State.transitionDuration);
+
+                return true;
             }
+
+            return false;
         }
 
         private void Global_CheckAndProcess_AirbonedState()
         {
             //Cant be airboned after finished attack for ground and Air unit for now...
-            if (!unitBehaviorIsStatic && control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn)
+            if (!control.unitBehaviorIsStatic && control.hasFinishedLaunchingTurn)
             {
                 if (control.characterSettings.unitType == UnitType.Ground || control.characterSettings.unitType == UnitType.Air)
                     return;
@@ -289,7 +279,7 @@ namespace Angry_Girls
             //Exctra condition for an air unit
             if (control.characterSettings.unitType == UnitType.Air)
             {
-                if (control.isGrounded || control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn)
+                if (control.isGrounded || control.hasFinishedLaunchingTurn)
                 {
                     ChangeAnimationState_CrossFadeInFixedTime(Singleton.Instance.statesDispatcher.idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
                 }
@@ -307,16 +297,6 @@ namespace Angry_Girls
         #endregion
 
         #region Conditions
-        private bool IsLandingCondition()
-        {
-            if ((Singleton.Instance.statesDispatcher.airbonedFlying_Dictionary.ContainsValue(currentStateData.hash))
-                && control.isGrounded)
-            {
-                return true;
-            }
-            return false;
-        }
-
         public bool IsLauchingAttackStateOver(float attackAnimationRepeatRate)
         {
             bool airAttack = Singleton.Instance.statesDispatcher.attackPrep_Dictionary.ContainsValue(currentStateData.hash);
@@ -324,18 +304,6 @@ namespace Angry_Girls
 
             //Пока работает, но расчет normilized time в данном случае неверный.
             if ((airAttack || groundAttack)
-                && (control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= attackAnimationRepeatRate))
-            {
-                return false;
-            }
-            return true;
-        }
-        public bool IsStaticAttackStateOver(float attackAnimationRepeatRate)
-        {
-            bool StaticAttack = Singleton.Instance.statesDispatcher.staticAttack_States_Dictionary.ContainsValue(currentStateData.hash);
-
-            //Пока работает, но расчет normilized time в данном случае неверный.
-            if ((StaticAttack)
                 && (control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= attackAnimationRepeatRate))
             {
                 return false;
@@ -382,6 +350,17 @@ namespace Angry_Girls
                 return;
             }
             control.animator.Play(newStateHash, layer, transitionDuration);
+
+            currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(Singleton.Instance.statesDispatcher.stateNames_Dictionary, newStateHash);
+            currentStateData.hash = newStateHash;
+        }
+        public void ChangeAnimationStateFixedTime(int newStateHash, int layer = 0, float transitionDuration = 1f)
+        {
+            if (currentStateData.hash == newStateHash)
+            {
+                return;
+            }
+            control.animator.PlayInFixedTime(newStateHash, layer, transitionDuration);
 
             currentStateData.currentStateName = Singleton.Instance.hashManager.GetName(Singleton.Instance.statesDispatcher.stateNames_Dictionary, newStateHash);
             currentStateData.hash = newStateHash;

@@ -41,7 +41,7 @@ namespace Angry_Girls
                 if (stateInfo.normalizedTime >= control.characterSettings.launchedAttackPrepAbility.timesToRepeat_AttackPrep_State)
                 {
                     control.isAttacking = false;
-                    control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn = true;
+                    control.subComponentProcessor.launchLogic.control.hasFinishedLaunchingTurn = true;
                 }
             }
             else
@@ -50,7 +50,7 @@ namespace Angry_Girls
                 if (currentAttackTimer >= control.characterSettings.launchedAttackPrepAbility.attackTimeDuration)
                 {
                     control.isAttacking = false;
-                    control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn = true;
+                    control.subComponentProcessor.launchLogic.control.hasFinishedLaunchingTurn = true;
                 }
             }
         }

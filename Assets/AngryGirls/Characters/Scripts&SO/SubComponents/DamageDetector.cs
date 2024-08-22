@@ -52,7 +52,7 @@ namespace Angry_Girls
 
             //should set bool for hit animation
             ColorDebugLog.Log(control.name + " has been hit by " + vfx.vfxOwner.name + " || " + vfx.GetVFXType().ToString(), System.Drawing.KnownColor.Aquamarine);
-            control.subComponentProcessor.animationProcessor.unitGotHit = true;
+            control.unitGotHit = true;
         }
 
         private void ApplyDamage(float damage)
@@ -62,8 +62,8 @@ namespace Angry_Girls
 
         public void SetParamsAfterDeath()
         {
-            control.subComponentProcessor.animationProcessor.airToGroundUnit_FinishedAbility = true;
-            control.subComponentProcessor.launchLogic.hasFinishedLaunchingTurn = true;
+            control.airToGroundUnit_FinishedAbility = true;
+            control.hasFinishedLaunchingTurn = true;
             control.subComponentProcessor.attackSystem.hasFinishedStaticAttackTurn = true;
             control.rigidBody.useGravity = true;
             //DeadBody
