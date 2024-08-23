@@ -119,40 +119,6 @@ MonoBehaviour:
   _bottom: {fileID: 5334764737914758433}
   _front: {fileID: 6856069825757993094}
   _back: {fileID: 5321384789249125008}
-  bottomSpheres:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  frontSpheres:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  backSpheres:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  upSpheres:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!1 &449259334719681513
 GameObject:
   m_ObjectHideFlags: 0
@@ -745,7 +711,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   control: {fileID: 0}
   _health: 100
-  currentHealth: 0
 --- !u!1 &1905549136142692612
 GameObject:
   m_ObjectHideFlags: 0
@@ -918,9 +883,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   control: {fileID: 0}
-  hasBeenLaunched: 0
-  hasFinishedLaunchingTurn: 0
-  hasUsedAbility: 0
 --- !u!1 &2268399448965009457
 GameObject:
   m_ObjectHideFlags: 0
@@ -1169,9 +1131,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   control: {fileID: 0}
-  projectileSpawnTransform: {fileID: 7260981478403319719}
-  VFX_Color: {r: 0, g: 0.5211234, b: 1, a: 1}
-  hasFinishedStaticAttackTurn: 0
 --- !u!1 &2640689163874789523
 GameObject:
   m_ObjectHideFlags: 0
@@ -1270,16 +1229,65 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d05c2acc13ea674d80c1cbcd8e78951, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentStateData:
+    currentStateName: 0
+    hash: 0
+  currentHealth: 0
   isLanding: 0
   isGrounded: 0
   isAttacking: 0
   isDead: 0
+  unitGotHit: 0
+  hasUsedAbility: 0
+  hasBeenLaunched: 0
+  airToGroundUnit_FinishedAbility: 0
+  hasFinishedLaunchingTurn: 0
+  hasFinishedStaticAttackTurn: 1
+  unitBehaviorIsStatic: 1
+  checkGlobalBehavior: 0
   rigidBody: {fileID: 0}
   boxCollider: {fileID: 0}
   animator: {fileID: 0}
-  subComponentProcessor: {fileID: 0}
+  subComponentMediator: {fileID: 0}
+  collisionSpheresData:
+    bottomSpheres:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    frontSpheres:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    backSpheres:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    upSpheres:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   playerOrAi: 0
   characterSettings: {fileID: 11400000, guid: 28afea81c95372d4fb753c0287980f6c, type: 2}
+  projectileSpawnTransform: {fileID: 253452075603770101}
+  VFX_Color: {r: 0, g: 0.6489775, b: 1, a: 0}
 --- !u!95 &3541158604538972460
 Animator:
   serializedVersion: 5
@@ -2078,16 +2086,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a29945b115fbcd40a8e08741c310ea1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arrSubComponents: []
-  groundDetector: {fileID: 0}
-  animationProcessor: {fileID: 0}
-  launchLogic: {fileID: 0}
-  collisionSpheres: {fileID: 0}
-  boxColliderUpdater: {fileID: 0}
-  blockingManager: {fileID: 0}
-  characterMovement: {fileID: 0}
-  attackSystem: {fileID: 0}
-  damageProcessor: {fileID: 0}
 --- !u!1 &5456733493903060805
 GameObject:
   m_ObjectHideFlags: 0
@@ -2197,31 +2195,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   control: {fileID: 0}
-  airToGroundUnit_FinishedAbility: 0
-  checkGlobalBehavior: 0
-  unitBehaviorIsStatic: 1
-  unitGotHit: 0
-  currentStateData:
-    currentStateName: 0
-    hash: 0
-  attackPrep_Dictionary:
-    _serializedList: []
-  attackFinish_Dictionary:
-    _serializedList: []
-  staticAttack_States_Dictionary:
-    _serializedList: []
-  _stateNames_Dictionary:
-    _serializedList: []
-  _idle_Dictionary:
-    _serializedList: []
-  _airbonedFlying_Dictionary:
-    _serializedList: []
-  _landingNames_Dictionary:
-    _serializedList: []
-  _hitReaction_Dictionary:
-    _serializedList: []
-  _death_States_Dictionary:
-    _serializedList: []
 --- !u!1 &5503316897883994643
 GameObject:
   m_ObjectHideFlags: 0

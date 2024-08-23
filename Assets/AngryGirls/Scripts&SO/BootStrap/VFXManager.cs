@@ -40,16 +40,15 @@ namespace Angry_Girls
 
         public GameObject SpawnVFX(CControl control, VFX_Type vfx_Type)
         {
-            var characterAttackSystem = control.subComponentProcessor.attackSystem;
 
             //spawn 
             var poolManager = Singleton.Instance.poolManager;
-            var vfx = poolManager.GetObject(vfx_Type, poolManager.vfxPoolDictionary, characterAttackSystem.projectileSpawnTransform.position, Quaternion.identity);
+            var vfx = poolManager.GetObject(vfx_Type, poolManager.vfxPoolDictionary, control.projectileSpawnTransform.position, Quaternion.identity);
 
             //set color
             if (vfx.GetComponentInChildren<VisualEffect>() != null)
             {
-                vfx.GetComponentInChildren<VisualEffect>().SetVector4("Color", characterAttackSystem.VFX_Color);
+                vfx.GetComponentInChildren<VisualEffect>().SetVector4("Color", control.VFX_Color);
             }
 
             //set parent and position

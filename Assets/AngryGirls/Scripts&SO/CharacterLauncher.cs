@@ -122,7 +122,10 @@ namespace Angry_Girls
             DisableTrajectoryDots();
             characterToLaunch.rigidBody.useGravity = true;
             characterToLaunch.rigidBody.velocity = new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward);
-            StartCoroutine(characterToLaunch.subComponentProcessor.launchLogic.ProcessLaunch());
+
+            //ColorDebugLog.Log(this.name + " triggers operation " + SubcomponentMediator_EventNames.Launch_Unit, System.Drawing.KnownColor.ControlLightLight);
+            characterToLaunch.subComponentMediator.Notify(this, SubcomponentMediator_EventNames.Launch_Unit);
+            //StartCoroutine(characterToLaunch.subComponentMediator._launchLogic.ProcessLaunch());
         }
 
         private void DisableTrajectoryDots()

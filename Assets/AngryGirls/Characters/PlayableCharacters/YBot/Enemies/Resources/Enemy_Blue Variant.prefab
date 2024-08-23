@@ -547,31 +547,68 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b32dce3e0c48b9d4db3fe995187cbdc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentStateData:
+    currentStateName: 0
+    hash: 0
+  currentHealth: 1
   isLanding: 0
   isGrounded: 0
   isAttacking: 0
   isDead: 0
-  currentHealth: 1
+  unitGotHit: 0
+  hasUsedAbility: 0
+  hasBeenLaunched: 0
+  airToGroundUnit_FinishedAbility: 0
+  hasFinishedLaunchingTurn: 0
+  hasFinishedStaticAttackTurn: 1
+  unitBehaviorIsStatic: 1
+  checkGlobalBehavior: 0
   rigidBody: {fileID: 0}
   boxCollider: {fileID: 0}
   animator: {fileID: 81703025573287472}
-  subComponentProcessor: {fileID: 9019795889118547465}
+  subComponentMediator: {fileID: 0}
+  collisionSpheresData:
+    bottomSpheres:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    frontSpheres:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    backSpheres:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    upSpheres:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   playerOrAi: 1
   characterSettings: {fileID: 11400000, guid: 02680e40217c43e44a594ac4cad06f99, type: 2}
-  health: 100
-  _hitReaction_Dictionary:
-    _serializedList: []
-  _death_States_Dictionary:
-    _serializedList: []
---- !u!114 &9019795889118547465 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5560322760933331221, guid: c03c7eedb934e76448be7b86074461a4,
+  projectileSpawnTransform: {fileID: 3711684987824727529}
+  VFX_Color: {r: 0, g: 0.3982904, b: 1, a: 0}
+--- !u!4 &3711684987824727529 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
     type: 3}
   m_PrefabInstance: {fileID: 3460731012454276892}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a29945b115fbcd40a8e08741c310ea1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

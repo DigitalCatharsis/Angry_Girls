@@ -89,7 +89,7 @@ namespace Angry_Girls
             currentPhase = CurrentPhase.StaticPhase;
             foreach (var character in _charactersTurn_List)
             {
-                character.GetComponent<CControl>().subComponentProcessor.attackSystem.hasFinishedStaticAttackTurn = false;
+                character.GetComponent<CControl>().hasFinishedStaticAttackTurn = false;
             }
         }
 
