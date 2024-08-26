@@ -20,7 +20,7 @@ namespace Angry_Girls
             control.rigidBody.AddForce(control.characterSettings.launchedAttackPrepAbility.attackPrepMovementForce);
 
             //var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_FireBall, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.identity); OLD!
-            var poolManager = Singleton.Instance.poolManager;
+            var poolManager = GameLoader.Instance.poolManager;
             var projectile = poolManager.GetObject<VFX_Type>(VFX_Type.VFX_FireBall, poolManager.vfxPoolDictionary, control.projectileSpawnTransform.position, Quaternion.identity);
             projectile.GetComponent<VFX>().SendProjectile_Fireball__TweenMove(control.projectileSpawnTransform.position, _finalProjectileRotation, control.characterSettings.launchedAttackPrepAbility.attackDamage);
 
@@ -31,7 +31,7 @@ namespace Angry_Girls
             {
                 attacksCount = (int)stateInfo.normalizedTime;
                 //var projectile = Singleton.Instance.spawnManager.SpawnThing<VFX_Type>(VFX_Type.VFX_FireBall, control.subComponentProcessor.attackSystem.projectileSpawnTransform.position, Quaternion.identity); OLD!
-                var poolManager = Singleton.Instance.poolManager;
+                var poolManager = GameLoader.Instance.poolManager;
                 var projectile = poolManager.GetObject<VFX_Type>(VFX_Type.VFX_FireBall, poolManager.vfxPoolDictionary, control.projectileSpawnTransform.position, Quaternion.identity);
                 projectile.GetComponent<VFX>().SendProjectile_Fireball__TweenMove(control.projectileSpawnTransform.position, _finalProjectileRotation, control.characterSettings.launchedAttackPrepAbility.attackDamage);
             }

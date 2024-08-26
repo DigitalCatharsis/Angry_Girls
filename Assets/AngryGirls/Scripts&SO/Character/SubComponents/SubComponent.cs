@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace Angry_Girls
 {
-    public abstract class SubComponent : BaseMediatorComponent
+    public abstract class SubComponent<T> : BaseMediatorComponent<T> where T : Enum
     {
         public CControl control;
         public abstract void OnAwake();

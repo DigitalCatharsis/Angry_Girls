@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class CharacterMovement : SubComponent
+    public class CharacterMovement : SubComponent<SubcomponentMediator_EventNames>
     {
         public override void OnComponentEnable()
         {

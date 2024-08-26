@@ -19,16 +19,16 @@ namespace Angry_Girls
 
         public GameObject InstantiateCharacter(CharacterType poolObjectType, Vector3 position, Quaternion rotation)
         {
-            return Singleton.Instance.spawnManager.CharacterFactory.SpawnGameobject(poolObjectType, position, rotation);
+            return GameLoader.Instance.spawnManager.CharacterFactory.SpawnGameobject(poolObjectType, position, rotation);
         }
 
         public GameObject InstantiateVFX(VFX_Type poolObjectType, Vector3 position, Quaternion rotation)
         {
-            return Singleton.Instance.spawnManager.vFXFactory.SpawnGameobject(poolObjectType, position, rotation);
+            return GameLoader.Instance.spawnManager.vFXFactory.SpawnGameobject(poolObjectType, position, rotation);
         }
         public GameObject InstantiateProjectile(DataType poolObjectType, Vector3 position, Quaternion rotation)
         {
-            return Singleton.Instance.spawnManager.dataFactory.SpawnGameobject(poolObjectType, position, rotation);
+            return GameLoader.Instance.spawnManager.dataFactory.SpawnGameobject(poolObjectType, position, rotation);
         }
     }
 } 

@@ -50,34 +50,25 @@ namespace Angry_Girls
             SpawnProjectoryDots(_positionTransforms[0]);
         }
 
-        public List<GameObject> SpawnAndGetCharacters(CharacterType[] selectedCharactersList)
+        public Transform[] GetPositionTransforms()
         {
-            var charList = new List<GameObject>();
-            for (var i = 0; i < selectedCharactersList.Count(); i++)
-            {
-                //charList.Add(Instantiate(Resources.Load(selectedCharactersList[i].ToString())) as GameObject); //old
-                charList.Add(Singleton.Instance.poolManager.GetObject<CharacterType>
-                    (selectedCharactersList[i], Singleton.Instance.poolManager.characterPoolDictionary, Vector3.zero, Quaternion.identity));
-            }
-            return charList;
+            return _positionTransforms;
         }
 
-        public void UpdateCharacterPositions(List<GameObject> charactersToLaunch)
+        public void LaunchUnit(CharacterControl characterToLaunch)
         {
-            for (var i = 0; i < Singleton.Instance.launchManager.charactersToLaunchLeft.Count(); i++)
-            {
-                charactersToLaunch[i].transform.position = _positionTransforms[i].position;
-            }
-        }
+            DisableTrajectoryDots();
+            characterToLaunch.rigidBody.useGravity = true;
+            characterToLaunch.rigidBody.velocity = new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward);
 
-        public void SetLaunchableCharactersBehavior(List<GameObject> charactersToLaunchLeft)
+            characterToLaunch.subComponentMediator.Notify(this, SubcomponentMediator_EventNames.Launch_Unit);
+        }
+        public void AimingTheLaunch(GameObject characterToLaunch)
         {
-            foreach (var character in charactersToLaunchLeft)
-            {
-                character.GetComponent<CControl>().unitBehaviorIsStatic = false;
-            }
+            CalculateDirection();
+            DrawTraectory();
+            AdjustCameraZoom();
         }
-
         private void SpawnProjectoryDots(Transform spawnTransform)
         {
             for (int i = 0; i < _dotsNumber; i++)
@@ -86,17 +77,10 @@ namespace Angry_Girls
             }
         }
 
-        public void AimingTheLaunch(GameObject characterToLaunch)
-        {
-            CalculateDirection();
-            DrawTraectory();
-            AdjustCameraZoom();
-        }
-
         private void CalculateDirection()
         {
             //Calculation direction
-            var pointerPosition = Singleton.Instance.ñameraManager.GetPointerWorldPosition(Camera.main);
+            var pointerPosition = CameraManager.Instance.GetPointerWorldPosition(Camera.main);
             _offsetEndPostion = new Vector3(0, pointerPosition.y, pointerPosition.z);
             _directionVector = _offsetEndPostion - _offsetStartPoint;
         }
@@ -117,17 +101,6 @@ namespace Angry_Girls
                     + 0.5f * Physics.gravity * elapsedTime * elapsedTime;
         }
 
-        public void LaunchUnit(CharacterControl characterToLaunch)
-        {
-            DisableTrajectoryDots();
-            characterToLaunch.rigidBody.useGravity = true;
-            characterToLaunch.rigidBody.velocity = new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward);
-
-            //ColorDebugLog.Log(this.name + " triggers operation " + SubcomponentMediator_EventNames.Launch_Unit, System.Drawing.KnownColor.ControlLightLight);
-            characterToLaunch.subComponentMediator.Notify(this, SubcomponentMediator_EventNames.Launch_Unit);
-            //StartCoroutine(characterToLaunch.subComponentMediator._launchLogic.ProcessLaunch());
-        }
-
         private void DisableTrajectoryDots()
         {
             for (int i = 0; i < _trajectoryDots.Length; i++)
@@ -142,15 +115,6 @@ namespace Angry_Girls
                 _trajectoryDots[i].SetActive(true);
             }
         }
-
-
-        //private Vector3 GetPointerWorldPosition(Camera camera)
-        //{
-        //    Vector3 screenPosition = Input.mousePosition;
-        //    screenPosition.z = camera.nearClipPlane + 1;
-        //    return camera.ScreenToWorldPoint(screenPosition);
-        //}
-
         private void AdjustCameraZoom()
         {
             // Calculate distance between _offsetEndPostion and _startPoint
@@ -172,6 +136,13 @@ namespace Angry_Girls
         //    _charactersList[indexB] = tmp;
 
         //    _characterToLaunch = _charactersList[0].GetComponent<CharacterControl>();
+        //}
+
+        //private Vector3 GetPointerWorldPosition(Camera camera)
+        //{
+        //    Vector3 screenPosition = Input.mousePosition;
+        //    screenPosition.z = camera.nearClipPlane + 1;
+        //    return camera.ScreenToWorldPoint(screenPosition);
         //}
     }
 }

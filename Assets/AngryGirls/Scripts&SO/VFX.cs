@@ -170,7 +170,7 @@ namespace Angry_Girls
             {
                 return;
             }
-            var poolManager = Singleton.Instance.poolManager;
+            var poolManager = GameLoader.Instance.poolManager;
             poolManager.GetObject(VFX_Type.VFX_Damage_White, poolManager.vfxPoolDictionary, transform.position, Quaternion.identity);
             this.gameObject.SetActive(false);
         }

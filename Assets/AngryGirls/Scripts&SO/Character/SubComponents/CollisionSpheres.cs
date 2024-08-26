@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class CollisionSpheres : SubComponent
+    public class CollisionSpheres : SubComponent<SubcomponentMediator_EventNames>
     {
         [Header("Setup")]
         [SerializeField] private Transform _up;

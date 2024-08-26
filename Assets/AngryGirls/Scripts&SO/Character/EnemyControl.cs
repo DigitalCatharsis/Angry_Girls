@@ -4,7 +4,6 @@ namespace Angry_Girls
 {
     public class EnemyControl : CControl
     {
-
         private void Awake()
         {
             rigidBody = GetComponent<Rigidbody>();
@@ -16,7 +15,7 @@ namespace Angry_Girls
         }
         private void OnEnable()
         {
-            Singleton.Instance.characterManager.enemyCharacters.Add(this.gameObject);
+            CharacterManager.Instance.enemyCharacters.Add(this.gameObject);
 
             animator = GetComponent<Animator>();
             subComponentMediator.OnComponentEnable();
@@ -29,7 +28,7 @@ namespace Angry_Girls
                 return;
             }
 
-            subComponentMediator.CheckForDamage(this, SubcomponentMediator_EventNames.Trigger_Enter, other);
+            subComponentMediator.CheckForDamage(this, SubcomponentMediator_EventNames.CharacterCollider_Trigger_Enter, other);
         }
 
         private void Update()

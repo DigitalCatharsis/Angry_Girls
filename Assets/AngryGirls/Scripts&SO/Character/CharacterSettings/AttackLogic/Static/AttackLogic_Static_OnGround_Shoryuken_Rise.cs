@@ -8,7 +8,7 @@ namespace Angry_Girls
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
 
-            _vfx = Singleton.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Shouryken, control.transform.position, Quaternion.identity);
+            _vfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Shouryken, control.transform.position, Quaternion.identity);
             _vfx.GetComponent<VFX>().InitAndRunVFX(
                 1, 
                 false, 

@@ -32,7 +32,7 @@ namespace Angry_Girls
         IEnumerator _ScheduledOff()
         {
             yield return new WaitForSeconds (scheduledOffTime);
-            if (!Singleton.Instance.poolManager.dataPoolDictionary[poolObjectType].Contains(this.gameObject))
+            if (!GameLoader.Instance.poolManager.dataPoolDictionary[poolObjectType].Contains(this.gameObject))
             {
                 TurnOff();
                 ReturnToPool();
@@ -41,9 +41,9 @@ namespace Angry_Girls
 
         public void ReturnToPool()
         {
-            if (!Singleton.Instance.poolManager.dataPoolDictionary[poolObjectType].Contains(this.gameObject))
+            if (!GameLoader.Instance.poolManager.dataPoolDictionary[poolObjectType].Contains(this.gameObject))
             {
-                Singleton.Instance.poolManager.AddObject(poolObjectType, Singleton.Instance.poolManager.dataPoolDictionary, this.gameObject);
+                GameLoader.Instance.poolManager.AddObject(poolObjectType, GameLoader.Instance.poolManager.dataPoolDictionary, this.gameObject);
             }
         }
     }

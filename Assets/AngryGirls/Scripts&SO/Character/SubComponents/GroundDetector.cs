@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class GroundDetector : SubComponent
+    public class GroundDetector : SubComponent<SubcomponentMediator_EventNames>
     {
         [Header("Setup")]
         [SerializeField] private float _collidingBlockDistance;
@@ -53,7 +53,7 @@ namespace Angry_Girls
 
                     if (blockingObj != null)
                     {
-                        var character = Singleton.Instance.characterManager.GetCharacter(blockingObj.transform.root.gameObject);
+                        var character = CharacterManager.Instance.GetCharacter(blockingObj.transform.root.gameObject);
 
                         if (character == null)
                         {

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class BoxColliderUpdater : SubComponent
+    public class BoxColliderUpdater : SubComponent<SubcomponentMediator_EventNames>
     {
         public bool isUpdatingSpheres = false;
         public bool isUpdateColliderCondition = false;
@@ -32,7 +32,7 @@ namespace Angry_Girls
             if (isUpdatingSpheres)
             {
                 //ColorDebugLog.Log(this.name + " triggers operation " + SubcomponentMediator_EventNames.Reposition_ColliderSpheres, System.Drawing.KnownColor.ControlLightLight);
-                control.subComponentMediator.Notify(this, SubcomponentMediator_EventNames.Reposition_ColliderSpheres);
+                control.subComponentMediator.Notify(this, SubcomponentMediator_EventNames.Character_Reposition_ColliderSpheres);
 
                 //if (control.subComponentProcessor.animationProcessor.isLanding)  //prevent bug when idle after catching corner of platform
                 //{

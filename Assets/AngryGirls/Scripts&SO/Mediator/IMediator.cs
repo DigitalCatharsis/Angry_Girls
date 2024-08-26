@@ -1,3 +1,5 @@
+using System;
+
 namespace Angry_Girls
 {
     //https://refactoring.guru/ru/design-patterns/mediator
@@ -6,8 +8,8 @@ namespace Angry_Girls
     // Интерфейс Посредника предоставляет метод, используемый компонентами для
     // уведомления посредника о различных событиях. Посредник может реагировать
     // на эти события  и передавать исполнение другим компонентам.
-    public interface IMediator
+    public interface IMediator<T> where T : Enum
     {
-        void Notify(object sender, SubcomponentMediator_EventNames eventName);
+        public void Notify(object sender, T eventName);
     }
 }

@@ -17,9 +17,9 @@ namespace Angry_Girls
 
         public void ReturnToPool()
         {
-            if (!Singleton.Instance.poolManager.characterPoolDictionary[poolObjectType].Contains(this.gameObject))
+            if (!GameLoader.Instance.poolManager.characterPoolDictionary[poolObjectType].Contains(this.gameObject))
             {
-                Singleton.Instance.poolManager.AddObject(poolObjectType, Singleton.Instance.poolManager.characterPoolDictionary, this.gameObject);
+                GameLoader.Instance.poolManager.AddObject(poolObjectType, GameLoader.Instance.poolManager.characterPoolDictionary, this.gameObject);
             }
         }
     }

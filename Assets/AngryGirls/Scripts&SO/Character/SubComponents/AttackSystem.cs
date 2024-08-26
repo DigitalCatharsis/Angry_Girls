@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class AttackSystem : SubComponent
+    public class AttackSystem : SubComponent<SubcomponentMediator_EventNames>
     {
         //Logic
         //public AttackAbilityLogic attackPrepLogic;

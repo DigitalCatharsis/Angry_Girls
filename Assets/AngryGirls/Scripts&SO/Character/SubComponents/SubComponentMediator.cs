@@ -6,9 +6,9 @@ namespace Angry_Girls
     public enum SubcomponentMediator_EventNames
     {
         Launch_Unit,
-        Reposition_ColliderSpheres,
-        Check_For_Damage,
-        Trigger_Enter,
+        Character_Reposition_ColliderSpheres,
+        Character_Check_For_Damage,
+        CharacterCollider_Trigger_Enter,
     }
 
     public enum SubComponentType
@@ -23,11 +23,11 @@ namespace Angry_Girls
         AttackSystem,
         DamageProcessor,
     }
-    public class SubComponentMediator : MonoBehaviour, IMediator
+    public class SubComponentMediator : MonoBehaviour, IMediator<SubcomponentMediator_EventNames>
     {
         private CControl _control;
 
-        private SubComponent[] _arrSubComponents;
+        private SubComponent<SubcomponentMediator_EventNames>[] _arrSubComponents;
 
         private AnimationProcessor _animationProcessor;
         private LaunchLogic _launchLogic;
@@ -44,8 +44,8 @@ namespace Angry_Girls
             _control = GetComponentInParent<CControl>();
             InitComponents();
 
-            _arrSubComponents = new SubComponent[Enum.GetNames(typeof(SubComponentType)).Length];
-            _arrSubComponents = GetComponentsInChildren<SubComponent>();
+            _arrSubComponents = new SubComponent<SubcomponentMediator_EventNames>[Enum.GetNames(typeof(SubComponentType)).Length];
+            _arrSubComponents = GetComponentsInChildren<SubComponent<SubcomponentMediator_EventNames>>();
 
             foreach (var component in _arrSubComponents)
             {
@@ -75,16 +75,18 @@ namespace Angry_Girls
                 _launchLogic.ProcessLaunch();
             }
 
-            if (eventName == SubcomponentMediator_EventNames.Reposition_ColliderSpheres)
+            if (eventName == SubcomponentMediator_EventNames.Character_Reposition_ColliderSpheres)
             {
                 //ColorDebugLog.Log(_control.name + "'s" + " Subcomponent's Mediator reacts on " + SubcomponentMediator_EventNames.Reposition_ColliderSpheres + " and triggers following operations:", System.Drawing.KnownColor.ControlLightLight);
                 _collisionSpheres.RepositionAllSpheres();
             }
         }
 
+
+        //TODO ask Danya
         public void CheckForDamage(object sender, SubcomponentMediator_EventNames eventName, Collider collider)
         {
-            if (eventName == SubcomponentMediator_EventNames.Trigger_Enter)
+            if (eventName == SubcomponentMediator_EventNames.CharacterCollider_Trigger_Enter)
             {
                 //ColorDebugLog.Log(_control.name + "'s" + " Subcomponent's Mediator reacts on " + SubcomponentMediator_EventNames.Trigger_Enter + " and triggers following operations:", System.Drawing.KnownColor.ControlLightLight);
                 _damageProcessor.CheckForDamage(collider);
@@ -138,7 +140,7 @@ namespace Angry_Girls
         #region TEMP METHODS
         public void tempChangeAnimation()
         {
-            _animationProcessor.ChangeAnimationState(Singleton.Instance.statesDispatcher.staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], 0, transitionDuration: 1);
+            _animationProcessor.ChangeAnimationState(StatesDispatcher.Instance.staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], 0, transitionDuration: 1);
         }
         #endregion
     }

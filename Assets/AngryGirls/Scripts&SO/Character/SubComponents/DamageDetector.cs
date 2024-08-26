@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class DamageProcessor : SubComponent
+    public class DamageProcessor : SubComponent<SubcomponentMediator_EventNames>
     {
         [Header("Setup")]
         [SerializeField] private float _health = 100f;

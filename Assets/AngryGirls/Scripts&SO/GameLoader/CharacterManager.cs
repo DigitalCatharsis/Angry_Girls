@@ -5,10 +5,22 @@ using UnityEngine;
 namespace Angry_Girls
 {
 
-    public class CharacterManager : MonoBehaviour
+    public class CharacterManager : GameLoaderComponent
     {
+        public static CharacterManager Instance;
         public List<GameObject> playableCharacters = new List<GameObject>();
         public List<GameObject> enemyCharacters = new List<GameObject>();
+
+        public override void OnComponentEnable()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(this);
+                return;
+            }
+
+            Instance = this;
+        }
 
         public GameObject GetPlaybleCharacter(GameObject character)
         {
@@ -46,6 +58,8 @@ namespace Angry_Girls
 
             return null;
         }
+
+
     }
 
 }

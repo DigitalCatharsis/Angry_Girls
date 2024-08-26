@@ -77,7 +77,7 @@ namespace Angry_Girls
             //spawn
             for (var i = 0; i < angles.Length; i++)
             {
-                var projectile = Singleton.Instance.VFXManager.SpawnVFX_AtPosition(
+                var projectile = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(
                     vfx_Type: control.characterSettings.launchedAttackPrepAbility.AttackVFX.GetComponent<VFX>().GetVFXType(), 
                     control.projectileSpawnTransform.position, 
                     Quaternion.Euler(angles[i]));

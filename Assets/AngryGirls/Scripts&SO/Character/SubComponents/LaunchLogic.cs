@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class LaunchLogic : SubComponent
+    public class LaunchLogic : SubComponent<SubcomponentMediator_EventNames>
     {
         public override void OnFixedUpdate()
         {
             if (control.hasBeenLaunched == true && control.hasFinishedLaunchingTurn == false)
             {
-                Singleton.Instance.ñameraManager.CenterCameraAgainst(control.boxCollider);
+                CameraManager.Instance.CenterCameraAgainst(control.boxCollider);
             }
         }
         public void ProcessLaunch()
@@ -50,7 +50,9 @@ namespace Angry_Girls
             {
                 yield return null;
             }
-            Singleton.Instance.launchManager.OnLaunchIsOver();
+
+            //Singleton.Instance.launchManager.OnLaunchIsOver();
+            GameLoader.Instance.gameLoaderMediator.Notify(this, GameLoaderMediator_EventNames.ProceedOnLaunchIsOver);
         }
 
         private void CheckForAbilityUse()

@@ -27,7 +27,7 @@ namespace Angry_Girls
             }
 
             //TODO: ask Pasha
-            subComponentMediator.CheckForDamage(this, SubcomponentMediator_EventNames.Trigger_Enter, other);
+            subComponentMediator.CheckForDamage(this, SubcomponentMediator_EventNames.CharacterCollider_Trigger_Enter, other);
         }
 
         private void Update()
@@ -49,7 +49,7 @@ namespace Angry_Girls
         }
         private void OnEnable()
         {
-            Singleton.Instance.characterManager.playableCharacters.Add(this.gameObject);
+            CharacterManager.Instance.playableCharacters.Add(this.gameObject);
 
             subComponentMediator.OnComponentEnable();
         }

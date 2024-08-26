@@ -5,8 +5,21 @@ using UnityEngine;
 namespace Angry_Girls
 {
     [Serializable]
-    public class HashManager : MonoBehaviour
+    public class HashManager : GameLoaderComponent
     {
+        public static HashManager Instance;
+
+        public override void OnComponentEnable()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(this);
+                return;
+            }
+
+            Instance = this;
+        }
+
         //Only for Visual sruff!!!
         public SerializedDictionary<string, GameObject> dictionaryOwners = new();
 
@@ -30,13 +43,6 @@ namespace Angry_Girls
             return newDic;
         }
 
-        //public void AddToDictionary<T>(SerializedDictionary<T, int> dict, T[] val)
-        //{
-        //    foreach (var item in val)
-        //    {
-        //        dict.Add((T)item, Animator.StringToHash(item.ToString()));
-        //    }
-        //}
 
         public int GetHash<T>(T enumType, SerializedDictionary<T, int> dictionary) where T : Enum
         {
@@ -54,5 +60,13 @@ namespace Angry_Girls
             }
             return default;
         }
+
+        //public void AddToDictionary<T>(SerializedDictionary<T, int> dict, T[] val)
+        //{
+        //    foreach (var item in val)
+        //    {
+        //        dict.Add((T)item, Animator.StringToHash(item.ToString()));
+        //    }
+        //}
     }
 }

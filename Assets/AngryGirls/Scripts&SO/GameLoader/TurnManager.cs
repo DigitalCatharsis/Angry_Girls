@@ -11,50 +11,70 @@ namespace Angry_Girls
         LaunchingPhase,
     }
 
-    public class TurnManager : MonoBehaviour
+    public class TurnManager : GameLoaderComponent
     {
-        public int currentTurn = 0;
-        public bool isLaunchingPhaseOver = false;
-        public bool isStaticPhaseOver = true;
+        public static TurnManager Instance;
 
-        public CurrentPhase currentPhase = CurrentPhase.LaunchingPhase;
+        [SerializeField] private int _currentTurn = 0;
+        [SerializeField] private CurrentPhase _currentPhase = CurrentPhase.LaunchingPhase;
+
+        public bool isLaunchingPhaseOver = false;
+        [SerializeField] private bool _isStaticPhaseOver = true;
 
         [SerializeField] private List<GameObject> _charactersTurn_List = new();
+
+        public int CurrentTurn => _currentTurn;
+        public CurrentPhase CurrentPhase => _currentPhase;
+
+        public override void OnComponentEnable()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(this);
+                return;
+            }
+
+            Instance = this;
+        }
+
+        public void IncrementCurentTurn()
+        {
+            _currentTurn++;
+        }
 
         public void AddCharacterToTurnList(GameObject character)
         {
             _charactersTurn_List.Add(character);
         }
 
-        public void RemoveCharacterFromTurnList(GameObject character)
-        {
-            _charactersTurn_List.Remove(character);
-        }
-
         private void Update()
         {
-            if (currentPhase == CurrentPhase.LaunchingPhase)
+            if (_currentPhase == CurrentPhase.LaunchingPhase)
             {                
                 if (isLaunchingPhaseOver == false)
                 {
                     return;
                 }
+                else
+                {
+                    Debug.Log("asd");
+                }
 
                 SwitchToAttackingPhase();
 
                 //Adding enemies to attack list after 2 launches
-                if (currentTurn == 1)
+                if (_currentTurn == 1)
                 {
-                    _charactersTurn_List.InsertRange(_charactersTurn_List.Count - 1, Singleton.Instance.characterManager.enemyCharacters);
+                    _charactersTurn_List.InsertRange(_charactersTurn_List.Count - 1, CharacterManager.Instance.enemyCharacters);
                 }
 
                 // wait untill everyone do its turn then switch to LaunchimgPhase
                 StartCoroutine(OnEachTurn_Routine());
             }
 
-            if (currentPhase == CurrentPhase.StaticPhase)
+            if (_currentPhase == CurrentPhase.StaticPhase)
             {
-                if (isStaticPhaseOver == false)
+                if (_isStaticPhaseOver == false)
                 {
                     return;
                 }
@@ -70,7 +90,7 @@ namespace Angry_Girls
                     continue;
                 }
 
-                Singleton.Instance.ñameraManager.CenterCameraAgainst(_charactersTurn_List[i].GetComponent<BoxCollider>());
+                CameraManager.Instance.CenterCameraAgainst(_charactersTurn_List[i].GetComponent<BoxCollider>());
                 ColorDebugLog.Log(_charactersTurn_List[i].name.ToString() + " is attacking.", KnownColor.Aqua);
 
                 //Attack
@@ -78,15 +98,15 @@ namespace Angry_Girls
 
                 yield return new WaitForSeconds(2);
             }
-            Singleton.Instance.ñameraManager.ReturnCameraToStartPosition(1f);
+            CameraManager.Instance.ReturnCameraToStartPosition(1f);
             SwitchToLaunchingPhase();
         }
 
         private void SwitchToAttackingPhase()
         {
             isLaunchingPhaseOver = true;
-            isStaticPhaseOver = false;
-            currentPhase = CurrentPhase.StaticPhase;
+            _isStaticPhaseOver = false;
+            _currentPhase = CurrentPhase.StaticPhase;
             foreach (var character in _charactersTurn_List)
             {
                 character.GetComponent<CControl>().hasFinishedStaticAttackTurn = false;
@@ -95,12 +115,13 @@ namespace Angry_Girls
 
         private void SwitchToLaunchingPhase()
         {
-            Singleton.Instance.turnManager.currentTurn++;
-            isStaticPhaseOver = true;
+            _currentTurn++;
+            _isStaticPhaseOver = true;
             SortCharactersTurnList();
-            currentPhase = CurrentPhase.LaunchingPhase;
+            _currentPhase = CurrentPhase.LaunchingPhase;
             isLaunchingPhaseOver = false;
-            Singleton.Instance.launchManager.canPressAtCharacters = true;
+            GameLoader.Instance.gameLoaderMediator.Notify(this, GameLoaderMediator_EventNames.AllowCharacterPress);
+            //Singleton.Instance.launchManager.canPressAtCharacters = true;
         }
 
         private void SortCharactersTurnList()

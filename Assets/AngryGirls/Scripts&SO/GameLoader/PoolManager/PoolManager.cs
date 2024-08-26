@@ -57,7 +57,7 @@ namespace Angry_Girls
             }
             else
             {
-                return Singleton.Instance.poolObjectLoader.InstantiatePrefab(objType, position, rotation);
+                return GameLoader.Instance.poolObjectLoader.InstantiatePrefab(objType, position, rotation);
             }
         }
         #endregion

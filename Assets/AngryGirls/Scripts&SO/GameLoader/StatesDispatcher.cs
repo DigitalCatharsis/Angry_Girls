@@ -86,8 +86,10 @@ namespace Angry_Girls
         A_Sweep_Fall,
     }
     #endregion
-    public class StatesDispatcher : MonoBehaviour
+    public class StatesDispatcher : GameLoaderComponent
     {
+        public static StatesDispatcher Instance;
+
         [Header("State Dictionaries")]
         public SerializedDictionary<AttackPrep_States, int> attackPrep_Dictionary;
         public SerializedDictionary<AttackFinish_States, int> attackFinish_Dictionary;
@@ -99,18 +101,29 @@ namespace Angry_Girls
         public SerializedDictionary<HitReaction_States, int> hitReaction_Dictionary;
         public SerializedDictionary<Death_States, int> death_States_Dictionary;
 
+        public override void OnComponentEnable()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(this);
+                return;
+            }
+
+            Instance = this;
+        }
+
         private void Awake()
         {
             //Init Dictionaries
-            stateNames_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<StateNames>(this.gameObject);
-            idle_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<Idle_States>(this.gameObject);
-            airbonedFlying_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<AirbonedFlying_States>(this.gameObject);
-            attackPrep_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<AttackPrep_States>(this.gameObject);
-            attackFinish_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<AttackFinish_States>(this.gameObject);
-            landingNames_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<Landing_States>(this.gameObject);
-            staticAttack_States_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<StaticAttack_States>(this.gameObject);
-            hitReaction_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<HitReaction_States>(this.gameObject);
-            death_States_Dictionary = Singleton.Instance.hashManager.CreateAndInitDictionary<Death_States>(this.gameObject);
+            stateNames_Dictionary = HashManager.Instance.CreateAndInitDictionary<StateNames>(this.gameObject);
+            idle_Dictionary = HashManager.Instance.CreateAndInitDictionary<Idle_States>(this.gameObject);
+            airbonedFlying_Dictionary = HashManager.Instance.CreateAndInitDictionary<AirbonedFlying_States>(this.gameObject);
+            attackPrep_Dictionary = HashManager.Instance.CreateAndInitDictionary<AttackPrep_States>(this.gameObject);
+            attackFinish_Dictionary = HashManager.Instance.CreateAndInitDictionary<AttackFinish_States>(this.gameObject);
+            landingNames_Dictionary = HashManager.Instance.CreateAndInitDictionary<Landing_States>(this.gameObject);
+            staticAttack_States_Dictionary = HashManager.Instance.CreateAndInitDictionary<StaticAttack_States>(this.gameObject);
+            hitReaction_Dictionary = HashManager.Instance.CreateAndInitDictionary<HitReaction_States>(this.gameObject);
+            death_States_Dictionary = HashManager.Instance.CreateAndInitDictionary<Death_States>(this.gameObject);
         }
     }
 }

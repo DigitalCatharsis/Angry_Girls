@@ -3,8 +3,21 @@ using UnityEngine.VFX;
 
 namespace Angry_Girls
 {
-    public class VFXManager : MonoBehaviour
+    public class VFXManager : GameLoaderComponent
     {
+        public VFXManager Instance;
+
+        public override void OnComponentEnable()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(this);
+                return;
+            }
+
+            Instance = this;
+        }
+
         public GameObject SpawnVFX(
             Transform parentsTransform, 
             VFX_Type vfx_Type, 
@@ -21,7 +34,7 @@ namespace Angry_Girls
             )
         {
             //Spawn (taking from pool)
-            var poolManager = Singleton.Instance.poolManager;
+            var poolManager = GameLoader.Instance.poolManager;
             var vfx = poolManager.GetObject(vfx_Type, poolManager.vfxPoolDictionary, spawnPosition, spawnRotation);
 
             //Set Color
@@ -42,7 +55,7 @@ namespace Angry_Girls
         {
 
             //spawn 
-            var poolManager = Singleton.Instance.poolManager;
+            var poolManager = GameLoader.Instance.poolManager;
             var vfx = poolManager.GetObject(vfx_Type, poolManager.vfxPoolDictionary, control.projectileSpawnTransform.position, Quaternion.identity);
 
             //set color
@@ -57,7 +70,7 @@ namespace Angry_Girls
             var vfxComponent = vfx.GetComponent<VFX>();
 
             //Init and Run VFX
-            if (Singleton.Instance.turnManager.currentPhase == CurrentPhase.StaticPhase)
+            if (TurnManager.Instance.CurrentPhase == CurrentPhase.StaticPhase)
             {
                 var staticAbility = control.characterSettings.staticAttackAbility;
                 vfxComponent.InitAndRunVFX(
@@ -90,7 +103,7 @@ namespace Angry_Girls
         public GameObject SpawnVFX_AtPosition(VFX_Type vfx_Type, Vector3 spawnPosition, Quaternion spawnRotation)
         {
             //Spawn (taking from pool)
-            var poolManager = Singleton.Instance.poolManager;
+            var poolManager = GameLoader.Instance.poolManager;
             var vfx = poolManager.GetObject(vfx_Type, poolManager.vfxPoolDictionary, spawnPosition, spawnRotation);
             return vfx;
         }
