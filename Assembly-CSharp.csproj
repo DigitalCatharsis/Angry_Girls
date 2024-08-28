@@ -56,6 +56,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="D:\Study\Unity\Angry_Girls\Assets\AngryGirls\DOTween\Editor\DOTweenEditor.dll" />
+    <Analyzer Include="D:\Study\Unity\Angry_Girls\Assets\AngryGirls\DOTween\DOTween.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.23f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.23f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
@@ -73,6 +75,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\Static\AttackLogic_Static_OnGround_Shoryuken_Rise.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolManager.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\Settings\PhysicsSettings.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Test_ShowDamageAmount.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\CharacterSettings\CharacterSettings.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\DistanceBetweenTwoObjects\DistanceBetweenTwoObjects.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolObject\IPoolObject.cs" />
@@ -114,6 +117,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponentMediator.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ColorDebugLog\ColorDebugLog.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\BoxColliderUpdater.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AudioManager\AudioManager.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleSprite.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\Launching\AttackLogic_HeadSpinAttack.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\StaticAttack_Behavior_OnGround.cs" />
@@ -145,6 +149,7 @@
     <Compile Include="Assets\AngryGirls\Helpers\DebugInfo.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\SpawnManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CControl.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AudioManager\SoundClipsCollection.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\GroundDetector.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI_Control.cs" />
   </ItemGroup>

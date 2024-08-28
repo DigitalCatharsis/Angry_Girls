@@ -1,16 +1,12 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Angry_Girls
 {
-
     public class CharacterManager : MonoBehaviour
     {
         public List<GameObject> playableCharacters = new List<GameObject>();
         public List<GameObject> enemyCharacters = new List<GameObject>();
-
-
         public GameObject GetPlaybleCharacter(GameObject character)
         {
             foreach (var elem in playableCharacters)
@@ -22,6 +18,7 @@ namespace Angry_Girls
             }
             return null;
         }
+
         public GameObject GetEnemyCharacter(GameObject character)
         {
             foreach (var elem in enemyCharacters)
@@ -47,8 +44,5 @@ namespace Angry_Girls
 
             return null;
         }
-
-
     }
-
 }

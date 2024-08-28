@@ -33,6 +33,10 @@ namespace Angry_Girls
             if (vfx.vfxOwner == null && vfx.projectileDamage != 0)
             {
                 ApplyDamage(vfx.projectileDamage);
+                var contactpoint = triggerCollider.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
+                var previewVfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_TestOnHitEffect, contactpoint, Quaternion.identity);
+                previewVfx.GetComponent<Test_ShowDamageAmount>().ShowDamage(vfx.projectileDamage);
+                GameLoader.Instance.audioManager.PlayRandomSound(AudioSourceType.CharacterHit);
             }
 
             //no team fire
@@ -43,6 +47,10 @@ namespace Angry_Girls
             else
             {
                 ApplyDamage(vfx.projectileDamage);
+                var contactpoint = triggerCollider.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
+                var previewVfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_TestOnHitEffect, contactpoint, Quaternion.identity);
+                previewVfx.GetComponent<Test_ShowDamageAmount>().ShowDamage(vfx.projectileDamage);
+                GameLoader.Instance.audioManager.PlayRandomSound(AudioSourceType.CharacterHit);
             }
 
             //are we dead?

@@ -16,12 +16,14 @@ namespace Angry_Girls
         [SerializeField] private int _currentTurn = 0;
         [SerializeField] private CurrentPhase _currentPhase = CurrentPhase.LaunchingPhase;
 
-        public bool isLaunchingPhaseOver = false;
+        [SerializeField] private bool _isLaunchingPhaseOver = false;
         [SerializeField] private bool _isStaticPhaseOver = true;
 
         [SerializeField] private List<GameObject> _charactersTurn_List = new();
 
+        //props
         public int CurrentTurn => _currentTurn;
+        public bool IsLaunchingPhaseOver { set => _isLaunchingPhaseOver = value; }
         public CurrentPhase CurrentPhase => _currentPhase;
 
         public void IncrementCurentTurn()
@@ -38,13 +40,9 @@ namespace Angry_Girls
         {
             if (_currentPhase == CurrentPhase.LaunchingPhase)
             {                
-                if (isLaunchingPhaseOver == false)
+                if (_isLaunchingPhaseOver == false)
                 {
                     return;
-                }
-                else
-                {
-                    Debug.Log("asd");
                 }
 
                 SwitchToAttackingPhase();
@@ -91,7 +89,7 @@ namespace Angry_Girls
 
         private void SwitchToAttackingPhase()
         {
-            isLaunchingPhaseOver = true;
+            _isLaunchingPhaseOver = true;
             _isStaticPhaseOver = false;
             _currentPhase = CurrentPhase.StaticPhase;
             foreach (var character in _charactersTurn_List)
@@ -106,7 +104,7 @@ namespace Angry_Girls
             _isStaticPhaseOver = true;
             SortCharactersTurnList();
             _currentPhase = CurrentPhase.LaunchingPhase;
-            isLaunchingPhaseOver = false;
+            _isLaunchingPhaseOver = false;
             GameLoader.Instance.gameLoaderMediator.Notify(this, GameLoaderMediator_EventNames.AllowCharacterPress);
             //Singleton.Instance.launchManager.canPressAtCharacters = true;
         }

@@ -44,7 +44,6 @@ namespace Angry_Girls
             var charList = new List<GameObject>();
             for (var i = 0; i < selectedCharactersList.Count(); i++)
             {
-                //charList.Add(Instantiate(Resources.Load(selectedCharactersList[i].ToString())) as GameObject); //old
                 charList.Add(GameLoader.Instance.poolManager.GetObject<CharacterType>
                     (selectedCharactersList[i], GameLoader.Instance.poolManager.characterPoolDictionary, Vector3.zero, Quaternion.identity));
             }
@@ -144,7 +143,6 @@ namespace Angry_Girls
         private IEnumerator OnLaunchIsOver_Routine(float secondsToWaitAfterAttack)
         {
             GameLoader.Instance.turnManager.AddCharacterToTurnList(_charactersToLaunchLeft[0]);
-            //GameLoader.Instance._turnManager.AddCharacterToTurnList(_charactersToLaunchLeft[0]);
 
             yield return new WaitForSeconds(_charactersToLaunchLeft[0].GetComponent<CharacterControl>().animator.GetCurrentAnimatorStateInfo(0).length);
             UpdateCharactersLists(_charactersToLaunchLeft[0]);
@@ -156,11 +154,10 @@ namespace Angry_Girls
                 GameLoader.Instance.cameraManager.ReturnCameraToStartPosition(1f);
                 _canPressAtCharacters = true;
                 GameLoader.Instance.turnManager.IncrementCurentTurn();
-                //GameLoader.Instance._turnManager._currentTurn++;
             }
             else
             {
-                GameLoader.Instance.turnManager.isLaunchingPhaseOver = true;
+                GameLoader.Instance.turnManager.IsLaunchingPhaseOver = true;
             }
         }
     }

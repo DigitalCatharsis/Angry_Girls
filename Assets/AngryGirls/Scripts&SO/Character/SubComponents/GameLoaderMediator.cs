@@ -12,13 +12,11 @@ namespace Angry_Girls
     {
         private CameraManager _ñameraManager;
         private LaunchManager _launchManager;
-        private TurnManager _turnManager;
 
-        public GameLoaderMediator(CameraManager ñameraManager, LaunchManager launchManager, TurnManager turnManager)
+        public GameLoaderMediator(CameraManager ñameraManager, LaunchManager launchManager)
         {
             _ñameraManager = ñameraManager;
             _launchManager = launchManager;
-            _turnManager = turnManager;
         }
 
         public void Notify(object sender, GameLoaderMediator_EventNames eventName)
