@@ -140,7 +140,7 @@ namespace Angry_Girls
         #region TEMP METHODS
         public void tempChangeAnimation()
         {
-            _animationProcessor.ChangeAnimationState(StatesDispatcher.Instance.staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], 0, transitionDuration: 1);
+            _animationProcessor.ChangeAnimationState(GameLoader.Instance.statesDispatcher.staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], 0, transitionDuration: 1);
         }
         #endregion
     }

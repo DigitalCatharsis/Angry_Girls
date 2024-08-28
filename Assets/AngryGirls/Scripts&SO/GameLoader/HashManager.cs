@@ -5,21 +5,8 @@ using UnityEngine;
 namespace Angry_Girls
 {
     [Serializable]
-    public class HashManager : GameLoaderComponent
+    public class HashManager : MonoBehaviour
     {
-        public static HashManager Instance;
-
-        public override void OnComponentEnable()
-        {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(this);
-                return;
-            }
-
-            Instance = this;
-        }
-
         //Only for Visual sruff!!!
         public SerializedDictionary<string, GameObject> dictionaryOwners = new();
 

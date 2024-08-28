@@ -2,27 +2,14 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class CameraManager : GameLoaderComponent
+    public class CameraManager : MonoBehaviour
     {
-        public static CameraManager Instance;
-
         [Header("Setup")]
         [SerializeField] private Vector3 cameraStartPosition = new Vector3(13.25f, 1.44f, -0.00999999f);
         [SerializeField] private float startOrthographicCameraSize = 1.65f;
         [SerializeField] private float _secondsCameraWaitsAfterAttack = 1.5f;
 
         public float SecondsCameraWaitsAfterAttack => _secondsCameraWaitsAfterAttack;
-
-        public override void OnComponentEnable()
-        {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(this);
-                return;
-            }
-
-            Instance = this;
-        }
 
         // Center camera on character collider center
         public void CenterCameraAgainst(Collider selectedObject)

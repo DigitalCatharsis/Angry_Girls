@@ -3,21 +3,8 @@ using UnityEngine.VFX;
 
 namespace Angry_Girls
 {
-    public class VFXManager : GameLoaderComponent
+    public class VFXManager : MonoBehaviour
     {
-        public VFXManager Instance;
-
-        public override void OnComponentEnable()
-        {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(this);
-                return;
-            }
-
-            Instance = this;
-        }
-
         public GameObject SpawnVFX(
             Transform parentsTransform, 
             VFX_Type vfx_Type, 
@@ -70,7 +57,7 @@ namespace Angry_Girls
             var vfxComponent = vfx.GetComponent<VFX>();
 
             //Init and Run VFX
-            if (TurnManager.Instance.CurrentPhase == CurrentPhase.StaticPhase)
+            if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.StaticPhase)
             {
                 var staticAbility = control.characterSettings.staticAttackAbility;
                 vfxComponent.InitAndRunVFX(

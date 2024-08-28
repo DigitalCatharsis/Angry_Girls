@@ -15,7 +15,7 @@ namespace Angry_Girls
         }
         private void OnEnable()
         {
-            CharacterManager.Instance.enemyCharacters.Add(this.gameObject);
+            GameLoader.Instance.characterManager.enemyCharacters.Add(this.gameObject);
 
             animator = GetComponent<Animator>();
             subComponentMediator.OnComponentEnable();

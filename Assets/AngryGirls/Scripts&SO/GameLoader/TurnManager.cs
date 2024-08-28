@@ -11,10 +11,8 @@ namespace Angry_Girls
         LaunchingPhase,
     }
 
-    public class TurnManager : GameLoaderComponent
+    public class TurnManager : MonoBehaviour
     {
-        public static TurnManager Instance;
-
         [SerializeField] private int _currentTurn = 0;
         [SerializeField] private CurrentPhase _currentPhase = CurrentPhase.LaunchingPhase;
 
@@ -25,17 +23,6 @@ namespace Angry_Girls
 
         public int CurrentTurn => _currentTurn;
         public CurrentPhase CurrentPhase => _currentPhase;
-
-        public override void OnComponentEnable()
-        {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(this);
-                return;
-            }
-
-            Instance = this;
-        }
 
         public void IncrementCurentTurn()
         {
@@ -65,7 +52,7 @@ namespace Angry_Girls
                 //Adding enemies to attack list after 2 launches
                 if (_currentTurn == 1)
                 {
-                    _charactersTurn_List.InsertRange(_charactersTurn_List.Count - 1, CharacterManager.Instance.enemyCharacters);
+                    _charactersTurn_List.InsertRange(_charactersTurn_List.Count - 1, GameLoader.Instance.characterManager.enemyCharacters);
                 }
 
                 // wait untill everyone do its turn then switch to LaunchimgPhase
@@ -90,7 +77,7 @@ namespace Angry_Girls
                     continue;
                 }
 
-                CameraManager.Instance.CenterCameraAgainst(_charactersTurn_List[i].GetComponent<BoxCollider>());
+                GameLoader.Instance.cameraManager.CenterCameraAgainst(_charactersTurn_List[i].GetComponent<BoxCollider>());
                 ColorDebugLog.Log(_charactersTurn_List[i].name.ToString() + " is attacking.", KnownColor.Aqua);
 
                 //Attack
@@ -98,7 +85,7 @@ namespace Angry_Girls
 
                 yield return new WaitForSeconds(2);
             }
-            CameraManager.Instance.ReturnCameraToStartPosition(1f);
+            GameLoader.Instance.cameraManager.ReturnCameraToStartPosition(1f);
             SwitchToLaunchingPhase();
         }
 

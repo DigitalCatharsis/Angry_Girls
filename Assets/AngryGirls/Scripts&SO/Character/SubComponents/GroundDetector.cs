@@ -53,7 +53,7 @@ namespace Angry_Girls
 
                     if (blockingObj != null)
                     {
-                        var character = CharacterManager.Instance.GetCharacter(blockingObj.transform.root.gameObject);
+                        var character = GameLoader.Instance.characterManager.GetCharacter(blockingObj.transform.root.gameObject);
 
                         if (character == null)
                         {

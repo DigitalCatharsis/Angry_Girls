@@ -10,14 +10,14 @@ namespace Angry_Girls
         public PoolManager poolManager;
         public PoolObjectLoader poolObjectLoader;
 
-        private CharacterManager _characterManager;
-        private HashManager _hashManager;
-        private StatesDispatcher _statesDispatcher;
+        public CharacterManager characterManager;
+        public HashManager hashManager; 
+        public StatesDispatcher statesDispatcher;
         public VFXManager VFXManager;
 
-        private CameraManager _ñameraManager;
-        private LaunchManager _launchManager;
-        private TurnManager _turnManager;
+        public CameraManager cameraManager;
+        public LaunchManager launchManager;
+        public TurnManager turnManager;
 
         public GameLoaderMediator gameLoaderMediator;
 
@@ -31,29 +31,19 @@ namespace Angry_Girls
 
             Instance = this;
 
-            _characterManager = GetComponentInChildren<CharacterManager>();
+            characterManager = GetComponentInChildren<CharacterManager>();
             myExtentions = GetComponentInChildren<MyExtentions>();
-            _ñameraManager = GetComponentInChildren<CameraManager>();
-            _launchManager = GetComponentInChildren<LaunchManager>();
-            _hashManager = GetComponentInChildren<HashManager>();
+            cameraManager = GetComponentInChildren<CameraManager>();
+            launchManager = GetComponentInChildren<LaunchManager>();
+            hashManager = GetComponentInChildren<HashManager>();
             spawnManager = GetComponentInChildren<SpawnManager>();
-            _turnManager = GetComponentInChildren<TurnManager>();
+            turnManager = GetComponentInChildren<TurnManager>();
             poolManager = GetComponentInChildren<PoolManager>();
             poolObjectLoader = GetComponentInChildren<PoolObjectLoader>();
             VFXManager = GetComponentInChildren<VFXManager>();
-            _statesDispatcher = GetComponentInChildren<StatesDispatcher>();
+            statesDispatcher = GetComponentInChildren<StatesDispatcher>();
 
-            foreach (var component in GetComponentsInChildren<GameLoaderComponent>())
-            {
-                component.OnComponentEnable();
-            }
-
-            gameLoaderMediator = new GameLoaderMediator(_ñameraManager, _launchManager, _turnManager);
+            gameLoaderMediator = new GameLoaderMediator(cameraManager, launchManager, turnManager);
         }
     }
-}
-
-public abstract class GameLoaderComponent : MonoBehaviour
-{
-    public abstract void OnComponentEnable();
 }

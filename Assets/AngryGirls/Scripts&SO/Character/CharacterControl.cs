@@ -49,7 +49,7 @@ namespace Angry_Girls
         }
         private void OnEnable()
         {
-            CharacterManager.Instance.playableCharacters.Add(this.gameObject);
+            GameLoader.Instance.characterManager.playableCharacters.Add(this.gameObject);
 
             subComponentMediator.OnComponentEnable();
         }

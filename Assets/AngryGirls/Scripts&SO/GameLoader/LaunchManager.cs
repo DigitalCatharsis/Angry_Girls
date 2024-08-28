@@ -7,9 +7,8 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class LaunchManager : GameLoaderComponent
+    public class LaunchManager : MonoBehaviour
     {
-        public static LaunchManager Instance;
         [Header("Setup")]
         [SerializeField] private CharacterSelect characterSelectSO;
         [SerializeField] private CharacterLauncher _characterLauncher;
@@ -23,17 +22,6 @@ namespace Angry_Girls
         [Header("Debug)")]
         [SerializeField] private List<GameObject> _charactersToLaunchLeft;
         [SerializeField] private List<GameObject> _launchedCharacters;
-
-        public override void OnComponentEnable()
-        {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(this);
-                return;
-            }
-
-            Instance = this;
-        }
 
         private void Start()
         {
@@ -110,7 +98,7 @@ namespace Angry_Girls
             {
 
                 // Center camera on character collider center
-                CameraManager.Instance.CenterCameraAgainst(_charactersToLaunchLeft[0].GetComponent<CharacterControl>().boxCollider);
+                GameLoader.Instance.cameraManager.CenterCameraAgainst(_charactersToLaunchLeft[0].GetComponent<CharacterControl>().boxCollider);
 
                 _characterLauncher.AimingTheLaunch(_charactersToLaunchLeft[0]);
             }
@@ -150,12 +138,12 @@ namespace Angry_Girls
 
         public void OnLaunchIsOver()
         {
-            StartCoroutine(OnLaunchIsOver_Routine(CameraManager.Instance.SecondsCameraWaitsAfterAttack));
+            StartCoroutine(OnLaunchIsOver_Routine(GameLoader.Instance.cameraManager.SecondsCameraWaitsAfterAttack));
         }
 
         private IEnumerator OnLaunchIsOver_Routine(float secondsToWaitAfterAttack)
         {
-            TurnManager.Instance.AddCharacterToTurnList(_charactersToLaunchLeft[0]);
+            GameLoader.Instance.turnManager.AddCharacterToTurnList(_charactersToLaunchLeft[0]);
             //GameLoader.Instance._turnManager.AddCharacterToTurnList(_charactersToLaunchLeft[0]);
 
             yield return new WaitForSeconds(_charactersToLaunchLeft[0].GetComponent<CharacterControl>().animator.GetCurrentAnimatorStateInfo(0).length);
@@ -163,16 +151,16 @@ namespace Angry_Girls
             yield return new WaitForSeconds(secondsToWaitAfterAttack);
             UpdateCharacterPositions(_charactersToLaunchLeft);
 
-            if (TurnManager.Instance.CurrentTurn < 1)
+            if (GameLoader.Instance.turnManager.CurrentTurn < 1)
             {
-                CameraManager.Instance.ReturnCameraToStartPosition(1f);
+                GameLoader.Instance.cameraManager.ReturnCameraToStartPosition(1f);
                 _canPressAtCharacters = true;
-                TurnManager.Instance.IncrementCurentTurn();
+                GameLoader.Instance.turnManager.IncrementCurentTurn();
                 //GameLoader.Instance._turnManager._currentTurn++;
             }
             else
             {
-                TurnManager.Instance.isLaunchingPhaseOver = true;
+                GameLoader.Instance.turnManager.isLaunchingPhaseOver = true;
             }
         }
     }
