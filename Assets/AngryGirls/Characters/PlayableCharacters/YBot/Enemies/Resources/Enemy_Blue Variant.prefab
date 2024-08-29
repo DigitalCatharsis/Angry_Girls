@@ -604,11 +604,11 @@ MonoBehaviour:
     - {fileID: 0}
   playerOrAi: 1
   characterSettings: {fileID: 11400000, guid: 02680e40217c43e44a594ac4cad06f99, type: 2}
-  projectileSpawnTransform: {fileID: 3711684987824727529}
+  projectileSpawnTransform: {fileID: 8966692269676343072}
   VFX_Color: {r: 0, g: 0.3982904, b: 1, a: 0}
---- !u!4 &3711684987824727529 stripped
+--- !u!4 &8966692269676343072 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
+  m_CorrespondingSourceObject: {fileID: 5509850239664615484, guid: c03c7eedb934e76448be7b86074461a4,
     type: 3}
   m_PrefabInstance: {fileID: 3460731012454276892}
   m_PrefabAsset: {fileID: 0}

@@ -1286,7 +1286,7 @@ MonoBehaviour:
     - {fileID: 0}
   playerOrAi: 0
   characterSettings: {fileID: 11400000, guid: 28afea81c95372d4fb753c0287980f6c, type: 2}
-  projectileSpawnTransform: {fileID: 253452075603770101}
+  projectileSpawnTransform: {fileID: 7260981478403319719}
   VFX_Color: {r: 0, g: 0.6489775, b: 1, a: 0}
 --- !u!95 &3541158604538972460
 Animator:

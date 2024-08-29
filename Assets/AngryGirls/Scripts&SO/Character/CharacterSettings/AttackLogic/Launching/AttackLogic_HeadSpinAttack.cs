@@ -9,12 +9,11 @@ namespace Angry_Girls
         private float _impulseY = 7f;
         private float _impulseZ = 5f;
         private Vector3 _finalProjectileRotation = new Vector3(75f, 0, 0);
-        public float currentAttackTimer;
-        public int attacksCount;
+        private float _currentAttackTimer;
+
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            currentAttackTimer = 0;
-            attacksCount = 0;
+            _currentAttackTimer = 0;
 
             control.isAttacking = true;
 
@@ -46,8 +45,8 @@ namespace Angry_Girls
             }
             else
             {
-                currentAttackTimer += Time.deltaTime;
-                if (currentAttackTimer >= control.characterSettings.launchedAttackPrepAbility.attackTimeDuration)
+                _currentAttackTimer += Time.deltaTime;
+                if (_currentAttackTimer >= control.characterSettings.launchedAttackPrepAbility.attackTimeDuration)
                 {
                     control.isAttacking = false;
                     control.airToGroundUnit_FinishedAbility = true;
@@ -72,7 +71,7 @@ namespace Angry_Girls
             control.isAttacking = false;
         }
 
-        private void ProcessFireballs(CControl control, Vector3[] angles)
+        private void ProcessFireballs(CControl control, Vector3[] angles, float moveDuration = 1.5f)
         {
             //spawn
             for (var i = 0; i < angles.Length; i++)
@@ -90,7 +89,6 @@ namespace Angry_Girls
                 }
 
                 var impulse = new Vector3(0, _impulseY * projectile.transform.forward.y, _impulseZ * projectile.transform.forward.z);
-                var moveDuration = 1.5f;
 
                 //add impulse and rotate
                 projectile.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.Impulse);

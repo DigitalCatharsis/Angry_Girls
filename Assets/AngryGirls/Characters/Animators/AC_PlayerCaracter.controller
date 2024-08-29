@@ -364,7 +364,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: A_ShootArrow
+  m_Name: A_SendFireball_Front
   m_Speed: 2.5
   m_CycleOffset: 0
   m_Transitions: []

@@ -47,7 +47,7 @@ namespace Angry_Girls
     {
         NONE,
         A_Shoryuken_DownSmash_Prep,
-        A_ShootArrow,
+        A_SendFireball_Front,
         A_HeadSpin_Attack,
     }
     public enum StaticAttack_States

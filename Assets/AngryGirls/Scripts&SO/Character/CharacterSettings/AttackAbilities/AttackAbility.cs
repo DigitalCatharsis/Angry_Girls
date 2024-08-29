@@ -19,7 +19,7 @@ namespace Angry_Girls
         public bool useAnimationNormalizedTimeDuration = false;
 
         [Space(5)]
-        [Header("Projectile Phyciscs")]
+        [Header("Character Phyciscs")]
         public Vector3 attackPrepMovementSpeed = new Vector3(0, -2, 0);
         public Vector3 attackPrepMovementForce = new Vector3(0, 0, 0);
 
@@ -36,8 +36,8 @@ namespace Angry_Girls
 
         [Space(5)]
         [Header("Projectile Phyciscs")]
-        public Vector3 attackMovementSpeed = new Vector3(0, -2, 0);
-        public Vector3 attackMovementForce = new Vector3(0, 0, 0);
+        public Vector3 attackMovementSpeed = new Vector3(0, -2, 0);  //?
+        public Vector3 attackMovementForce = new Vector3(0, 0, 0);  //?
         public bool destroyOnCollision = false;
 
         [Space(5)]

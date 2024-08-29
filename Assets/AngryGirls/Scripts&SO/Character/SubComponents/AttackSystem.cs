@@ -22,8 +22,8 @@ namespace Angry_Girls
             //attackPrep
             switch (control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation)
             {
-                case AttackPrep_States.A_ShootArrow:
-                    control.attackSystem_Data.attackPrepLogic = new AttackLogic_ShootArrow();
+                case AttackPrep_States.A_SendFireball_Front:
+                    control.attackSystem_Data.attackPrepLogic = new AttackLogic_SendFireball_Front();
                     break;
                 case AttackPrep_States.A_Shoryuken_DownSmash_Prep:
                     control.attackSystem_Data.attackPrepLogic = new AttackLogic_ShoryukenDownSmash_Prep();

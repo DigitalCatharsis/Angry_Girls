@@ -85,6 +85,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 263490b01e5a26a4eab11fef160f8338,
         type: 2}
+    - target: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: projectileSpawnTransform
+      value: 
+      objectReference: {fileID: 1330159168460676502}
     - target: {fileID: 4674259014324178179, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_IsActive
@@ -122,6 +127,12 @@ PrefabInstance:
 --- !u!4 &464290289296872469 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2066009735122893324, guid: c03c7eedb934e76448be7b86074461a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1935014461455445529}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1330159168460676502 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 625756058259321743, guid: c03c7eedb934e76448be7b86074461a4,
     type: 3}
   m_PrefabInstance: {fileID: 1935014461455445529}
   m_PrefabAsset: {fileID: 0}
