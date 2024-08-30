@@ -28,9 +28,9 @@ namespace Angry_Girls
 
         public void TurnOff()
         {
-            this.transform.parent = null;
-            this.transform.position = Vector3.zero;
-            this.transform.rotation = Quaternion.identity;
+            //this.transform.parent = null;
+            //this.transform.position = Vector3.zero;
+            //this.transform.rotation = Quaternion.identity;
         }
 
         //IEnumerator _ScheduledOff()

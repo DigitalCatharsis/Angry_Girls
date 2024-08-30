@@ -9712,11 +9712,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49d18267dcc029e4fac167ae161938d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timeToLive: 1
+  _timeToLive: 11
   _isTimeToLiveIsNormilizedTime: 0
-  _destroyOnCollision: 1
   _particleSystem: {fileID: 5921108591417898}
   projectileDamage: 0
+  _destroyOnCollision: 1
+  vfxOwner: {fileID: 0}
 --- !u!65 &2069930466965192653
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9730,14 +9731,14 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 30208
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Size: {x: 0.44159758, y: 0.51286125, z: 1}
-  m_Center: {x: -0.02348423, y: -0.0035085678, z: 0}
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &-5860992727677275382
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9757,8 +9758,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Size: {x: 0.4415976, y: 0.6357298, z: 1.1143938}
-  m_Center: {x: -0.02348423, y: -0.0013899803, z: -0.010591924}
+  m_Size: {x: 0.44159758, y: 0.4506178, z: 1}
+  m_Center: {x: -0.02348423, y: -0.0035090446, z: 0}
 --- !u!54 &8380759687567671478
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9769,7 +9770,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -9784,8 +9785,8 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 1
+  m_Constraints: 32
+  m_CollisionDetection: 2
 --- !u!114 &2358576165146636041
 MonoBehaviour:
   m_ObjectHideFlags: 0

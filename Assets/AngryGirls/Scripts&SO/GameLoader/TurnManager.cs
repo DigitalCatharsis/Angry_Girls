@@ -83,6 +83,7 @@ namespace Angry_Girls
 
                 yield return new WaitForSeconds(2);
             }
+
             GameLoader.Instance.cameraManager.ReturnCameraToStartPosition(1f);
             SwitchToLaunchingPhase();
         }

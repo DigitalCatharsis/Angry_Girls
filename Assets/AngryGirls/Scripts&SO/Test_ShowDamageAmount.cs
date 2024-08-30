@@ -1,10 +1,8 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using DG.Tweening;
+using System.Security;
 
 namespace Angry_Girls
 {
@@ -20,6 +18,15 @@ namespace Angry_Girls
         private IEnumerator DisableItself()
         {
             yield return new WaitForSeconds(_timeToLive);
+            //GetComponentInChildren<TextMeshPro>().text = string.Empty;
+            //transform.root.parent = null;
+            //transform.root.position = Vector3.zero;
+            //transform.root.rotation = Quaternion.identity;
+
+            //var particle = GetComponent<ParticleSystem>();
+
+            //particle.Clear(true);
+
             transform.root.gameObject.SetActive(false);
         }
 

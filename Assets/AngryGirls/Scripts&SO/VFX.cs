@@ -22,8 +22,8 @@ namespace Angry_Girls
 
         private void OnEnable()
         {
-            int LayerIgnoreRaycast = LayerMask.NameToLayer("Projectile");
-            gameObject.layer = LayerIgnoreRaycast;
+            //int LayerIgnoreRaycast = LayerMask.NameToLayer("Projectile");
+            //gameObject.layer = LayerIgnoreRaycast;
 
         }
 
@@ -147,6 +147,11 @@ namespace Angry_Girls
                 return;
             }
 
+            if (collision.gameObject.GetComponent<VFX>() != null)
+            {
+                return;
+            }
+
             var control = collision.gameObject.GetComponent<CControl>();
 
             if (control != null &&
@@ -155,20 +160,38 @@ namespace Angry_Girls
                 return;
             }
 
-            GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Damage_White, transform.position, Quaternion.identity);
-            this.gameObject.SetActive(false);
+            var vfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Damage_White, transform.position, Quaternion.identity);
+            vfx.GetComponent<VFX>().InitAndRunVFX(1, true, false, 0, false,false);
+            StartCoroutine(DisableVFX());
         }
 
         private IEnumerator VFXLiving_Routine()
         {
             yield return new WaitForSeconds(_timeToLive);
 
-            this.gameObject.SetActive(false);
+            StartCoroutine(DisableVFX());
         }
 
         public VFX_Type GetVFXType()
         {
             return GetComponent<VFXPoolObject>().poolObjectType;
+        }
+
+        private IEnumerator DisableVFX()
+        {
+            yield return new WaitForEndOfFrame();
+            this.transform.parent = null;
+            this.transform.position = Vector3.zero;
+            this.transform.rotation = Quaternion.identity;
+
+            var rigid = gameObject.GetComponent<Rigidbody>();
+            if (rigid != null)
+            {
+                rigid.velocity = Vector3.zero;
+                //gameObject.GetComponent<Rigidbody>().rotation = Quaternion.identity;
+                rigid.angularVelocity = Vector3.zero;
+            }
+            this.gameObject.SetActive(false);
         }
     }
 }

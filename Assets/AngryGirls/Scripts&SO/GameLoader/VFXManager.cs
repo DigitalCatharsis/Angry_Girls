@@ -17,7 +17,8 @@ namespace Angry_Girls
             float VFXDamage, 
             bool enableCollider = false, 
             bool enableTrigger = false,
-            GameObject owner = null
+            GameObject owner = null,
+            bool setAsOwner = false
             )
         {
             //Spawn (taking from pool)
@@ -30,17 +31,19 @@ namespace Angry_Girls
                 vfx.GetComponentInChildren<VisualEffect>().SetVector4("Color", VFXColor);
             }
 
-            //Set parent
-            vfx.transform.parent = parentsTransform;
+            if (setAsOwner)
+            {
+                //set parent and position
+                vfx.transform.parent = owner.transform;
+            }
 
             //Init and run VFX
             GetComponent<VFX>().InitAndRunVFX(timeToLive,isTimeToLiveIsNormilizedTime,destroyOnCollision,VFXDamage, enableCollider, enableTrigger, owner: owner);
             return vfx;
         }
 
-        public GameObject SpawnVFX(CControl control, VFX_Type vfx_Type)
+        public GameObject SpawnVFX(CControl control, VFX_Type vfx_Type, bool setAsOwner = false)
         {
-
             //spawn 
             var poolManager = GameLoader.Instance.poolManager;
             var vfx = poolManager.GetObject(vfx_Type, poolManager.vfxPoolDictionary, control.projectileSpawnTransform.position, Quaternion.identity);
@@ -51,8 +54,11 @@ namespace Angry_Girls
                 vfx.GetComponentInChildren<VisualEffect>().SetVector4("Color", control.VFX_Color);
             }
 
-            //set parent and position
-            vfx.transform.parent = control.transform;
+            if (setAsOwner)
+            {
+                //set parent and position
+                vfx.transform.parent = control.transform;
+            }
 
             var vfxComponent = vfx.GetComponent<VFX>();
 

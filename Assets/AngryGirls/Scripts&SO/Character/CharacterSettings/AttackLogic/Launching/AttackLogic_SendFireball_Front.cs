@@ -1,4 +1,6 @@
 using DG.Tweening;
+using System.Drawing;
+using System.Runtime.CompilerServices;
 using UnityEditor.Search;
 using UnityEngine;
 
@@ -11,9 +13,6 @@ namespace Angry_Girls
 
         private Vector3 _finalProjectileRotation = new Vector3(45f, 0, 0);
 
-        private float _impulseY = 7f;
-        private float _impulseZ = 10f;
-
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             _currentAttackTimer = 0;
@@ -22,7 +21,7 @@ namespace Angry_Girls
             control.isAttacking = true;
             control.rigidBody.useGravity = false;
             control.rigidBody.velocity = control.characterSettings.launchedAttackPrepAbility.attackPrepMovementSpeed;
-            control.rigidBody.AddForce(control.characterSettings.launchedAttackPrepAbility.attackPrepMovementForce);
+            //control.rigidBody.AddForce(control.characterSettings.launchedAttackPrepAbility.attackPrepMovementForce); //turn it back
 
             SendFireball(control, control.projectileSpawnTransform.position, _finalProjectileRotation, control.characterSettings.launchedAttackPrepAbility.attackDamage);
 
@@ -62,15 +61,26 @@ namespace Angry_Girls
 
         private void SendFireball(CControl control, Vector3 startPoint, Vector3 finalRotationDegree, float moveDuration = 1.5f)
         {
+            var vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, VFX_Type.VFX_FireBall);
+            //Debug.Break();
+            var impulse = new Vector3(
+                0,
+                control.characterSettings.launchedAttackPrepAbility.projectileMovementSpeed.y * vfx.transform.forward.y,
+                control.characterSettings.launchedAttackPrepAbility.projectileMovementSpeed.z * vfx.transform.forward.z
+                );
+
+            vfx.GetComponent<VFX>().InitAndRunVFX(control.characterSettings.launchedAttackPrepAbility, control.gameObject); 
+            vfx.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);
+            vfx.transform.DORotate(endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * vfx.transform.forward.z), duration: moveDuration, mode: RotateMode.Fast).SetLink(vfx, LinkBehaviour.PauseOnDisableRestartOnEnable);
+
+
+
+
+
+
+
             //var frontDistance = new Vector3(0, 0, 2.2f);
             //var gravityDistance = new Vector3(0, 2.8f, 8f);
-
-            var vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, VFX_Type.VFX_FireBall);
-            var impulse = new Vector3(0, _impulseY * vfx.transform.forward.y, _impulseZ * vfx.transform.forward.z);
-            vfx.GetComponent<VFX>().InitAndRunVFX(control.characterSettings.launchedAttackPrepAbility, control.gameObject);
-            vfx.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.Impulse);
-            vfx.transform.DORotate(endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * vfx.transform.forward.z), duration: moveDuration, mode: RotateMode.Fast);
-
 
             //var waypoints = new[]
             //{

@@ -32,11 +32,7 @@ namespace Angry_Girls
             //aplly damage if no owner (damages everyone)
             if (vfx.vfxOwner == null && vfx.projectileDamage != 0)
             {
-                ApplyDamage(vfx.projectileDamage);
-                var contactpoint = triggerCollider.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
-                var previewVfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_TestOnHitEffect, contactpoint, Quaternion.identity);
-                previewVfx.GetComponent<Test_ShowDamageAmount>().ShowDamage(vfx.projectileDamage);
-                GameLoader.Instance.audioManager.PlayRandomSound(AudioSourceType.CharacterHit);
+                OnDamageTaken(vfx.projectileDamage, triggerCollider, vfx);
             }
 
             //no team fire
@@ -46,11 +42,7 @@ namespace Angry_Girls
             }
             else
             {
-                ApplyDamage(vfx.projectileDamage);
-                var contactpoint = triggerCollider.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
-                var previewVfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_TestOnHitEffect, contactpoint, Quaternion.identity);
-                previewVfx.GetComponent<Test_ShowDamageAmount>().ShowDamage(vfx.projectileDamage);
-                GameLoader.Instance.audioManager.PlayRandomSound(AudioSourceType.CharacterHit);
+                OnDamageTaken(vfx.projectileDamage, triggerCollider, vfx);
             }
 
             //are we dead?
@@ -65,9 +57,13 @@ namespace Angry_Girls
             control.unitGotHit = true;
         }
 
-        private void ApplyDamage(float damage)
+        private void OnDamageTaken(float damage, Collider triggerCollider, VFX vfx)
         {
             control.currentHealth -= damage;
+            var contactpoint = triggerCollider.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
+            var previewVfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_TestOnHitEffect, contactpoint, Quaternion.identity);
+            previewVfx.GetComponent<Test_ShowDamageAmount>().ShowDamage(vfx.projectileDamage);
+            GameLoader.Instance.audioManager.PlayRandomSound(AudioSourceType.CharacterHit);
         }
 
         public void SetParamsAfterDeath()

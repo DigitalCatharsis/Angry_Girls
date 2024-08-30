@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -4479715664449668280}
   - component: {fileID: -1893633089817046530}
   - component: {fileID: 91092507137127200}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: VFX_Flame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,9 +50,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _timeToLive: 1
   _isTimeToLiveIsNormilizedTime: 0
-  _destroyOnCollision: 0
   _particleSystem: {fileID: 0}
   projectileDamage: 0
+  _destroyOnCollision: 0
+  vfxOwner: {fileID: 0}
 --- !u!114 &-4479715664449668280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,7 +120,7 @@ GameObject:
   - component: {fileID: 7937382409923814167}
   - component: {fileID: 6102906784945577741}
   - component: {fileID: 3569553733560221384}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: VEG_Flame
   m_TagString: Untagged
   m_Icon: {fileID: 0}

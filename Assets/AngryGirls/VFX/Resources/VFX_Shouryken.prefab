@@ -50,9 +50,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _timeToLive: 1
   _isTimeToLiveIsNormilizedTime: 0
-  _destroyOnCollision: 0
   _particleSystem: {fileID: 6220422225713749368}
   projectileDamage: 0
+  _destroyOnCollision: 0
+  vfxOwner: {fileID: 0}
 --- !u!114 &3829810582608407739
 MonoBehaviour:
   m_ObjectHideFlags: 0

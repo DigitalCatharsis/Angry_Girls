@@ -5,7 +5,7 @@ namespace Angry_Girls
 {
     public class AttackLogic_Static_Prep_Shoryuken : AttackAbilityLogic
     {
-        private GameObject runningVFX;
+        private GameObject _runningVFX;
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             //Первый вариант
@@ -24,7 +24,8 @@ namespace Angry_Girls
             //    );
 
             //Второй вариант с перегрузкой
-            runningVFX = GameLoader.Instance.VFXManager.SpawnVFX(control, control.characterSettings.staticAttackAbility.AttackVFX.GetComponent<VFXPoolObject>().poolObjectType);
+            _runningVFX = GameLoader.Instance.VFXManager.SpawnVFX(control, control.characterSettings.staticAttackAbility.AttackVFX.GetComponent<VFXPoolObject>().poolObjectType, setAsOwner: true);
+            _runningVFX.GetComponent<VFX>().InitAndRunVFX(control.characterSettings.launchedAttackPrepAbility, control.gameObject);
 
         }
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
@@ -40,7 +41,7 @@ namespace Angry_Girls
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            runningVFX.GetComponentInChildren<VisualEffect>().Stop(); //TODO не забудь в остальных стейтах
+            _runningVFX.GetComponentInChildren<VisualEffect>().Stop(); //TODO не забудь в остальных стейтах
         }
     }
 }
