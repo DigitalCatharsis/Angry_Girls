@@ -8,7 +8,7 @@ namespace Angry_Girls
         [Header("Setup")]
         [Header("Animation")]
         public CharAnimationData<StaticAttack_States> staticAttack_State;
-        public float timesToRepeat_AttackState = 1f;
+        public float timesToRepeat_AttackPrep_State = 1f;
 
         [Space(5)]
         [Header("Attack")]
@@ -16,6 +16,11 @@ namespace Angry_Girls
         [Space(5)]
         public float attackTimeDuration = 3f;
         public bool useAnimationNormalizedTimeDuration = false;
+
+        [Space(5)]
+        [Header("Character Phyciscs")]
+        public Vector3 attackPrepMovementSpeed = new Vector3(0, 0, 0);
+        public Vector3 attackPrepMovementForce = new Vector3(0, 0, 0);
 
         [Space(15)]
         [Header("Projectile")]
@@ -30,8 +35,7 @@ namespace Angry_Girls
 
         [Space(5)]
         [Header("Projectile Phyciscs")]
-        public Vector3 attackMovementSpeed = new Vector3(0, -2, 0);
-        public Vector3 attackMovementForce = new Vector3(0, 0, 0);
+        public Vector3 projectileMovementSpeed = new Vector3(0, 0, 0);  //?
         public bool destroyOnCollision = false;
 
         [Space(5)]

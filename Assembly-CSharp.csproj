@@ -146,6 +146,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\VFX.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\DebugInfo.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\SpawnManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\Static\AttackLogic_Static_SendFireball_Front_Static.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CControl.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AudioManager\SoundClipsCollection.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\GroundDetector.cs" />

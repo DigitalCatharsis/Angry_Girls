@@ -28,6 +28,7 @@ namespace Angry_Girls
         A_HitReaction_HeadHit,
         A_HitReaction_HeadHit2,
         A_HitReaction_Left,
+        A_SendFireball_Front_Static
     }
     public enum Idle_States
     {
@@ -56,6 +57,7 @@ namespace Angry_Girls
         A_Shoryuken_Prep_Static,
         A_Shoryuken_Landing_Static,
         A_Shoryuken_Rise_Static,
+        A_SendFireball_Front_Static
     }
     public enum AttackFinish_States
     {
