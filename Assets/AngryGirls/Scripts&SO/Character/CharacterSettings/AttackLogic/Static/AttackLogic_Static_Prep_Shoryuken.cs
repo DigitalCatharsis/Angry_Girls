@@ -35,7 +35,6 @@ namespace Angry_Girls
             {
                 //TODO: fuck...
                 control.subComponentMediator.tempChangeAnimation();
-                //ap.ChangeAnimationState(Singleton.Instance.statesDispatcher.staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], 0, transitionDuration: 1);
             }
         }
 

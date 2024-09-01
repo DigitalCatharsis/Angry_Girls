@@ -75,6 +75,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
+      propertyPath: isLanding
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: VFX_Color.b
+      value: 0.06209469
+      objectReference: {fileID: 0}
+    - target: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: VFX_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: VFX_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: currentHealth
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
       propertyPath: characterSettings
       value: 
       objectReference: {fileID: 11400000, guid: 263490b01e5a26a4eab11fef160f8338,

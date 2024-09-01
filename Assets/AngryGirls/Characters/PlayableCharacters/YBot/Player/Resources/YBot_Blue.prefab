@@ -710,7 +710,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   control: {fileID: 0}
-  _health: 100
 --- !u!1 &1905549136142692612
 GameObject:
   m_ObjectHideFlags: 0
@@ -1232,7 +1231,7 @@ MonoBehaviour:
   currentStateData:
     currentStateName: 0
     hash: 0
-  currentHealth: 0
+  currentHealth: 30
   isLanding: 0
   isGrounded: 0
   isAttacking: 0

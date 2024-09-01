@@ -45,13 +45,15 @@ namespace Angry_Girls
                     return;
                 }
 
-                SwitchToAttackingPhase();
 
                 //Adding enemies to attack list after 2 launches
                 if (_currentTurn == 1)
                 {
                     _charactersTurn_List.InsertRange(_charactersTurn_List.Count - 1, GameLoader.Instance.characterManager.enemyCharacters);
                 }
+
+                //current Phase is Static
+                SwitchToAttackingPhase();
 
                 // wait untill everyone do its turn then switch to LaunchimgPhase
                 StartCoroutine(OnEachTurn_Routine());

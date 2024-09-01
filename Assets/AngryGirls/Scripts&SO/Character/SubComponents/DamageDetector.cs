@@ -4,12 +4,8 @@ namespace Angry_Girls
 {
     public class DamageProcessor : SubComponent<SubcomponentMediator_EventNames>
     {
-        [Header("Setup")]
-        [SerializeField] private float _health = 100f;
-
         public override void OnComponentEnable()
         {
-            control.currentHealth = _health;
         }
         public override void OnUpdate()
         {

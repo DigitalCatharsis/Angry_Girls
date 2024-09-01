@@ -2217,6 +2217,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_Blue
       objectReference: {fileID: 0}
+    - target: {fileID: 1526512453941406509, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
+        type: 3}
+      propertyPath: currentHealth
+      value: 1111
+      objectReference: {fileID: 0}
     - target: {fileID: 3711684987824727529, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
       propertyPath: m_LocalPosition.x
