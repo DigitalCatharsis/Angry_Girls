@@ -40,5 +40,5 @@ MonoBehaviour:
   deathByAnimation: 1
   launchedAttackPrepAbility: {fileID: 11400000, guid: e35d5a6e8a68115488c24f09ded5e324,
     type: 2}
-  staticAttackAbility: {fileID: 11400000, guid: d3e3d0be744d1f340a843ac743d9b222,
+  staticAttackAbility: {fileID: 11400000, guid: 81ea2363aaa562546b8b177ae8a3118c,
     type: 2}

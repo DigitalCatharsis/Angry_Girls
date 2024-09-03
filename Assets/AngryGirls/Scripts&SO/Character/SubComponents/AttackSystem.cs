@@ -53,8 +53,14 @@ namespace Angry_Girls
                     control.attackSystem_Data.staticAttackLogic_Landing = new AttackLogic_Static_Landing_Shoryuken();
                     control.attackSystem_Data.staticAttackLogic_OnGround = new AttackLogic_Static_OnGround_Shoryuken_Rise();
                     break;
-                    //default:
-                    //    throw new Exception("No logic for state like " + control.characterSettings.attackPrepAbility.attackPrep_State.animation.ToString());
+                case StaticAttack_States.A_SendFireball_Front_Static:
+                    control.attackSystem_Data.staticAttackLogic_Prep = new AttackLogic_SendFireball_Front();
+                    break;
+                case StaticAttack_States.A_HeadSpin_Attack_Static:
+                    control.attackSystem_Data.staticAttackLogic_Prep = new AttackLogic_Static_HeadSpin();
+                    break;
+                default:
+                    throw new Exception("No logic for state like " + control.characterSettings.staticAttackAbility.staticAttack_State.animation.ToString());
             }
         }
 

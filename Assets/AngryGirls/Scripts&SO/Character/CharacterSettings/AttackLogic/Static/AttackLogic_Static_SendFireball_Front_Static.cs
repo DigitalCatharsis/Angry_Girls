@@ -1,7 +1,4 @@
 using DG.Tweening;
-using System.Drawing;
-using System.Runtime.CompilerServices;
-using UnityEditor.Search;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -21,8 +18,7 @@ namespace Angry_Girls
             control.isAttacking = true;
             control.rigidBody.useGravity = false;
             control.rigidBody.velocity = control.characterSettings.staticAttackAbility.attackPrepMovementSpeed;
-            //control.rigidBody.AddForce(control.characterSettings.launchedAttackPrepAbility.attackPrepMovementForce); //turn it back
-
+            
             SendFireball(control, control.projectileSpawnTransform.position, _finalProjectileRotation, control.characterSettings.staticAttackAbility.attackDamage);
 
         }
@@ -69,6 +65,7 @@ namespace Angry_Girls
                 control.characterSettings.staticAttackAbility.projectileMovementSpeed.z * vfx.transform.forward.z
                 );
 
+            control.rigidBody.AddForce(control.characterSettings.staticAttackAbility.attackPrepMovementForce); //turn it back
             vfx.GetComponent<VFX>().InitAndRunVFX(control.characterSettings.staticAttackAbility, control.gameObject);
             vfx.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);
             vfx.transform.DORotate(endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * vfx.transform.forward.z), duration: moveDuration, mode: RotateMode.Fast).SetLink(vfx, LinkBehaviour.PauseOnDisableRestartOnEnable);

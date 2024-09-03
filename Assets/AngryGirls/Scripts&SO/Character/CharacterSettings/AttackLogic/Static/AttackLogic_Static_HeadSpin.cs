@@ -4,12 +4,13 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class AttackLogic_HeadSpinAttack : AttackAbilityLogic
+    public class AttackLogic_Static_HeadSpin : AttackAbilityLogic
     {
         private float _impulseY = 7f;
         private float _impulseZ = 5f;
         private Vector3 _finalProjectileRotation = new Vector3(75f, 0, 0);
         private float _currentAttackTimer;
+        private bool _totallyRetardedWayToCallBool = false;
 
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
@@ -21,7 +22,17 @@ namespace Angry_Girls
             control.rigidBody.velocity = control.characterSettings.launchedAttackPrepAbility.attackPrepMovementSpeed;
             control.rigidBody.AddForce(control.characterSettings.launchedAttackPrepAbility.attackPrepMovementForce);
 
-            Vector3[] angles = {
+
+        }
+
+        public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
+        {
+            if (_totallyRetardedWayToCallBool == false)
+            {
+                if (control.rigidBody.velocity.y < 0.0001f)
+                {
+                    _totallyRetardedWayToCallBool = true;
+                    Vector3[] angles = {
                   new Vector3(170f,0,0),
                   new Vector3(200f,0,0),
                   new Vector3(230f,0,0),
@@ -30,11 +41,9 @@ namespace Angry_Girls
                   new Vector3(230f,-180f,0)
             };
 
-            ProcessFireballs(control, angles);
-        }
-
-        public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
-        {
+                    ProcessFireballs(control, angles);
+                }
+            }
             if (control.characterSettings.launchedAttackPrepAbility.useAnimationNormalizedTimeDuration)
             {
                 if (stateInfo.normalizedTime >= control.characterSettings.launchedAttackPrepAbility.timesToRepeat_AttackPrep_State)

@@ -21,11 +21,10 @@ namespace Angry_Girls
             control.isAttacking = true;
             control.rigidBody.useGravity = false;
             control.rigidBody.velocity = control.characterSettings.launchedAttackPrepAbility.attackPrepMovementSpeed;
-            //control.rigidBody.AddForce(control.characterSettings.launchedAttackPrepAbility.attackPrepMovementForce); //turn it back
 
             SendFireball(control, control.projectileSpawnTransform.position, _finalProjectileRotation, control.characterSettings.launchedAttackPrepAbility.attackDamage);
-
         }
+
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             if (_attacksCount < ((int)stateInfo.normalizedTime))
@@ -69,6 +68,7 @@ namespace Angry_Girls
                 control.characterSettings.launchedAttackPrepAbility.projectileMovementSpeed.z * vfx.transform.forward.z
                 );
 
+            control.rigidBody.AddForce(control.characterSettings.launchedAttackPrepAbility.attackPrepMovementForce); //turn it back
             vfx.GetComponent<VFX>().InitAndRunVFX(control.characterSettings.launchedAttackPrepAbility, control.gameObject); 
             vfx.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);
             vfx.transform.DORotate(endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * vfx.transform.forward.z), duration: moveDuration, mode: RotateMode.Fast).SetLink(vfx, LinkBehaviour.PauseOnDisableRestartOnEnable);
