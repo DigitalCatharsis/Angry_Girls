@@ -1,3 +1,4 @@
+using AYellowpaper.SerializedCollections;
 using System;
 using UnityEngine;
 
@@ -5,13 +6,7 @@ namespace Angry_Girls
 {
     public class AttackSystem : SubComponent<SubcomponentMediator_EventNames>
     {
-        //Logic
-        //public AttackAbilityLogic attackPrepLogic;
-        //public AttackAbilityLogic attackFinishLogic;
-
-        //public AttackAbilityLogic staticAttackLogic_Prep;
-        //public AttackAbilityLogic staticAttackLogic_Landing;
-        //public AttackAbilityLogic staticAttackLogic_OnGround;
+        SerializedDictionary<StaticAttack_States, AttackAbilityLogic> testStaticStateLogicContainer;
         public override void OnComponentEnable()
         {
             InitAttackLogic();
@@ -19,6 +14,7 @@ namespace Angry_Girls
 
         private void InitAttackLogic()
         {
+
             //attackPrep
             switch (control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation)
             {
@@ -56,8 +52,9 @@ namespace Angry_Girls
                 case StaticAttack_States.A_SendFireball_Front_Static:
                     control.attackSystem_Data.staticAttackLogic_Prep = new AttackLogic_SendFireball_Front();
                     break;
-                case StaticAttack_States.A_HeadSpin_Attack_Static:
-                    control.attackSystem_Data.staticAttackLogic_Prep = new AttackLogic_Static_HeadSpin();
+                case StaticAttack_States.A_HeadSpin_Attack_Prep_Static:
+                    control.attackSystem_Data.staticAttackLogic_Prep = new AttackLogic_Static_HeadSpin_Prep();
+                    control.attackSystem_Data.staticAttackLogic_Airboned = new AttackLogic_Static_HeadSpin();
                     break;
                 default:
                     throw new Exception("No logic for state like " + control.characterSettings.staticAttackAbility.staticAttack_State.animation.ToString());
@@ -92,6 +89,7 @@ namespace Angry_Girls
         public AttackAbilityLogic attackFinishLogic;
 
         public AttackAbilityLogic staticAttackLogic_Prep;
+        public AttackAbilityLogic staticAttackLogic_Airboned;
         public AttackAbilityLogic staticAttackLogic_Landing;
         public AttackAbilityLogic staticAttackLogic_OnGround;
     }

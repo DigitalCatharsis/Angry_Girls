@@ -138,7 +138,12 @@ namespace Angry_Girls
         }
 
         #region TEMP METHODS
-        public void tempChangeAnimation()
+        //Where the fuck should i place iT?!
+        public void TEMP_SetHeadSpinState()
+        {
+            _animationProcessor.ChangeAnimationState(GameLoader.Instance.statesDispatcher.staticAttack_States_Dictionary[StaticAttack_States.A_HeadSpin_Attack_Static], 0, transitionDuration: 1);
+        }
+        public void TEMP_SetShorukenLandingState()
         {
             _animationProcessor.ChangeAnimationState(GameLoader.Instance.statesDispatcher.staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], 0, transitionDuration: 1);
         }
