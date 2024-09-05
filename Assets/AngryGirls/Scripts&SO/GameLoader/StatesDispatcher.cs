@@ -30,7 +30,18 @@ namespace Angry_Girls
         A_HitReaction_Left,
         A_SendFireball_Front_Static,
         A_HeadSpin_Attack_Static,
-        A_HeadSpin_Attack_Prep_Static
+        A_HeadSpin_Attack_Prep_Static,
+        A_NinjaIdle_1,
+        A_NinjaIdle_2,
+        A_NinjaIdle_3,
+        A_NinjaIdle_4,
+        A_SwordIdle_1,
+        A_SwordIdle_2,            
+        A_SwordIdle_3,
+        A_SwordIdle_4,
+        A_SwordIdle_5,
+        A_SwordIdle_6,
+            
     }
     public enum Idle_States
     {
@@ -39,6 +50,16 @@ namespace Angry_Girls
         A_Idle_HeadSpin,
         A_Floating,
         A_Axe_Idle,
+        A_NinjaIdle_1,
+        A_NinjaIdle_2,
+        A_NinjaIdle_3,
+        A_NinjaIdle_4,
+        A_SwordIdle_1,
+        A_SwordIdle_2,
+        A_SwordIdle_3,
+        A_SwordIdle_4,
+        A_SwordIdle_5,
+        A_SwordIdle_6,
     }
     public enum AirbonedFlying_States
     {

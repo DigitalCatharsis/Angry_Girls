@@ -19,9 +19,9 @@ MonoBehaviour:
   landingMovementSpeed: {x: 0, y: 0, z: 0}
   boxcolliderContainer: {fileID: 11400000, guid: f850d6b3c9e089f40907f4cbddf37a9e,
     type: 2}
-  idle_State:
-    animation: 2
-    transitionDuration: 0.2
+  idle_States:
+  - animation: 2
+    transitionDuration: 0.1
   airbonedFlying_States:
     animation: 2
     transitionDuration: 0.1

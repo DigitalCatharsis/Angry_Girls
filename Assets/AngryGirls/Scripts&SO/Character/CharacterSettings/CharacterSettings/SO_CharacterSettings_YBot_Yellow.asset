@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5712a747d1a17fc42b72503a7509d404, type: 3}
-  m_Name: SO_CharacterSettings_YBot_Blue
+  m_Name: SO_CharacterSettings_YBot_Yellow
   m_EditorClassIdentifier: 
   _notifyAboutNONEStates: 0
   unitType: 0
@@ -20,13 +20,17 @@ MonoBehaviour:
   boxcolliderContainer: {fileID: 11400000, guid: 2697f8a1822d97d4597139c6fdf4cb34,
     type: 2}
   idle_States:
-  - animation: 5
+  - animation: 9
     transitionDuration: 0.1
-  - animation: 6
+  - animation: 10
     transitionDuration: 0.1
-  - animation: 7
+  - animation: 11
     transitionDuration: 0.1
-  - animation: 8
+  - animation: 12
+    transitionDuration: 0.1
+  - animation: 13
+    transitionDuration: 0.1
+  - animation: 14
     transitionDuration: 0.1
   airbonedFlying_States:
     animation: 1

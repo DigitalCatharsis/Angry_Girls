@@ -1,5 +1,7 @@
 using AYellowpaper.SerializedCollections;
 using System;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -31,13 +33,15 @@ namespace Angry_Girls
             }
 
             //should start from idle when the game starts
-            ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesDispatcher.idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+            var idleState = control.characterSettings.idle_States[UnityEngine.Random.Range(0, control.characterSettings.idle_States.Count)];
+
+            ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesDispatcher.idle_Dictionary[idleState.animation], transitionDuration: idleState.transitionDuration);
         }
 
         public override void OnFixedUpdate()
         {
             //On Launching behavior phase
-            if (GameLoader.Instance.turnManager.CurrentPhase  == CurrentPhase.LaunchingPhase
+            if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.LaunchingPhase
                 //&& control.playerOrAi == PlayerOrAi.Player
                 && control.hasBeenLaunched == true)
             {
@@ -195,7 +199,7 @@ namespace Angry_Girls
             {
                 var randomDeathAnimation = control.characterSettings.death_States[UnityEngine.Random.Range(0, control.characterSettings.death_States.Count)].animation; //0 = none            
                                                                                                                                                                         //no crossFade for instant animations changes at fast damage recive
-                ChangeAnimationState(GameLoader.Instance.statesDispatcher.death_States_Dictionary[randomDeathAnimation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+                ChangeAnimationState(GameLoader.Instance.statesDispatcher.death_States_Dictionary[randomDeathAnimation], transitionDuration: 0.1f);
                 return;
             }
             else
@@ -221,9 +225,9 @@ namespace Angry_Girls
 
         private void Global_CheckAndProcess_HitReaction()
         {
-            var randomHitAnimation = control.characterSettings.hitReaction_States[UnityEngine.Random.Range(0, control.characterSettings.hitReaction_States.Count)].animation;        
+            var randomHitAnimation = control.characterSettings.hitReaction_States[UnityEngine.Random.Range(0, control.characterSettings.hitReaction_States.Count)].animation;
             //no crossFade for instant animations changes at fast damage recive
-            ChangeAnimationState(GameLoader.Instance.statesDispatcher.hitReaction_Dictionary[randomHitAnimation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+            ChangeAnimationState(GameLoader.Instance.statesDispatcher.hitReaction_Dictionary[randomHitAnimation], transitionDuration: 0.1f);
             control.unitGotHit = false;
             return;
         }
@@ -276,7 +280,7 @@ namespace Angry_Girls
             {
                 if (control.isGrounded || control.hasFinishedLaunchingTurn)
                 {
-                    ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesDispatcher.idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+                    ToIdle();
                 }
 
                 return;
@@ -285,7 +289,7 @@ namespace Angry_Girls
             //everyone else
             if (control.isGrounded)
             {
-                ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesDispatcher.idle_Dictionary[control.characterSettings.idle_State.animation], transitionDuration: control.characterSettings.idle_State.transitionDuration);
+                ToIdle();
             }
         }
 
@@ -375,6 +379,24 @@ namespace Angry_Girls
             {
                 control.transform.rotation = Quaternion.Euler(0, 180, 0);
             }
+        }
+
+        private void ToIdle()
+        {
+            var test = GameLoader.Instance.statesDispatcher.stateNames_Dictionary;
+            var hash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
+            if (GameLoader.Instance.statesDispatcher.idle_Dictionary.ContainsValue(hash))
+            {
+                return;
+            }
+            if ((control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9))
+            {
+                return;
+            }
+
+            var idleState = control.characterSettings.idle_States[UnityEngine.Random.Range(0, control.characterSettings.idle_States.Count)];
+
+            ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesDispatcher.idle_Dictionary[idleState.animation], transitionDuration: idleState.transitionDuration);
         }
 
         public override void OnAwake()

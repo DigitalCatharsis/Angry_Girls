@@ -32,7 +32,7 @@ namespace Angry_Girls
         public BoxColliderUpdater_Container boxcolliderContainer;
 
         [Header("Animations")]
-        public CharAnimationData<Idle_States> idle_State;
+        public List<CharAnimationData<Idle_States>> idle_States;
         public CharAnimationData<AirbonedFlying_States> airbonedFlying_States;
         public CharAnimationData<AttackFinish_States> attackFininsh_State;
         public CharAnimationData<Landing_States> landing_State;
@@ -71,6 +71,12 @@ namespace Angry_Girls
             }
         }
 
+        public CharAnimationData<T> GetRandomState<T>(List<CharAnimationData<T>> collection) where T : Enum
+        {
+            var index = UnityEngine.Random.Range(0, collection.Count);
+            return collection[index];
+        }
+
         public void CheckForNoneValues(CControl control)
         {
             if (_notifyAboutNONEStates == false)
@@ -79,7 +85,7 @@ namespace Angry_Girls
             }
 
             //debug
-            NotifyForNONE_Value(idle_State, control);
+            NotifyForNONE_Value(idle_States, control);
             NotifyForNONE_Value(airbonedFlying_States, control);
             NotifyForNONE_Value(attackFininsh_State, control);
             NotifyForNONE_Value(landing_State, control);

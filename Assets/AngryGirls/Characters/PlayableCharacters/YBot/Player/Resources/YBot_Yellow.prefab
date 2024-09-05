@@ -88,6 +88,12 @@ PrefabInstance:
       propertyPath: VFX_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: characterSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: a778f59384ee71745baa1bd3d66b00e8,
+        type: 2}
     - target: {fileID: 7121561051254715629, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: VFX_Color.a
