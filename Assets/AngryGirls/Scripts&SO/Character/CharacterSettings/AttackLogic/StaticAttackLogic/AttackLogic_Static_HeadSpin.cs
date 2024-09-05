@@ -9,12 +9,10 @@ namespace Angry_Girls
         private float _impulseY = 7f;
         private float _impulseZ = 5f;
         private Vector3 _finalProjectileRotation = new Vector3(75f, 0, 0);
-        private float _currentAttackTimer;
+        private bool _secondShootingDone = false;
 
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            _currentAttackTimer = 0;
-
             control.isAttacking = true;
 
             //Move character when casting ability
@@ -35,13 +33,14 @@ namespace Angry_Girls
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            if (control.characterSettings.staticAttackAbility.useAnimationNormalizedTimeDuration)
+            if (_secondShootingDone == true)
             {
-                if (stateInfo.normalizedTime >= control.characterSettings.staticAttackAbility.timesToRepeat_AttackPrep_State)
-                {
-                    if (control.rigidBody.velocity.y < 0.0001)
-                    {
-                        Vector3[] angles = {
+                return;
+            }
+
+            if (control.rigidBody.velocity.y < 0.0001)
+            {
+                Vector3[] angles = {
                   new Vector3(-205f,0,0),
                   new Vector3(-225f,0,0),
                   new Vector3(-270f,0,0),
@@ -49,56 +48,16 @@ namespace Angry_Girls
                   new Vector3(-325f,0,0),
             };
 
-                        //Second cast, second character move
-                        control.rigidBody.AddForce(control.characterSettings.staticAttackAbility.attackPrepMovementForce);
-                        ProcessFireballs(control, angles);
-                        control.isAttacking = false;
-                    }
-                    control.isAttacking = false;
-                    control.airToGroundUnit_FinishedAbility = true;
-                }
+                //Second cast, second character move
+                control.rigidBody.AddForce(control.characterSettings.staticAttackAbility.attackPrepMovementForce);
+                ProcessFireballs(control, angles);
+                control.isAttacking = false;
+                _secondShootingDone = true;
             }
-            else
-            {
-                _currentAttackTimer += Time.deltaTime;
-                if (_currentAttackTimer >= control.characterSettings.staticAttackAbility.attackTimeDuration)
-                {
-                    if (control.rigidBody.velocity.y < 0.0001)
-                    {
-                        Vector3[] angles = {
-                  new Vector3(-205f,0,0),
-                  new Vector3(-225f,0,0),
-                  new Vector3(-270f,0,0),
-                  new Vector3(-305f,0,0),
-                  new Vector3(-325f,0,0),
-            };
-
-                        //Second cast, second character move
-                        control.rigidBody.AddForce(control.characterSettings.staticAttackAbility.attackPrepMovementForce);
-                        ProcessFireballs(control, angles);
-                        control.isAttacking = false;
-                    }
-                    control.isAttacking = false;
-                }
-            }
-
-
-        }
+    }
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            //Vector3[] angles = {
-            //      new Vector3(-205f,0,0),
-            //      new Vector3(-225f,0,0),
-            //      new Vector3(-270f,0,0),
-            //      new Vector3(-305f,0,0),
-            //      new Vector3(-325f,0,0),
-            //};
-
-            ////Second cast, second character move
-            //control.rigidBody.AddForce(control.characterSettings.staticAttackAbility.attackPrepMovementForce);
-            //ProcessFireballs(control, angles);
-
             control.airToGroundUnit_FinishedAbility = true;
             control.isAttacking = false;
         }
