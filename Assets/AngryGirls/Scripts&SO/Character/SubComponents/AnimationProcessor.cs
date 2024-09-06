@@ -1,5 +1,6 @@
 using AYellowpaper.SerializedCollections;
 using System;
+using System.Drawing;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -11,14 +12,9 @@ namespace Angry_Girls
         public override void OnComponentEnable()
         {
             //Init start Animation
-            UpdateCurrentStateData_Value();
-        }
-
-        private void UpdateCurrentStateData_Value()
-        {
             AnimatorStateInfo stateInfo = control.animator.GetCurrentAnimatorStateInfo(0);
             control.currentStateData.hash = stateInfo.shortNameHash;
-            control.currentStateData.currentStateName = GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, control.currentStateData.hash);
+            control.currentStateData.currentStateName = GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash);
         }
 
         public override void OnStart()
@@ -42,7 +38,6 @@ namespace Angry_Girls
         {
             //On Launching behavior phase
             if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.LaunchingPhase
-                //&& control.playerOrAi == PlayerOrAi.Player
                 && control.hasBeenLaunched == true)
             {
                 LaunchingPhase_Logic();
@@ -85,15 +80,12 @@ namespace Angry_Girls
             if (control.isAttacking && control.isGrounded)
             {
                 control.animator.StopPlayback();
-                //ChangeAnimationState_CrossFadeInFixedTime(Singleton.Instance.statesDispatcher.attackFinish_Dictionary[control.characterSettings.attackFininsh_State.animation], transitionDuration: control.characterSettings.attackFininsh_State.transitionDuration);
-                ChangeAnimationState(GameLoader.Instance.statesDispatcher.attackFinish_Dictionary[control.characterSettings.attackFininsh_State.animation], transitionDuration: control.characterSettings.attackFininsh_State.transitionDuration);
+                ChangeAnimationStateFixedTime(GameLoader.Instance.statesDispatcher.attackFinish_Dictionary[control.characterSettings.attackFininsh_State.animation], transitionDuration: control.characterSettings.attackFininsh_State.transitionDuration);
             }
         }
 
         private void Launching_CheckAndProcess_AttackPrep()
         {
-            //Airboned + Attack  (AttackPrep)
-
             //AirToGround unit personal condition
             if (control.characterSettings.unitType == UnitType.AirToGround)
             {
@@ -104,14 +96,15 @@ namespace Angry_Girls
                     return;
                 }
 
-                if (GameLoader.Instance.statesDispatcher.attackPrep_Dictionary.ContainsValue(control.currentStateData.hash))
+                //if (GameLoader.Instance.statesDispatcher.attackPrep_Dictionary.ContainsValue(control.currentStateData.hash))
+                if (GameLoader.Instance.statesDispatcher.attackPrep_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
                 {
                     return;
                 }
             }
 
             //for ground unit
-            if (GameLoader.Instance.statesDispatcher.attackFinish_Dictionary.ContainsValue(control.currentStateData.hash))
+            if (GameLoader.Instance.statesDispatcher.attackFinish_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
             {
                 return;
             }
@@ -123,7 +116,7 @@ namespace Angry_Girls
             }
 
             control.isAttacking = true;
-            ChangeAnimationState_CrossFade(GameLoader.Instance.statesDispatcher.attackPrep_Dictionary[control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation], control.characterSettings.launchedAttackPrepAbility.attackPrep_State.transitionDuration);
+            ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesDispatcher.attackPrep_Dictionary[control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation],control.characterSettings.launchedAttackPrepAbility.attackPrep_State.transitionDuration);
             return;
         }
         #endregion
@@ -140,7 +133,7 @@ namespace Angry_Girls
 
         private void Static_CheckAndProcessAttack()
         {
-            if (GameLoader.Instance.statesDispatcher.staticAttack_States_Dictionary.ContainsValue(control.currentStateData.hash))
+            if (GameLoader.Instance.statesDispatcher.staticAttack_States_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
             {
                 return;
             }
@@ -241,7 +234,7 @@ namespace Angry_Girls
                 return false;
             }
 
-            if ((GameLoader.Instance.statesDispatcher.airbonedFlying_Dictionary.ContainsValue(control.currentStateData.hash))
+            if ((GameLoader.Instance.statesDispatcher.airbonedFlying_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
                 && control.isGrounded
                 && control.isAttacking == false)
             {
@@ -264,13 +257,16 @@ namespace Angry_Girls
                     return;
             }
 
-            //everyones logic
-            if (GameLoader.Instance.statesDispatcher.attackFinish_Dictionary.ContainsValue(control.currentStateData.hash))
+            //personal ground unit condition
+            if (GameLoader.Instance.statesDispatcher.attackFinish_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
             {
                 return;
             }
 
-            ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesDispatcher.airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], control.characterSettings.airbonedFlying_States.transitionDuration);
+            //everyones logic
+            ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesDispatcher.airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], transitionDuration: control.characterSettings.airbonedFlying_States.transitionDuration);
+
+            //ChangeAnimationStateFixedTime(GameLoader.Instance.statesDispatcher.airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], transitionDuration: control.characterSettings.airbonedFlying_States.transitionDuration);
         }
 
         private void Global_CheckAndProcess_Idle()
@@ -298,8 +294,8 @@ namespace Angry_Girls
         #region Conditions
         public bool IsLauchingAttackStateOver(float attackAnimationRepeatRate)
         {
-            bool airAttack = GameLoader.Instance.statesDispatcher.attackPrep_Dictionary.ContainsValue(control.currentStateData.hash);
-            bool groundAttack = GameLoader.Instance.statesDispatcher.attackFinish_Dictionary.ContainsValue(control.currentStateData.hash);
+            bool airAttack = GameLoader.Instance.statesDispatcher.attackPrep_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash);
+            bool groundAttack = GameLoader.Instance.statesDispatcher.attackFinish_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash);
 
             //ѕока работает, но расчет normilized time в данном случае неверный.
             if ((airAttack || groundAttack)
@@ -315,7 +311,7 @@ namespace Angry_Girls
 
         private void ChangeAnimationState_CrossFade(int newStateHash, float transitionDuration, int layer = 0, float normalizedTimeOffset = 0.0f, float normalizedTransitionTime = 0.0f)
         {
-            if (control.currentStateData.hash == newStateHash)
+            if (control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash == newStateHash)
             {
                 return;
             }
@@ -325,26 +321,49 @@ namespace Angry_Girls
             control.currentStateData.hash = newStateHash;
         }
 
-        public void ChangeAnimationState_CrossFadeInFixedTime(int newStateHash, float transitionDuration, int layer = 0, float normalizedTimeOffset = 0.0f, float normalizedTransitionTime = 0.0f)
-        {
+        public void ChangeAnimationState_CrossFadeInFixedTime(int newStateHash, float transitionDuration, int layer = 0)
+        {            
+            var shortNameHash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
+
             if (GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, newStateHash) == StateNames.NONE)
             {
                 return;
             }
 
-            if (control.currentStateData.hash == newStateHash)
+            if (shortNameHash == newStateHash || control.animator.IsInTransition(layer))
             {
                 return;
             }
-            control.animator.CrossFadeInFixedTime(newStateHash, transitionDuration, layer, normalizedTimeOffset, normalizedTransitionTime);
+
+            //if (control.currentStateData.hash == newStateHash)
+            //{
+            //    return;
+            //}
+
+            if (control.name == "YBot_Green(Clone)")
+            {
+                ColorDebugLog.Log(GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, shortNameHash).ToString() 
+                    + " -> " 
+                    + GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, newStateHash).ToString(), KnownColor.Yellow);
+
+                ColorDebugLog.Log("ShortNameHash: " + GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, shortNameHash).ToString(), System.Drawing.KnownColor.Yellow);
+                ColorDebugLog.Log("newStateHash: " + GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, newStateHash).ToString(), System.Drawing.KnownColor.Yellow);
+                ColorDebugLog.Log("===================================", KnownColor.Window);
+            }
+
+            //control.animator.StopPlayback();
+            //control.animator.CrossFadeInFixedTime(newStateHash, fixedTransitionDuration: transitionDuration, layer: layer,fixedTimeOffset: fixedTimeOffset, normalizedTransitionTime: normalizedTransitionTime);
+            control.animator.CrossFadeInFixedTime(newStateHash, fixedTransitionDuration: transitionDuration, layer: layer, fixedTimeOffset: 0f, normalizedTransitionTime: 0.0f);
 
             control.currentStateData.currentStateName = GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, newStateHash);
             control.currentStateData.hash = newStateHash;
         }
 
+
+
         public void ChangeAnimationState(int newStateHash, int layer = 0, float transitionDuration = 1f)
         {
-            if (control.currentStateData.hash == newStateHash)
+            if (control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash == newStateHash)
             {
                 return;
             }
@@ -353,9 +372,9 @@ namespace Angry_Girls
             control.currentStateData.currentStateName = GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, newStateHash);
             control.currentStateData.hash = newStateHash;
         }
-        public void ChangeAnimationStateFixedTime(int newStateHash, int layer = 0, float transitionDuration = 1f)
+        public void ChangeAnimationStateFixedTime(int newStateHash, int layer = 0, float transitionDuration = 0f)
         {
-            if (control.currentStateData.hash == newStateHash)
+            if (control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash == newStateHash)
             {
                 return;
             }

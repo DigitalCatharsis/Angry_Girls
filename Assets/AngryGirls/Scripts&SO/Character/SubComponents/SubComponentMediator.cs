@@ -145,7 +145,7 @@ namespace Angry_Girls
         }
         public void TEMP_SetShorukenLandingState()
         {
-            _animationProcessor.ChangeAnimationState(GameLoader.Instance.statesDispatcher.staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], 0, transitionDuration: 1);
+            _animationProcessor.ChangeAnimationStateFixedTime(GameLoader.Instance.statesDispatcher.staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], 0, transitionDuration: 1);
         }
         #endregion
     }

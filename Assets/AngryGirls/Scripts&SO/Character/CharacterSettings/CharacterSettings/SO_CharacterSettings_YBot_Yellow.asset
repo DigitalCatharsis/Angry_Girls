@@ -21,17 +21,17 @@ MonoBehaviour:
     type: 2}
   idle_States:
   - animation: 9
-    transitionDuration: 0.1
+    transitionDuration: 0.25
   - animation: 10
-    transitionDuration: 0.1
+    transitionDuration: 0.25
   - animation: 11
-    transitionDuration: 0.1
+    transitionDuration: 0.25
   - animation: 12
-    transitionDuration: 0.1
+    transitionDuration: 0.25
   - animation: 13
-    transitionDuration: 0.1
+    transitionDuration: 0.25
   - animation: 14
-    transitionDuration: 0.1
+    transitionDuration: 0.25
   airbonedFlying_States:
     animation: 1
     transitionDuration: 0.1
