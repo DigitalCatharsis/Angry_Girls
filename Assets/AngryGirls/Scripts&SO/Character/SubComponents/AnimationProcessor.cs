@@ -1,8 +1,4 @@
-using AYellowpaper.SerializedCollections;
 using System;
-using System.Drawing;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -308,19 +304,6 @@ namespace Angry_Girls
         #endregion
 
         #region Change State
-
-        private void ChangeAnimationState_CrossFade(int newStateHash, float transitionDuration, int layer = 0, float normalizedTimeOffset = 0.0f, float normalizedTransitionTime = 0.0f)
-        {
-            if (control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash == newStateHash)
-            {
-                return;
-            }
-            control.animator.CrossFade(newStateHash, transitionDuration, layer, normalizedTimeOffset, normalizedTransitionTime);
-
-            control.currentStateData.currentStateName = GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, newStateHash);
-            control.currentStateData.hash = newStateHash;
-        }
-
         public void ChangeAnimationState_CrossFadeInFixedTime(int newStateHash, float transitionDuration, int layer = 0)
         {            
             var shortNameHash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
@@ -335,24 +318,17 @@ namespace Angry_Girls
                 return;
             }
 
-            //if (control.currentStateData.hash == newStateHash)
+            //if (control.name == "YBot_Green(Clone)")
             //{
-            //    return;
+            //    ColorDebugLog.Log(GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, shortNameHash).ToString() 
+            //        + " -> " 
+            //        + GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, newStateHash).ToString(), KnownColor.Yellow);
+
+            //    ColorDebugLog.Log("ShortNameHash: " + GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, shortNameHash).ToString(), System.Drawing.KnownColor.Yellow);
+            //    ColorDebugLog.Log("newStateHash: " + GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, newStateHash).ToString(), System.Drawing.KnownColor.Yellow);
+            //    ColorDebugLog.Log("===================================", KnownColor.Window);
             //}
 
-            if (control.name == "YBot_Green(Clone)")
-            {
-                ColorDebugLog.Log(GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, shortNameHash).ToString() 
-                    + " -> " 
-                    + GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, newStateHash).ToString(), KnownColor.Yellow);
-
-                ColorDebugLog.Log("ShortNameHash: " + GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, shortNameHash).ToString(), System.Drawing.KnownColor.Yellow);
-                ColorDebugLog.Log("newStateHash: " + GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, newStateHash).ToString(), System.Drawing.KnownColor.Yellow);
-                ColorDebugLog.Log("===================================", KnownColor.Window);
-            }
-
-            //control.animator.StopPlayback();
-            //control.animator.CrossFadeInFixedTime(newStateHash, fixedTransitionDuration: transitionDuration, layer: layer,fixedTimeOffset: fixedTimeOffset, normalizedTransitionTime: normalizedTransitionTime);
             control.animator.CrossFadeInFixedTime(newStateHash, fixedTransitionDuration: transitionDuration, layer: layer, fixedTimeOffset: 0f, normalizedTransitionTime: 0.0f);
 
             control.currentStateData.currentStateName = GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, newStateHash);

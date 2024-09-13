@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class TODO : MonoBehaviour
 {
     //Поворот после статичной атаки в стороне близжайшего противника
     //Поворот запущенный пешек в левую сторону
-
-    //Игнорировать других персонажей кроме противников (PlayerType)
     //Оптимизировать дальность полета и дельту для зума.
     //Сделать максимальынй радиус для запуска. Превышение будет возвпращать заданное максимальное значение радиуса
     //Вылет персонажа за край карты || UPD: уменьшить радиус оттягивания при запуске персонажа
@@ -22,4 +19,35 @@ public class TODO : MonoBehaviour
     //Движение камеры по грабу левой клавишей мыши
     //Монетки для очков и предварительной траектории
     //Bool для полного и частиного отображения траектории
+}
+
+public class SomeClass : IDisposable
+{
+    private bool disposed = false;
+
+    // реализация интерфейса IDisposable.
+    public void Dispose()
+    {
+        // освобождаем неуправляемые ресурсы
+        Dispose(true);
+        // подавляем финализацию
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposed) return;
+        if (disposing)
+        {
+            // Освобождаем управляемые ресурсы
+        }
+        // освобождаем неуправляемые объекты
+        disposed = true;
+    }
+
+    // Деструктор
+    ~SomeClass()
+    {
+        Dispose(false);
+    }
 }

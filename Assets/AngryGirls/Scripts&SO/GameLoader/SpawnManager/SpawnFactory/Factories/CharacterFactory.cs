@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    //TODO: HashManager
     public enum CharacterType
     {
         YBot_Blue,

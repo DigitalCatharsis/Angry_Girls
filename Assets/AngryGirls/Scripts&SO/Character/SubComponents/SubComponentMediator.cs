@@ -88,7 +88,6 @@ namespace Angry_Girls
         {
             if (eventName == SubcomponentMediator_EventNames.CharacterCollider_Trigger_Enter)
             {
-                //ColorDebugLog.Log(_control.name + "'s" + " Subcomponent's Mediator reacts on " + SubcomponentMediator_EventNames.Trigger_Enter + " and triggers following operations:", System.Drawing.KnownColor.ControlLightLight);
                 _damageProcessor.CheckForDamage(collider);
             }
         }

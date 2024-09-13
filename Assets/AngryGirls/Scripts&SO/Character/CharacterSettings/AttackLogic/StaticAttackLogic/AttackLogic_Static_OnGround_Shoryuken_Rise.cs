@@ -15,7 +15,7 @@ namespace Angry_Girls
                 destroyOnCollision: false, 
                 control.characterSettings.launchedAttackPrepAbility.attackDamage, 
                 enableCollider: false, 
-                enableTrigger: true, //TODO: бага в анимации из-за урона самому себе
+                enableTrigger: true, 
                 owner: control.gameObject
                 ); 
         }

@@ -28603,7 +28603,6 @@ GameObject:
   - component: {fileID: 2856694958892417096}
   - component: {fileID: 6048308684481631739}
   - component: {fileID: 7267831022188360813}
-  - component: {fileID: -1585768811547435344}
   - component: {fileID: 2691327820251538289}
   - component: {fileID: 6587955497302116823}
   m_Layer: 13
@@ -33397,24 +33396,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49d18267dcc029e4fac167ae161938d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _vfxType: 0
   _timeToLive: 1
   _isTimeToLiveIsNormilizedTime: 0
-  _destroyOnCollision: 0
   _particleSystem: {fileID: 0}
   projectileDamage: 0
---- !u!114 &-1585768811547435344
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8535787800293781277}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56fd5ac9cc2e53249a9150122e0cac4c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  poolObjectType: 0
+  _destroyOnCollision: 0
+  vfxOwner: {fileID: 0}
 --- !u!65 &2691327820251538289
 BoxCollider:
   m_ObjectHideFlags: 0

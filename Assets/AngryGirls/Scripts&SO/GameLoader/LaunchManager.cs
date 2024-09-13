@@ -12,7 +12,6 @@ namespace Angry_Girls
         [Header("Setup")]
         [SerializeField] private CharacterSelect characterSelectSO;
         [SerializeField] private CharacterLauncher _characterLauncher;
-        [SerializeField] private Transform _characterLauncherStartTransform;  //TODO: ? does it neccesery?
 
         [Space(10)]
         [Header("Conditions")]

@@ -69,7 +69,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\AnimationProcessor.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModulePhysics2D.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\CameraManager.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolObject\DataPoolObject.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\CharacterSelect\CharacterSelect.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolManager.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\Settings\PhysicsSettings.cs" />
@@ -77,7 +76,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\CharacterSettings\CharacterSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\StaticAttackLogic\AttackLogic_Static_HeadSpin.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\DistanceBetweenTwoObjects\DistanceBetweenTwoObjects.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolObject\IPoolObject.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\LaunchingAttackLogic\AttackLogic_ShoryukenDownSmash_Finish.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Mediator\BaseMediatorComponent.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\SpawnFactory\Factories\DataFactory.cs" />
@@ -105,7 +103,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\AttackSystem.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\StaticAttack_Behavior_Airboned.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleAudio.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolObject\CharacterPoolObject.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolObject\PoolObject.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\Examples\MediatorExample.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CollisionDetection.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\StaticAttack_Behavior_Prep.cs" />
@@ -132,7 +130,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\VFXManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\CharacterMovement.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\Landing_Behavior.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolObject\VFXPoolObject.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\HitReaction_Behavior.cs" />
     <Compile Include="Assets\AngryGirls\Characters\CollisionSpheres\OverlapChecker.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\HashManager.cs" />
