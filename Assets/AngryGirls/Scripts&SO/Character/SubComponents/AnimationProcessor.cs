@@ -166,8 +166,16 @@ namespace Angry_Girls
             }
 
             //Check Landing
-            if (control.isGrounded && !control.isAttacking)
+            if (control.isGrounded)
             {
+                if (control.characterSettings.unitType != UnitType.AirToGround)
+                {
+                    if (control.isAttacking)
+                    {
+                        return;
+                    }
+                }
+
                 if (Global_CheckAndProcess_Landing() == true)
                 {
                     //без return не успеет перейти в State Behavior
@@ -230,9 +238,20 @@ namespace Angry_Girls
                 return false;
             }
 
+            //no landing phase for air units. The Launch is over
+            if (control.characterSettings.unitType == UnitType.AirToGround 
+                && (GameLoader.Instance.statesDispatcher.attackPrep_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash) || GameLoader.Instance.statesDispatcher.staticAttack_States_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
+                && control.isGrounded)
+            {
+                ChangeAnimationState_CrossFadeInFixedTime(
+                    GameLoader.Instance.statesDispatcher.landingNames_Dictionary[control.characterSettings.landing_State.animation],
+                    control.characterSettings.landing_State.transitionDuration);
+
+                return true;
+            }
+
             if ((GameLoader.Instance.statesDispatcher.airbonedFlying_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
-                && control.isGrounded
-                && control.isAttacking == false)
+                && control.isGrounded)
             {
                 ChangeAnimationState_CrossFadeInFixedTime(
                     GameLoader.Instance.statesDispatcher.landingNames_Dictionary[control.characterSettings.landing_State.animation],

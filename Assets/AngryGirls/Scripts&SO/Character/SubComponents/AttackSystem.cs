@@ -27,6 +27,9 @@ namespace Angry_Girls
                 case AttackPrep_States.A_HeadSpin_Attack:
                     control.attackSystem_Data.attackPrepLogic = new AttackLogic_HeadSpinAttack();
                     break;
+                case AttackPrep_States.A_SwordAttack_Prep:
+                    control.attackSystem_Data.attackPrepLogic = new AttackLogic_SwordAttack();
+                    break;
                     //default:
                     //    throw new Exception("No logic for state like " + control.characterSettings.attackPrepAbility.attackPrep_State.animation.ToString());
             }

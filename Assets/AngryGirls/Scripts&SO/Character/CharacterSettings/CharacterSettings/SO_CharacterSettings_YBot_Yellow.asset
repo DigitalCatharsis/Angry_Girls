@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: SO_CharacterSettings_YBot_Yellow
   m_EditorClassIdentifier: 
   _notifyAboutNONEStates: 0
-  unitType: 0
+  unitType: 1
   atHittingObstacle_Speed: {x: 0, y: -4, z: 0}
   groundAttackMovementSpeed: {x: 0, y: 0, z: 0}
   landingMovementSpeed: {x: 0, y: 0, z: 0}
-  boxcolliderContainer: {fileID: 11400000, guid: 2697f8a1822d97d4597139c6fdf4cb34,
+  boxcolliderContainer: {fileID: 11400000, guid: 6f80649aecb08d542b0d1a70813e866d,
     type: 2}
   idle_States:
   - animation: 9
@@ -36,10 +36,10 @@ MonoBehaviour:
     animation: 1
     transitionDuration: 0.1
   attackFininsh_State:
-    animation: 1
+    animation: 0
     transitionDuration: 0
   landing_State:
-    animation: 1
+    animation: 4
     transitionDuration: 0
   hitReaction_States:
   - animation: 3
@@ -48,7 +48,7 @@ MonoBehaviour:
   - animation: 1
     transitionDuration: 0
   deathByAnimation: 1
-  launchedAttackPrepAbility: {fileID: 11400000, guid: bada94d1a62ddf448aca8b765c91f4a2,
+  launchedAttackPrepAbility: {fileID: 11400000, guid: 564518373937fe24cb5883216d98ce15,
     type: 2}
   staticAttackAbility: {fileID: 11400000, guid: d3e3d0be744d1f340a843ac743d9b222,
     type: 2}

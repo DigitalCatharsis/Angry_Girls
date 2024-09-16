@@ -80,6 +80,12 @@ namespace Angry_Girls
                 //ColorDebugLog.Log(_control.name + "'s" + " Subcomponent's Mediator reacts on " + SubcomponentMediator_EventNames.Reposition_ColliderSpheres + " and triggers following operations:", System.Drawing.KnownColor.ControlLightLight);
                 _collisionSpheres.RepositionAllSpheres();
             }
+
+            if (eventName == SubcomponentMediator_EventNames.Character_Reposition_ColliderSpheres)
+            {
+                //ColorDebugLog.Log(_control.name + "'s" + " Subcomponent's Mediator reacts on " + SubcomponentMediator_EventNames.Reposition_ColliderSpheres + " and triggers following operations:", System.Drawing.KnownColor.ControlLightLight);
+                _collisionSpheres.RepositionAllSpheres();
+            }
         }
 
 
@@ -145,6 +151,10 @@ namespace Angry_Girls
         public void TEMP_SetShorukenLandingState()
         {
             _animationProcessor.ChangeAnimationStateFixedTime(GameLoader.Instance.statesDispatcher.staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], 0, transitionDuration: 1);
+        }
+        public Vector3 GetBottomContactPoint()
+        {
+            return _groundDetector.bottomRaycastContactPoint;
         }
         #endregion
     }

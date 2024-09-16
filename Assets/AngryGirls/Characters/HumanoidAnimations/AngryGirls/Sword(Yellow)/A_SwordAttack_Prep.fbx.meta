@@ -36,8 +36,8 @@ ModelImporter:
       name: A_SwordAttack_Prep
       takeName: mixamo.com
       internalID: -203655887218126122
-      firstFrame: 79
-      lastFrame: 133
+      firstFrame: 109
+      lastFrame: 158
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

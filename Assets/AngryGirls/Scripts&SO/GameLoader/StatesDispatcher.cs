@@ -41,7 +41,9 @@ namespace Angry_Girls
         A_SwordIdle_4,
         A_SwordIdle_5,
         A_SwordIdle_6,
-            
+        A_SwordAttack_Prep,
+        A_SwordAttack_Attack,
+        A_SwordAttack_Landing,
     }
     public enum Idle_States
     {
@@ -73,6 +75,8 @@ namespace Angry_Girls
         A_Shoryuken_DownSmash_Prep,
         A_SendFireball_Front,
         A_HeadSpin_Attack,
+        A_SwordAttack_Attack,
+        A_SwordAttack_Prep,
     }
     public enum StaticAttack_States
     {
@@ -95,6 +99,7 @@ namespace Angry_Girls
         A_Fall_Landing,
         A_AirbonedRolling_Landing,
         A_Idle_HeadSpin,
+        A_SwordAttack_Landing,
     }
 
     public enum HitReaction_States
