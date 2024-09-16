@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class PoolObject : MonoBehaviour, IDisposable
+    public abstract class PoolObject : MonoBehaviour, IDisposable
     {
         [SerializeField][ShowOnly] private bool _isDisposedBase = false;
 
@@ -33,6 +33,11 @@ namespace Angry_Girls
             }
             // освобождаем неуправляемые объекты
             _isDisposedBase = true;
+        }
+
+        public virtual void Init_PoolObject()
+        {
+            _isDisposedBase = false;
         }
 
         private void ResetTransform()
