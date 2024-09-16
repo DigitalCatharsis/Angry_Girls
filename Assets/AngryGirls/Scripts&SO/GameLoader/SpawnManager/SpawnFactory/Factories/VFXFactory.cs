@@ -32,33 +32,33 @@ namespace Angry_Girls
             VFX_TestOnHitEffect = Resources.Load(VFX_Type.VFX_TestOnHitEffect.ToString()) as GameObject;
         }
 
-        public GameObject SpawnGameobject(VFX_Type VFX_Type, Vector3 position, Quaternion rotation)
+        public PoolObject SpawnGameobject(VFX_Type VFX_Type, Vector3 position, Quaternion rotation)
         {
             switch (VFX_Type)
             {
                 case VFX_Type.VFX_Damage_White:
                     {
-                        return Instantiate(VFX_Damage_White, position, rotation);
+                        return (Instantiate(VFX_Damage_White, position, rotation)).GetComponent<PoolObject>();
                     }
                 case VFX_Type.VFX_Shouryken:
                     {
-                        return Instantiate(VFX_Shouryken, position, rotation);
+                        return (Instantiate(VFX_Shouryken, position, rotation)).GetComponent<PoolObject>();
                     }
                 case VFX_Type.VFX_FireBall:
                     {
-                        return Instantiate(VFX_FireBall, position, rotation);
+                        return (Instantiate(VFX_FireBall, position, rotation)).GetComponent<PoolObject>();
                     }
                 case VFX_Type.VFX_Flame:
                     {
-                        return Instantiate(VFX_Flame, position, rotation);
+                        return (Instantiate(VFX_Flame, position, rotation)).GetComponent<PoolObject>();
                     }
                 case VFX_Type.VFX_Flame2:
                     {
-                        return Instantiate(VFX_Flame2, position, rotation);
+                        return (Instantiate(VFX_Flame2, position, rotation)).GetComponent<PoolObject>();
                     }
                 case VFX_Type.VFX_TestOnHitEffect:
                     {
-                        return Instantiate(VFX_TestOnHitEffect, position, rotation);
+                        return (Instantiate(VFX_TestOnHitEffect, position, rotation)).GetComponent<PoolObject>();
                     }
                 default:
                     {

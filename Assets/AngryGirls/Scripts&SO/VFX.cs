@@ -6,9 +6,9 @@ namespace Angry_Girls
 {
     public class VFX : PoolObject
     {
-        [SerializeField] [ShowOnly] private bool _isDisposed = false;
-
         [SerializeField] private VFX_Type _vfxType;
+        [SerializeField] private PoolObject _poolObject;
+        
 
         //[Header("Setup")]
         [SerializeField] private float _timeToLive = 1f;
@@ -25,49 +25,33 @@ namespace Angry_Girls
 
         private void OnEnable()
         {
-            _isDisposed = false;
+            _poolObject = GetComponent<PoolObject>(); 
             //int LayerIgnoreRaycast = LayerMask.NameToLayer("Projectile");
             //gameObject.layer = LayerIgnoreRaycast;
         }
-
         protected override void Dispose(bool disposing)
         {
-            if (_isDisposed) return;
-            if (disposing)
-            {
-                // Освобождение управляемых ресурсов
-                ResetRigidbody();
-                ReturnToPool();
-            }
-            _isDisposed = true;
-            // Обращение к методу Dispose базового класса
             base.Dispose(disposing);
         }
 
-        private void ResetRigidbody()
+
+        protected override void ReturnToPool() //Запихать в дочерний класс
         {
-            var rigid = gameObject.GetComponent<Rigidbody>();
-            if (rigid != null)
+            var vfx = GetComponent<VFX>().GetVFXType();
+            if (!GameLoader.Instance.poolManager.vfxPoolDictionary[vfx].Contains(this))
             {
-                rigid.velocity = Vector3.zero;
-                //gameObject.GetComponent<Rigidbody>().rotation = Quaternion.identity;
-                rigid.angularVelocity = Vector3.zero;
+                GameLoader.Instance.poolManager.AddObject(vfx, GameLoader.Instance.poolManager.vfxPoolDictionary, this);
             }
         }
+
+
 
         private IEnumerator VFXLiving_Routine()
         {
             yield return new WaitForSeconds(_timeToLive);
-            Dispose(true);
+            _poolObject.Dispose();
         }
 
-        private void ReturnToPool() //Запихать в дочерний класс
-        {
-            if (!GameLoader.Instance.poolManager.vfxPoolDictionary[_vfxType].Contains(this.gameObject))
-            {
-                GameLoader.Instance.poolManager.AddObject(_vfxType, GameLoader.Instance.poolManager.vfxPoolDictionary, this.gameObject);
-            }
-        }
         public void InitAndRunVFX(float timeToLive, bool isTimeToLiveIsNormilizedTime, bool destroyOnCollision, float damage, bool enableCollider, bool enableTrigger, GameObject owner = null)
         {
             //set owner for future trigger logic
@@ -200,9 +184,9 @@ namespace Angry_Girls
                 return;
             }
 
-            var vfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Damage_White, transform.position, Quaternion.identity);
+            var vfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Shouryken, transform.position, Quaternion.identity);
             vfx.GetComponent<VFX>().InitAndRunVFX(1, true, false, 0, false,false);
-            Dispose(true);
+            _poolObject.Dispose();
         }
         public VFX_Type GetVFXType()
         {

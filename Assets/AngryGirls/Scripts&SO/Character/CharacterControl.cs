@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Angry_Girls
 {
@@ -46,6 +47,18 @@ namespace Angry_Girls
         private void Start()
         {
             subComponentMediator.OnStart();
+
+            //TEST WEAPON
+            if (weaponHolder != null)
+            {
+                var weaponPrefab = Resources.Load("DefinetlyNotAWeapon") as GameObject;
+                var weapon = Instantiate(weaponPrefab, weaponHolder.transform.position, Quaternion.identity);
+
+                weapon.transform.parent = weaponHolder;
+                weapon.transform.localScale = weaponHolder.transform.localScale;
+                weapon.transform.position = weaponHolder.transform.position;
+                weapon.transform.rotation = weaponHolder.transform.rotation;
+            }
         }
         private void OnEnable()
         {

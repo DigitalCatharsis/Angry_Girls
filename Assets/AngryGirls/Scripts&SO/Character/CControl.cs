@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -7,12 +8,13 @@ namespace Angry_Girls
         Player,
         Ai,
     }
-    public abstract class CControl : MonoBehaviour
+    public abstract class CControl : PoolObject
     {
         [Space(15)]
         [Header("Debug")]
         [Header("State Data")]
         public CurrentStateData currentStateData = new();
+        [SerializeField] private  CharacterType _characterType;
 
         [Header("Health")]
         public float currentHealth;
@@ -49,5 +51,22 @@ namespace Angry_Girls
         [Header("VFX")]
         public Transform projectileSpawnTransform;
         public Color VFX_Color;
+
+        [Header("Weapon")]
+        [SerializeReference]
+        public Transform weaponHolder;
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+        }        
+        
+        protected override void ReturnToPool()
+        {
+            if (!GameLoader.Instance.poolManager.characterPoolDictionary[_characterType].Contains(this))
+            {
+                GameLoader.Instance.poolManager.AddObject(_characterType, GameLoader.Instance.poolManager.characterPoolDictionary, this);
+            }
+        }
     }
 }

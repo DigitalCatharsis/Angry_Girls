@@ -44,7 +44,7 @@ namespace Angry_Girls
             for (var i = 0; i < selectedCharactersList.Count(); i++)
             {
                 charList.Add(GameLoader.Instance.poolManager.GetObject<CharacterType>
-                    (selectedCharactersList[i], GameLoader.Instance.poolManager.characterPoolDictionary, Vector3.zero, Quaternion.identity));
+                    (selectedCharactersList[i], GameLoader.Instance.poolManager.characterPoolDictionary, Vector3.zero, Quaternion.identity).gameObject);
             }
             return charList;
         }

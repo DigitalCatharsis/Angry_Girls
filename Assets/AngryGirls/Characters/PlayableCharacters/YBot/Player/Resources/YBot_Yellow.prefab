@@ -90,6 +90,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
+      propertyPath: weaponHolder
+      value: 
+      objectReference: {fileID: 5686471887839585178}
+    - target: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
       propertyPath: characterSettings
       value: 
       objectReference: {fileID: 11400000, guid: a778f59384ee71745baa1bd3d66b00e8,
@@ -126,6 +131,12 @@ PrefabInstance:
 --- !u!1 &1224915519363040437 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7826443467263071413, guid: c03c7eedb934e76448be7b86074461a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 8962966944753586176}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5686471887839585178 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3641357107157496730, guid: c03c7eedb934e76448be7b86074461a4,
     type: 3}
   m_PrefabInstance: {fileID: 8962966944753586176}
   m_PrefabAsset: {fileID: 0}

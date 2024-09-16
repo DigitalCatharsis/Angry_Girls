@@ -39,7 +39,7 @@ namespace Angry_Girls
 
             //Init and run VFX
             GetComponent<VFX>().InitAndRunVFX(timeToLive,isTimeToLiveIsNormilizedTime,destroyOnCollision,VFXDamage, enableCollider, enableTrigger, owner: owner);
-            return vfx;
+            return vfx.gameObject;
         }
 
         public GameObject SpawnVFX(CControl control, VFX_Type vfx_Type, bool setAsOwner = false)
@@ -90,7 +90,7 @@ namespace Angry_Girls
                     );
             }           
 
-            return vfx;
+            return vfx.gameObject;
         }
 
         public GameObject SpawnVFX_AtPosition(VFX_Type vfx_Type, Vector3 spawnPosition, Quaternion spawnRotation)
@@ -98,7 +98,7 @@ namespace Angry_Girls
             //Spawn (taking from pool)
             var poolManager = GameLoader.Instance.poolManager;
             var vfx = poolManager.GetObject(vfx_Type, poolManager.vfxPoolDictionary, spawnPosition, spawnRotation);
-            return vfx;
+            return vfx.gameObject;
         }
     }
 }

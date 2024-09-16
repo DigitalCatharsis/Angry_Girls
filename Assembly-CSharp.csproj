@@ -78,7 +78,6 @@
     <Compile Include="Assets\AngryGirls\Helpers\DistanceBetweenTwoObjects\DistanceBetweenTwoObjects.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\LaunchingAttackLogic\AttackLogic_ShoryukenDownSmash_Finish.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Mediator\BaseMediatorComponent.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\SpawnFactory\Factories\DataFactory.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LookAtPoint\LookAtPoint.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\StaticAttackLogic\AttackLogic_Static_Prep_Shoryuken.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\Idle_Behavior.cs" />

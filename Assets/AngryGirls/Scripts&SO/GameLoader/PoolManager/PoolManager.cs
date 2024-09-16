@@ -8,16 +8,13 @@ namespace Angry_Girls
     public class PoolManager : MonoBehaviour
     {
         [SerializedDictionary("CharacterType", "Values")]
-        public SerializedDictionary<CharacterType, List<GameObject>> characterPoolDictionary = new SerializedDictionary<CharacterType, List<GameObject>>();
+        public SerializedDictionary<CharacterType, List<PoolObject>> characterPoolDictionary = new SerializedDictionary<CharacterType, List<PoolObject>>();
 
         [SerializedDictionary("VFXType", "Values")]
-        public SerializedDictionary<VFX_Type, List<GameObject>> vfxPoolDictionary = new SerializedDictionary<VFX_Type, List<GameObject>>();
-
-        [SerializedDictionary("DataType", "Values")]
-        public SerializedDictionary<DataType, List<GameObject>> dataPoolDictionary = new SerializedDictionary<DataType, List<GameObject>>();
+        public SerializedDictionary<VFX_Type, List<PoolObject>> vfxPoolDictionary = new SerializedDictionary<VFX_Type, List<PoolObject>>();
 
         #region SetupDictionary
-        private void SetUpDictionary<T>(Dictionary<T,List<GameObject>> poolDictionary)
+        private void SetUpDictionary<T>(Dictionary<T,List<PoolObject>> poolDictionary)
         {
             T[] arr = Enum.GetValues(typeof(T)) as T[];
 
@@ -25,26 +22,26 @@ namespace Angry_Girls
             {
                 if (!poolDictionary.ContainsKey(p))
                 {
-                    poolDictionary.Add(p, new List<GameObject>());
+                    poolDictionary.Add(p, new List<PoolObject>());
                 }
             }
         }
         #endregion
 
         #region GetObjectFromPool
-        public GameObject GetObject<T>(T objType, Dictionary<T, List<GameObject>> poolDictionary,  Vector3 position, Quaternion rotation)
+        public PoolObject GetObject<T>(T objType, Dictionary<T, List<PoolObject>> poolDictionary,  Vector3 position, Quaternion rotation)
         {
                 return ObjectGetter(poolDictionary, objType, position, rotation);
         }
 
-        private GameObject ObjectGetter<T>(Dictionary<T, List<GameObject>> poolDictionary, T objType, Vector3 position, Quaternion rotation)
+        private PoolObject ObjectGetter<T>(Dictionary<T, List<PoolObject>> poolDictionary, T objType, Vector3 position, Quaternion rotation)
         {
             if (poolDictionary.Count == 0)
             {
                 SetUpDictionary(poolDictionary);
             }
 
-             List<GameObject> list = poolDictionary[objType];
+             List<PoolObject> list = poolDictionary[objType];
 
             if (list.Count > 0)
             {
@@ -52,21 +49,25 @@ namespace Angry_Girls
                 obj.transform.position = position;
                 obj.transform.rotation = rotation;
                 list.RemoveAt(0);
+
+                obj.Init_PoolObject();
                 obj.gameObject.SetActive(true);
                 return obj;
             }
             else
             {
-                return GameLoader.Instance.poolObjectLoader.InstantiatePrefab(objType, position, rotation);
+                var obj = GameLoader.Instance.poolObjectLoader.InstantiatePrefab(objType, position, rotation);
+                obj.Init_PoolObject();
+                return obj;
             }
         }
         #endregion
 
-        public void AddObject<T>(T objType, Dictionary<T, List<GameObject>> poolDictionary, GameObject poolGameObject)
+        public void AddObject<T>(T objType, Dictionary<T, List<PoolObject>> poolDictionary, PoolObject poolGameObject)
         {
             var listOfGameObjects = poolDictionary[(T)objType];
             listOfGameObjects.Add(poolGameObject);
-            poolGameObject.SetActive(false);
+            poolGameObject.gameObject.SetActive(false);
         }
     }
 }
