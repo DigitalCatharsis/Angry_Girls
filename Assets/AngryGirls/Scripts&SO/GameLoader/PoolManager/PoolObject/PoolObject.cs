@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Angry_Girls
 {
@@ -27,6 +28,7 @@ namespace Angry_Girls
                 // Освобождаем управляемые ресурсы
 
                 this.gameObject.SetActive(false);
+
                 ResetRigidbody();
                 ResetTransform();
                 ReturnToPool();

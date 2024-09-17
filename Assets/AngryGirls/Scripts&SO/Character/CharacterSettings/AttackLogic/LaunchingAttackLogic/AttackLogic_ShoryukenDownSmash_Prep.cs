@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -22,7 +23,7 @@ namespace Angry_Girls
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            _vfx.GetComponentInChildren<VisualEffect>().Stop(); //TODO не забудь в остальных стейтах
+            _vfx.GetComponent<VFX>().Dispose();
         }
     }
 }

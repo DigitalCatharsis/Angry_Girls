@@ -1,13 +1,13 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Angry_Girls
 {
     public class VFX : PoolObject
     {
         [SerializeField] private VFX_Type _vfxType;
-        [SerializeField] private PoolObject _poolObject;
         
 
         //[Header("Setup")]
@@ -25,12 +25,18 @@ namespace Angry_Girls
 
         private void OnEnable()
         {
-            _poolObject = GetComponent<PoolObject>(); 
             //int LayerIgnoreRaycast = LayerMask.NameToLayer("Projectile");
             //gameObject.layer = LayerIgnoreRaycast;
         }
+
         protected override void Dispose(bool disposing)
         {
+            var visualEffect = GetComponentInChildren<VisualEffect>();
+            if (visualEffect != null)
+            {
+                visualEffect.Stop();
+            }
+
             base.Dispose(disposing);
         }
 
@@ -49,7 +55,7 @@ namespace Angry_Girls
         private IEnumerator VFXLiving_Routine()
         {
             yield return new WaitForSeconds(_timeToLive);
-            _poolObject.Dispose();
+            Dispose();
         }
 
         public void InitAndRunVFX(float timeToLive, bool isTimeToLiveIsNormilizedTime, bool destroyOnCollision, float damage, bool enableCollider, bool enableTrigger, GameObject owner = null)
@@ -186,7 +192,7 @@ namespace Angry_Girls
 
             var vfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Shouryken, transform.position, Quaternion.identity);
             vfx.GetComponent<VFX>().InitAndRunVFX(1, true, false, 0, false,false);
-            _poolObject.Dispose();
+            Dispose();
         }
         public VFX_Type GetVFXType()
         {

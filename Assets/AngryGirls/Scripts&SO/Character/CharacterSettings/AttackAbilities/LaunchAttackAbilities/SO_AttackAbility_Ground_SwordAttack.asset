@@ -21,7 +21,7 @@ MonoBehaviour:
   useAnimationNormalizedTimeDuration: 0
   attackPrepMovementSpeed: {x: 0, y: 0, z: 0}
   attackPrepMovementForce: {x: 0, y: 0, z: 0}
-  AttackVFX: {fileID: 4078025661996777973, guid: b6c04b95478e0774ba78823585d2be99,
+  AttackVFX: {fileID: 4588421622435289864, guid: 15539f90faf5fb643af141e3fd3cc9d3,
     type: 3}
   timeToLive: 99
   isTimeToLiveIsNormilizedTime: 0

@@ -99,6 +99,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: a778f59384ee71745baa1bd3d66b00e8,
         type: 2}
+    - target: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: projectileSpawnTransform
+      value: 
+      objectReference: {fileID: 5491443488994573005}
     - target: {fileID: 7121561051254715629, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: VFX_Color.a
@@ -131,6 +136,12 @@ PrefabInstance:
 --- !u!1 &1224915519363040437 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7826443467263071413, guid: c03c7eedb934e76448be7b86074461a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 8962966944753586176}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5491443488994573005 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3483354201952365261, guid: c03c7eedb934e76448be7b86074461a4,
     type: 3}
   m_PrefabInstance: {fileID: 8962966944753586176}
   m_PrefabAsset: {fileID: 0}
