@@ -99,10 +99,12 @@ namespace Angry_Girls
                     timeToLive: control.characterSettings.launchedAttackPrepAbility.timeToLive,
                     isTimeToLiveIsNormilizedTime: control.characterSettings.launchedAttackPrepAbility.isTimeToLiveIsNormilizedTime,
                     destroyOnCollision: control.characterSettings.launchedAttackPrepAbility.destroyOnCollision,
+                    destroyOnCharacterCollision: control.characterSettings.launchedAttackPrepAbility.destroyOnCharacterCollision,
                     damage: control.characterSettings.launchedAttackPrepAbility.attackDamage,
                     enableCollider: control.characterSettings.launchedAttackPrepAbility.enableCollider,
                     enableTrigger: control.characterSettings.launchedAttackPrepAbility.enableTrigger,
                     owner: control.gameObject
+                    
                     );
             }
         }

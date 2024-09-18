@@ -53,18 +53,25 @@ namespace Angry_Girls
 
                     if (blockingObj != null)
                     {
-                        var character = GameLoader.Instance.characterManager.GetCharacter(blockingObj.transform.root.gameObject);
 
-                        if (character == null)
-                        {
-                            //_ground = blockingObj.transform.gameObject;
-                            landingPosition = new Vector3(
-                                0f,
-                                bottomRaycastContactPoint.y,
-                                bottomRaycastContactPoint.z);
+                        landingPosition = new Vector3(
+                            0f,
+                            bottomRaycastContactPoint.y,
+                            bottomRaycastContactPoint.z);
 
-                            return true;
-                        }
+                        return true;
+
+                        //var character = GameLoader.Instance.characterManager.GetCharacter(blockingObj.transform.root.gameObject);
+
+                        //if (character == null)
+                        //{
+                        //    landingPosition = new Vector3(
+                        //        0f,
+                        //        bottomRaycastContactPoint.y,
+                        //        bottomRaycastContactPoint.z);
+
+                        //    return true;
+                        //}
                     }
                 }
             }

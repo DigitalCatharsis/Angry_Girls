@@ -13,6 +13,7 @@ namespace Angry_Girls
                 1, 
                 false, 
                 destroyOnCollision: false, 
+                destroyOnCharacterCollision: false, 
                 control.characterSettings.launchedAttackPrepAbility.attackDamage, 
                 enableCollider: false, 
                 enableTrigger: true, 

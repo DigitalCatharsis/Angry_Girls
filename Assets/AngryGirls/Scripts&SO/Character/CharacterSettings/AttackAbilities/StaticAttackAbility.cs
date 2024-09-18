@@ -37,6 +37,7 @@ namespace Angry_Girls
         [Header("Projectile Phyciscs")]
         public Vector3 projectileMovementSpeed = new Vector3(0, 0, 0);  //?
         public bool destroyOnCollision = false;
+        public bool destroyOnCharacterCollision = false;
 
         [Space(5)]
         [Header("Projectile Colliders")]

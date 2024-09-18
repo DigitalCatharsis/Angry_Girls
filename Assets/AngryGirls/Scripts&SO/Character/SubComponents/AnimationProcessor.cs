@@ -112,7 +112,7 @@ namespace Angry_Girls
             }
 
             control.isAttacking = true;
-            ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesDispatcher.attackPrep_Dictionary[control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation],control.characterSettings.launchedAttackPrepAbility.attackPrep_State.transitionDuration);
+            ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesDispatcher.attackPrep_Dictionary[control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation], control.characterSettings.launchedAttackPrepAbility.attackPrep_State.transitionDuration);
             return;
         }
         #endregion
@@ -238,10 +238,18 @@ namespace Angry_Girls
                 return false;
             }
 
+            if (GameLoader.Instance.statesDispatcher.landingNames_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash)
+                || GameLoader.Instance.statesDispatcher.idle_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
+            {
+                return false;
+            }
+
             //no landing phase for air units. The Launch is over
-            if (control.characterSettings.unitType == UnitType.AirToGround 
-                && (GameLoader.Instance.statesDispatcher.attackPrep_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash) || GameLoader.Instance.statesDispatcher.staticAttack_States_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
-                && control.isGrounded)
+            if (control.characterSettings.unitType == UnitType.AirToGround
+                && (!control.isAttacking)
+                && control.isGrounded
+                )
+
             {
                 ChangeAnimationState_CrossFadeInFixedTime(
                     GameLoader.Instance.statesDispatcher.landingNames_Dictionary[control.characterSettings.landing_State.animation],
@@ -250,7 +258,8 @@ namespace Angry_Girls
                 return true;
             }
 
-            if ((GameLoader.Instance.statesDispatcher.airbonedFlying_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
+            if (control.characterSettings.unitType != UnitType.AirToGround
+                && (GameLoader.Instance.statesDispatcher.airbonedFlying_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
                 && control.isGrounded)
             {
                 ChangeAnimationState_CrossFadeInFixedTime(
@@ -324,7 +333,7 @@ namespace Angry_Girls
 
         #region Change State
         public void ChangeAnimationState_CrossFadeInFixedTime(int newStateHash, float transitionDuration, int layer = 0)
-        {            
+        {
             var shortNameHash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
 
             if (GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, newStateHash) == StateNames.NONE)

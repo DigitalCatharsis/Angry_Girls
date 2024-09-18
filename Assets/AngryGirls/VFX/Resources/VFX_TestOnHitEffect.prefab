@@ -28775,8 +28775,6 @@ GameObject:
   - component: {fileID: 7267831022188360813}
   - component: {fileID: 2691327820251538289}
   - component: {fileID: 6587955497302116823}
-  - component: {fileID: 1224258985435518301}
-  - component: {fileID: 3366216342297578785}
   m_Layer: 13
   m_Name: VFX_TestOnHitEffect
   m_TagString: Untagged
@@ -33569,12 +33567,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49d18267dcc029e4fac167ae161938d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isDisposed: 0
   _vfxType: 5
-  _timeToLive: 0
+  _timeToLive: 1
   _isTimeToLiveIsNormilizedTime: 0
   _particleSystem: {fileID: 0}
   projectileDamage: 0
   _destroyOnCollision: 0
+  _destroyOnCharacterTrigger: 0
   vfxOwner: {fileID: 0}
 --- !u!65 &2691327820251538289
 BoxCollider:
@@ -33618,32 +33618,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1224258985435518301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8535787800293781277}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ceec17568b0bbb4d9da29e942af06f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _timeToLive: 1
---- !u!114 &3366216342297578785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8535787800293781277}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ceec17568b0bbb4d9da29e942af06f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _timeToLive: 1
 --- !u!1 &8880755726145212491
 GameObject:
   m_ObjectHideFlags: 0

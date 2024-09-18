@@ -27,5 +27,6 @@ MonoBehaviour:
   isTimeToLiveIsNormilizedTime: 0
   projectileMovementSpeed: {x: 0, y: 0, z: 0}
   destroyOnCollision: 0
+  destroyOnCharacterCollision: 0
   enableCollider: 0
   enableTrigger: 1

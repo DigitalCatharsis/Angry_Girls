@@ -9711,12 +9711,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49d18267dcc029e4fac167ae161938d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isDisposed: 0
   _vfxType: 2
   _timeToLive: 11
   _isTimeToLiveIsNormilizedTime: 0
   _particleSystem: {fileID: 5921108591417898}
   projectileDamage: 0
   _destroyOnCollision: 1
+  _destroyOnCharacterCollision: 0
   vfxOwner: {fileID: 0}
 --- !u!65 &2069930466965192653
 BoxCollider:

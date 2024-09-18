@@ -59,6 +59,9 @@ namespace Angry_Girls
                     control.attackSystem_Data.staticAttackLogic_Prep = new AttackLogic_Static_HeadSpin_Prep();
                     control.attackSystem_Data.staticAttackLogic_Airboned = new AttackLogic_Static_HeadSpin();
                     break;
+                case StaticAttack_States.A_SwordAttack_Static:
+                    control.attackSystem_Data.staticAttackLogic_Prep = new AttackLogic_Static_SwordAttack();
+                    break;
                 default:
                     throw new Exception("No logic for state like " + control.characterSettings.staticAttackAbility.staticAttack_State.animation.ToString());
             }

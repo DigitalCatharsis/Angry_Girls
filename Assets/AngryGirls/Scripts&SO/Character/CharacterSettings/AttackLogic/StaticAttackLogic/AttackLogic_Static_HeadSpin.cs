@@ -13,8 +13,10 @@ namespace Angry_Girls
 
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
+            _secondShootingDone = false;
             control.isAttacking = true;
 
+            control.rigidBody.velocity = Vector3.zero;
             //Move character when casting ability
             control.rigidBody.velocity = control.characterSettings.staticAttackAbility.attackPrepMovementSpeed;
             control.rigidBody.AddForce(control.characterSettings.staticAttackAbility.attackPrepMovementForce);
@@ -59,6 +61,7 @@ namespace Angry_Girls
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             control.airToGroundUnit_FinishedAbility = true;
+            control.hasFinishedStaticAttackTurn = true;
             control.isAttacking = false;
         }
 
@@ -90,12 +93,18 @@ namespace Angry_Girls
                     timeToLive: control.characterSettings.staticAttackAbility.timeToLive,
                     isTimeToLiveIsNormilizedTime: control.characterSettings.staticAttackAbility.isTimeToLiveIsNormilizedTime,
                     destroyOnCollision: control.characterSettings.staticAttackAbility.destroyOnCollision,
+                    destroyOnCharacterCollision: control.characterSettings.staticAttackAbility.destroyOnCharacterCollision,
                     damage: control.characterSettings.staticAttackAbility.attackDamage,
                     enableCollider: control.characterSettings.staticAttackAbility.enableCollider,
                     enableTrigger: control.characterSettings.staticAttackAbility.enableTrigger,
                     owner: control.gameObject
                     );
             }
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }

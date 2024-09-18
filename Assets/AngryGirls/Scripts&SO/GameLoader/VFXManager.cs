@@ -14,6 +14,7 @@ namespace Angry_Girls
             float timeToLive,
             bool isTimeToLiveIsNormilizedTime,
             bool destroyOnCollision,
+            bool destroyOnCharacterCollision,
             float VFXDamage, 
             bool enableCollider = false, 
             bool enableTrigger = false,
@@ -38,7 +39,7 @@ namespace Angry_Girls
             }
 
             //Init and run VFX
-            GetComponent<VFX>().InitAndRunVFX(timeToLive,isTimeToLiveIsNormilizedTime,destroyOnCollision,VFXDamage, enableCollider, enableTrigger, owner: owner);
+            GetComponent<VFX>().InitAndRunVFX(timeToLive,isTimeToLiveIsNormilizedTime,destroyOnCollision, destroyOnCharacterCollision,VFXDamage, enableCollider, enableTrigger, owner: owner);
             return vfx.gameObject;
         }
 
@@ -70,6 +71,7 @@ namespace Angry_Girls
                     staticAbility.timeToLive, 
                     staticAbility.isTimeToLiveIsNormilizedTime, 
                     staticAbility.destroyOnCollision, 
+                    staticAbility.destroyOnCharacterCollision, 
                     staticAbility.attackDamage,
                     staticAbility.enableCollider, 
                     staticAbility.enableTrigger, 
@@ -83,6 +85,7 @@ namespace Angry_Girls
                     launchingAbility.timeToLive, 
                     launchingAbility.isTimeToLiveIsNormilizedTime,
                     launchingAbility.destroyOnCollision,
+                    launchingAbility.destroyOnCharacterCollision,
                     launchingAbility.attackDamage,
                     launchingAbility.enableCollider, 
                     launchingAbility.enableTrigger,
