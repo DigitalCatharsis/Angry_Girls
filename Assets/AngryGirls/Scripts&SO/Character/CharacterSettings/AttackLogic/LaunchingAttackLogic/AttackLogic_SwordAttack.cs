@@ -11,7 +11,7 @@ namespace Angry_Girls
             control.rigidBody.velocity = new Vector3(0, 10, 2);
 
             _vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, control.characterSettings.launchedAttackPrepAbility.AttackVFX.GetComponent<VFX>().GetVFXType(), setAsOwner: true);
-            _vfx.GetComponent<VFX>().InitAndRunVFX(control.characterSettings.launchedAttackPrepAbility, control.gameObject);
+            //_vfx.GetComponent<VFX>().InitAndRunVFX(control.characterSettings.launchedAttackPrepAbility, control.gameObject);
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)

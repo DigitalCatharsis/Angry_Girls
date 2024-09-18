@@ -66,7 +66,7 @@ namespace Angry_Girls
                 );
 
             control.rigidBody.AddForce(control.characterSettings.staticAttackAbility.attackPrepMovementForce); //turn it back
-            vfx.GetComponent<VFX>().InitAndRunVFX(control.characterSettings.staticAttackAbility, control.gameObject);
+            //vfx.GetComponent<VFX>().InitAndRunVFX(control.characterSettings.staticAttackAbility, control.gameObject);
             vfx.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);
             vfx.transform.DORotate(endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * vfx.transform.forward.z), duration: moveDuration, mode: RotateMode.Fast).SetLink(vfx, LinkBehaviour.PauseOnDisableRestartOnEnable);
 

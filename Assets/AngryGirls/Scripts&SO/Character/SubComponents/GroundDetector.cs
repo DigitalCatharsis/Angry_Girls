@@ -44,7 +44,7 @@ namespace Angry_Girls
             }
 
             //Если падаем
-            if (control.rigidBody.velocity.y < 0f)
+            if (control.rigidBody.velocity.y < 0.1f)
             {
                 foreach (var bottomSphere in control.collisionSpheresData.bottomSpheres)
                 {
