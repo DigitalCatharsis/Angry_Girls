@@ -8,6 +8,7 @@ namespace Angry_Girls
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             control.rigidBody.velocity = Vector3.zero;
+            //rotation
             control.rigidBody.velocity = new Vector3(0, 10, 2);
 
             _vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, control.characterSettings.launchedAttackPrepAbility.AttackVFX.GetComponent<VFX>().GetVFXType(), setAsOwner: true);

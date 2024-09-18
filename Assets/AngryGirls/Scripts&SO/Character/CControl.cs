@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Angry_Girls
 {
@@ -8,7 +9,7 @@ namespace Angry_Girls
         Player,
         Ai,
     }
-    public abstract class CControl : PoolObject
+    public class CControl : PoolObject
     {
         [Space(15)]
         [Header("Debug")]
@@ -18,6 +19,7 @@ namespace Angry_Girls
 
         [Header("Health")]
         public float currentHealth;
+        public Slider healthSlider;
 
         public bool isLanding = false;
         public bool isGrounded = false;
@@ -56,6 +58,70 @@ namespace Angry_Girls
         [SerializeReference]
         public Transform weaponHolder;
 
+        private void Awake()
+        {
+            rigidBody = GetComponent<Rigidbody>();
+            animator = GetComponent<Animator>();
+            boxCollider = gameObject.GetComponent<BoxCollider>();
+            subComponentMediator = GetComponentInChildren<SubComponentMediator>();
+
+            subComponentMediator.OnAwake();
+        }
+
+        private void OnCollisionStay(Collision collision)
+        {
+            boxColliderContacts = collision.contacts;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (isDead)
+            {
+                return;
+            }
+
+            //TODO: ask Pasha
+            subComponentMediator.CheckForDamage(this, SubcomponentMediator_EventNames.CharacterCollider_Trigger_Enter, other);
+        }
+
+        private void Update()
+        {
+            subComponentMediator.OnUpdate();
+        }
+        private void FixedUpdate()
+        {
+            subComponentMediator.OnFixedUpdate();
+        }
+        private void LateUpdate()
+        {
+            subComponentMediator.OnLateUpdate();
+        }
+
+        private void Start()
+        {
+            subComponentMediator.OnStart();
+
+            //TEST WEAPON
+            if (weaponHolder != null)
+            {
+                var weaponPrefab = Resources.Load("DefinetlyNotAWeapon") as GameObject;
+                var weapon = Instantiate(weaponPrefab, weaponHolder.transform.position, Quaternion.identity);
+
+                weapon.transform.parent = weaponHolder;
+                weapon.transform.localScale = weaponHolder.transform.localScale;
+                weapon.transform.position = weaponHolder.transform.position;
+                weapon.transform.rotation = weaponHolder.transform.rotation;
+            }
+        }
+        private void OnEnable()
+        {
+            GameLoader.Instance.characterManager.playableCharacters.Add(this.gameObject);
+
+            subComponentMediator.OnComponentEnable();
+        }
+
+
+        //ObjectPooling
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);

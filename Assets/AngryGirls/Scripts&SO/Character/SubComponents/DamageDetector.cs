@@ -6,6 +6,8 @@ namespace Angry_Girls
     {
         public override void OnComponentEnable()
         {
+            control.healthSlider.maxValue = control.currentHealth;
+            control.healthSlider.value = control.currentHealth;
         }
         public override void OnUpdate()
         {
@@ -56,6 +58,7 @@ namespace Angry_Girls
         private void OnDamageTaken(float damage, Collider triggerCollider, VFX vfx)
         {
             control.currentHealth -= damage;
+            control.healthSlider.value = control.currentHealth;
             var contactpoint = triggerCollider.ClosestPoint(transform.position);
             //var contactpoint = triggerCollider.ClosestPointOnBounds(transform.position);
             var previewVfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_TestOnHitEffect, contactpoint, Quaternion.identity);
@@ -66,6 +69,7 @@ namespace Angry_Girls
 
         public void SetParamsAfterDeath()
         {
+            control.healthSlider.gameObject.SetActive(false);
             control.airToGroundUnit_FinishedAbility = true;
             control.hasFinishedLaunchingTurn = true;
             control.hasFinishedStaticAttackTurn = true;

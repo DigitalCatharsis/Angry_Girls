@@ -11,22 +11,22 @@ PrefabInstance:
     - target: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.020071004
       objectReference: {fileID: 0}
     - target: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.48
       objectReference: {fileID: 0}
     - target: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 1.08
       objectReference: {fileID: 0}
     - target: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
@@ -36,7 +36,7 @@ PrefabInstance:
     - target: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
@@ -51,7 +51,7 @@ PrefabInstance:
     - target: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
@@ -547,10 +547,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b32dce3e0c48b9d4db3fe995187cbdc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isDisposed: 0
   currentStateData:
     currentStateName: 0
     hash: 0
-  currentHealth: 1
+  _characterType: 0
+  currentHealth: 100
+  healthSlider: {fileID: 6471614779640202308}
   isLanding: 0
   isGrounded: 0
   isAttacking: 0
@@ -606,6 +609,19 @@ MonoBehaviour:
   characterSettings: {fileID: 11400000, guid: 02680e40217c43e44a594ac4cad06f99, type: 2}
   projectileSpawnTransform: {fileID: 8966692269676343072}
   VFX_Color: {r: 0, g: 0.3982904, b: 1, a: 0}
+  weaponHolder: {fileID: 0}
+--- !u!114 &6471614779640202308 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7622685278357723992, guid: c03c7eedb934e76448be7b86074461a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 3460731012454276892}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8966692269676343072 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5509850239664615484, guid: c03c7eedb934e76448be7b86074461a4,
