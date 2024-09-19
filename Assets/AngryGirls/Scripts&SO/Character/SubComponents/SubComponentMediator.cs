@@ -9,6 +9,7 @@ namespace Angry_Girls
         Character_Reposition_ColliderSpheres,
         Character_Check_For_Damage,
         CharacterCollider_Trigger_Enter,
+        HealthBarGeneration,
     }
 
     public enum SubComponentType
@@ -19,8 +20,6 @@ namespace Angry_Girls
         BoxColliderUpdater,
         LgroundDetector,
         LaunchLogic,
-        CharacterMovement,
-        AttackSystem,
         DamageProcessor,
     }
     public class SubComponentMediator : MonoBehaviour, IMediator<SubcomponentMediator_EventNames>
@@ -31,13 +30,11 @@ namespace Angry_Girls
 
         private AnimationProcessor _animationProcessor;
         private LaunchLogic _launchLogic;
-        private AttackSystem _attackSystem;
         private DamageProcessor _damageProcessor;
         private CollisionSpheres _collisionSpheres;
         private BoxColliderUpdater _boxColliderUpdater;
         private BlockingManager _blockingManager;
         private GroundDetector _groundDetector;
-        private CharacterMovement _characterMovement;
 
         public void OnAwake()
         {
@@ -62,8 +59,6 @@ namespace Angry_Girls
             _collisionSpheres = GetComponentInChildren<CollisionSpheres>();
             _boxColliderUpdater = GetComponentInChildren<BoxColliderUpdater>();
             _blockingManager = GetComponentInChildren<BlockingManager>();
-            _characterMovement = GetComponentInChildren<CharacterMovement>();
-            _attackSystem = GetComponentInChildren<AttackSystem>();
             _damageProcessor = GetComponentInChildren<DamageProcessor>();
         }
 
@@ -71,19 +66,17 @@ namespace Angry_Girls
         {
             if (eventName == SubcomponentMediator_EventNames.Launch_Unit)
             {
-                ColorDebugLog.Log(_control.name + "'s" + " Subcomponent's Mediator reacts on " + SubcomponentMediator_EventNames.Launch_Unit + " and triggers following operations:", System.Drawing.KnownColor.ControlLightLight);
+                //ColorDebugLog.Log(_control.name + "'s" + " Subcomponent's Mediator reacts on " + SubcomponentMediator_EventNames.Launch_Unit + " and triggers following operations:", System.Drawing.KnownColor.ControlLightLight);
                 _launchLogic.ProcessLaunch();
             }
 
             if (eventName == SubcomponentMediator_EventNames.Character_Reposition_ColliderSpheres)
             {
-                //ColorDebugLog.Log(_control.name + "'s" + " Subcomponent's Mediator reacts on " + SubcomponentMediator_EventNames.Reposition_ColliderSpheres + " and triggers following operations:", System.Drawing.KnownColor.ControlLightLight);
                 _collisionSpheres.RepositionAllSpheres();
             }
 
             if (eventName == SubcomponentMediator_EventNames.Character_Reposition_ColliderSpheres)
             {
-                //ColorDebugLog.Log(_control.name + "'s" + " Subcomponent's Mediator reacts on " + SubcomponentMediator_EventNames.Reposition_ColliderSpheres + " and triggers following operations:", System.Drawing.KnownColor.ControlLightLight);
                 _collisionSpheres.RepositionAllSpheres();
             }
         }

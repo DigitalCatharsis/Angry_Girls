@@ -10,12 +10,10 @@ namespace Angry_Girls
 
     public class GameLoaderMediator : IMediator<GameLoaderMediator_EventNames>
     {
-        private CameraManager _ñameraManager;
         private LaunchManager _launchManager;
 
-        public GameLoaderMediator(CameraManager ñameraManager, LaunchManager launchManager)
+        public GameLoaderMediator(LaunchManager launchManager)
         {
-            _ñameraManager = ñameraManager;
             _launchManager = launchManager;
         }
 

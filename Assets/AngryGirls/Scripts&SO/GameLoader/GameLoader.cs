@@ -15,6 +15,8 @@ namespace Angry_Girls
         public StatesDispatcher statesDispatcher;
         public VFXManager VFXManager;
         public AudioManager audioManager;
+        public UIManager UIManager;
+        public AttackLogicContainer attackLogicContainer;
 
         public CameraManager cameraManager;
         public LaunchManager launchManager;
@@ -44,8 +46,10 @@ namespace Angry_Girls
             VFXManager = GetComponentInChildren<VFXManager>();
             statesDispatcher = GetComponentInChildren<StatesDispatcher>();
             audioManager = GetComponentInChildren<AudioManager>();
+            UIManager = GetComponentInChildren<UIManager>();
+            attackLogicContainer = GetComponentInChildren<AttackLogicContainer>();
 
-            gameLoaderMediator = new GameLoaderMediator(cameraManager, launchManager);
+            gameLoaderMediator = new GameLoaderMediator(launchManager);
         }
     }
 }

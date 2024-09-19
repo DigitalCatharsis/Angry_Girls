@@ -118,12 +118,16 @@ namespace Angry_Girls
             GameLoader.Instance.characterManager.playableCharacters.Add(this.gameObject);
 
             subComponentMediator.OnComponentEnable();
+
+            GameLoader.Instance.attackLogicContainer.SetCharacterAttackLogic(this);
+            GameLoader.Instance.UIManager.CreateHealthBar(this);
         }
 
 
         //ObjectPooling
         protected override void Dispose(bool disposing)
         {
+            GameLoader.Instance.UIManager.RemoveHealthBar(this);
             base.Dispose(disposing);
         }        
         

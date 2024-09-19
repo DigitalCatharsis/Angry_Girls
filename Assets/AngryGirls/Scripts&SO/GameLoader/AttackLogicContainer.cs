@@ -1,20 +1,13 @@
-using AYellowpaper.SerializedCollections;
 using System;
 using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class AttackSystem : SubComponent<SubcomponentMediator_EventNames>
+
+    public class AttackLogicContainer: MonoBehaviour
     {
-        SerializedDictionary<StaticAttack_States, AttackAbilityLogic> testStaticStateLogicContainer;
-        public override void OnComponentEnable()
+        public void SetCharacterAttackLogic(CControl control)
         {
-            InitAttackLogic();
-        }
-
-        private void InitAttackLogic()
-        {
-
             //attackPrep
             switch (control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation)
             {
@@ -65,26 +58,6 @@ namespace Angry_Girls
                 default:
                     throw new Exception("No logic for state like " + control.characterSettings.staticAttackAbility.staticAttack_State.animation.ToString());
             }
-        }
-
-        public override void OnUpdate()
-        {
-        }
-
-        public override void OnAwake()
-        {
-        }
-
-        public override void OnFixedUpdate()
-        {
-        }
-
-        public override void OnLateUpdate()
-        {
-        }
-
-        public override void OnStart()
-        {
         }
     }
 
