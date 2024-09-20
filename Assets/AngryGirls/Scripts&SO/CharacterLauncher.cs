@@ -61,6 +61,16 @@ namespace Angry_Girls
             characterToLaunch.rigidBody.useGravity = true;
             characterToLaunch.rigidBody.velocity = new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward);
 
+            if (_directionVector.z > 0)
+            {
+                characterToLaunch.transform.rotation = Quaternion.Euler(0,180,0);
+            }
+            else if (_directionVector.z < 0)
+            {
+                characterToLaunch.transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+
+
             characterToLaunch.subComponentMediator.Notify(this, SubcomponentMediator_EventNames.Launch_Unit);
         }
         public void AimingTheLaunch(GameObject characterToLaunch)
