@@ -8,25 +8,8 @@ namespace Angry_Girls
         private GameObject _runningVFX;
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            //Первый вариант
-            //runningVFX = Singleton.Instance.VFXManager.SpawnVFX(
-            //    parentsTransform: control.gameObject.transform,
-            //    vfx_Type: control.characterSettings.staticAttackAbility.AttackVFX.GetComponent<VFXPoolObject>().poolObjectType,
-            //    VFXColor: control.subComponentProcessor.attackSystem.VFX_Color,
-            //    spawnPosition: control.subComponentProcessor.attackSystem.projectileSpawnTransform.position,
-            //    spawnRotation: Quaternion.identity,
-            //    timeToLive: control.characterSettings.staticAttackAbility.timeToLive,
-            //    isTimeToLiveIsNormilizedTime: true,
-            //    destroyOnCollision: true,
-            //    VFXDamage: control.characterSettings.launchedAttackPrepAbility.attackDamage,
-            //    enableCollider: false,
-            //    enableTrigger: true
-            //    );
-
-            //Второй вариант с перегрузкой
             control.rigidBody.velocity = (new Vector3(0, 3.5f, 1.5f * control.transform.forward.z));
             _runningVFX = GameLoader.Instance.VFXManager.SpawnVFX(control, control.characterSettings.staticAttackAbility.AttackVFX.GetComponent<VFX>().GetVFXType(), setAsOwner: true);
-            //_runningVFX.GetComponent<VFX>().InitAndRunVFX(control.characterSettings.launchedAttackPrepAbility, control.gameObject);
 
         }
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)

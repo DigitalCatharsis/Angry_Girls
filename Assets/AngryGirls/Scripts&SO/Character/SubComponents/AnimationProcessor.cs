@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -157,6 +159,19 @@ namespace Angry_Girls
             {
                 Global_CheckAndProcess_HitReaction();
                 return;
+            }
+
+            //if idle turn to enemy
+            if (GameLoader.Instance.statesDispatcher.idle_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
+            {
+                if (control.playerOrAi == PlayerOrAi.Player)
+                {
+                    TurnToTheClosestEnemy(PlayerOrAi.Ai);
+                }
+                else
+                {
+                    TurnToTheClosestEnemy(PlayerOrAi.Player);
+                }
             }
 
             //Check just Airboned
@@ -390,17 +405,40 @@ namespace Angry_Girls
 
         #endregion
 
-        //TODO: implement. Its buged af
-        public void SetRotation()
+
+        private void TurnToTheClosestEnemy(PlayerOrAi playerOrAi)
         {
-            if (control.rigidBody.velocity.z > 0.00001f)
+            float closestDistance = 9999f;
+            var collection = new List<GameObject>();
+
+            if (playerOrAi == PlayerOrAi.Player)
             {
-                control.transform.rotation = Quaternion.Euler(0, 0, 0);
+                collection = GameLoader.Instance.characterManager.playableCharacters;
+            }
+            else
+            {
+                collection = GameLoader.Instance.characterManager.enemyCharacters;
             }
 
-            if (control.rigidBody.velocity.z < 0.00001f)
+            foreach (var character in collection)
+            {
+                if (character.GetComponent<CControl>().isDead) continue;
+
+                var distacne = transform.position.z - character.transform.position.z;
+
+                if (Math.Abs(closestDistance) > Math.Abs(distacne))
+                {
+                    closestDistance = distacne;
+                }
+            }
+
+            if (closestDistance > 0)
             {
                 control.transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
+            else if (closestDistance < 0)
+            {
+                control.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
         }
 

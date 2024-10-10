@@ -112,7 +112,10 @@ namespace Angry_Girls
                 weapon.transform.position = weaponHolder.transform.position;
                 weapon.transform.rotation = weaponHolder.transform.rotation;
             }
+
+            
         }
+
         private void OnEnable()
         {
             if (this is CharacterControl)
