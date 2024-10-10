@@ -58,17 +58,20 @@ namespace Angry_Girls
         public void LaunchUnit(CharacterControl characterToLaunch)
         {
             DisableTrajectoryDots();
-            characterToLaunch.rigidBody.useGravity = true;
-            characterToLaunch.rigidBody.velocity = new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward);
 
             if (_directionVector.z > 0)
             {
-                characterToLaunch.transform.rotation = Quaternion.Euler(0,180,0);
+                characterToLaunch.transform.rotation = Quaternion.Euler(0, 180, 0);
             }
             else if (_directionVector.z < 0)
             {
                 characterToLaunch.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
+
+            characterToLaunch.rigidBody.useGravity = true;
+            characterToLaunch.rigidBody.velocity = new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward);
+
+
 
 
             characterToLaunch.subComponentMediator.Notify(this, SubcomponentMediator_EventNames.Launch_Unit);
@@ -136,23 +139,5 @@ namespace Angry_Girls
             // Apply zoom to camera
             Camera.main.orthographicSize = zoomFactor;
         }
-
-
-
-        //public void SwapCharacters(int indexA, int indexB)
-        //{
-        //    var tmp = _charactersList[indexA];
-        //    _charactersList[indexA] = _charactersList[indexB];
-        //    _charactersList[indexB] = tmp;
-
-        //    _characterToLaunch = _charactersList[0].GetComponent<CharacterControl>();
-        //}
-
-        //private Vector3 GetPointerWorldPosition(Camera camera)
-        //{
-        //    Vector3 screenPosition = Input.mousePosition;
-        //    screenPosition.z = camera.nearClipPlane + 1;
-        //    return camera.ScreenToWorldPoint(screenPosition);
-        //}
     }
 }

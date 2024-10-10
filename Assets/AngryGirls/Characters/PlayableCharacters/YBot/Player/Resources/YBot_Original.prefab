@@ -1146,7 +1146,7 @@ MonoBehaviour:
     currentStateName: 0
     hash: 0
   _characterType: 0
-  currentHealth: 30
+  currentHealth: 60
   healthSlider: {fileID: 0}
   isLanding: 0
   isGrounded: 0

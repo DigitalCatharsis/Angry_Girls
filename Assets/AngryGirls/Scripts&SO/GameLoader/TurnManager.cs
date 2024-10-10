@@ -77,7 +77,7 @@ namespace Angry_Girls
                     continue;
                 }
 
-                GameLoader.Instance.cameraManager.CenterCameraAgainst(_charactersTurn_List[i].GetComponent<BoxCollider>());
+                GameLoader.Instance.cameraManager.CenterCameraAgainst(_charactersTurn_List[i]);
                 ColorDebugLog.Log(_charactersTurn_List[i].name.ToString() + " is attacking.", KnownColor.Aqua);
 
                 //Attack

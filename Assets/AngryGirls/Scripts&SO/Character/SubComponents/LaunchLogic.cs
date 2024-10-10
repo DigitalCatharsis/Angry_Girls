@@ -9,7 +9,7 @@ namespace Angry_Girls
         {
             if (control.hasBeenLaunched == true && control.hasFinishedLaunchingTurn == false)
             {
-                GameLoader.Instance.cameraManager.CenterCameraAgainst(control.boxCollider);
+                GameLoader.Instance.cameraManager.CenterCameraAgainst(control.gameObject);
             }
         }
         public void ProcessLaunch()

@@ -81,6 +81,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\StaticAttackLogic\AttackLogic_Static_SwordAttack.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LookAtPoint\LookAtPoint.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\StaticAttackLogic\AttackLogic_Static_Prep_Shoryuken.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\DeathZone.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\Idle_Behavior.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AttackAbilityLogic.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AttackLogicContainer.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AudioManager\AudioManager.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleSprite.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\StaticAttack_Behavior_OnGround.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\BackGround.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ListOfLists\SerializableList.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\DeathBehavior.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\CharacterManager.cs" />
@@ -130,6 +132,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\Attack_Fininsh_Behavior.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\VFXManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\Landing_Behavior.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\LocalRotation.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\HitReaction_Behavior.cs" />
     <Compile Include="Assets\AngryGirls\Characters\CollisionSpheres\OverlapChecker.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\HashManager.cs" />

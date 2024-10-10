@@ -29,6 +29,7 @@ namespace Angry_Girls
             UpdateCharacterPositions(_charactersToLaunchLeft);
             SetLaunchableCharactersBehavior(_charactersToLaunchLeft);
             _canPressAtCharacters = true;
+            GameLoader.Instance.cameraManager.CenterCameraAgainst(_characterLauncher.gameObject);
         }
         private void UpdateCharacterPositions(List<GameObject> charactersToLaunch)
         {
@@ -96,7 +97,7 @@ namespace Angry_Girls
             {
 
                 // Center camera on character collider center
-                GameLoader.Instance.cameraManager.CenterCameraAgainst(_charactersToLaunchLeft[0].GetComponent<CharacterControl>().boxCollider);
+                GameLoader.Instance.cameraManager.CenterCameraAgainst(_charactersToLaunchLeft[0]);
 
                 _characterLauncher.AimingTheLaunch(_charactersToLaunchLeft[0]);
             }

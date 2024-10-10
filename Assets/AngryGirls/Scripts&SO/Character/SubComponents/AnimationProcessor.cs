@@ -164,13 +164,17 @@ namespace Angry_Girls
             //if idle turn to enemy
             if (GameLoader.Instance.statesDispatcher.idle_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
             {
-                if (control.playerOrAi == PlayerOrAi.Player)
+                if (control.hasFinishedLaunchingTurn)
                 {
-                    TurnToTheClosestEnemy(PlayerOrAi.Ai);
-                }
-                else
-                {
-                    TurnToTheClosestEnemy(PlayerOrAi.Player);
+
+                    if (control.playerOrAi == PlayerOrAi.Player)
+                    {
+                        TurnToTheClosestEnemy(PlayerOrAi.Ai);
+                    }
+                    else
+                    {
+                        TurnToTheClosestEnemy(PlayerOrAi.Player);
+                    }
                 }
             }
 

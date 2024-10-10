@@ -12,9 +12,14 @@ namespace Angry_Girls
         public float SecondsCameraWaitsAfterAttack => _secondsCameraWaitsAfterAttack;
 
         // Center camera on character collider center
-        public void CenterCameraAgainst(Collider selectedObject)
+        public void CenterCameraAgainst(GameObject selectedObject)
         {
-            var boundsCenter = selectedObject.bounds.center;
+            if (selectedObject.GetComponent<Collider>() == null)
+            {
+                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, selectedObject.transform.position.y, selectedObject.transform.position.z);
+                return;
+            }
+            var boundsCenter = selectedObject.GetComponent<Collider>().bounds.center;
             Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, boundsCenter.y, boundsCenter.z);
         }
 
