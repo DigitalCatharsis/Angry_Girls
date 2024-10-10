@@ -24,6 +24,7 @@ namespace Angry_Girls
             //    );
 
             //Второй вариант с перегрузкой
+            control.rigidBody.velocity = (new Vector3(0, 3.5f, 1.5f * control.transform.forward.z));
             _runningVFX = GameLoader.Instance.VFXManager.SpawnVFX(control, control.characterSettings.staticAttackAbility.AttackVFX.GetComponent<VFX>().GetVFXType(), setAsOwner: true);
             //_runningVFX.GetComponent<VFX>().InitAndRunVFX(control.characterSettings.launchedAttackPrepAbility, control.gameObject);
 
@@ -40,6 +41,7 @@ namespace Angry_Girls
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
+            control.rigidBody.velocity = Vector3.zero;
             _runningVFX.GetComponentInChildren<VisualEffect>().Stop(); //TODO не забудь в остальных стейтах
         }
     }

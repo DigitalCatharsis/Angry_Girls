@@ -17,8 +17,10 @@ namespace Angry_Girls
 
             control.isAttacking = true;
             control.rigidBody.useGravity = false;
-            control.rigidBody.velocity = control.characterSettings.staticAttackAbility.attackPrepMovementSpeed;
-            
+
+            //stop launched velocity 
+            control.rigidBody.velocity = Vector3.zero;
+
             SendFireball(control, control.projectileSpawnTransform.position, _finalProjectileRotation, control.characterSettings.staticAttackAbility.attackDamage);
 
         }
@@ -62,36 +64,13 @@ namespace Angry_Girls
             var impulse = new Vector3(
                 0,
                 control.characterSettings.staticAttackAbility.projectileMovementSpeed.y * vfx.transform.forward.y,
-                control.characterSettings.staticAttackAbility.projectileMovementSpeed.z * vfx.transform.forward.z
+                control.characterSettings.staticAttackAbility.projectileMovementSpeed.z * control.transform.forward.z
                 );
 
             control.rigidBody.AddForce(control.characterSettings.staticAttackAbility.attackPrepMovementForce); //turn it back
             //vfx.GetComponent<VFX>().InitAndRunVFX(control.characterSettings.staticAttackAbility, control.gameObject);
             vfx.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);
-            vfx.transform.DORotate(endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * vfx.transform.forward.z), duration: moveDuration, mode: RotateMode.Fast).SetLink(vfx, LinkBehaviour.PauseOnDisableRestartOnEnable);
-
-
-
-
-
-
-
-            //var frontDistance = new Vector3(0, 0, 2.2f);
-            //var gravityDistance = new Vector3(0, 2.8f, 8f);
-
-            //var waypoints = new[]
-            //{
-            //    startPoint,
-            //    new Vector3(vfxGameobject.transform.position.x, vfxGameobject.transform.position.y, vfxGameobject.transform.position.z + vfxGameobject.transform.forward.z * frontDistance.z),
-            //    new Vector3(vfxGameobject.transform.position.x, vfxGameobject.transform.position.y + Vector3.down.y * gravityDistance.y, vfxGameobject.transform.position.z + vfxGameobject.transform.forward.z * gravityDistance.z),
-            //};
-
-
-            //vfxGameobject.transform.DOPath(waypoints, moveDuration, pathType: PathType.Linear, pathMode: PathMode.Full3D, resolution: 10);
-            //vfxGameobject.transform.DORotate(endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * vfxGameobject.transform.forward.z), duration: moveDuration, mode: RotateMode.Fast);
-
-            ////add impulse and rotate
-            //projectile.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.Impulse);
+            vfx.transform.DORotate(endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * control.transform.forward.z), duration: moveDuration, mode: RotateMode.Fast).SetLink(vfx, LinkBehaviour.PauseOnDisableRestartOnEnable);
         }
     }
 }

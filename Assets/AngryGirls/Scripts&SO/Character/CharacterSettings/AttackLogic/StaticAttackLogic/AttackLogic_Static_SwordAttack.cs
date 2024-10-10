@@ -1,3 +1,6 @@
+using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Options;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -5,13 +8,20 @@ namespace Angry_Girls
     public class AttackLogic_Static_SwordAttack : AttackAbilityLogic
     {
         private GameObject _vfx;
+
+        private TweenerCore<Quaternion, Vector3, QuaternionOptions> _rotationTween;
+
+        //set proper rotation aftet changing state (landing for exmaple)
+        private Quaternion _savedRotation;
+
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
+            _savedRotation = control.transform.rotation;
             control.rigidBody.velocity = Vector3.zero;
-            control.rigidBody.velocity = new Vector3(0, 10, 2);
-
-            _vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, control.characterSettings.staticAttackAbility.AttackVFX.GetComponent<VFX>().GetVFXType(), setAsOwner: true);
-            //_vfx.GetComponent<VFX>().InitAndRunVFX(control.characterSettings.staticAttackAbility, control.gameObject);
+            //rotation
+            control.rigidBody.velocity = (new Vector3(0, 10, 2 * control.transform.forward.z));
+            _rotationTween = control.transform.DORotate(new Vector3(360, 0, 0), 0.3f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1);
+            _vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, control.characterSettings.launchedAttackPrepAbility.AttackVFX.GetComponent<VFX>().GetVFXType(), setAsOwner: true);
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
@@ -24,12 +34,14 @@ namespace Angry_Girls
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
+            control.transform.rotation = _savedRotation;
+            _rotationTween.Kill();
             if (control.subComponentMediator.GetBottomContactPoint() != Vector3.zero)
             {
                 control.transform.position = control.subComponentMediator.GetBottomContactPoint();
             }
             control.isAttacking = false;
-            control.airToGroundUnit_FinishedAbility = true;
+            //control.hasFinishedStaticAttackTurn = true;
             _vfx.GetComponent<VFX>().Dispose();
         }
     }

@@ -16,12 +16,12 @@ PrefabInstance:
     - target: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.48
+      value: 3.81
       objectReference: {fileID: 0}
     - target: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.08
+      value: 12.95
       objectReference: {fileID: 0}
     - target: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
@@ -551,9 +551,9 @@ MonoBehaviour:
   currentStateData:
     currentStateName: 0
     hash: 0
-  _characterType: 0
+  _characterType: 4
   currentHealth: 100
-  healthSlider: {fileID: 6471614779640202308}
+  healthSlider: {fileID: 0}
   isLanding: 0
   isGrounded: 0
   isAttacking: 0
@@ -610,18 +610,6 @@ MonoBehaviour:
   projectileSpawnTransform: {fileID: 8966692269676343072}
   VFX_Color: {r: 0, g: 0.3982904, b: 1, a: 0}
   weaponHolder: {fileID: 0}
---- !u!114 &6471614779640202308 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7622685278357723992, guid: c03c7eedb934e76448be7b86074461a4,
-    type: 3}
-  m_PrefabInstance: {fileID: 3460731012454276892}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &8966692269676343072 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5509850239664615484, guid: c03c7eedb934e76448be7b86074461a4,

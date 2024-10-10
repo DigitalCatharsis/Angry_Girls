@@ -1177,55 +1177,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 24520930995769507, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: testFloat
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 955612370531281707, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 955612370531281707, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1487138166773725071, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
       propertyPath: m_Name
       value: Enemy_Blue (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1526512453941406509, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: currentHealth
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 2601891940341965650, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2685592319220933704, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2685592319220933704, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2776349462317607465, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2776349462317607465, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3711684987824727529, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
@@ -1276,11 +1231,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6881014822654614173, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_UseGravity
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1621,55 +1571,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 24520930995769507, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: testFloat
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 955612370531281707, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 955612370531281707, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1487138166773725071, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
       propertyPath: m_Name
       value: Enemy_Blue (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1526512453941406509, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: currentHealth
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 2601891940341965650, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2685592319220933704, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2685592319220933704, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2776349462317607465, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2776349462317607465, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3711684987824727529, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
@@ -1720,11 +1625,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6881014822654614173, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_UseGravity
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2537,55 +2437,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 24520930995769507, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: testFloat
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 955612370531281707, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 955612370531281707, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1487138166773725071, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
       propertyPath: m_Name
       value: Enemy_Blue (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1526512453941406509, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: currentHealth
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 2601891940341965650, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2685592319220933704, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2685592319220933704, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2776349462317607465, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2776349462317607465, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3711684987824727529, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
@@ -2636,11 +2491,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6881014822654614173, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
-        type: 3}
-      propertyPath: m_UseGravity
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -15,7 +15,7 @@ namespace Angry_Girls
         [Header("Debug")]
         [Header("State Data")]
         public CurrentStateData currentStateData = new();
-        [SerializeField] private  CharacterType _characterType;
+        [SerializeField] private CharacterType _characterType;
 
         [Header("Health")]
         public float currentHealth;
@@ -29,11 +29,11 @@ namespace Angry_Girls
         public bool hasUsedAbility = false;
         public bool hasBeenLaunched = false;
         public bool airToGroundUnit_FinishedAbility = false;
-        public bool hasFinishedLaunchingTurn = false; 
+        public bool hasFinishedLaunchingTurn = false;
         public bool hasFinishedStaticAttackTurn = true;
 
         [Space(5)]
-        public bool unitBehaviorIsStatic = true; 
+        public bool unitBehaviorIsStatic = true;
         public bool checkGlobalBehavior = false;
 
         public Rigidbody rigidBody;
@@ -115,7 +115,14 @@ namespace Angry_Girls
         }
         private void OnEnable()
         {
-            GameLoader.Instance.characterManager.playableCharacters.Add(this.gameObject);
+            if (this is CharacterControl)
+            {
+                GameLoader.Instance.characterManager.playableCharacters.Add(this.gameObject);
+            }
+            else if (this is EnemyControl)
+            {
+                GameLoader.Instance.characterManager.enemyCharacters.Add(this.gameObject);
+            }
 
             subComponentMediator.OnComponentEnable();
 
@@ -129,8 +136,8 @@ namespace Angry_Girls
         {
             GameLoader.Instance.UIManager.RemoveHealthBar(this);
             base.Dispose(disposing);
-        }        
-        
+        }
+
         protected override void ReturnToPool()
         {
             if (!GameLoader.Instance.poolManager.characterPoolDictionary[_characterType].Contains(this))

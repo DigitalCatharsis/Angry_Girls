@@ -40,7 +40,7 @@ namespace Angry_Girls
                 control.transform.position = control.subComponentMediator.GetBottomContactPoint();
             }
             control.isAttacking = false;
-            control.hasFinishedStaticAttackTurn = true;
+            //control.hasFinishedLaunchingTurn = true;
             _vfx.GetComponent<VFX>().Dispose();
         }
     }

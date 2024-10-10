@@ -143,7 +143,7 @@ namespace Angry_Girls
         {
             GameLoader.Instance.turnManager.AddCharacterToTurnList(_charactersToLaunchLeft[0]);
 
-            yield return new WaitForSeconds(_charactersToLaunchLeft[0].GetComponent<CharacterControl>().animator.GetCurrentAnimatorStateInfo(0).length);
+            yield return new WaitForSeconds(_charactersToLaunchLeft[0].GetComponent<CControl>().animator.GetCurrentAnimatorStateInfo(0).length);
             UpdateCharactersLists(_charactersToLaunchLeft[0]);
             yield return new WaitForSeconds(secondsToWaitAfterAttack);
             UpdateCharacterPositions(_charactersToLaunchLeft);
