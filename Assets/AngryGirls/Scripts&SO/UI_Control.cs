@@ -1,3 +1,6 @@
+using DG.Tweening;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,11 +10,23 @@ namespace Angry_Girls
     {
         public void Restart()
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            StartCoroutine(KillAllTweensAndRestart());
+
         }
         public void NextScene()
         {
             SceneManager.LoadScene("test");
+        }
+
+        private IEnumerator KillAllTweensAndRestart()
+        {
+            var tweens = DOTween.PausedTweens() ?? new List<Tween>();
+            tweens.AddRange(DOTween.PlayingTweens());
+            for (int i = 0; i < tweens.Count; i++)
+                tweens[i]?.Kill();
+            yield return new WaitForEndOfFrame();
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }
