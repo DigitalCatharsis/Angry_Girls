@@ -1,5 +1,6 @@
 using TestNameSpace;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Angry_Girls
 {
@@ -21,6 +22,12 @@ namespace Angry_Girls
             control.isGrounded = IsGrounded();
         }
 
+        private void JostleFromEnemy()
+        {
+            control.rigidBody.velocity = (new Vector3(0, 1f, -control.transform.forward.z * 1));
+            //control.rigidBody.AddForce(new Vector3(0, 5f, -control.transform.forward.z * 2), mode: ForceMode.Impulse);
+        }
+
         private bool IsGrounded()
         {
             //Если что-то коллайдит главный BoxCollider
@@ -28,10 +35,28 @@ namespace Angry_Girls
             {
                 foreach (var contact in control.boxColliderContacts)
                 {
+                    var contactCharacter = contact.otherCollider.GetComponent<CControl>();
+                    if (contactCharacter != null && contactCharacter.playerOrAi != control.playerOrAi)
+                    {
+                        if (contactCharacter.isDead)
+                        {
+                            continue;
+                        }
+                        //prevent from stuck above enemy
+                        if (control.rigidBody.velocity == Vector3.zero )
+                        {
+                            JostleFromEnemy();
+                        }
+
+                        return false;
+                    }
+
+
+
                     var colliderBottom = (control.transform.position.y + control.boxCollider.center.y) - (control.boxCollider.size.y / 2f);
                     var yDiffirence = Mathf.Abs(contact.point.y - colliderBottom);
 
-                    if (yDiffirence < 0.01f)
+                    if (yDiffirence < 0.13f)
                     {
                         if (Mathf.Abs(control.rigidBody.velocity.y) < 0.001f)
                         {
@@ -51,28 +76,31 @@ namespace Angry_Girls
                     var blockingObj = CollisionDetection.GetCollidingObject
                         (control, bottomSphere.transform.position, -Vector3.up, _collidingBlockDistance, ref bottomRaycastContactPoint);
 
-                    if (blockingObj != null)
+                    if (blockingObj == null)
                     {
-
-                        landingPosition = new Vector3(
-                            0f,
-                            bottomRaycastContactPoint.y,
-                            bottomRaycastContactPoint.z);
-
-                        return true;
-
-                        //var character = GameLoader.Instance.characterManager.GetCharacter(blockingObj.transform.root.gameObject);
-
-                        //if (character == null)
-                        //{
-                        //    landingPosition = new Vector3(
-                        //        0f,
-                        //        bottomRaycastContactPoint.y,
-                        //        bottomRaycastContactPoint.z);
-
-                        //    return true;
-                        //}
+                        return false;
                     }
+
+
+                    var contactCharacter = blockingObj.GetComponent<CControl>();
+
+                    if (contactCharacter != null && contactCharacter.playerOrAi != control.playerOrAi)
+                    {
+                        if (contactCharacter.isDead)
+                        {
+                            continue;
+                        }
+
+                        JostleFromEnemy();
+                        return false;
+                    }
+
+                    landingPosition = new Vector3(
+                        0f,
+                        bottomRaycastContactPoint.y,
+                        bottomRaycastContactPoint.z);
+
+                    return true;
                 }
             }
             //_ground = null;

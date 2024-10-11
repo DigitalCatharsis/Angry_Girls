@@ -137,7 +137,15 @@ namespace Angry_Girls
             float zoomFactor = Mathf.Lerp(_zoomRange.x, _zoomRange.y, distance / _minDistanceForZoom);
 
             // Apply zoom to camera
-            Camera.main.orthographicSize = zoomFactor;
+            if (zoomFactor >= 6.1)  //TODO: set to field
+            {
+                Camera.main.orthographicSize = 6.1f;
+            }
+            else
+            {
+                Camera.main.orthographicSize = zoomFactor;
+            }
+            
         }
     }
 }

@@ -1,5 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace Angry_Girls
@@ -9,6 +14,8 @@ namespace Angry_Girls
         Player,
         Ai,
     }
+
+    [Serializable]
     public class CControl : PoolObject
     {
         [Space(15)]
@@ -41,7 +48,7 @@ namespace Angry_Girls
         public Animator animator;
         public SubComponentMediator subComponentMediator;
         public AttackSystem_Data attackSystem_Data;
-        public ContactPoint[] boxColliderContacts;
+        public List<ContactPoint> boxColliderContacts = new();
         [Space(10)]
         public CollisionSpheresData collisionSpheresData;
 
@@ -68,9 +75,22 @@ namespace Angry_Girls
             subComponentMediator.OnAwake();
         }
 
-        private void OnCollisionStay(Collision collision)
+        private void OnCollisionEnter(Collision collision)
         {
-            boxColliderContacts = collision.contacts;
+            if (collision == null)
+            {
+                return;
+            }
+
+            boxColliderContacts.AddRange(collision.contacts);
+        }
+
+        private void OnCollisionExit(Collision collision)
+        {
+            foreach (var contact in collision.contacts)
+            {
+                boxColliderContacts.Remove(contact);
+            }
         }
 
         private void OnTriggerEnter(Collider other)
@@ -113,7 +133,7 @@ namespace Angry_Girls
                 weapon.transform.rotation = weaponHolder.transform.rotation;
             }
 
-            
+
         }
 
         private void OnEnable()
