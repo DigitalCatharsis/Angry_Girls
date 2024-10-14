@@ -141,10 +141,10 @@ namespace Angry_Girls
         {
             _animationProcessor.ChangeAnimationState(GameLoader.Instance.statesContainer.attack_Dictionary[Attack_States.Alternate_HeadSpin_Attack], 0, transitionDuration: 1);
         }
-        public void TEMP_SetShorukenLandingState()
-        {
-            _animationProcessor.ChangeAnimationStateFixedTime(GameLoader.Instance.statesContainer.attack_Dictionary[Attack_States.Alternate_Shoryuken_Landing], 0, transitionDuration: 1);
-        }
+        //public void TEMP_SetShorukenLandingState()
+        //{
+        //    _animationProcessor.ChangeAnimationStateFixedTime(GameLoader.Instance.statesContainer.landingNames_Dictionary[Landing_States.Landing_Shoryuken], 0, transitionDuration: 1);
+        //}
         public Vector3 GetBottomContactPoint()
         {
             return _groundDetector.bottomRaycastContactPoint;

@@ -17,16 +17,12 @@ namespace Angry_Girls
         private void OnEnable()
         {
             _isDisposed = false;
-            //int LayerIgnoreRaycast = LayerMask.NameToLayer("Projectile");
-            //gameObject.layer = LayerIgnoreRaycast;
         }
         protected virtual void Dispose(bool disposing)
         {
             if (_isDisposed) return;
             if (disposing)
             {
-                // Освобождаем управляемые ресурсы
-
                 this.gameObject.SetActive(false);
 
                 ResetRigidbody();

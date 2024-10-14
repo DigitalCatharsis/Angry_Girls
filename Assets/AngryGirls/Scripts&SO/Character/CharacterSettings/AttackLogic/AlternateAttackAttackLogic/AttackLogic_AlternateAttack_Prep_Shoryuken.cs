@@ -18,7 +18,7 @@ namespace Angry_Girls
                 && control.isGrounded)
             {
                 //TODO: fuck...
-                control.subComponentMediator.TEMP_SetShorukenLandingState();
+                //control.subComponentMediator.TEMP_SetShorukenLandingState();
             }
         }
 

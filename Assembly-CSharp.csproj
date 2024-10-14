@@ -137,7 +137,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\HashManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\LaunchLogic.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUnityVersion.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_OnGround_Shoryuken_Rise.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\CollisionSpheres.cs" />
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackAbilities\AttackAbility.cs" />

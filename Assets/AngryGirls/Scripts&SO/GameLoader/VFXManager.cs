@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -5,6 +7,34 @@ namespace Angry_Girls
 {
     public class VFXManager : MonoBehaviour
     {
+        public void FadeOutFlame_And_Dispose(VFX vFX, float disposeDuration, float fadeDuration)
+        {
+            StartCoroutine(On_DisposeVfxAfterTime(vFX, disposeDuration, fadeDuration));
+        }
+
+        private IEnumerator On_DisposeVfxAfterTime(VFX vFX, float disposeDuration, float fadeDuration)
+        {
+            //fading
+            var visualEffect = vFX.GetComponentInChildren<VisualEffect>();
+            float elapsedTime = 0f;
+
+            while (elapsedTime < disposeDuration)
+            {
+                float t = elapsedTime / disposeDuration; // Нормализуем время
+                float newValue = Mathf.Lerp(fadeDuration, 0, t); // Плавно уменьшаем значение
+                visualEffect.SetFloat("FlamesLifetime", newValue); // Устанавливаем новое значение параметра
+                visualEffect.SetFloat("SmokeLifetime", newValue); // Устанавливаем новое значение параметра
+                visualEffect.SetFloat("FlameRate", newValue); // Устанавливаем новое значение параметра
+                visualEffect.SetFloat("SmokeRate", newValue); // Устанавливаем новое значение параметра
+
+                elapsedTime += Time.deltaTime; // Увеличиваем прошедшее время
+                yield return null; // Ждем следующего кадра
+            }
+
+            yield return new WaitForSeconds(disposeDuration);
+            vFX.Dispose();
+        }
+
         public GameObject SpawnVFX(
             Transform parentsTransform, 
             VFX_Type vfx_Type, 

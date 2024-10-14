@@ -22,11 +22,7 @@ namespace Angry_Girls
             control.isGrounded = IsGrounded();
         }
 
-        private void JostleFromEnemy()
-        {
-            control.rigidBody.velocity = (new Vector3(0, 1f, -control.transform.forward.z * 1));
-            //control.rigidBody.AddForce(new Vector3(0, 5f, -control.transform.forward.z * 2), mode: ForceMode.Impulse);
-        }
+
 
         private bool IsGrounded()
         {
@@ -45,7 +41,7 @@ namespace Angry_Girls
                         //prevent from stuck above enemy
                         if (control.rigidBody.velocity == Vector3.zero )
                         {
-                            JostleFromEnemy();
+                            control.JostleFromEnemy(2);
                         }
 
                         return false;
@@ -91,7 +87,7 @@ namespace Angry_Girls
                             continue;
                         }
 
-                        JostleFromEnemy();
+                        control.JostleFromEnemy(2);
                         return false;
                     }
 

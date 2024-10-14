@@ -84,6 +84,7 @@ namespace Angry_Girls
         Landing_General,
         Landing_Rolling,
         Landing_SwordAttack,
+        Landing_Shoryuken,
     }
 
     public enum Attack_States

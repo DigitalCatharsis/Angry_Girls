@@ -51,7 +51,6 @@ namespace Angry_Girls
                 yield return null;
             }
 
-            //Singleton.Instance.launchManager.OnLaunchIsOver();
             GameLoader.Instance.gameLoaderMediator.Notify(this, GameLoaderMediator_EventNames.ProceedOnLaunchIsOver);
         }
 

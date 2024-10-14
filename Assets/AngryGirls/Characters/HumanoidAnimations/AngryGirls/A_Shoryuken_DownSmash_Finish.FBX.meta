@@ -55,8 +55,8 @@ ModelImporter:
       name: A_Shoryuken_DownSmash_Finish
       takeName: Take 001
       internalID: 1827226128182048838
-      firstFrame: 25
-      lastFrame: 45
+      firstFrame: 27
+      lastFrame: 58
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

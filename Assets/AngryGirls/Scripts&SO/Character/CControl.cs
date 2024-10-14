@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+using static UnityEditor.Rendering.FilterWindow;
 
 namespace Angry_Girls
 {
@@ -48,7 +49,7 @@ namespace Angry_Girls
         public Animator animator;
         public SubComponentMediator subComponentMediator;
         public AttackSystem_Data attackSystem_Data;
-        public List<ContactPoint> boxColliderContacts = new();
+        public ContactPoint[] boxColliderContacts;
         [Space(10)]
         public CollisionSpheresData collisionSpheresData;
 
@@ -74,6 +75,11 @@ namespace Angry_Girls
             hasFinishedLaunchingTurn = true;
         }
 
+        public void JostleFromEnemy(float zValue)
+        {
+            rigidBody.velocity = (new Vector3(0, 0, -transform.forward.z * zValue));
+        }
+
         private void Awake()
         {
             rigidBody = GetComponent<Rigidbody>();
@@ -84,23 +90,37 @@ namespace Angry_Girls
             subComponentMediator.OnAwake();
         }
 
-        private void OnCollisionEnter(Collision collision)
+        private void OnCollisionStay(Collision collision)
         {
-            if (collision == null)
-            {
-                return;
-            }
-
-            boxColliderContacts.AddRange(collision.contacts);
+            boxColliderContacts = (collision.contacts);
         }
 
-        private void OnCollisionExit(Collision collision)
-        {
-            foreach (var contact in collision.contacts)
-            {
-                boxColliderContacts.Remove(contact);
-            }
-        }
+        //private void OnCollisionEnter(Collision collision)
+        //{
+        //    if (collision == null)
+        //    {
+        //        return;
+        //    }
+
+        //    foreach (var contact in collision.contacts)
+        //    {
+        //        if (contact.otherCollider.gameObject.transform.root != this.transform.root)
+        //        {
+        //            if (!boxColliderContacts.Contains(contact))
+        //            {
+        //                boxColliderContacts.Add(contact);
+        //            }
+        //        }
+        //    }
+        //}
+
+        //private void OnCollisionExit(Collision collision)
+        //{
+        //    if (collision.collider.gameObject.transform.root != this.transform.root)
+        //    {
+        //        boxColliderContacts.Remove(collision.comtap);
+        //    }
+        //}
 
         private void OnTriggerEnter(Collider other)
         {

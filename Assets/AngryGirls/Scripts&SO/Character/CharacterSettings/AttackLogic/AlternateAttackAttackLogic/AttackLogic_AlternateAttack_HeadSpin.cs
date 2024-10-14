@@ -61,9 +61,6 @@ namespace Angry_Girls
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             control.FinishTurn();
-            //control.airToGroundUnit_FinishedAbility = true;
-            //control.hasFinishedAlternateAttackTurn = true;
-            //control.isAttacking = false;
         }
 
         private void ProcessFireballs(CControl control, Vector3[] angles, float moveDuration = 1.5f)
@@ -101,11 +98,6 @@ namespace Angry_Girls
                     owner: control.gameObject
                     );
             }
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
         }
     }
 }

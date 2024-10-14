@@ -50,7 +50,6 @@ namespace Angry_Girls
                 case Attack_States.Alternate_Shoryuken_Prep:
                     control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_Prep_Shoryuken();
                     control.attackSystem_Data.AlternateAttackLogic_Landing = new AttackLogic_AlternateAttack_Landing_Shoryuken();
-                    control.attackSystem_Data.AlternateAttackLogic_OnGround = new AttackLogic_AlternateAttack_OnGround_Shoryuken_Rise();
                     break;
                 case Attack_States.Alternate_SendFireball_Front:
                     control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_Launch_SendFireball_Front();

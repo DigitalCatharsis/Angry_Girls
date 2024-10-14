@@ -56,6 +56,7 @@ namespace Angry_Girls
 
         private void OnDamageTaken(float damage, Collider triggerCollider, VFX vfx)
         {
+            control.JostleFromEnemy(3);
             control.currentHealth -= damage;
             GameLoader.Instance.UIManager.UpdateHealthBarValueAndVision(control);
 

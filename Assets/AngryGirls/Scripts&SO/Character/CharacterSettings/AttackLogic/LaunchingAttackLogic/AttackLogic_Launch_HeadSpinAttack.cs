@@ -40,8 +40,6 @@ namespace Angry_Girls
                 if (stateInfo.normalizedTime >= control.characterSettings.AttackAbility_Launch.timesToRepeat_Attack_State)
                 {
                     control.FinishTurn();
-                    //control.isAttacking = false;
-                    //control.airToGroundUnit_FinishedAbility = true;
                 }
             }
             else
@@ -50,8 +48,6 @@ namespace Angry_Girls
                 if (_currentAttackTimer >= control.characterSettings.AttackAbility_Launch.attackTimeDuration)
                 {
                     control.FinishTurn();
-                    //control.isAttacking = false;
-                    //control.airToGroundUnit_FinishedAbility = true;
                 }
             }
         }
