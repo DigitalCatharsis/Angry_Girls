@@ -13,17 +13,17 @@ namespace Angry_Girls
                 _control = animator.transform.root.GetComponent<CharacterControl>();
             }
 
-            _control.attackSystem_Data.attackPrepLogic.OnStateEnter(_control, animator, stateInfo);
+            _control.attackSystem_Data.Launch_AttackLogic.OnStateEnter(_control, animator, stateInfo);
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            _control.attackSystem_Data.attackPrepLogic.OnStateUpdate(_control, animator, stateInfo);
+            _control.attackSystem_Data.Launch_AttackLogic.OnStateUpdate(_control, animator, stateInfo);
         }
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            _control.attackSystem_Data.attackPrepLogic.OnStateExit(_control, animator, stateInfo);
+            _control.attackSystem_Data.Launch_AttackLogic.OnStateExit(_control, animator, stateInfo);
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()

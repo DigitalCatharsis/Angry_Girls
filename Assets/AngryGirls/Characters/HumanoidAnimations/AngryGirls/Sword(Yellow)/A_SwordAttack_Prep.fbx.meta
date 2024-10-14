@@ -33,7 +33,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: A_SwordAttack_Prep
+      name: Launch_A_SwordAttack_Prep
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 109

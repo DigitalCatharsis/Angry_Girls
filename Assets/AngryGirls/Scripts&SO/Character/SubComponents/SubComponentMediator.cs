@@ -139,11 +139,11 @@ namespace Angry_Girls
         //Where the fuck should i place iT?!
         public void TEMP_SetHeadSpinState()
         {
-            _animationProcessor.ChangeAnimationState(GameLoader.Instance.statesDispatcher.staticAttack_States_Dictionary[StaticAttack_States.A_HeadSpin_Attack_Static], 0, transitionDuration: 1);
+            _animationProcessor.ChangeAnimationState(GameLoader.Instance.statesContainer.attack_Dictionary[Attack_States.Alternate_HeadSpin_Attack], 0, transitionDuration: 1);
         }
         public void TEMP_SetShorukenLandingState()
         {
-            _animationProcessor.ChangeAnimationStateFixedTime(GameLoader.Instance.statesDispatcher.staticAttack_States_Dictionary[StaticAttack_States.A_Shoryuken_Landing_Static], 0, transitionDuration: 1);
+            _animationProcessor.ChangeAnimationStateFixedTime(GameLoader.Instance.statesContainer.attack_Dictionary[Attack_States.Alternate_Shoryuken_Landing], 0, transitionDuration: 1);
         }
         public Vector3 GetBottomContactPoint()
         {

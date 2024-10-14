@@ -26,7 +26,7 @@ MonoBehaviour:
     animation: 2
     transitionDuration: 0.1
   attackFininsh_State:
-    animation: 1
+    animation: 0
     transitionDuration: 0
   landing_State:
     animation: 2
@@ -38,7 +38,7 @@ MonoBehaviour:
   - animation: 1
     transitionDuration: 0
   deathByAnimation: 1
-  launchedAttackPrepAbility: {fileID: 11400000, guid: e35d5a6e8a68115488c24f09ded5e324,
+  AttackAbility_Launch: {fileID: 11400000, guid: e35d5a6e8a68115488c24f09ded5e324,
     type: 2}
-  staticAttackAbility: {fileID: 11400000, guid: 81ea2363aaa562546b8b177ae8a3118c,
+  AttackAbility_Alternate: {fileID: 11400000, guid: 69fef6e1f5c2af04bbce14acc0bcc598,
     type: 2}

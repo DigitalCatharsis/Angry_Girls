@@ -12,7 +12,7 @@ namespace Angry_Girls
 
         public CharacterManager characterManager;
         public HashManager hashManager; 
-        public StatesDispatcher statesDispatcher;
+        public StatesContainer statesContainer;
         public VFXManager VFXManager;
         public AudioManager audioManager;
         public UIManager UIManager;
@@ -44,7 +44,7 @@ namespace Angry_Girls
             poolManager = GetComponentInChildren<PoolManager>();
             poolObjectLoader = GetComponentInChildren<PoolObjectLoader>();
             VFXManager = GetComponentInChildren<VFXManager>();
-            statesDispatcher = GetComponentInChildren<StatesDispatcher>();
+            statesContainer = GetComponentInChildren<StatesContainer>();
             audioManager = GetComponentInChildren<AudioManager>();
             UIManager = GetComponentInChildren<UIManager>();
             attackLogicContainer = GetComponentInChildren<AttackLogicContainer>();

@@ -37,10 +37,10 @@ namespace Angry_Girls
         public bool hasBeenLaunched = false;
         public bool airToGroundUnit_FinishedAbility = false;
         public bool hasFinishedLaunchingTurn = false;
-        public bool hasFinishedStaticAttackTurn = true;
+        public bool hasFinishedAlternateAttackTurn = true;
 
         [Space(5)]
-        public bool unitBehaviorIsStatic = true;
+        public bool unitBehaviorIsAlternate = true;
         public bool checkGlobalBehavior = false;
 
         public Rigidbody rigidBody;
@@ -64,6 +64,15 @@ namespace Angry_Girls
         [Header("Weapon")]
         [SerializeReference]
         public Transform weaponHolder;
+
+        public void FinishTurn()
+        {
+            isAttacking = false;
+            isLanding = false;
+            hasFinishedAlternateAttackTurn = true;
+            airToGroundUnit_FinishedAbility = true;
+            hasFinishedLaunchingTurn = true;
+        }
 
         private void Awake()
         {
@@ -122,6 +131,7 @@ namespace Angry_Girls
             subComponentMediator.OnStart();
 
             //TEST WEAPON
+            //TODO: implement properly
             if (weaponHolder != null)
             {
                 var weaponPrefab = Resources.Load("DefinetlyNotAWeapon") as GameObject;
@@ -132,8 +142,6 @@ namespace Angry_Girls
                 weapon.transform.position = weaponHolder.transform.position;
                 weapon.transform.rotation = weaponHolder.transform.rotation;
             }
-
-
         }
 
         private void OnEnable()

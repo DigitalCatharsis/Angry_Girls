@@ -54,7 +54,7 @@ namespace Angry_Girls
         {
             foreach (var character in charactersToLaunchLeft)
             {
-                character.GetComponent<CControl>().unitBehaviorIsStatic = false;
+                character.GetComponent<CControl>().unitBehaviorIsAlternate = false;
             }
         }
         private void Update()

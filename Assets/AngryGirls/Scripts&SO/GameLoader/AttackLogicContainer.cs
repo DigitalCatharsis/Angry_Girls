@@ -3,60 +3,67 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-
     public class AttackLogicContainer: MonoBehaviour
     {
         public void SetCharacterAttackLogic(CControl control)
         {
-            //attackPrep
-            switch (control.characterSettings.launchedAttackPrepAbility.attackPrep_State.animation)
+            if (control.characterSettings.AttackAbility_Launch != null)
             {
-                case AttackPrep_States.A_SendFireball_Front:
-                    control.attackSystem_Data.attackPrepLogic = new AttackLogic_SendFireball_Front();
-                    break;
-                case AttackPrep_States.A_Shoryuken_DownSmash_Prep:
-                    control.attackSystem_Data.attackPrepLogic = new AttackLogic_ShoryukenDownSmash_Prep();
-                    break;
-                case AttackPrep_States.A_HeadSpin_Attack:
-                    control.attackSystem_Data.attackPrepLogic = new AttackLogic_HeadSpinAttack();
-                    break;
-                case AttackPrep_States.A_SwordAttack_Prep:
-                    control.attackSystem_Data.attackPrepLogic = new AttackLogic_SwordAttack();
-                    break;
-                    //default:
-                    //    throw new Exception("No logic for state like " + control.characterSettings.attackPrepAbility.attackPrep_State.animation.ToString());
+                //attackPrep
+                switch (control.characterSettings.AttackAbility_Launch.attack_State.animation)
+                {
+                    case Attack_States.Launch_SendFireball_Front:
+                        control.attackSystem_Data.Launch_AttackLogic = new AttackLogic_Launch_SendFireball_Front();
+                        break;
+                    case Attack_States.Launch_Shoryuken_DownSmash_Prep:
+                        control.attackSystem_Data.Launch_AttackLogic = new AttackLogic_Launch_ShoryukenDownSmash_Prep();
+                        break;
+                    case Attack_States.Launch_HeadSpin_Attack:
+                        control.attackSystem_Data.Launch_AttackLogic = new AttackLogic_Launch_HeadSpinAttack();
+                        break;
+                    case Attack_States.Launch_SwordAttack_Prep:
+                        control.attackSystem_Data.Launch_AttackLogic = new AttackLogic_Launch_SwordAttack();
+                        break;
+                    default:
+                        throw new Exception("No logic for state like " + control.characterSettings.AttackAbility_Launch.attack_State.animation.ToString());
+                }
             }
+            else
+            {
+                ColorDebugLog.Log("no Launch Attack Ability for " + control.name, System.Drawing.KnownColor.GreenYellow);
+            }
+
 
             //attackFinish
             switch (control.characterSettings.attackFininsh_State.animation)
             {
-                case AttackFinish_States.A_Shoryuken_DownSmash_Finish:
-                    control.attackSystem_Data.attackFinishLogic = new AttackLogic_ShoryukenDownSmash_Finish();
+                case AttackFinish_States.Launch_Shoryuken_DownSmash_Finish:
+                    control.attackSystem_Data.Launch_AttackFinishLogic = new AttackLogic_Launch_ShoryukenDownSmash_Finish();
                     break;
                     //default:
                     //    throw new Exception("No logic for state like " + control.characterSettings.attackPrepAbility.attackPrep_State.animation.ToString());
             }
 
-            //StaticAttack
-            switch (control.characterSettings.staticAttackAbility.staticAttack_State.animation)
+            //Alternate_Attack
+            switch (control.characterSettings.AttackAbility_Alternate.attack_State.animation)
             {
-                case StaticAttack_States.A_Shoryuken_Prep_Static:
-                    control.attackSystem_Data.staticAttackLogic_Prep = new AttackLogic_Static_Prep_Shoryuken();
-                    control.attackSystem_Data.staticAttackLogic_Landing = new AttackLogic_Static_Landing_Shoryuken();
-                    control.attackSystem_Data.staticAttackLogic_OnGround = new AttackLogic_Static_OnGround_Shoryuken_Rise();
+                case Attack_States.Alternate_Shoryuken_Prep:
+                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_Prep_Shoryuken();
+                    control.attackSystem_Data.AlternateAttackLogic_Landing = new AttackLogic_AlternateAttack_Landing_Shoryuken();
+                    control.attackSystem_Data.AlternateAttackLogic_OnGround = new AttackLogic_AlternateAttack_OnGround_Shoryuken_Rise();
                     break;
-                case StaticAttack_States.A_SendFireball_Front_Static:
-                    control.attackSystem_Data.staticAttackLogic_Prep = new AttackLogic_SendFireball_Front();
+                case Attack_States.Alternate_SendFireball_Front:
+                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_Launch_SendFireball_Front();
                     break;
-                case StaticAttack_States.A_HeadSpin_Attack_Prep_Static:
-                    control.attackSystem_Data.staticAttackLogic_Prep = new AttackLogic_Static_HeadSpin_Prep();
-                    control.attackSystem_Data.staticAttackLogic_Airboned = new AttackLogic_Static_HeadSpin();
+                case Attack_States.Alternate_HeadSpin_Attack_Prep:
+                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_HeadSpin_Prep();
+                    control.attackSystem_Data.AlternateAttackLogic_Airboned = new AttackLogic_AlternateAttack_HeadSpin();
                     break;
-                case StaticAttack_States.A_SwordAttack_Static:
-                    control.attackSystem_Data.staticAttackLogic_Prep = new AttackLogic_Static_SwordAttack();
+                case Attack_States.Alternate_SwordAttack_Prep:
+                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_SwordAttack();
                     break;
                 default:
-                    throw new Exception("No logic for state like " + control.characterSettings.staticAttackAbility.staticAttack_State.animation.ToString());
+                    throw new Exception("No logic for state like " + control.characterSettings.AttackAbility_Alternate.attack_State.animation.ToString());
             }
         }
     }
@@ -64,12 +71,12 @@ namespace Angry_Girls
     [Serializable]
     public class AttackSystem_Data
     {
-        public AttackAbilityLogic attackPrepLogic;
-        public AttackAbilityLogic attackFinishLogic;
+        public AttackAbilityLogic Launch_AttackLogic;
+        public AttackAbilityLogic Launch_AttackFinishLogic;
 
-        public AttackAbilityLogic staticAttackLogic_Prep;
-        public AttackAbilityLogic staticAttackLogic_Airboned;
-        public AttackAbilityLogic staticAttackLogic_Landing;
-        public AttackAbilityLogic staticAttackLogic_OnGround;
+        public AttackAbilityLogic AlternateAttackLogic_Prep;
+        public AttackAbilityLogic AlternateAttackLogic_Airboned;
+        public AttackAbilityLogic AlternateAttackLogic_Landing;
+        public AttackAbilityLogic AlternateAttackLogic_OnGround;
     }
 }

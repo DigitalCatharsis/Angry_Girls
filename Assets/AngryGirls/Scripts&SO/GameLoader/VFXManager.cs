@@ -64,23 +64,23 @@ namespace Angry_Girls
             var vfxComponent = vfx.GetComponent<VFX>();
 
             //Init and Run VFX
-            if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.StaticPhase)
+            if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.AlternatePhase)
             {
-                var staticAbility = control.characterSettings.staticAttackAbility;
+                var AlternateAbility = control.characterSettings.AttackAbility_Alternate;
                 vfxComponent.InitAndRunVFX(
-                    staticAbility.timeToLive, 
-                    staticAbility.isTimeToLiveIsNormilizedTime, 
-                    staticAbility.destroyOnCollision, 
-                    staticAbility.destroyOnCharacterCollision, 
-                    staticAbility.attackDamage,
-                    staticAbility.enableCollider, 
-                    staticAbility.enableTrigger, 
+                    AlternateAbility.timeToLive, 
+                    AlternateAbility.isTimeToLiveIsNormilizedTime, 
+                    AlternateAbility.destroyOnCollision, 
+                    AlternateAbility.destroyOnCharacterCollision, 
+                    AlternateAbility.attackDamage,
+                    AlternateAbility.enableCollider, 
+                    AlternateAbility.enableTrigger, 
                     owner: control.gameObject
                     );
             }
             else
             {
-                var launchingAbility = control.characterSettings.launchedAttackPrepAbility;
+                var launchingAbility = control.characterSettings.AttackAbility_Launch;
                 vfxComponent.InitAndRunVFX(
                     launchingAbility.timeToLive, 
                     launchingAbility.isTimeToLiveIsNormilizedTime,

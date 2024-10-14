@@ -14,55 +14,60 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boxColliderAnimationData:
     _serializedList:
-    - Key: 29
+    - Key: 9
       Value:
         boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
         boxColliderSize: {x: 0, y: 0.8602528, z: 0.3019529}
         changeSpeed: 50
-    - Key: 5
+    - Key: 10
+      Value:
+        boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
+        boxColliderSize: {x: 0, y: 0.8602528, z: 0.3019529}
+        changeSpeed: 50
+    - Key: 11
+      Value:
+        boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
+        boxColliderSize: {x: 0, y: 0.8602528, z: 0.3019529}
+        changeSpeed: 50
+    - Key: 12
+      Value:
+        boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
+        boxColliderSize: {x: 0, y: 0.8602528, z: 0.3019529}
+        changeSpeed: 50
+    - Key: 13
+      Value:
+        boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
+        boxColliderSize: {x: 0, y: 0.8602528, z: 0.3019529}
+        changeSpeed: 50
+    - Key: 14
+      Value:
+        boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
+        boxColliderSize: {x: 0, y: 0.8602528, z: 0.3019529}
+        changeSpeed: 50
+    - Key: 15
       Value:
         boxColliderCenter: {x: 0, y: 0.4746108, z: 0.04519272}
         boxColliderSize: {x: 0, y: 0.7242823, z: 0.4526234}
         changeSpeed: 50
-    - Key: 30
+    - Key: 19
       Value:
         boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
         boxColliderSize: {x: 0, y: 0.8602528, z: 0.3019529}
+        changeSpeed: 50
+    - Key: 23
+      Value:
+        boxColliderCenter: {x: 0, y: 0, z: 0.04335566}
+        boxColliderSize: {x: 0.2461494, y: 0.4500484, z: 0.612847}
         changeSpeed: 50
     - Key: 31
       Value:
-        boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
-        boxColliderSize: {x: 0, y: 0.8602528, z: 0.3019529}
+        boxColliderCenter: {x: 0, y: 0, z: 0.04335566}
+        boxColliderSize: {x: 0.2461494, y: 0.4500484, z: 0.612847}
         changeSpeed: 50
-    - Key: 32
-      Value:
-        boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
-        boxColliderSize: {x: 0, y: 0.8602528, z: 0.3019529}
-        changeSpeed: 50
-    - Key: 33
-      Value:
-        boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
-        boxColliderSize: {x: 0, y: 0.8602528, z: 0.3019529}
-        changeSpeed: 50
-    - Key: 34
-      Value:
-        boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
-        boxColliderSize: {x: 0, y: 0.8602528, z: 0.3019529}
-        changeSpeed: 50
-    - Key: 17
+    - Key: 39
       Value:
         boxColliderCenter: {x: 0.00000004470348, y: -0.01338433, z: -0.1855023}
         boxColliderSize: {x: 0.2461494, y: 0.005595952, z: 0.2152416}
-        changeSpeed: 50
-    - Key: 36
-      Value:
-        boxColliderCenter: {x: 0, y: 0, z: 0.04335566}
-        boxColliderSize: {x: 0.2461494, y: 0.4500484, z: 0.612847}
-        changeSpeed: 50
-    - Key: 38
-      Value:
-        boxColliderCenter: {x: 0, y: 0, z: 0.04335566}
-        boxColliderSize: {x: 0.2461494, y: 0.4500484, z: 0.612847}
         changeSpeed: 50
     - Key: 37
       Value:

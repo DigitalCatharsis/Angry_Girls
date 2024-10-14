@@ -33,20 +33,20 @@ namespace Angry_Girls
 
         [Header("Animations")]
         public List<CharAnimationData<Idle_States>> idle_States;
-        public CharAnimationData<AirbonedFlying_States> airbonedFlying_States;
+        public CharAnimationData<Falling_States> airbonedFlying_States;
         public CharAnimationData<AttackFinish_States> attackFininsh_State;
         public CharAnimationData<Landing_States> landing_State;
         [Space(5)]
         public List<CharAnimationData<HitReaction_States>> hitReaction_States;
         public List<CharAnimationData<Death_States>> death_States;
 
-        public bool deathByAnimation = true;
+        public bool deathByAnimation = true; //TODO: implement ragdoll
 
         [Header("Launched Attack Ability")]
         [SerializeReference]
-        public AttackAbility launchedAttackPrepAbility;
-        [Header("Static Attack Ability")]
-        public StaticAttackAbility staticAttackAbility;
+        public AttackAbility AttackAbility_Launch;
+        [Header("Alternate Attack Ability")]
+        public AttackAbility AttackAbility_Alternate;
 
         private void  NotifyForNONE_Value<T>(CharAnimationData<T> charAnimationData, CControl control) where T : Enum
         {

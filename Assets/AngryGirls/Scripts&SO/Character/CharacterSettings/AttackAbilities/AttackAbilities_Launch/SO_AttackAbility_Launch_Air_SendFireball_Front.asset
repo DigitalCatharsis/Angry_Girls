@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0028d3c9ed40ac4fb418dabae3bc0e9, type: 3}
+  m_Name: SO_AttackAbility_Launch_Air_SendFireball_Front
+  m_EditorClassIdentifier: 
+  attack_State:
+    animation: 2
+    transitionDuration: 0
+  timesToRepeat_Attack_State: 1
+  attackDamage: 5
+  attackTimeDuration: 0
+  useAnimationNormalizedTimeDuration: 1
+  attackMovementSpeed: {x: 0, y: 0, z: 0}
+  attackMovementForce: {x: 0, y: 0, z: -500}
+  AttackVFX: {fileID: 5238815803969079422, guid: 3e9f49843884c504281b8bcdb82a7cdb,
+    type: 3}
+  timeToLive: 99
+  isTimeToLiveIsNormilizedTime: 0
+  projectileMovementSpeed: {x: 0, y: 0, z: 15}
+  destroyOnCollision: 1
+  destroyOnCharacterCollision: 0
+  enableCollider: 1
+  enableTrigger: 1

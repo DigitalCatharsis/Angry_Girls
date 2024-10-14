@@ -38,7 +38,7 @@ MonoBehaviour:
   - animation: 1
     transitionDuration: 0
   deathByAnimation: 1
-  launchedAttackPrepAbility: {fileID: 11400000, guid: 8230bc02d932fdb4890b9296e4aa8250,
+  AttackAbility_Launch: {fileID: 11400000, guid: 8230bc02d932fdb4890b9296e4aa8250,
     type: 2}
-  staticAttackAbility: {fileID: 11400000, guid: bb23c86816701414d8832fde6e51d088,
+  AttackAbility_Alternate: {fileID: 11400000, guid: c1830bd3eef988a449c6d351352687d0,
     type: 2}

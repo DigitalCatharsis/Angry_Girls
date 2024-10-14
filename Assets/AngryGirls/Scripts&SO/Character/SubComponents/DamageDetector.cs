@@ -69,9 +69,7 @@ namespace Angry_Girls
 
         public void SetParamsAfterDeath()
         {
-            control.airToGroundUnit_FinishedAbility = true;
-            control.hasFinishedLaunchingTurn = true;
-            control.hasFinishedStaticAttackTurn = true;
+            control.FinishTurn();
             control.rigidBody.useGravity = true;
             //DeadBody
             control.gameObject.layer = 12;

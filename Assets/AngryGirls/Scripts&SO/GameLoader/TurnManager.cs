@@ -7,7 +7,7 @@ namespace Angry_Girls
 {
     public enum CurrentPhase
     {
-        StaticPhase,
+        AlternatePhase,
         LaunchingPhase,
     }
 
@@ -17,7 +17,7 @@ namespace Angry_Girls
         [SerializeField] private CurrentPhase _currentPhase = CurrentPhase.LaunchingPhase;
 
         [SerializeField] private bool _isLaunchingPhaseOver = false;
-        [SerializeField] private bool _isStaticPhaseOver = true;
+        [SerializeField] private bool _isAlternatePhaseOver = true;
 
         [SerializeField] private List<GameObject> _charactersTurn_List = new();
 
@@ -52,16 +52,16 @@ namespace Angry_Girls
                     _charactersTurn_List.InsertRange(_charactersTurn_List.Count - 1, GameLoader.Instance.characterManager.enemyCharacters);
                 }
 
-                //current Phase is Static
+                //current Phase is Alternate
                 SwitchToAttackingPhase();
 
                 // wait untill everyone do its turn then switch to LaunchimgPhase
                 StartCoroutine(OnEachTurn_Routine());
             }
 
-            if (_currentPhase == CurrentPhase.StaticPhase)
+            if (_currentPhase == CurrentPhase.AlternatePhase)
             {
-                if (_isStaticPhaseOver == false)
+                if (_isAlternatePhaseOver == false)
                 {
                     return;
                 }
@@ -93,18 +93,18 @@ namespace Angry_Girls
         private void SwitchToAttackingPhase()
         {
             _isLaunchingPhaseOver = true;
-            _isStaticPhaseOver = false;
-            _currentPhase = CurrentPhase.StaticPhase;
+            _isAlternatePhaseOver = false;
+            _currentPhase = CurrentPhase.AlternatePhase;
             foreach (var character in _charactersTurn_List)
             {
-                character.GetComponent<CControl>().hasFinishedStaticAttackTurn = false;
+                character.GetComponent<CControl>().hasFinishedAlternateAttackTurn = false;
             }
         }
 
         private void SwitchToLaunchingPhase()
         {
             _currentTurn++;
-            _isStaticPhaseOver = true;
+            _isAlternatePhaseOver = true;
             SortCharactersTurnList();
             _currentPhase = CurrentPhase.LaunchingPhase;
             _isLaunchingPhaseOver = false;

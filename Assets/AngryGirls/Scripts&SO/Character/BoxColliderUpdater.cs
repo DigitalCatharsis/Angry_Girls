@@ -18,7 +18,7 @@ namespace Angry_Girls
         public void UpdateCollider()
         {
             var stateHash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
-            var stateName = GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, stateHash);
+            var stateName = GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesContainer.stateNames_Dictionary, stateHash);
 
             //if (!control.characterSettings.boxcolliderContainer.boxColliderAnimationData.ContainsKey(control.currentStateData.currentStateName))
             if (!control.characterSettings.boxcolliderContainer.boxColliderAnimationData.ContainsKey(stateName))
@@ -56,7 +56,7 @@ namespace Angry_Girls
             }
 
             var stateHash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
-            var stateName = GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, stateHash);
+            var stateName = GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesContainer.stateNames_Dictionary, stateHash);
 
             //var data = control.characterSettings.boxcolliderContainer.boxColliderAnimationData[currentState.currentStateName];
             var data = control.characterSettings.boxcolliderContainer.boxColliderAnimationData[stateName];
@@ -79,7 +79,7 @@ namespace Angry_Girls
             }
 
             var stateHash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
-            var stateName = GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesDispatcher.stateNames_Dictionary, stateHash);
+            var stateName = GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesContainer.stateNames_Dictionary, stateHash);
 
             var data = control.characterSettings.boxcolliderContainer.boxColliderAnimationData[stateName];
             if (Vector3.SqrMagnitude(control.boxCollider.center - data.boxColliderCenter) > 0.00001f || Vector3.SqrMagnitude(control.boxCollider.center - data.boxColliderCenter) < 0.00001f)

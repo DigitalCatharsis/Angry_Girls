@@ -8,8 +8,8 @@ namespace Angry_Girls
     {
         [Header("Setup")]
         [Header("Animation")]
-        public CharAnimationData<AttackPrep_States> attackPrep_State;
-        public float timesToRepeat_AttackPrep_State = 1f;
+        public CharAnimationData<Attack_States> attack_State;
+        public float timesToRepeat_Attack_State = 1f;
 
         [Space(5)]
         [Header("Attack")]
@@ -20,8 +20,8 @@ namespace Angry_Girls
 
         [Space(5)]
         [Header("Character Phyciscs")]
-        public Vector3 attackPrepMovementSpeed = new Vector3(0, 0, 0);
-        public Vector3 attackPrepMovementForce = new Vector3(0, 0, 0);
+        public Vector3 attackMovementSpeed = new Vector3(0, 0, 0);
+        public Vector3 attackMovementForce = new Vector3(0, 0, 0);
 
         [Space(15)]
         [Header("Projectile")]
