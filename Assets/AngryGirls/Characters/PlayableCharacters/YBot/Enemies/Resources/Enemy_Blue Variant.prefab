@@ -11,17 +11,17 @@ PrefabInstance:
     - target: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.020071004
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.81
+      value: 0.13
       objectReference: {fileID: 0}
     - target: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 12.95
+      value: 2.93
       objectReference: {fileID: 0}
     - target: {fileID: 253452075603770101, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
@@ -287,6 +287,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4452714583161221528, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4674259014324178179, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
@@ -563,8 +568,8 @@ MonoBehaviour:
   hasBeenLaunched: 0
   airToGroundUnit_FinishedAbility: 0
   hasFinishedLaunchingTurn: 0
-  hasFinishedStaticAttackTurn: 1
-  unitBehaviorIsStatic: 1
+  hasFinishedAlternateAttackTurn: 1
+  unitBehaviorIsAlternate: 1
   checkGlobalBehavior: 0
   rigidBody: {fileID: 0}
   boxCollider: {fileID: 0}

@@ -4,15 +4,19 @@ namespace Angry_Girls
 {
     public class DamageProcessor : SubComponent<SubcomponentMediator_EventNames>
     {
+        private bool _isdead = false;
         public override void OnComponentEnable()
         {
 
         }
         public override void OnUpdate()
         {
+            if (_isdead) return;
+
             if (control.isDead)
             {
                 SetParamsAfterDeath();
+                _isdead = true;
             }
         }
 

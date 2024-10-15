@@ -16,21 +16,21 @@ MonoBehaviour:
     _serializedList:
     - Key: 2
       Value:
-        boxColliderCenter: {x: 0.000000044703484, y: 0.36979246, z: -0.009551652}
-        boxColliderSize: {x: 0.24614942, y: 0.6764749, z: 0.51194155}
+        boxColliderCenter: {x: 0, y: 0.36979246, z: -0.009551652}
+        boxColliderSize: {x: 0.2, y: 0.6764749, z: 0.51194155}
         changeSpeed: 50
     - Key: 16
       Value:
-        boxColliderCenter: {x: 0.00000004470348, y: 0.3573987, z: 0.01009524}
-        boxColliderSize: {x: 0.2461494, y: 0.6865579, z: 0.5529058}
+        boxColliderCenter: {x: 0, y: 0.3573987, z: 0.01009524}
+        boxColliderSize: {x: 0.2, y: 0.6865579, z: 0.5529058}
         changeSpeed: 10
     - Key: 18
       Value:
-        boxColliderCenter: {x: 0.000000044703484, y: 0.36979246, z: -0.009551652}
-        boxColliderSize: {x: 0.24614942, y: 0.6764749, z: 0.51194155}
+        boxColliderCenter: {x: 0, y: 0.36979246, z: -0.009551652}
+        boxColliderSize: {x: 0.2, y: 0.6764749, z: 0.51194155}
         changeSpeed: 50
     - Key: 39
       Value:
-        boxColliderCenter: {x: 0.00000004470348, y: -0.01338433, z: -0.1855023}
-        boxColliderSize: {x: 0.2461494, y: 0.005595952, z: 0.9487329}
+        boxColliderCenter: {x: 0, y: -0.01338433, z: -0.1855023}
+        boxColliderSize: {x: 0.2, y: 0.005595952, z: 0.9487329}
         changeSpeed: 50

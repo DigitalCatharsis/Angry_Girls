@@ -17,40 +17,50 @@ MonoBehaviour:
     - Key: 5
       Value:
         boxColliderCenter: {x: 0, y: 0.4552352, z: 0.1697536}
-        boxColliderSize: {x: 0, y: 0.942835, z: 0.5345581}
+        boxColliderSize: {x: 0.2, y: 0.942835, z: 0.5345581}
         changeSpeed: 50
     - Key: 6
       Value:
         boxColliderCenter: {x: 0, y: 0.4552352, z: 0.1697536}
-        boxColliderSize: {x: 0, y: 0.942835, z: 0.5345581}
+        boxColliderSize: {x: 0.2, y: 0.942835, z: 0.5345581}
         changeSpeed: 50
     - Key: 7
       Value:
         boxColliderCenter: {x: 0, y: 0.4552352, z: 0.1697536}
-        boxColliderSize: {x: 0, y: 0.942835, z: 0.5345581}
+        boxColliderSize: {x: 0.2, y: 0.942835, z: 0.5345581}
         changeSpeed: 50
     - Key: 8
       Value:
         boxColliderCenter: {x: 0, y: 0.4552352, z: 0.1697536}
-        boxColliderSize: {x: 0, y: 0.942835, z: 0.5345581}
+        boxColliderSize: {x: 0.2, y: 0.942835, z: 0.5345581}
         changeSpeed: 50
     - Key: 4
       Value:
         boxColliderCenter: {x: 0, y: 0.4552352, z: 0.01009538}
-        boxColliderSize: {x: 0, y: 0.942835, z: 0.2152416}
+        boxColliderSize: {x: 0.2, y: 0.942835, z: 0.2152416}
+        changeSpeed: 50
+    - Key: 15
+      Value:
+        boxColliderCenter: {x: 0, y: 0.4968109, z: 0.02314484}
+        boxColliderSize: {x: 0.2, y: 0.7634029, z: 0.3813846}
+        changeSpeed: 50
+    - Key: 17
+      Value:
+        boxColliderCenter: {x: 0, y: 0.2670932, z: 0.02314484}
+        boxColliderSize: {x: 0.2, y: 0.5215948, z: 0.3813846}
         changeSpeed: 50
     - Key: 20
       Value:
         boxColliderCenter: {x: 0, y: 0.6116874, z: 0.04272452}
-        boxColliderSize: {x: 0, y: 1.139117, z: 0.6390768}
+        boxColliderSize: {x: 0.2, y: 1.139117, z: 0.6390768}
         changeSpeed: 50
     - Key: 33
       Value:
         boxColliderCenter: {x: 0, y: 0.2244832, z: 0.074193}
-        boxColliderSize: {x: 0, y: 0.4813312, z: 0.4459934}
+        boxColliderSize: {x: 0.2, y: 0.4813312, z: 0.4459934}
         changeSpeed: 50
     - Key: 39
       Value:
         boxColliderCenter: {x: 0, y: -0.01338433, z: -0.1855023}
-        boxColliderSize: {x: 0, y: 0.005595952, z: 0.9487329}
+        boxColliderSize: {x: 0.2, y: 0.005595952, z: 0.9487329}
         changeSpeed: 50

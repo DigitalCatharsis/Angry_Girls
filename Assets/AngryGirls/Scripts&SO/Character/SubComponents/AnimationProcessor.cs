@@ -253,12 +253,17 @@ namespace Angry_Girls
             var randomHitAnimation = control.characterSettings.hitReaction_States[UnityEngine.Random.Range(0, control.characterSettings.hitReaction_States.Count)].animation;
             //no crossFade for instant animations changes at fast damage recive
             ChangeAnimationState(GameLoader.Instance.statesContainer.hitReaction_Dictionary[randomHitAnimation], transitionDuration: 0.1f);
-            control.unitGotHit = false;
+            //control.unitGotHit = false;
             return;
         }
 
         private bool Global_CheckAndProcess_Landing()
         {
+            if (control.unitGotHit)
+            {
+                return false;
+            }
+
             //no landing phase for air units. The Launch is over
             if (control.characterSettings.unitType == UnitType.Air)
             {
@@ -268,7 +273,8 @@ namespace Angry_Girls
             }
 
             if (GameLoader.Instance.statesContainer.landingNames_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash)
-                || GameLoader.Instance.statesContainer.idle_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
+                || GameLoader.Instance.statesContainer.idle_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash)
+                || GameLoader.Instance.statesContainer.hitReaction_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
             {
                 return false;
             }
@@ -306,7 +312,7 @@ namespace Angry_Girls
             //Cant be airboned after finished attack for ground and Air unit for now...
             if (!control.unitBehaviorIsAlternate && control.hasFinishedLaunchingTurn)
             {
-                if (control.characterSettings.unitType == UnitType.Ground || control.characterSettings.unitType == UnitType.Air)
+                if (/*control.characterSettings.unitType == UnitType.Ground ||*/ control.characterSettings.unitType == UnitType.Air)
                     return;
             }
 

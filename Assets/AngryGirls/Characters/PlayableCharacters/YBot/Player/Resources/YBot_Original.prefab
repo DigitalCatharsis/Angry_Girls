@@ -1100,8 +1100,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.24614942, y: 0.94283503, z: 0.21524163}
-  m_Center: {x: 0.000000044703484, y: 0.45523515, z: 0.010095384}
+  m_Size: {x: 0.2, y: 0.94283503, z: 0.21524163}
+  m_Center: {x: 0, y: 0.45523515, z: 0.010095384}
 --- !u!54 &8032374457496847745
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1146,7 +1146,7 @@ MonoBehaviour:
     currentStateName: 0
     hash: 0
   _characterType: 0
-  currentHealth: 60
+  currentHealth: 200
   healthSlider: {fileID: 0}
   isLanding: 0
   isGrounded: 0
@@ -1157,8 +1157,8 @@ MonoBehaviour:
   hasBeenLaunched: 0
   airToGroundUnit_FinishedAbility: 0
   hasFinishedLaunchingTurn: 0
-  hasFinishedStaticAttackTurn: 1
-  unitBehaviorIsStatic: 1
+  hasFinishedAlternateAttackTurn: 1
+  unitBehaviorIsAlternate: 1
   checkGlobalBehavior: 0
   rigidBody: {fileID: 0}
   boxCollider: {fileID: 0}

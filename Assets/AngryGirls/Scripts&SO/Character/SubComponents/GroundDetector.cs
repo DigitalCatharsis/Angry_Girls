@@ -38,15 +38,14 @@ namespace Angry_Girls
                         {
                             continue;
                         }
-                        //prevent from stuck above enemy
-                        if (control.rigidBody.velocity == Vector3.zero )
-                        {
-                            control.JostleFromEnemy(2);
-                        }
+                        ////prevent from stuck above enemy
+                        //if (control.rigidBody.velocity == Vector3.zero && !control.isGrounded)
+                        //{
+                        //    control.JostleFromEnemy(2);
+                        //}
 
-                        return false;
+                        //return false;
                     }
-
 
 
                     var colliderBottom = (control.transform.position.y + control.boxCollider.center.y) - (control.boxCollider.size.y / 2f);
