@@ -107,7 +107,7 @@ namespace Angry_Girls
             {
                 Camera.main.orthographicSize /= 1.5f;
                 _canPressAtCharacters = false;
-                _characterLauncher.LaunchUnit(_charactersToLaunchLeft[0].GetComponent<CharacterControl>());
+                _characterLauncher.LaunchUnit(_charactersToLaunchLeft[0].GetComponent<CControl>());
                 _isLaunchAllowed = false;
             }
 

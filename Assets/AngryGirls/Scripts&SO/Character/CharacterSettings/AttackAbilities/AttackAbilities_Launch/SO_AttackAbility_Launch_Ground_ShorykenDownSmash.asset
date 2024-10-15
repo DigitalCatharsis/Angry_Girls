@@ -16,6 +16,9 @@ MonoBehaviour:
     animation: 1
     transitionDuration: 0
   timesToRepeat_Attack_State: 1
+  attackFininsh_State:
+    animation: 1
+    transitionDuration: 0
   attackDamage: 10
   attackTimeDuration: 0
   useAnimationNormalizedTimeDuration: 0

@@ -55,7 +55,7 @@ namespace Angry_Girls
             return _positionTransforms;
         }
 
-        public void LaunchUnit(CharacterControl characterToLaunch)
+        public void LaunchUnit(CControl characterToLaunch)
         {
             DisableTrajectoryDots();
 

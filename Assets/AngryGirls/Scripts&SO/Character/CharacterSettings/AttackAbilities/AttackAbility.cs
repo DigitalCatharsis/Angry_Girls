@@ -11,6 +11,9 @@ namespace Angry_Girls
         public CharAnimationData<Attack_States> attack_State;
         public float timesToRepeat_Attack_State = 1f;
 
+        [Header("AttackFinish state (if unit is ground type)")]
+        public CharAnimationData<AttackFinish_States> attackFininsh_State;
+
         [Space(5)]
         [Header("Attack")]
         public float attackDamage = 25f;

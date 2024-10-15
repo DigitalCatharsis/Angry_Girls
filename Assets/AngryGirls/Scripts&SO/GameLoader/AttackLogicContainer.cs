@@ -28,28 +28,38 @@ namespace Angry_Girls
                         throw new Exception("No logic for state like " + control.characterSettings.AttackAbility_Launch.attack_State.animation.ToString());
                 }
             }
-            else
-            {
-                ColorDebugLog.Log("no Launch Attack Ability for " + control.name, System.Drawing.KnownColor.GreenYellow);
-            }
 
-
-            //attackFinish
-            switch (control.characterSettings.attackFininsh_State.animation)
+            ///////////////////////////////attackFinish (for ground units)
+            //for launch
+            if (control.characterSettings.AttackAbility_Launch != null)
             {
-                case AttackFinish_States.Launch_Shoryuken_DownSmash_Finish:
-                    control.attackSystem_Data.Launch_AttackFinishLogic = new AttackLogic_Launch_ShoryukenDownSmash_Finish();
-                    break;
+                switch (control.characterSettings.AttackAbility_Launch.attackFininsh_State.animation)
+                {
+                    case AttackFinish_States.Launch_Shoryuken_DownSmash_Finish:
+                        control.attackSystem_Data.launch_AttackFinishLogic = new AttackLogic_Launch_ShoryukenDownSmash_Finish();
+                        break;
                     //default:
-                    //    throw new Exception("No logic for state like " + control.characterSettings.attackPrepAbility.attackPrep_State.animation.ToString());
+                    //    throw new Exception("No attackFinish logic for " + control.characterSettings.AttackAbility_Launch.attackFininsh_State);
+                }
             }
+
+            //for alternate
+            switch (control.characterSettings.AttackAbility_Alternate.attackFininsh_State.animation)
+            {
+                case AttackFinish_States.Alternate_Shoryuken_DownSmash_Finish:
+                    control.attackSystem_Data.alternate_AttackFinishLogic = new AttackLogic_AlternateAttack_Shoryuken_DownSmash_Finish();
+                    break;
+                //default:
+                //    throw new Exception("No logic for state like " + control.characterSettings.AttackAbility_Alternate.attackFininsh_State);
+            }
+            /////////////////////////////////////////////////
+            ///
 
             //Alternate_Attack
             switch (control.characterSettings.AttackAbility_Alternate.attack_State.animation)
             {
                 case Attack_States.Alternate_Shoryuken_Prep:
                     control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_Prep_Shoryuken();
-                    control.attackSystem_Data.AlternateAttackLogic_Landing = new AttackLogic_AlternateAttack_Landing_Shoryuken();
                     break;
                 case Attack_States.Alternate_SendFireball_Front:
                     control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_Launch_SendFireball_Front();
@@ -62,7 +72,7 @@ namespace Angry_Girls
                     control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_SwordAttack();
                     break;
                 default:
-                    throw new Exception("No logic for state like " + control.characterSettings.AttackAbility_Alternate.attack_State.animation.ToString());
+                    throw new Exception("No Alternate_Attack logic for " + control.name);
             }
         }
     }
@@ -71,11 +81,13 @@ namespace Angry_Girls
     public class AttackSystem_Data
     {
         public AttackAbilityLogic Launch_AttackLogic;
-        public AttackAbilityLogic Launch_AttackFinishLogic;
 
         public AttackAbilityLogic AlternateAttackLogic_Prep;
         public AttackAbilityLogic AlternateAttackLogic_Airboned;
         public AttackAbilityLogic AlternateAttackLogic_Landing;
         public AttackAbilityLogic AlternateAttackLogic_OnGround;
+
+        public AttackAbilityLogic launch_AttackFinishLogic;
+        public AttackAbilityLogic alternate_AttackFinishLogic;
     }
 }

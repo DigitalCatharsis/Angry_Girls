@@ -34,7 +34,6 @@ namespace Angry_Girls
         [Header("Animations")]
         public List<CharAnimationData<Idle_States>> idle_States;
         public CharAnimationData<Falling_States> airbonedFlying_States;
-        public CharAnimationData<AttackFinish_States> attackFininsh_State;
         public CharAnimationData<Landing_States> landing_State;
         [Space(5)]
         public List<CharAnimationData<HitReaction_States>> hitReaction_States;
@@ -87,7 +86,6 @@ namespace Angry_Girls
             //debug
             NotifyForNONE_Value(idle_States, control);
             NotifyForNONE_Value(airbonedFlying_States, control);
-            NotifyForNONE_Value(attackFininsh_State, control);
             NotifyForNONE_Value(landing_State, control);
             NotifyForNONE_Value(hitReaction_States, control);
             NotifyForNONE_Value(death_States, control);

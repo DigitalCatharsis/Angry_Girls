@@ -1,6 +1,4 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace Angry_Girls
 {
@@ -14,7 +12,6 @@ namespace Angry_Girls
             tempZlocation = control.transform.position.z;
             control.isAttacking = true;
             control.rigidBody.velocity = control.characterSettings.AttackAbility_Launch.attackMovementSpeed;
-            //control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementForce, ForceMode.Impulse);
 
             _vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, control.characterSettings.AttackAbility_Launch.AttackVFX.GetComponent<VFX>().GetVFXType(), setAsOwner: true);
         }
@@ -30,8 +27,6 @@ namespace Angry_Girls
                 {
                     character.JostleFromEnemy(3);
                     control.transform.position = new Vector3(0, control.transform.position.y - 0.01f, tempZlocation);
-                    //control.rigidBody.velocity = new Vector3(0, control.rigidBody.velocity.y - 2f, control.rigidBody.velocity.z);
-                    //Debug.Log(control.rigidBody.velocity);
                 }
             }
             if (control.isGrounded)

@@ -4,13 +4,13 @@ namespace Angry_Girls
 {
     public class Attack_Prep_Behavior : StateMachineBehaviour
     {
-        private CharacterControl _control;
+        private CControl _control;
 
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             if (_control == null)
             {
-                _control = animator.transform.root.GetComponent<CharacterControl>();
+                _control = animator.transform.root.GetComponent<CControl>();
             }
 
             _control.attackSystem_Data.Launch_AttackLogic.OnStateEnter(_control, animator, stateInfo);

@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: SO_AttackAbility_Alternate_AitToGround_HeadSpin
   m_EditorClassIdentifier: 
   attack_State:
-    animation: 9
+    animation: 8
     transitionDuration: 0
   timesToRepeat_Attack_State: 1
+  attackFininsh_State:
+    animation: 0
+    transitionDuration: 0
   attackDamage: 5
   attackTimeDuration: 1
   useAnimationNormalizedTimeDuration: 1

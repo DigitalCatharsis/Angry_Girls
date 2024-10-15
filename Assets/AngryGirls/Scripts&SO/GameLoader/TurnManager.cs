@@ -123,11 +123,11 @@ namespace Angry_Girls
                 {
                     continue;
                 }
-                if (character.GetComponent<CharacterControl>())
+                if (character.GetComponent<CControl>().playerOrAi == PlayerOrAi.Player)
                 {
                     tempCharacters.Add(character);
                 }
-                else if (character.GetComponent<EnemyControl>())
+                else if (character.GetComponent<CControl>().playerOrAi == PlayerOrAi.Ai)
                 {
                     tempEnemies.Add(character);
                 }

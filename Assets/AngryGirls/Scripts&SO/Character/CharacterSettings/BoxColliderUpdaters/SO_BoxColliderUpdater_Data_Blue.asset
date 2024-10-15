@@ -14,6 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boxColliderAnimationData:
     _serializedList:
+    - Key: 5
+      Value:
+        boxColliderCenter: {x: 0, y: 0.4552352, z: 0.1697536}
+        boxColliderSize: {x: 0, y: 0.942835, z: 0.5345581}
+        changeSpeed: 50
+    - Key: 6
+      Value:
+        boxColliderCenter: {x: 0, y: 0.4552352, z: 0.1697536}
+        boxColliderSize: {x: 0, y: 0.942835, z: 0.5345581}
+        changeSpeed: 50
+    - Key: 7
+      Value:
+        boxColliderCenter: {x: 0, y: 0.4552352, z: 0.1697536}
+        boxColliderSize: {x: 0, y: 0.942835, z: 0.5345581}
+        changeSpeed: 50
+    - Key: 8
+      Value:
+        boxColliderCenter: {x: 0, y: 0.4552352, z: 0.1697536}
+        boxColliderSize: {x: 0, y: 0.942835, z: 0.5345581}
+        changeSpeed: 50
     - Key: 4
       Value:
         boxColliderCenter: {x: 0, y: 0.4552352, z: 0.01009538}

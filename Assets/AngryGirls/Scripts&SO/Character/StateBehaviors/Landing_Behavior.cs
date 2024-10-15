@@ -21,16 +21,12 @@ namespace Angry_Girls
             if (stateInfo.normalizedTime >= 1)
             {
                 _control.FinishTurn();
-                //_control.isLanding = false;
-                //_control.hasFinishedLaunchingTurn = true;
             }
         }
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            _control.FinishTurn();
-            //_control.isLanding = false;
-            //_control.hasFinishedLaunchingTurn = true;
+            //_control.FinishTurn();
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()

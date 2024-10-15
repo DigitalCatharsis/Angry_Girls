@@ -62,7 +62,7 @@ namespace Angry_Girls
             //Check Ground attack (ground Unit Only)
             if (control.characterSettings.unitType == UnitType.Ground)
             {
-                Launching_CheckAndProcess_GroundAttack();
+                CheckAndProcess_GroundAttackFinish();
             }
 
             //CheckAttackPrep
@@ -72,13 +72,13 @@ namespace Angry_Girls
                 Launching_CheckAndProcess_AttackPrep();
             }
         }
-        private void Launching_CheckAndProcess_GroundAttack()
+        private void CheckAndProcess_GroundAttackFinish()
         {
             //Ground attack
             if (control.isAttacking && control.isGrounded)
             {
                 control.animator.StopPlayback();
-                ChangeAnimationStateFixedTime(GameLoader.Instance.statesContainer.attackFinish_Dictionary[control.characterSettings.attackFininsh_State.animation], transitionDuration: control.characterSettings.attackFininsh_State.transitionDuration);
+                ChangeAnimationStateFixedTime(GameLoader.Instance.statesContainer.attackFinish_Dictionary[control.Get_AttackAbility().attackFininsh_State.animation], transitionDuration: control.Get_AttackAbility().attackFininsh_State.transitionDuration);
             }
         }
 
@@ -125,13 +125,22 @@ namespace Angry_Girls
             if (!control.hasFinishedAlternateAttackTurn
                 && control.isAttacking)
             {
+                //Check Ground attack (ground Unit Only)
+                if (control.characterSettings.unitType == UnitType.Ground
+                    && GameLoader.Instance.statesContainer.attack_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
+                {
+                    CheckAndProcess_GroundAttackFinish();
+                    return;
+                }
+
                 Alternate_CheckAndProcessAttack();
             }
         }
 
         private void Alternate_CheckAndProcessAttack()
         {
-            if (GameLoader.Instance.statesContainer.attack_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
+            if (GameLoader.Instance.statesContainer.attack_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash) 
+                || GameLoader.Instance.statesContainer.attackFinish_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
             {
                 return;
             }

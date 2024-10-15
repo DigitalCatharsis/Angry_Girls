@@ -35,7 +35,6 @@ namespace Angry_Girls
         Launch_SwordAttack_Attack,
         Launch_SwordAttack_Prep,
         Alternate_Shoryuken_Prep,
-        Alternate_Shoryuken_Rise,
         Alternate_SendFireball_Front,
         Alternate_HeadSpin_Attack_Prep,
         Alternate_HeadSpin_Attack,
@@ -43,7 +42,8 @@ namespace Angry_Girls
         Alternate_SwordAttack_Attack,
         Alternate_Shoryuken_Landing,
 
-        Launch_Shoryuken_DownSmash_Finish,
+        Launch_Shoryuken_DownSmash_Finish, 
+        Alternate_Shoryuken_DownSmash_Finish,
 
         HitReaction_1,
         HitReaction_2,
@@ -96,18 +96,17 @@ namespace Angry_Girls
         Launch_SwordAttack_Attack,
         Launch_SwordAttack_Prep,
         Alternate_Shoryuken_Prep,
-        Alternate_Shoryuken_Rise,
         Alternate_SendFireball_Front,
         Alternate_HeadSpin_Attack_Prep,
         Alternate_HeadSpin_Attack,
         Alternate_SwordAttack_Prep,
         Alternate_SwordAttack_Attack,
-        Alternate_Shoryuken_Landing,  //:TODO should not be here. Rework entire Shoryken
     }
     public enum AttackFinish_States
     {
         NONE,
-        Launch_Shoryuken_DownSmash_Finish,  // TODO: Static?
+        Launch_Shoryuken_DownSmash_Finish,  
+        Alternate_Shoryuken_DownSmash_Finish,
     }
 
 

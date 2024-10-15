@@ -131,10 +131,10 @@ AnimatorStateMachine:
     m_Position: {x: 50, y: -180, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5643619976631800241}
-    m_Position: {x: -200, y: -330, z: 0}
+    m_Position: {x: -180, y: -230, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 9133210536440718375}
-    m_Position: {x: -200, y: -280, z: 0}
+    m_Position: {x: -180, y: -180, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8136383390607080391}
     m_Position: {x: -420, y: -180, z: 0}
@@ -163,8 +163,8 @@ AnimatorStateMachine:
     m_State: {fileID: 9211544960258206473}
     m_Position: {x: -410, y: -20, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: -2084199426805156796}
-    m_Position: {x: -200, y: -200, z: 0}
+    m_State: {fileID: 7449458965342569785}
+    m_Position: {x: -190, y: 50, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -867,34 +867,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b528424f45d55d846847f8c5957f8df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1102 &-2084199426805156796
-AnimatorState:
-  serializedVersion: 6
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: A_Shoryuken_Rise_Static
-  m_Speed: 1
-  m_CycleOffset: 0
-  m_Transitions: []
-  m_StateMachineBehaviours:
-  - {fileID: 696512490568494257}
-  m_Position: {x: 50, y: 50, z: 0}
-  m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
-  m_Mirror: 0
-  m_SpeedParameterActive: 0
-  m_MirrorParameterActive: 0
-  m_CycleOffsetParameterActive: 0
-  m_TimeParameterActive: 0
-  m_Motion: {fileID: 1827226128182048838, guid: 32a63329c8bf3284c82eef616da02c70,
-    type: 3}
-  m_Tag: 
-  m_SpeedParameter: 
-  m_MirrorParameter: 
-  m_CycleOffsetParameter: 
-  m_TimeParameter: 
 --- !u!1102 &-1928546273331349518
 AnimatorState:
   serializedVersion: 6
@@ -1119,18 +1091,6 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
---- !u!114 &696512490568494257
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca0d438ce21533d47a7e9760fa0aca9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1102 &940271705514174814
 AnimatorState:
   serializedVersion: 6
@@ -1376,7 +1336,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Alternate_Shoryuken_Prep
-  m_Speed: 2
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
@@ -1423,6 +1383,18 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &3622254918043858944
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85bd9040023b8a74c9b14f01a62006b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1101 &3858906554124648676
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1729,6 +1701,34 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!1102 &7449458965342569785
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alternate_Shoryuken_DownSmash_Finish
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours:
+  - {fileID: 3622254918043858944}
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 1
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 1827226128182048838, guid: d8118fbe2c4a7ea4fae242814e2568b2,
+    type: 3}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1101 &7549880274095638564
 AnimatorStateTransition:
   m_ObjectHideFlags: 1

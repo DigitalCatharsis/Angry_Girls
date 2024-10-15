@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor.ShaderGraph;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
@@ -66,6 +67,29 @@ namespace Angry_Girls
         [SerializeReference]
         public Transform weaponHolder;
 
+        public AttackAbilityLogic Get_AttackFinish_AttackAbilityLogic()
+        {
+            if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.LaunchingPhase)
+            {
+                return attackSystem_Data.launch_AttackFinishLogic;
+            }
+            else
+            {
+                return  attackSystem_Data.alternate_AttackFinishLogic;
+            }
+        }
+        public AttackAbility Get_AttackAbility()
+        {
+            if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.LaunchingPhase)
+            {
+                return characterSettings.AttackAbility_Launch;
+            }
+            else
+            {
+                return characterSettings.AttackAbility_Alternate;
+            }
+        }
+
         public void FinishTurn()
         {
             isAttacking = false;
@@ -73,6 +97,7 @@ namespace Angry_Girls
             hasFinishedAlternateAttackTurn = true;
             airToGroundUnit_FinishedAbility = true;
             hasFinishedLaunchingTurn = true;
+            ColorDebugLog.Log(this.name + "has finished turn", System.Drawing.KnownColor.Yellow);
         }
 
         public void JostleFromEnemy(float zValue)
@@ -94,33 +119,6 @@ namespace Angry_Girls
         {
             boxColliderContacts = (collision.contacts);
         }
-
-        //private void OnCollisionEnter(Collision collision)
-        //{
-        //    if (collision == null)
-        //    {
-        //        return;
-        //    }
-
-        //    foreach (var contact in collision.contacts)
-        //    {
-        //        if (contact.otherCollider.gameObject.transform.root != this.transform.root)
-        //        {
-        //            if (!boxColliderContacts.Contains(contact))
-        //            {
-        //                boxColliderContacts.Add(contact);
-        //            }
-        //        }
-        //    }
-        //}
-
-        //private void OnCollisionExit(Collision collision)
-        //{
-        //    if (collision.collider.gameObject.transform.root != this.transform.root)
-        //    {
-        //        boxColliderContacts.Remove(collision.comtap);
-        //    }
-        //}
 
         private void OnTriggerEnter(Collider other)
         {
@@ -166,11 +164,11 @@ namespace Angry_Girls
 
         private void OnEnable()
         {
-            if (this is CharacterControl)
+            if (playerOrAi == PlayerOrAi.Player)
             {
                 GameLoader.Instance.characterManager.playableCharacters.Add(this.gameObject);
             }
-            else if (this is EnemyControl)
+            else if (playerOrAi == PlayerOrAi.Ai)
             {
                 GameLoader.Instance.characterManager.enemyCharacters.Add(this.gameObject);
             }

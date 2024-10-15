@@ -14,8 +14,7 @@ namespace Angry_Girls
         }
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            if (stateInfo.normalizedTime >= 1
-                && control.isGrounded)
+            if (stateInfo.normalizedTime >= 1 && control.isGrounded)
             {
                 //TODO: fuck...
                 //control.subComponentMediator.TEMP_SetShorukenLandingState();
@@ -25,7 +24,7 @@ namespace Angry_Girls
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             control.rigidBody.velocity = Vector3.zero;
-            _runningVFX.GetComponentInChildren<VisualEffect>().Stop(); //TODO не забудь в остальных стейтах
+            GameLoader.Instance.VFXManager.FadeOutFlame_And_Dispose(_runningVFX.GetComponent<VFX>(), 3.5f, 3.5f);
         }
     }
 }
