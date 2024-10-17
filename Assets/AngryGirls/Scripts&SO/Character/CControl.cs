@@ -97,7 +97,7 @@ namespace Angry_Girls
             hasFinishedAlternateAttackTurn = true;
             airToGroundUnit_FinishedAbility = true;
             hasFinishedLaunchingTurn = true;
-            ColorDebugLog.Log(this.name + "has finished turn", System.Drawing.KnownColor.Yellow);
+            //ColorDebugLog.Log(this.name + "has finished turn", System.Drawing.KnownColor.Yellow);  //It calls a lot of times. Fix. TODO:
         }
 
         public void JostleFromEnemy(float zValue)
