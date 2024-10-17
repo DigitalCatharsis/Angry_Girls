@@ -41,8 +41,6 @@ namespace Angry_Girls
                 if (stateInfo.normalizedTime >= control.characterSettings.AttackAbility_Launch.timesToRepeat_Attack_State)
                 {
                     control.FinishTurn();
-                    //control.isAttacking = false;
-                    //control.hasFinishedLaunchingTurn = true;
                 }
             }
             else
@@ -51,8 +49,6 @@ namespace Angry_Girls
                 if (_currentAttackTimer >= control.characterSettings.AttackAbility_Launch.attackTimeDuration)
                 {
                     control.FinishTurn();
-                    //control.isAttacking = false;
-                    //control.hasFinishedLaunchingTurn = true;
                 }
             }
         }
@@ -83,29 +79,6 @@ namespace Angry_Girls
             //Move fireball
             vfx.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);
             vfx.transform.DORotate(endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * control.transform.forward.z), duration: moveDuration, mode: RotateMode.Fast).SetLink(vfx, LinkBehaviour.PauseOnDisableRestartOnEnable);
-
-
-
-
-
-
-
-            //var frontDistance = new Vector3(0, 0, 2.2f);
-            //var gravityDistance = new Vector3(0, 2.8f, 8f);
-
-            //var waypoints = new[]
-            //{
-            //    startPoint,
-            //    new Vector3(vfxGameobject.transform.position.x, vfxGameobject.transform.position.y, vfxGameobject.transform.position.z + vfxGameobject.transform.forward.z * frontDistance.z),
-            //    new Vector3(vfxGameobject.transform.position.x, vfxGameobject.transform.position.y + Vector3.down.y * gravityDistance.y, vfxGameobject.transform.position.z + vfxGameobject.transform.forward.z * gravityDistance.z),
-            //};
-
-
-            //vfxGameobject.transform.DOPath(waypoints, moveDuration, pathType: PathType.Linear, pathMode: PathMode.Full3D, resolution: 10);
-            //vfxGameobject.transform.DORotate(endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * vfxGameobject.transform.forward.z), duration: moveDuration, mode: RotateMode.Fast);
-
-            ////add impulse and rotate
-            //projectile.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.Impulse);
         }
     }
 }

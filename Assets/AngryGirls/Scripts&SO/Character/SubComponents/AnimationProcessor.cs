@@ -251,9 +251,7 @@ namespace Angry_Girls
         private void Global_CheckAndProcess_HitReaction()
         {
             var randomHitAnimation = control.characterSettings.hitReaction_States[UnityEngine.Random.Range(0, control.characterSettings.hitReaction_States.Count)].animation;
-            //no crossFade for instant animations changes at fast damage recive
             ChangeAnimationState(GameLoader.Instance.statesContainer.hitReaction_Dictionary[randomHitAnimation], transitionDuration: 0.1f);
-            //control.unitGotHit = false;
             return;
         }
 

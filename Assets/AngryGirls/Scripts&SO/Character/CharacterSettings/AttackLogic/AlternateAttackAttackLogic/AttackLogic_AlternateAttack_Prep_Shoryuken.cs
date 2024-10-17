@@ -14,11 +14,6 @@ namespace Angry_Girls
         }
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            if (stateInfo.normalizedTime >= 1 && control.isGrounded)
-            {
-                //TODO: fuck...
-                //control.subComponentMediator.TEMP_SetShorukenLandingState();
-            }
         }
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)

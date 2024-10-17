@@ -15,11 +15,6 @@ namespace Angry_Girls
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            //if (stateInfo.normalizedTime >= 0.9)
-            //{
-            //TODO: fuck...
-            //    control.subComponentMediator.TEMP_SetHeadSpinState();
-            //}
             if (control.rigidBody.velocity.y <= 0.0001)
             {
                 //TODO: fuck...
