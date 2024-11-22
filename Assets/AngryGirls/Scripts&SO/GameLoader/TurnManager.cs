@@ -19,6 +19,9 @@ namespace Angry_Girls
         [SerializeField] private bool _isLaunchingPhaseOver = false;
         [SerializeField] private bool _isAlternatePhaseOver = true;
 
+        private float _timeToChangePhase = 2f;
+        public float TimeToChangePhase { get => _timeToChangePhase; }
+
         [SerializeField] private List<GameObject> _charactersTurn_List = new();
 
         //props
@@ -83,7 +86,7 @@ namespace Angry_Girls
                 //Attack
                 _charactersTurn_List[i].GetComponent<CControl>().isAttacking = true;
 
-                yield return new WaitForSeconds(2);
+                yield return new WaitForSeconds(_timeToChangePhase);
             }
 
             GameLoader.Instance.cameraManager.ReturnCameraToStartPosition(1f);

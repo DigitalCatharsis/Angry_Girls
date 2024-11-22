@@ -107,11 +107,11 @@ namespace Angry_Girls
                 return;
             }
 
-            //Everyones logic
-            if (IsLauchingAttackStateOver(control.characterSettings.AttackAbility_Launch.timesToRepeat_Attack_State) == false)
-            {
-                return;
-            }
+            ////Everyones logic
+            //if (IsLauchingAttackStateOver(control.characterSettings.AttackAbility_Launch.timesToRepeat_Attack_State) == false)
+            //{
+            //    return;
+            //}
 
             control.isAttacking = true;
             ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.attack_Dictionary[control.characterSettings.AttackAbility_Launch.attack_State.animation], control.characterSettings.AttackAbility_Launch.attack_State.transitionDuration);

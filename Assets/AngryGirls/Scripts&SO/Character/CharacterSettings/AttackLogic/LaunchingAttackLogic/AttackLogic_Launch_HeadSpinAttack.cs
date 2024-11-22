@@ -10,6 +10,8 @@ namespace Angry_Girls
         private float _impulseZ = 5f;
         private Vector3 _finalProjectileRotation = new Vector3(75f, 0, 0);
         private float _currentAttackTimer;
+        private int _timesToRepeat_Attack_State = 2;
+        private bool _haveShootedSecondTime = false;
 
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
@@ -35,26 +37,9 @@ namespace Angry_Girls
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            if (control.characterSettings.AttackAbility_Launch.useAnimationNormalizedTimeDuration)
+            if (!_haveShootedSecondTime && stateInfo.normalizedTime >= _timesToRepeat_Attack_State)
             {
-                if (stateInfo.normalizedTime >= control.characterSettings.AttackAbility_Launch.timesToRepeat_Attack_State)
-                {
-                    control.FinishTurn();
-                }
-            }
-            else
-            {
-                _currentAttackTimer += Time.deltaTime;
-                if (_currentAttackTimer >= control.characterSettings.AttackAbility_Launch.attackTimeDuration)
-                {
-                    control.FinishTurn();
-                }
-            }
-        }
-
-        public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
-        {
-            Vector3[] angles = {
+                Vector3[] angles = {
                   new Vector3(-205f,0,0),
                   new Vector3(-225f,0,0),
                   new Vector3(-270f,0,0),
@@ -62,10 +47,17 @@ namespace Angry_Girls
                   new Vector3(-325f,0,0),
             };
 
-            //Second cast, second character move
-            control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementForce);
-            ProcessFireballs(control, angles);
+                //Second cast, second character move
+                control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementForce);
+                ProcessFireballs(control, angles);
+                _haveShootedSecondTime = true;
+                control.FinishTurn();
+            }
+        }
 
+        public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
+        {
+            _haveShootedSecondTime = false;
             control.FinishTurn();
             //control.isAttacking = false;
         }
@@ -103,7 +95,7 @@ namespace Angry_Girls
                     enableCollider: control.characterSettings.AttackAbility_Launch.enableCollider,
                     enableTrigger: control.characterSettings.AttackAbility_Launch.enableTrigger,
                     owner: control.gameObject
-                    
+
                     );
             }
         }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class Attack_Prep_Behavior : StateMachineBehaviour
+    public class LaunchAttack_Behavior_Prep : StateMachineBehaviour
     {
         private CControl _control;
 

@@ -15,13 +15,13 @@ MonoBehaviour:
   attack_State:
     animation: 10
     transitionDuration: 0
-  timesToRepeat_Attack_State: 1
+  timesToRepeat_Attack_State: 0
+  spawnProjectile_TransitionOffset: 0
   attackFininsh_State:
     animation: 0
     transitionDuration: 0
   attackDamage: 10
   attackTimeDuration: 0
-  useAnimationNormalizedTimeDuration: 0
   attackMovementSpeed: {x: 0, y: 0, z: 0}
   attackMovementForce: {x: 0, y: 0, z: 0}
   AttackVFX: {fileID: 4588421622435289864, guid: 15539f90faf5fb643af141e3fd3cc9d3,

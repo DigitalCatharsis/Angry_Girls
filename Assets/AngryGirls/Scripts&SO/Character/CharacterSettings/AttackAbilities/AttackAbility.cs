@@ -9,7 +9,8 @@ namespace Angry_Girls
         [Header("Setup")]
         [Header("Animation")]
         public CharAnimationData<Attack_States> attack_State;
-        public float timesToRepeat_Attack_State = 1f;
+        //public float timesToRepeat_Attack_State = 0f;
+        //public float spawnProjectile_TransitionOffset = 0f;
 
         [Header("AttackFinish state (if unit is ground type)")]
         public CharAnimationData<AttackFinish_States> attackFininsh_State;
@@ -19,7 +20,7 @@ namespace Angry_Girls
         public float attackDamage = 25f;
         [Space(5)]
         public float attackTimeDuration = 3f;
-        public bool useAnimationNormalizedTimeDuration = false;
+        //public bool useAnimationNormalizedTimeDuration = false;
 
         [Space(5)]
         [Header("Character Phyciscs")]
