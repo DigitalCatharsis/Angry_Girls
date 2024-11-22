@@ -48,6 +48,52 @@ MonoBehaviour:
     _serializedList: []
   vfxPoolDictionary:
     _serializedList: []
+--- !u!1 &939880494844296250
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4334342904675032143}
+  - component: {fileID: 1963108085314077142}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4334342904675032143
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939880494844296250}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2958300703721250050}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1963108085314077142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939880494844296250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59b1bfe42e3473a40bfafdb0fe1da3e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healtBar_Dict:
+    _serializedList: []
 --- !u!1 &1425773094351709038
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,6 +143,50 @@ MonoBehaviour:
     type: 2}
   _levelMusicAudioSource: {fileID: 0}
   _characterHitAudioSource: {fileID: 5164191188629132872}
+--- !u!1 &1808027891758780672
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2446423314911251858}
+  - component: {fileID: 3283065325347066340}
+  m_Layer: 0
+  m_Name: AttackLogicContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2446423314911251858
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1808027891758780672}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2958300703721250050}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3283065325347066340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1808027891758780672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 757366d292a397d4c89110ee0e8ab27d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2950552378211900705
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,7 +278,7 @@ MonoBehaviour:
   _currentTurn: 0
   _currentPhase: 1
   _isLaunchingPhaseOver: 0
-  _isStaticPhaseOver: 1
+  _isAlternatePhaseOver: 1
   _charactersTurn_List: []
 --- !u!1 &4898376234727210327
 GameObject:
@@ -456,11 +546,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15171fb64745dbd49aaaa6a514ed6b11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackPrep_Dictionary:
+  attack_Dictionary:
     _serializedList: []
   attackFinish_Dictionary:
-    _serializedList: []
-  staticAttack_States_Dictionary:
     _serializedList: []
   stateNames_Dictionary:
     _serializedList: []
@@ -515,6 +603,8 @@ Transform:
   - {fileID: 1948757394530791269}
   - {fileID: 6194781299668122069}
   - {fileID: 688400422820678465}
+  - {fileID: 4334342904675032143}
+  - {fileID: 2446423314911251858}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8142097811665119726
@@ -535,9 +625,11 @@ MonoBehaviour:
   poolObjectLoader: {fileID: 0}
   characterManager: {fileID: 0}
   hashManager: {fileID: 0}
-  statesDispatcher: {fileID: 0}
+  statesContainer: {fileID: 0}
   VFXManager: {fileID: 0}
   audioManager: {fileID: 0}
+  UIManager: {fileID: 0}
+  attackLogicContainer: {fileID: 0}
   cameraManager: {fileID: 0}
   launchManager: {fileID: 0}
   turnManager: {fileID: 0}

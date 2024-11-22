@@ -15,7 +15,8 @@ namespace Angry_Girls
         }
         public void NextScene()
         {
-            SceneManager.LoadScene("test");
+            throw new System.Exception("Next Scene load is not Implemented");
+            //SceneManager.LoadScene("test");
         }
 
         private IEnumerator KillAllTweensAndRestart()

@@ -78,6 +78,7 @@
     <Compile Include="Assets\AngryGirls\Helpers\DistanceBetweenTwoObjects\DistanceBetweenTwoObjects.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\AlternateAttack_Behavior_Prep.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Mediator\BaseMediatorComponent.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\LevelSettings\LevelSettings.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LookAtPoint\LookAtPoint.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\DeathZone.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\Idle_Behavior.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\SpawnManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CControl.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AudioManager\SoundClipsCollection.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\LevelSettings\LevelSettings_Data.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\GroundDetector.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\AlternateAttack_Behavior_Landing.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI_Control.cs" />

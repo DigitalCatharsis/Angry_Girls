@@ -1,3 +1,6 @@
+using AYellowpaper.SerializedCollections;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -5,61 +8,62 @@ namespace Angry_Girls
     public enum AudioSourceType
     {
         CharacterHit,
+        LevelMusic,
     }
 
     public class AudioManager : MonoBehaviour
     {
-        [Header("Sound Collections")]
-        [SerializeField] private SoundClipsCollection _characterHitSounds;
-
-        [Header("AudioSources")]
-        [SerializeField] private AudioSource _levelMusicAudioSource;
-        [SerializeField] private AudioSource _characterHitAudioSource;
+        [SerializeField] private SerializedDictionary<AudioSourceType, SoundData> soundDataDict = new();
 
         public void PlayRandomSound(AudioSourceType type, bool randomPitch = false)
-        {
-            switch (type)
+        {   
+            var audiosource = soundDataDict[type].audioSorce;
+            var audioclipCollection = soundDataDict[type].audioClipCollection;
+
+            if (randomPitch)
             {
-                case AudioSourceType.CharacterHit:
-                    {
-                        if (randomPitch)
-                        {
-                            _characterHitAudioSource.pitch = (Random.Range(0.6f, 0.9f));
-                        }
-                        _characterHitAudioSource.PlayOneShot(GetRandomAudioClip(_characterHitSounds), _characterHitAudioSource.volume);
-                        return;
-                    }
+                audiosource.pitch = (UnityEngine.Random.Range(0.6f, 0.9f));
             }
+            audiosource.PlayOneShot(GetRandomAudioClip(audioclipCollection), audiosource.volume);
         }
 
         public void PlayCustomSound(AudioSourceType type, int index = 0, bool randomPitch = false)
         {
-            switch (type)
+            var audiosource = soundDataDict[type].audioSorce;
+            var audioclipCollection = soundDataDict[type].audioClipCollection;
+
+            if (randomPitch)
             {
-                case AudioSourceType.CharacterHit:
-                    {
-                        if (randomPitch)
-                        {
-                            _characterHitAudioSource.pitch = (Random.Range(0.6f, 0.9f));
-                        }
-                        _characterHitAudioSource.clip = GetCusomAudioClip(_characterHitSounds, index);
-                        _characterHitAudioSource.Play();
-                        //audioSource.PlayOneShot ?
-                        return;
-                    }
+                audiosource.pitch = (UnityEngine.Random.Range(0.6f, 0.9f));
             }
+            audiosource.PlayOneShot(audioclipCollection.audioClips[index], audiosource.volume);
+            //audioSource.PlayOneShot ?
         }
+
+        //public void PlayCustomSound(AudioClip audioClip, AudioSourceType type)
+        //{
+
+        //    _characterHitAudioSource.Play();
+        //}
 
         private AudioClip GetRandomAudioClip(SoundClipsCollection clipsCollection)
         {
-            var randomIndex = Random.Range(0, (clipsCollection.audioClips.Count - 1));
+            var randomIndex = UnityEngine.Random.Range(0, (clipsCollection.audioClips.Count));
             var randomValue = clipsCollection.audioClips[randomIndex];
             return randomValue;
         }
+
         private AudioClip GetCusomAudioClip(SoundClipsCollection clipsCollection, int index)
         {
             var value = clipsCollection.audioClips[index];
             return value;
         }
+    }
+
+    [Serializable]
+    public class SoundData
+    {
+        public AudioSource audioSorce;
+        public SoundClipsCollection audioClipCollection;
     }
 }
