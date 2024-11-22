@@ -102,7 +102,8 @@ namespace Angry_Girls
 
         public void JostleFromEnemy(float zValue)
         {
-            rigidBody.velocity = (new Vector3(0, 0, -transform.forward.z * zValue));
+            //TODO shpuld not be in ground detector
+            //rigidBody.velocity = (new Vector3(0, 0, -transform.forward.z * zValue));
         }
 
         private void Awake()

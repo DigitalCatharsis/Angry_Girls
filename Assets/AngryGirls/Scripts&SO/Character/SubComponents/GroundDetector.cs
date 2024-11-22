@@ -38,13 +38,6 @@ namespace Angry_Girls
                         {
                             continue;
                         }
-                        ////prevent from stuck above enemy
-                        //if (control.rigidBody.velocity == Vector3.zero && !control.isGrounded)
-                        //{
-                        //    control.JostleFromEnemy(2);
-                        //}
-
-                        //return false;
                     }
 
 
@@ -55,7 +48,6 @@ namespace Angry_Girls
                     {
                         if (Mathf.Abs(control.rigidBody.velocity.y) < 0.001f)
                         {
-                            //_ground = contact.otherCollider.transform.gameObject;
                             landingPosition = new Vector3(0f, contact.point.y, contact.point.z);
                             return true;
                         }

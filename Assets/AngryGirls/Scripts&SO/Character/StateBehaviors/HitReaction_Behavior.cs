@@ -27,8 +27,8 @@ namespace Angry_Girls
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            _control.unitGotHit = false;
 
-            
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()
