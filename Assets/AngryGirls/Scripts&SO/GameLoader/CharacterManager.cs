@@ -9,26 +9,12 @@ namespace Angry_Girls
         public List<GameObject> enemyCharacters = new List<GameObject>();
         public GameObject GetPlaybleCharacter(GameObject character)
         {
-            foreach (var elem in playableCharacters)
-            {
-                if (elem == character)
-                {
-                    return elem;
-                }
-            }
-            return null;
+            return playableCharacters.Find(x => x == character);
         }
 
         public GameObject GetEnemyCharacter(GameObject character)
         {
-            foreach (var elem in enemyCharacters)
-            {
-                if (elem == character)
-                {
-                    return elem;
-                }
-            }
-            return null;
+            return enemyCharacters.Find(x => x == character);
         }
 
         public GameObject GetCharacter(GameObject character)

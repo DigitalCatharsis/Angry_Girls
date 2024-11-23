@@ -206,7 +206,7 @@ namespace Angry_Girls
 
                 if (Global_CheckAndProcess_Landing() == true)
                 {
-                    //без return не успеет перейти в State Behavior
+                    //пїЅпїЅпїЅ return пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ State Behavior
                     return;
                 }
             }
@@ -354,7 +354,7 @@ namespace Angry_Girls
             bool airAttack = GameLoader.Instance.statesContainer.attack_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash);
             bool groundAttack = GameLoader.Instance.statesContainer.attackFinish_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash);
 
-            //Пока работает, но расчет normilized time в данном случае неверный.
+            //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ normilized time пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
             if ((airAttack || groundAttack)
                 && (control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= attackAnimationRepeatRate))
             {
@@ -462,7 +462,6 @@ namespace Angry_Girls
 
         private void ToIdle()
         {
-            var test = GameLoader.Instance.statesContainer.stateNames_Dictionary;
             var hash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
             if (GameLoader.Instance.statesContainer.idle_Dictionary.ContainsValue(hash))
             {

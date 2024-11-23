@@ -7,13 +7,12 @@ namespace Angry_Girls
     {
         public PoolObject InstantiatePrefab<T>(T objType, Vector3 position, Quaternion rotation)
         {
-            var typelist = objType switch
+            return objType switch
             {
                 CharacterType characterType => InstantiateCharacter(characterType, position, rotation),
                 VFX_Type powerUpType => InstantiateVFX(powerUpType, position, rotation),
-                var unknownType => throw new Exception($"{unknownType?.GetType()}")
+                _ => throw new Exception($"{objType?.GetType()}")
             };
-            return typelist;
         }
 
         private PoolObject InstantiateCharacter(CharacterType poolObjectType, Vector3 position, Quaternion rotation)

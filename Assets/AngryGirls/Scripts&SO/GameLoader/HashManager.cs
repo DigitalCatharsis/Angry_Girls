@@ -22,10 +22,7 @@ namespace Angry_Girls
             }
 
             //Remember
-            if (!dictionaryOwners.ContainsKey(typeof(T).ToString()))
-            {
-                dictionaryOwners.Add(typeof(T).ToString(), sender);
-            }
+            dictionaryOwners.TryAdd(typeof(T).ToString(), sender);
 
             return newDic;
         }
