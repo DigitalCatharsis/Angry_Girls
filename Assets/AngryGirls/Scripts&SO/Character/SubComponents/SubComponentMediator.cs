@@ -25,9 +25,6 @@ namespace Angry_Girls
     public class SubComponentMediator : MonoBehaviour, IMediator<SubcomponentMediator_EventNames>
     {
         private CControl _control;
-
-        private SubComponent<SubcomponentMediator_EventNames>[] _arrSubComponents;
-
         private AnimationProcessor _animationProcessor;
         private LaunchLogic _launchLogic;
         private DamageProcessor _damageProcessor;
@@ -38,17 +35,7 @@ namespace Angry_Girls
 
         public void OnAwake()
         {
-            _control = GetComponentInParent<CControl>();
             InitComponents();
-
-            _arrSubComponents = new SubComponent<SubcomponentMediator_EventNames>[Enum.GetNames(typeof(SubComponentType)).Length];
-            _arrSubComponents = GetComponentsInChildren<SubComponent<SubcomponentMediator_EventNames>>();
-
-            foreach (var component in _arrSubComponents)
-            {
-                component.control = _control;
-                component.OnAwake();
-            }
         }
 
         private void InitComponents()
@@ -81,57 +68,12 @@ namespace Angry_Girls
             }
         }
 
-
         //TODO ask Danya
-        public void CheckForDamage(object sender, SubcomponentMediator_EventNames eventName, Collider collider)
+        public void NotifyDamaged(object sender, SubcomponentMediator_EventNames eventName, Collider collider)
         {
             if (eventName == SubcomponentMediator_EventNames.CharacterCollider_Trigger_Enter)
             {
                 _damageProcessor.CheckForDamage(collider);
-            }
-        }
-
-        public void OnUpdate()
-        {
-            foreach (var component in _arrSubComponents)
-            {
-                component.OnUpdate();
-            }
-        }
-        public void OnFixedUpdate()
-        {
-            foreach (var component in _arrSubComponents)
-            {
-                component.OnFixedUpdate();
-            }
-        }
-        public void OnLateUpdate()
-        {
-            foreach (var component in _arrSubComponents)
-            {
-                component.OnLateUpdate();
-            }
-        }
-
-        public void OnStart()
-        {
-            foreach (var component in _arrSubComponents)
-            {
-                component.OnStart();
-            }
-        }
-        public void OnComponentEnable()
-        {
-            foreach (var component in _arrSubComponents)
-            {
-                component.OnComponentEnable();
-            }
-        }
-        public void OnComponentLateUpdate()
-        {
-            foreach (var component in _arrSubComponents)
-            {
-                component.OnComponentEnable();
             }
         }
 

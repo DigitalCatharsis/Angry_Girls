@@ -8,10 +8,11 @@ namespace Angry_Girls
     {
         [SerializeField][ShowOnly] private bool _isDisposed = false;
 
-        // реализация интерфейса IDisposable.
+        // Do we need Dispose here?
+        // Г°ГҐГ Г«ГЁГ§Г Г¶ГЁГї ГЁГ­ГІГҐГ°ГґГҐГ©Г±Г  IDisposable.
         public void Dispose()
         {
-            // освобождаем неуправляемые ресурсы
+            // Г®Г±ГўГ®ГЎГ®Г¦Г¤Г ГҐГ¬ Г­ГҐГіГЇГ°Г ГўГ«ГїГҐГ¬Г»ГҐ Г°ГҐГ±ГіГ°Г±Г»
             Dispose(true);
         }
         private void OnEnable()
@@ -29,7 +30,7 @@ namespace Angry_Girls
                 ResetTransform();
                 ReturnToPool();
             }
-            // освобождаем неуправляемые объекты
+            // Г®Г±ГўГ®ГЎГ®Г¦Г¤Г ГҐГ¬ Г­ГҐГіГЇГ°Г ГўГ«ГїГҐГ¬Г»ГҐ Г®ГЎГєГҐГЄГІГ»
             _isDisposed = true;
         }
         protected abstract void ReturnToPool();

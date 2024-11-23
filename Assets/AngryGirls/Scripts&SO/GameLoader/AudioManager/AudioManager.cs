@@ -2,6 +2,7 @@ using AYellowpaper.SerializedCollections;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Angry_Girls
 {
@@ -17,7 +18,7 @@ namespace Angry_Girls
 
         public void PlayRandomSound(AudioSourceType type, bool randomPitch = false)
         {   
-            var audiosource = soundDataDict[type].audioSorce;
+            var audiosource = soundDataDict[type].audioSource;
             var audioclipCollection = soundDataDict[type].audioClipCollection;
 
             if (randomPitch)
@@ -29,7 +30,7 @@ namespace Angry_Girls
 
         public void PlayCustomSound(AudioSourceType type, int index = 0, bool randomPitch = false)
         {
-            var audiosource = soundDataDict[type].audioSorce;
+            var audiosource = soundDataDict[type].audioSource;
             var audioclipCollection = soundDataDict[type].audioClipCollection;
 
             if (randomPitch)
@@ -63,7 +64,7 @@ namespace Angry_Girls
     [Serializable]
     public class SoundData
     {
-        public AudioSource audioSorce;
+        [FormerlySerializedAs("audioSorce")] public AudioSource audioSource;
         public SoundClipsCollection audioClipCollection;
     }
 }
