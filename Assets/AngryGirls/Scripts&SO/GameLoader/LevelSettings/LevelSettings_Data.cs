@@ -8,9 +8,5 @@ namespace Angry_Girls
         [Header("BackgroundMusic")]
         public AudioSourceType audioSourceType = AudioSourceType.LevelMusic;
         public int audioClipEllementIndex;
-
-
-
-
     }
 }

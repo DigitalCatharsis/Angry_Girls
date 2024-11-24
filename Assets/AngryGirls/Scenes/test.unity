@@ -200,6 +200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraStartPosition: {x: 13.25, y: 1.44, z: -0.00999999}
   startOrthographicCameraSize: 1
+  _secondsCameraWaitsAfterAttack: 1.5
 --- !u!1 &259730796
 GameObject:
   m_ObjectHideFlags: 0
@@ -1168,21 +1169,12 @@ MonoBehaviour:
   _zoomRange: {x: 1.65, y: 13}
   _forceFactorUp: 2
   _forceFactorForward: 1
-  _charactersListToSpawn: {fileID: 11400000, guid: d186721f519e1c44b85b1601ef8bd298,
-    type: 2}
   _offsetPoint: {fileID: 1592556009}
   _trajectoryDotPrefab: {fileID: 4246235413054643113, guid: 51409ddd559245f47bb63b58abba0737,
     type: 3}
   _dotsNumber: 100
   _zoomSpeed: 100
   _minDistanceForZoom: 20
-  _canProceedLaunch: 0
-  _characterToLaunch: {fileID: 0}
-  _charactersList:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!4 &1053024449
 Transform:
   m_ObjectHideFlags: 0
@@ -1368,7 +1360,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myExtentions: {fileID: 0}
-  CameraManager: {fileID: 0}
+  spawnManager: {fileID: 0}
+  poolManager: {fileID: 0}
+  poolObjectLoader: {fileID: 0}
+  characterManager: {fileID: 0}
+  hashManager: {fileID: 0}
+  statesContainer: {fileID: 0}
+  VFXManager: {fileID: 0}
+  audioManager: {fileID: 0}
+  UIManager: {fileID: 0}
+  attackLogicContainer: {fileID: 0}
+  cameraManager: {fileID: 0}
+  launchManager: {fileID: 0}
+  turnManager: {fileID: 0}
 --- !u!4 &1373116993
 Transform:
   m_ObjectHideFlags: 0
