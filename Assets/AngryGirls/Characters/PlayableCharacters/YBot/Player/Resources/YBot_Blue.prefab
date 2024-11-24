@@ -77,8 +77,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: -4565884009001823619, guid: 50185ad75b7e4b24e94bc21f24f66fae,
-        type: 3}
+      objectReference: {fileID: 2100000, guid: 8c3d1cd958df18242983f287a025d669, type: 2}
     - target: {fileID: 2640689163874789523, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_Name
@@ -196,7 +195,7 @@ MonoBehaviour:
   - {fileID: 1224915519363040437}
   CurrentMaterials:
   - {fileID: -840037777384891287, guid: 81bdd09900078f7489f82cd9b644698d, type: 3}
-  - {fileID: 2100000, guid: 50085a05f93e65a488bb17c839517d7b, type: 2}
+  - {fileID: 2100000, guid: 8c3d1cd958df18242983f287a025d669, type: 2}
   NewMaterials:
   - {fileID: -840037777384891287, guid: 50185ad75b7e4b24e94bc21f24f66fae, type: 3}
-  - {fileID: -4565884009001823619, guid: 50185ad75b7e4b24e94bc21f24f66fae, type: 3}
+  - {fileID: 2100000, guid: 8c3d1cd958df18242983f287a025d669, type: 2}

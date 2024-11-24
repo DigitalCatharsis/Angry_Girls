@@ -1,6 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
+using DG.Tweening;
 using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Angry_Girls
@@ -8,6 +12,7 @@ namespace Angry_Girls
     public class UIManager : MonoBehaviour
     {
         [SerializeField] private SerializedDictionary<CControl, Slider> _healtBar_Dict;
+        [SerializeField] private GameObject gameOverUi;
         public void CreateHealthBar(CControl control)
         {
             var healthBar = Resources.Load("HealthBar") as GameObject;
@@ -37,6 +42,11 @@ namespace Angry_Girls
             }
         }
 
+        public void ShowGameoverUI( )
+        {
+            gameOverUi.SetActive(true);
+        }
+
         private void Update()
         {
             foreach (var elem in _healtBar_Dict)
@@ -48,6 +58,38 @@ namespace Angry_Girls
                     ) ;
 
             }
+        }
+
+        public void RestartCurrentLevel()
+        {
+            StartCoroutine(KillAllTweensAndRestart());
+
+        }
+        public void BackToMainMenu()
+        {
+            StartCoroutine(KillAllTweensAnLoadLevel(0));
+
+        }
+
+        private IEnumerator KillAllTweensAndRestart()
+        {
+            var tweens = DOTween.PausedTweens() ?? new List<Tween>();
+            tweens.AddRange(DOTween.PlayingTweens());
+            for (int i = 0; i < tweens.Count; i++)
+                tweens[i]?.Kill();
+            yield return new WaitForEndOfFrame();
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        private IEnumerator KillAllTweensAnLoadLevel(int levelIndex)
+        {
+            var tweens = DOTween.PausedTweens() ?? new List<Tween>();
+            tweens.AddRange(DOTween.PlayingTweens());
+            for (int i = 0; i < tweens.Count; i++)
+                tweens[i]?.Kill();
+            yield return new WaitForEndOfFrame();
+
+            SceneManager.LoadScene(levelIndex);
         }
     }
 }

@@ -114,6 +114,7 @@ namespace Angry_Girls
             //gameover
             if (_charactersToLaunchLeft.Count == 0 && _canPressAtCharacters)
             {
+                GameLoader.Instance.UIManager.ShowGameoverUI();
                 ColorDebugLog.Log("GAME OVER", KnownColor.Cyan);
             }
         }
