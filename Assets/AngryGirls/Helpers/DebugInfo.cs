@@ -36,11 +36,11 @@ namespace Angry_Girls
             GUILayout.Label("World position: " + point.ToString("F3"));
 
             //Enemy:
-            GUILayout.Label("==Enemy==");
-            if (GameLoader.Instance.characterManager.enemyCharacters.Count != 0)
-            {
-                GUILayout.Label("Enemy HP: " + GameLoader.Instance.characterManager.enemyCharacters[0].GetComponent<EnemyControl>().currentHealth);
-            }
+            //GUILayout.Label("==Enemy==");
+            //if (GameLoader.Instance.characterManager.enemyCharacters.Count != 0)
+            //{
+            //    GUILayout.Label("Enemy HP: " + GameLoader.Instance.characterManager.enemyCharacters[0].GetComponent<CControl>().currentHealth);
+            //}
             GUILayout.Label("==Turn Manager:==");
             GUILayout.Label("Current phase: " + GameLoader.Instance.turnManager.CurrentPhase.ToString());
             GUILayout.Label("Current turn: " + GameLoader.Instance.turnManager.CurrentTurn);

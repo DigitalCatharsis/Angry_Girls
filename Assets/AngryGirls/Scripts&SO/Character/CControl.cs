@@ -45,10 +45,12 @@ namespace Angry_Girls
         public bool unitBehaviorIsAlternate = true;
         public bool checkGlobalBehavior = false;
 
+        public SubComponentMediator subComponentMediator;
+        private SubComponentsController subComponentsController;
+
         public Rigidbody rigidBody;
         public BoxCollider boxCollider;
         public Animator animator;
-        public SubComponentMediator subComponentMediator;
         public AttackSystem_Data attackSystem_Data;
         public ContactPoint[] boxColliderContacts;
         [Space(10)]
@@ -112,8 +114,10 @@ namespace Angry_Girls
             animator = GetComponent<Animator>();
             boxCollider = gameObject.GetComponent<BoxCollider>();
             subComponentMediator = GetComponentInChildren<SubComponentMediator>();
+            subComponentsController = GetComponentInChildren<SubComponentsController>();
 
             subComponentMediator.OnAwake();
+            subComponentsController.OnAwake();
         }
 
         private void OnCollisionStay(Collision collision)
@@ -128,26 +132,25 @@ namespace Angry_Girls
                 return;
             }
 
-            //TODO: ask Pasha
-            subComponentMediator.CheckForDamage(this, SubcomponentMediator_EventNames.CharacterCollider_Trigger_Enter, other);
+            subComponentMediator.NotifyDamaged(this, SubcomponentMediator_EventNames.CharacterCollider_Trigger_Enter, other);
         }
 
         private void Update()
         {
-            subComponentMediator.OnUpdate();
+            subComponentsController.OnUpdate();
         }
         private void FixedUpdate()
         {
-            subComponentMediator.OnFixedUpdate();
+            subComponentsController.OnFixedUpdate();
         }
         private void LateUpdate()
         {
-            subComponentMediator.OnLateUpdate();
+            subComponentsController.OnLateUpdate();
         }
 
         private void Start()
         {
-            subComponentMediator.OnStart();
+            subComponentsController.OnStart();
 
             //TEST WEAPON
             //TODO: implement properly
@@ -174,7 +177,7 @@ namespace Angry_Girls
                 GameLoader.Instance.characterManager.enemyCharacters.Add(this.gameObject);
             }
 
-            subComponentMediator.OnComponentEnable();
+            subComponentsController.OnComponentEnable();
 
             GameLoader.Instance.attackLogicContainer.SetCharacterAttackLogic(this);
             GameLoader.Instance.UIManager.CreateHealthBar(this);

@@ -111,11 +111,11 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\GameLoader.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUtils.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\StatesContainer.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\EnemyControl.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponentMediator.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ColorDebugLog\ColorDebugLog.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\BoxColliderUpdater.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AudioManager\AudioManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponentsController.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleSprite.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\BackGround.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ListOfLists\SerializableList.cs" />
@@ -124,7 +124,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\DeathBehavior.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\CharacterManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\LaunchingAttackLogic\AttackLogic_Launch_SwordAttack.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterControl.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolObjectLoader.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Mediator\IMediator.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\Attack_Fininsh_Behavior.cs" />

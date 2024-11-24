@@ -9,13 +9,11 @@ namespace Angry_Girls
         private float _impulseY = 7f;
         private float _impulseZ = 5f;
         private Vector3 _finalProjectileRotation = new Vector3(75f, 0, 0);
-        private float _currentAttackTimer;
         private int _timesToRepeat_Attack_State = 2;
         private bool _haveShootedSecondTime = false;
 
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            _currentAttackTimer = 0;
 
             control.isAttacking = true;
 
