@@ -1,13 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor.ShaderGraph;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
-using static UnityEditor.Rendering.FilterWindow;
 
 namespace Angry_Girls
 {

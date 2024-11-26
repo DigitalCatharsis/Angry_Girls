@@ -6,8 +6,8 @@ namespace Angry_Girls
     {
         [Header("Setup")]
         [SerializeField] private Vector3 cameraStartPosition = new Vector3(13.25f, 1.44f, -0.00999999f);
-        [SerializeField] private float startOrthographicCameraSize = 1.65f;
-        [SerializeField] private float _secondsCameraWaitsAfterAttack = 1.5f;
+        [SerializeField] private const float startOrthographicCameraSize = 1.85f;
+        [SerializeField] private const float _secondsCameraWaitsAfterAttack = 2f;
 
         public float SecondsCameraWaitsAfterAttack => _secondsCameraWaitsAfterAttack;
 

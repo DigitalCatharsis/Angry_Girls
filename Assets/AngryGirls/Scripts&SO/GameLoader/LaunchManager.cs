@@ -22,6 +22,12 @@ namespace Angry_Girls
         [SerializeField] private List<GameObject> _charactersToLaunchLeft;
         [SerializeField] private List<GameObject> _launchedCharacters;
 
+
+        //current launching character
+        //method to control his launch
+        //input manager? isPressed
+
+
         private void Start()
         {
             _characterLauncher.InitLauncher();
