@@ -19,7 +19,7 @@ namespace Angry_Girls
 
             //Move character when casting ability
             control.rigidBody.velocity = control.characterSettings.AttackAbility_Launch.attackMovementSpeed;
-            control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementForce);
+            //control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementForce);
 
             Vector3[] angles = {
                   new Vector3(170f,0,0),
@@ -46,7 +46,8 @@ namespace Angry_Girls
             };
 
                 //Second cast, second character move
-                control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementForce);
+                //control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementForce);
+                control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed;
                 ProcessFireballs(control, angles);
                 _haveShootedSecondTime = true;
                 control.FinishTurn();

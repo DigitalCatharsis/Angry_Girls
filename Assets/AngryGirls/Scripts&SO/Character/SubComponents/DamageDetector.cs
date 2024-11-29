@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class DamageProcessor : SubComponent<SubcomponentMediator_EventNames>
+    public class DamageHandler : SubComponent<UnitLaunch_EventNames>
     {
         private bool _isdead = false;
         public override void OnComponentEnable()
@@ -60,7 +60,7 @@ namespace Angry_Girls
 
         private void OnDamageTaken(float damage, Collider triggerCollider, VFX vfx)
         {
-            control.JostleFromEnemy(3);
+            control.JostleFromEnemy(triggerCollider.gameObject ,3);
             control.currentHealth -= damage;
             GameLoader.Instance.UIManager.UpdateHealthBarValueAndVision(control);
 

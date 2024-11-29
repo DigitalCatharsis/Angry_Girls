@@ -87,18 +87,16 @@ namespace Angry_Girls
 
         public void FinishTurn()
         {
+            hasFinishedLaunchingTurn = true;
             isAttacking = false;
-            isLanding = false;
             hasFinishedAlternateAttackTurn = true;
             airToGroundUnit_FinishedAbility = true;
-            hasFinishedLaunchingTurn = true;
             //ColorDebugLog.Log(this.name + "has finished turn", System.Drawing.KnownColor.Yellow);  //It calls a lot of times. Fix. TODO:
         }
 
-        public void JostleFromEnemy(float zValue)
+        public void JostleFromEnemy(GameObject enemy, float zValue)
         {
-            //TODO shpuld not be in ground detector
-            //rigidBody.velocity = (new Vector3(0, 0, -transform.forward.z * zValue));
+            rigidBody.velocity = (new Vector3(0, 0, (transform.position.z - enemy.transform.position.z) * zValue));
         }
 
         private void Awake()
@@ -125,7 +123,7 @@ namespace Angry_Girls
                 return;
             }
 
-            subComponentMediator.NotifyDamaged(this, SubcomponentMediator_EventNames.CharacterCollider_Trigger_Enter, other);
+            subComponentMediator.Notify(this, NotifyContact_EventNames.CharacterCollider_Trigger_Enter, other);
         }
 
         private void Update()

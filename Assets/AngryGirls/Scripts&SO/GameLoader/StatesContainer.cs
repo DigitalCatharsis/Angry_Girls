@@ -97,7 +97,6 @@ namespace Angry_Girls
         Launch_SwordAttack_Prep,
         Alternate_Shoryuken_Prep,
         Alternate_SendFireball_Front,
-        Alternate_HeadSpin_Attack_Prep,
         Alternate_HeadSpin_Attack,
         Alternate_SwordAttack_Prep,
         Alternate_SwordAttack_Attack,

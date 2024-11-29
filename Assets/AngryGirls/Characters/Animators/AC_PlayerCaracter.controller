@@ -155,10 +155,10 @@ AnimatorStateMachine:
     m_Position: {x: -660, y: 50, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4815077151450564786}
-    m_Position: {x: -410, y: 50, z: 0}
+    m_Position: {x: -430, y: -10, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 9211544960258206473}
-    m_Position: {x: -410, y: -20, z: 0}
+    m_Position: {x: -430, y: 100, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7449458965342569785}
     m_Position: {x: -190, y: 50, z: 0}
@@ -604,18 +604,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7cecf06c29d7444aaa1b13e532ea60b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-3992862766797526568
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ebd4b2e39529ae4283eb42228cc7993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1102 &-3911856150360771952
@@ -1425,7 +1413,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Alternate_SwordAttack_Prep
-  m_Speed: 6
+  m_Speed: 6.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 2091082212054584021}
@@ -1481,7 +1469,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: -3992862766797526568}
+  - {fileID: 5187511541976681858}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1507,6 +1495,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d0c9c84f721d7c4da81f8fc87b4a075, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5187511541976681858
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a812b57bb58a1d549a6b21c4be866543, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &5233527835147740005

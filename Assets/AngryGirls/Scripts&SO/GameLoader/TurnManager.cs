@@ -19,8 +19,8 @@ namespace Angry_Girls
         [SerializeField] private bool _isLaunchingPhaseOver = false;
         [SerializeField] private bool _isAlternatePhaseOver = true;
 
-        private float _timeToChangePhase = 2f;
-        public float TimeToChangePhase { get => _timeToChangePhase; }
+        private const float _timeToWentAfterUnitFinishedAttack = 2f;
+        public float TimeToChangePhase { get => _timeToWentAfterUnitFinishedAttack; }
 
         [SerializeField] private List<GameObject> _charactersTurn_List = new();
 
@@ -80,13 +80,14 @@ namespace Angry_Girls
                     continue;
                 }
 
+                //TODO: camera has to follow in Alternate state about several frames? so make a corutine?
                 GameLoader.Instance.cameraManager.CenterCameraAgainst(_charactersTurn_List[i]);
                 ColorDebugLog.Log(_charactersTurn_List[i].name.ToString() + " is attacking.", KnownColor.Aqua);
 
                 //Attack
                 _charactersTurn_List[i].GetComponent<CControl>().isAttacking = true;
 
-                yield return new WaitForSeconds(_timeToChangePhase);
+                yield return new WaitForSeconds(_timeToWentAfterUnitFinishedAttack);
             }
 
             GameLoader.Instance.cameraManager.ReturnCameraToStartPosition(1f);
@@ -111,7 +112,7 @@ namespace Angry_Girls
             SortCharactersTurnList();
             _currentPhase = CurrentPhase.LaunchingPhase;
             _isLaunchingPhaseOver = false;
-            GameLoader.Instance.gameLoaderMediator.Notify(this, GameLoaderMediator_EventNames.AllowCharacterPress);
+            GameLoader.Instance.launchManager.Allow_CharacterPress();
             //Singleton.Instance.launchManager.canPressAtCharacters = true;
         }
 

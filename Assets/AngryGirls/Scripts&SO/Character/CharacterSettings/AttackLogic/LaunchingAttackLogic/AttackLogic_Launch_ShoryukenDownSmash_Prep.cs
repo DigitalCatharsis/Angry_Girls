@@ -25,7 +25,7 @@ namespace Angry_Girls
                 var character = contact.otherCollider.gameObject.GetComponent<CControl>();
                 if (character != null)
                 {
-                    character.JostleFromEnemy(3);
+                    //character.JostleFromEnemy(3);
                     control.transform.position = new Vector3(0, control.transform.position.y - 0.01f, tempZlocation);
                 }
             }

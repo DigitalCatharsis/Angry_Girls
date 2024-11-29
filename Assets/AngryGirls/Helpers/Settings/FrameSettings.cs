@@ -7,9 +7,8 @@ namespace Angry_Girls
 
     public class FrameSettings : ScriptableObject
     {
-        [Range(0.01f,1f)]
-        public float TimeScale;
-        public int TargetFPS;
-
+        [Range(0.01f,4f)]
+        public float TimeScale = 1.0f;
+        public int TargetFPS = 200;
     }
 }

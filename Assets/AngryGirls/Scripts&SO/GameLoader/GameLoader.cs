@@ -19,10 +19,9 @@ namespace Angry_Girls
         public AttackLogicContainer attackLogicContainer;
 
         public CameraManager cameraManager;
-        public LaunchManager launchManager;
+        public LaunchHandler launchManager;
         public TurnManager turnManager;
-
-        public GameLoaderMediator gameLoaderMediator;
+        public GameLogic gameLogic;
 
         private void OnEnable()
         {
@@ -37,7 +36,7 @@ namespace Angry_Girls
             characterManager = GetComponentInChildren<CharacterManager>();
             myExtentions = GetComponentInChildren<MyExtentions>();
             cameraManager = GetComponentInChildren<CameraManager>();
-            launchManager = GetComponentInChildren<LaunchManager>();
+            launchManager = GetComponentInChildren<LaunchHandler>();
             hashManager = GetComponentInChildren<HashManager>();
             spawnManager = GetComponentInChildren<SpawnManager>();
             turnManager = GetComponentInChildren<TurnManager>();
@@ -48,8 +47,7 @@ namespace Angry_Girls
             audioManager = GetComponentInChildren<AudioManager>();
             UIManager = GetComponentInChildren<UIManager>();
             attackLogicContainer = GetComponentInChildren<AttackLogicContainer>();
-
-            gameLoaderMediator = new GameLoaderMediator(launchManager);
+            gameLogic = GetComponentInChildren<GameLogic>();
         }
     }
 }

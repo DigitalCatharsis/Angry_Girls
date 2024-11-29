@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -21,7 +22,10 @@ namespace Angry_Girls
         [Header("Launching Setup")]
         [SerializeField] private GameObject _positionsContainer;
         [Space(10)]
-        [SerializeField] private Vector2 _zoomRange = new Vector2(5f, 10f); // Диапазон зума
+        private const float _minZoom = 5.0f;
+        private const float _maxZoom = 10.0f;
+        private const float _maxZoomFactorValue = 6.1f;
+        [SerializeField] private Vector2 _zoomRange = new Vector2(_minZoom, _maxZoom); // Диапазон зума
         [Space(10)]
         [SerializeField] private float _forceFactorUp;
         [SerializeField] private float _forceFactorForward;
@@ -70,12 +74,9 @@ namespace Angry_Girls
 
             characterToLaunch.rigidBody.useGravity = true;
             characterToLaunch.rigidBody.velocity = new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward);
+        }       
 
 
-
-
-            characterToLaunch.subComponentMediator.Notify(this, SubcomponentMediator_EventNames.Launch_Unit);
-        }
         public void AimingTheLaunch(GameObject characterToLaunch)
         {
             CalculateDirection();
@@ -120,7 +121,7 @@ namespace Angry_Girls
             {
                 _trajectoryDots[i].SetActive(false);
             }
-        } 
+        }
         private void EnableTrajectoryDots()
         {
             for (int i = 0; i < _trajectoryDots.Length; i++)
@@ -137,15 +138,15 @@ namespace Angry_Girls
             float zoomFactor = Mathf.Lerp(_zoomRange.x, _zoomRange.y, distance / _minDistanceForZoom);
 
             // Apply zoom to camera
-            if (zoomFactor >= 6.1)  //TODO: set to field
+            if (zoomFactor >= _maxZoomFactorValue)  //TODO: set to field
             {
-                Camera.main.orthographicSize = 6.1f;
+                Camera.main.orthographicSize = _maxZoomFactorValue;
             }
             else
             {
                 Camera.main.orthographicSize = zoomFactor;
             }
-            
+
         }
     }
 }

@@ -72,7 +72,6 @@
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModulePhysics2D.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\CameraManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\CharacterSelect\CharacterSelect.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_HeadSpin_Prep.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\InputManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolManager.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\Settings\PhysicsSettings.cs" />
@@ -93,7 +92,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_SendFireball_Front.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_Shoryuken_DownSmash_Finish.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUI.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\GameLoaderMediator.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\SpawnFactory\Factories\IFactory.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\Settings\FrameSettings.cs" />
     <Compile Include="Assets\AngryGirls\TODO.cs" />
@@ -101,6 +99,7 @@
     <Compile Include="Assets\AngryGirls\Helpers\Settings\Settings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\MyExtentions.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LayerAdder\LayerAdder.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLogic.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ShowOnlyAttribute\ShowOnlyAttribute.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_SwordAttack.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponent.cs" />
@@ -139,18 +138,17 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\HitReaction_Behavior.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_Prep_Shoryuken.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\HashManager.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\LaunchLogic.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUnityVersion.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\CollisionSpheres.cs" />
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackAbilities\AttackAbility.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\LaunchManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\SpawnFactory\Factories\VFXFactory.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModulePhysics.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\DamageDetector.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\VFX.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\DebugInfo.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\SpawnManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\LaunchHandler.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CControl.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AudioManager\SoundClipsCollection.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\LevelSettings\LevelSettings_Data.cs" />

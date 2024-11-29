@@ -64,9 +64,8 @@ namespace Angry_Girls
                 case Attack_States.Alternate_SendFireball_Front:
                     control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_Launch_SendFireball_Front();
                     break;
-                case Attack_States.Alternate_HeadSpin_Attack_Prep:
-                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_HeadSpin_Prep();
-                    control.attackSystem_Data.AlternateAttackLogic_Airboned = new AttackLogic_AlternateAttack_HeadSpin();
+                case Attack_States.Alternate_HeadSpin_Attack:
+                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_HeadSpin();
                     break;
                 case Attack_States.Alternate_SwordAttack_Prep:
                     control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_SwordAttack();

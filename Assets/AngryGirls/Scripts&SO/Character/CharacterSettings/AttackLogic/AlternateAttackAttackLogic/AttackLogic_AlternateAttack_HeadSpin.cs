@@ -9,40 +9,19 @@ namespace Angry_Girls
         private float _impulseY = 7f;
         private float _impulseZ = 5f;
         private Vector3 _finalProjectileRotation = new Vector3(75f, 0, 0);
-        private bool _secondShootingDone = false;
+        private bool _haveShootedFirstTime = false;
 
-        public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
-        {
-            _secondShootingDone = false;
-            control.isAttacking = true;
 
-            control.rigidBody.velocity = Vector3.zero;
-            //Move character when casting ability
-            control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed;
-            control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementForce);
-
-            Vector3[] angles = {
+       private Vector3[] _firstShoot_ProjectileAngles = {
                   new Vector3(170f,0,0),
                   new Vector3(200f,0,0),
                   new Vector3(230f,0,0),
                   new Vector3(170f,-180f,0),
                   new Vector3(200f,-180f,0),
                   new Vector3(230f,-180f,0)
-                  };
+            };
 
-            ProcessFireballs(control, angles);
-        }
-
-        public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
-        {
-            if (_secondShootingDone == true)
-            {
-                return;
-            }
-
-            if (control.rigidBody.velocity.y < 0.0001)
-            {
-                Vector3[] angles = {
+        private Vector3[] _secondShoot_ProjectileAngles = {
                   new Vector3(-205f,0,0),
                   new Vector3(-225f,0,0),
                   new Vector3(-270f,0,0),
@@ -50,17 +29,41 @@ namespace Angry_Girls
                   new Vector3(-325f,0,0),
             };
 
+        public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
+        {
+
+            control.isAttacking = true;
+
+            //Move character when casting ability
+            control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed;
+            control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed;
+            //control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementForce);
+        }
+
+        public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
+        {
+            if (control.rigidBody.velocity.y <= - 0.2f && !_haveShootedFirstTime)            
+                //if (!_haveShootedFirstTime && stateInfo.normalizedTime >= _timesToRepeat_Attack_State
+                //&& control.rigidBody.velocity.y <= - 0.2f)
+            {
+
+
                 //Second cast, second character move
-                control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementForce);
-                ProcessFireballs(control, angles);
-                control.isAttacking = false;
-                _secondShootingDone = true;
+                control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed;
+                //control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementForce);
+                ProcessFireballs(control, _firstShoot_ProjectileAngles);
+                _haveShootedFirstTime = true;
+                control.FinishTurn();
             }
-    }
+        }
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
+            control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed;
+            ProcessFireballs(control, _secondShoot_ProjectileAngles);
+            _haveShootedFirstTime = false;
             control.FinishTurn();
+            //control.isAttacking = false;
         }
 
         private void ProcessFireballs(CControl control, Vector3[] angles, float moveDuration = 1.5f)
@@ -96,6 +99,7 @@ namespace Angry_Girls
                     enableCollider: control.characterSettings.AttackAbility_Alternate.enableCollider,
                     enableTrigger: control.characterSettings.AttackAbility_Alternate.enableTrigger,
                     owner: control.gameObject
+
                     );
             }
         }

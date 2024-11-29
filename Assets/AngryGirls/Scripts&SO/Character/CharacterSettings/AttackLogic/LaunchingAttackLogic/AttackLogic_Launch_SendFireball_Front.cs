@@ -75,7 +75,8 @@ namespace Angry_Girls
                 );
 
             //MoveCharacter when cast fireball
-            control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementForce * control.transform.forward.z); //turn it back
+            //control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementForce * control.transform.forward.z); //turn it back
+            control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed * control.transform.forward.z; //turn it back
 
             //Move fireball
             vfx.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);

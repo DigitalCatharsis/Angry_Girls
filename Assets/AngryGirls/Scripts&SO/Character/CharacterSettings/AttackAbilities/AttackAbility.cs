@@ -25,7 +25,7 @@ namespace Angry_Girls
         [Space(5)]
         [Header("Character Phyciscs")]
         public Vector3 attackMovementSpeed = new Vector3(0, 0, 0);
-        public Vector3 attackMovementForce = new Vector3(0, 0, 0);
+        //public Vector3 attackMovementForce = new Vector3(0, 0, 0);
 
         [Space(15)]
         [Header("Projectile")]

@@ -5,9 +5,10 @@ namespace Angry_Girls
     public class CameraManager : MonoBehaviour
     {
         [Header("Setup")]
-        [SerializeField] private Vector3 cameraStartPosition = new Vector3(13.25f, 1.44f, -0.00999999f);
+        [SerializeField] private readonly Vector3 _cameraStartPosition = new Vector3(13.25f, 1.44f, -0.00999999f);
         [SerializeField] private const float startOrthographicCameraSize = 1.85f;
         [SerializeField] private const float _secondsCameraWaitsAfterAttack = 2f;
+        [SerializeField] private const float _zoomeCameraValueAfterLaunch = 5f;
 
         public float SecondsCameraWaitsAfterAttack => _secondsCameraWaitsAfterAttack;
 
@@ -23,6 +24,11 @@ namespace Angry_Girls
             Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, boundsCenter.y, boundsCenter.z);
         }
 
+        public void ZoomOutCameraAfterLaunch()
+        {
+             Camera.main.orthographicSize -= (Camera.main.orthographicSize / _zoomeCameraValueAfterLaunch);  
+        }
+
         public void MoveCameraTo(Vector3 placeToMove, float speed)
         {
             GameLoader.Instance.myExtentions.Lerp_Position(Camera.main.gameObject, startPosition: Camera.main.transform.position, endPosition: placeToMove, speed);
@@ -31,7 +37,7 @@ namespace Angry_Girls
 
         public void ReturnCameraToStartPosition(float speed)
         {
-            GameLoader.Instance.myExtentions.Lerp_Position(Camera.main.gameObject, startPosition: Camera.main.transform.position, endPosition: cameraStartPosition, speed);
+            GameLoader.Instance.myExtentions.Lerp_Position(Camera.main.gameObject, startPosition: Camera.main.transform.position, endPosition: _cameraStartPosition, speed);
             GameLoader.Instance.myExtentions.Lerp_OrthographicCamera_Size(Camera.main, startValue: Camera.main.orthographicSize, startOrthographicCameraSize, speed);
         }
 

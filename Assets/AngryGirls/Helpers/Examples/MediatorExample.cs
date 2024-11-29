@@ -32,7 +32,7 @@ namespace TestNameSpace  //dont forget about namespace
         {
             if (eventName == "A")
             {
-                ColorDebugLog.Log("this" + "'s" + " Subcomponent's Mediator reacts on " + SubcomponentMediator_EventNames.Launch_Unit + " and triggers following operations:", System.Drawing.KnownColor.ControlLightLight);
+                ColorDebugLog.Log("this" + "'s" + " Subcomponent's Mediator reacts on " + UnitLaunch_EventNames.Launch_Unit + " and triggers following operations:", System.Drawing.KnownColor.ControlLightLight);
                 this._testComponent2.DoC();
             }
             if (eventName == "D")
@@ -107,7 +107,7 @@ namespace TestNameSpace  //dont forget about namespace
 
             new TestMeidator(testComp,testComp2);
 
-            ColorDebugLog.Log(this.name + " triggers operation" + SubcomponentMediator_EventNames.Launch_Unit, System.Drawing.KnownColor.ControlLightLight);
+            ColorDebugLog.Log(this.name + " triggers operation" + UnitLaunch_EventNames.Launch_Unit, System.Drawing.KnownColor.ControlLightLight);
             testComp.DoA();
 
             Debug.Log("Client triggers operation D.");

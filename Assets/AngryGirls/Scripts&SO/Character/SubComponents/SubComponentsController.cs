@@ -3,16 +3,26 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
+    public enum SubComponentType
+    {
+        CollisionSpheres,
+        AnimationProcessor,
+        BlockingManager,
+        BoxColliderUpdater,
+        LgroundDetector,
+        LaunchLogic,
+        DamageProcessor,
+    }
     public class SubComponentsController : MonoBehaviour
     {
         public static SubComponentsController Instance;
         
-        private SubComponent<SubcomponentMediator_EventNames>[] _arrSubComponents;
+        private SubComponent<UnitLaunch_EventNames>[] _arrSubComponents;
         
         public void OnAwake()
         {
-            _arrSubComponents = new SubComponent<SubcomponentMediator_EventNames>[Enum.GetNames(typeof(SubComponentType)).Length];
-            _arrSubComponents = GetComponentsInChildren<SubComponent<SubcomponentMediator_EventNames>>();
+            _arrSubComponents = new SubComponent<UnitLaunch_EventNames>[Enum.GetNames(typeof(SubComponentType)).Length];
+            _arrSubComponents = GetComponentsInChildren<SubComponent<UnitLaunch_EventNames>>();
 
             var control = GetComponentInParent<CControl>();
             foreach (var component in _arrSubComponents)

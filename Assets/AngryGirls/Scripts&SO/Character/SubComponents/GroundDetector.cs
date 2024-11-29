@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Angry_Girls
 {
-    public class GroundDetector : SubComponent<SubcomponentMediator_EventNames>
+    public class GroundDetector : SubComponent<UnitLaunch_EventNames>
     {
         [Header("Setup")]
         [SerializeField] private float _collidingBlockDistance;
@@ -78,7 +78,7 @@ namespace Angry_Girls
                             continue;
                         }
 
-                        control.JostleFromEnemy(2);
+                        //control.JostleFromEnemy(2);
                         return false;
                     }
 

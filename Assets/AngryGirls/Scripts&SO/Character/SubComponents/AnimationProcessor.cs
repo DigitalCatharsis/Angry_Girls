@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class AnimationProcessor : SubComponent<SubcomponentMediator_EventNames>
+    public class AnimationProcessor : SubComponent<UnitLaunch_EventNames>
     {
         public override void OnComponentEnable()
         {
