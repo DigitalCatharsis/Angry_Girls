@@ -30,8 +30,8 @@ namespace Angry_Girls
 
             isUpdatingSpheres = false;
 
-            UpdateBoxCollider_Size(control.currentStateData);
-            UpdateBoxCollider_Center(control.currentStateData);
+            UpdateBoxCollider_Size();
+            UpdateBoxCollider_Center();
 
             if (isUpdatingSpheres)
             {
@@ -48,7 +48,7 @@ namespace Angry_Girls
             }
         }
 
-        private void UpdateBoxCollider_Size(CurrentStateData currentState)
+        private void UpdateBoxCollider_Size()
         {
             if (isUpdateColliderCondition == false)
             {
@@ -71,7 +71,7 @@ namespace Angry_Girls
             }
         }
 
-        private void UpdateBoxCollider_Center(CurrentStateData currentState)
+        private void UpdateBoxCollider_Center()
         {
             if (isUpdateColliderCondition == false)
             {

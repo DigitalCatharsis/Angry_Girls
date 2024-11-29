@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SO_CharacterSettings_YBot_Yellow
   m_EditorClassIdentifier: 
   _notifyAboutNONEStates: 0
-  unitType: 1
+  unitType: 0
   atHittingObstacle_Speed: {x: 0, y: -4, z: 0}
   groundAttackMovementSpeed: {x: 0, y: 0, z: 0}
   landingMovementSpeed: {x: 0, y: 0, z: 0}
@@ -35,9 +35,6 @@ MonoBehaviour:
   airbonedFlying_States:
     animation: 1
     transitionDuration: 0.1
-  attackFininsh_State:
-    animation: 0
-    transitionDuration: 0
   landing_State:
     animation: 3
     transitionDuration: 0

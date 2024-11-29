@@ -21,13 +21,13 @@ MonoBehaviour:
         changeSpeed: 10
     - Key: 3
       Value:
-        boxColliderCenter: {x: 0, y: 0.5371408, z: 0.08440621}
+        boxColliderCenter: {x: 0, y: 0, z: 0}
         boxColliderSize: {x: 0.2, y: 0.9740849, z: 0.4560484}
         changeSpeed: 50
     - Key: 16
       Value:
-        boxColliderCenter: {x: 0, y: 0.028983, z: 0.08440912}
-        boxColliderSize: {x: 0.2, y: 0.722738, z: 0.4560578}
+        boxColliderCenter: {x: 0, y: 0, z: 0}
+        boxColliderSize: {x: 0.2, y: 0.6076189, z: 0.56075305}
         changeSpeed: 10
     - Key: 39
       Value:

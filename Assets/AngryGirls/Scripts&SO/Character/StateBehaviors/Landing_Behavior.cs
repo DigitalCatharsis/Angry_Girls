@@ -21,7 +21,7 @@ namespace Angry_Girls
             if (stateInfo.normalizedTime >= 1)
             {
                 _control.isLanding = false;
-                _control.FinishTurn();
+                //_control.FinishTurn();
             }
         }
 

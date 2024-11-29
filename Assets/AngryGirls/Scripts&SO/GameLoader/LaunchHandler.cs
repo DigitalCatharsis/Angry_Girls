@@ -150,7 +150,7 @@ namespace Angry_Girls
 
             //Changing layer from CharacterToLaunch to Character
             int characterLayer = LayerMask.NameToLayer("Character");
-            transform.root.gameObject.layer = characterLayer;
+            control.transform.root.gameObject.layer = characterLayer;
 
             control.checkGlobalBehavior = true;
             control.hasFinishedLaunchingTurn = false;

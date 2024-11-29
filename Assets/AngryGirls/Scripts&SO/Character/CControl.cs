@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,7 +17,6 @@ namespace Angry_Girls
         [Space(15)]
         [Header("Debug")]
         [Header("State Data")]
-        public CurrentStateData currentStateData = new();
         [SerializeField] private CharacterType _characterType;
 
         [Header("Health")]
@@ -33,6 +33,7 @@ namespace Angry_Girls
         public bool airToGroundUnit_FinishedAbility = false;
         public bool hasFinishedLaunchingTurn = false;
         public bool hasFinishedAlternateAttackTurn = true;
+        public bool timerForGroundedFinishTurnIsActivated = false;
 
         [Space(5)]
         public bool unitBehaviorIsAlternate = true;
@@ -82,6 +83,30 @@ namespace Angry_Girls
             else
             {
                 return characterSettings.AttackAbility_Alternate;
+            }
+        }
+
+        public void GiveTimeForAttackUntillFinishTurn(float timeToCheck)
+        {
+            var temp = this.name;
+            StartCoroutine(ExecuteFinishTurnTimer(timeToCheck));
+        }
+
+        private IEnumerator ExecuteFinishTurnTimer(float timeToCheck)
+        {
+            timerForGroundedFinishTurnIsActivated = true;
+            var time = Time.deltaTime;
+            while (!hasUsedAbility)
+            {
+                if (time >= timeToCheck)
+                {
+                    timerForGroundedFinishTurnIsActivated = false;
+                    FinishTurn();
+                    yield break;
+                }
+
+                time += Time.deltaTime;
+                yield return null;
             }
         }
 
