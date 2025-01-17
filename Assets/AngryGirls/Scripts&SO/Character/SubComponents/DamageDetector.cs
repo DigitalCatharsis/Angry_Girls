@@ -74,7 +74,7 @@ namespace Angry_Girls
 
         public void SetParamsAfterDeath()
         {   
-            control.FinishTurn();
+            control.FinishTurn(2);
             control.rigidBody.useGravity = true;
             //DeadBody
             control.gameObject.layer = 12;

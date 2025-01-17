@@ -46,19 +46,17 @@ namespace Angry_Girls
             };
 
                 //Second cast, second character move
-                //control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementForce);
                 control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed;
                 ProcessFireballs(control, angles);
                 _haveShootedSecondTime = true;
-                control.FinishTurn();
+                control.isAttacking = false;
             }
         }
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             _haveShootedSecondTime = false;
-            control.FinishTurn();
-            //control.isAttacking = false;
+            //control.FinishTurn(2);
         }
 
         private void ProcessFireballs(CControl control, Vector3[] angles, float moveDuration = 1.5f)

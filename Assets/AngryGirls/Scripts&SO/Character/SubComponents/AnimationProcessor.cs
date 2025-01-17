@@ -82,12 +82,17 @@ namespace Angry_Girls
 
         private void Launching_CheckAndProcess_AttackPrep()
         {
+            if (!control.canUseAbility)
+            {
+                return;
+            }
+
+
             //AirToGround unit personal condition
             if (control.characterSettings.unitType == UnitType.AirToGround)
             {
                 if (control.isGrounded
-                    || control.isAttacking
-                    || control.airToGroundUnit_FinishedAbility)
+                    || control.isAttacking)
                 {
                     return;
                 }
@@ -111,6 +116,7 @@ namespace Angry_Girls
             //    return;
             //}
 
+            control.canUseAbility = false;
             control.isAttacking = true;
             ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.attack_Dictionary[control.characterSettings.AttackAbility_Launch.attack_State.animation], control.characterSettings.AttackAbility_Launch.attack_State.transitionDuration);
             return;
@@ -137,11 +143,17 @@ namespace Angry_Girls
 
         private void Alternate_CheckAndProcessAttack()
         {
-            if (GameLoader.Instance.statesContainer.attack_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash)
-                || GameLoader.Instance.statesContainer.attackFinish_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
+            if (!control.canUseAbility)
             {
                 return;
             }
+            //if (GameLoader.Instance.statesContainer.attack_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash)
+            //    || GameLoader.Instance.statesContainer.attackFinish_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
+            //{
+            //    return;
+            //}
+
+            control.canUseAbility = false;
 
             ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.attack_Dictionary[control.characterSettings.AttackAbility_Alternate.attack_State.animation], transitionDuration: control.characterSettings.AttackAbility_Alternate.attackTimeDuration);
         }
@@ -198,10 +210,10 @@ namespace Angry_Girls
                 var randomHitAnimation = control.characterSettings.hitReaction_States[UnityEngine.Random.Range(0, control.characterSettings.hitReaction_States.Count)].animation;
                 ChangeAnimationState(GameLoader.Instance.statesContainer.hitReaction_Dictionary[randomHitAnimation], transitionDuration: 0.1f);
 
-                if (control.isAttacking)
-                {
-                    control.FinishTurn();
-                }
+                //if (control.isAttacking)
+                //{
+                //    control.FinishTurn();
+                //}
                 return;
             }
 

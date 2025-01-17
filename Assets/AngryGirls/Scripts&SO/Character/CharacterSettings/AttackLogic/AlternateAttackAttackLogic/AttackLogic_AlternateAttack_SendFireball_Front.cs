@@ -41,7 +41,7 @@ namespace Angry_Girls
             {
                 _loopsCount = 0;
                 _timeInCurrentLoop = 0f;
-                control.FinishTurn();
+                control.FinishTurn(2);
             }
 
             //—брос флага в конце цикла
