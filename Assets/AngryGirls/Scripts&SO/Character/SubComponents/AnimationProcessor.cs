@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Angry_Girls
 {
@@ -82,12 +83,17 @@ namespace Angry_Girls
 
         private void Launching_CheckAndProcess_AttackPrep()
         {
+            if (!control.canUseAbility)
+            {
+                return;
+            }
+
+
             //AirToGround unit personal condition
             if (control.characterSettings.unitType == UnitType.AirToGround)
             {
                 if (control.isGrounded
-                    || control.isAttacking
-                    || control.airToGroundUnit_FinishedAbility)
+                    || control.isAttacking)
                 {
                     return;
                 }
@@ -105,12 +111,7 @@ namespace Angry_Girls
                 return;
             }
 
-            ////Everyones logic
-            //if (IsLauchingAttackStateOver(control.characterSettings.AttackAbility_Launch.timesToRepeat_Attack_State) == false)
-            //{
-            //    return;
-            //}
-
+            control.canUseAbility = false;
             control.isAttacking = true;
             ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.attack_Dictionary[control.characterSettings.AttackAbility_Launch.attack_State.animation], control.characterSettings.AttackAbility_Launch.attack_State.transitionDuration);
             return;
@@ -137,13 +138,21 @@ namespace Angry_Girls
 
         private void Alternate_CheckAndProcessAttack()
         {
-            if (GameLoader.Instance.statesContainer.attack_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash)
-                || GameLoader.Instance.statesContainer.attackFinish_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
+            if (!control.canUseAbility)
             {
                 return;
             }
+            //if (GameLoader.Instance.statesContainer.attack_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash)
+            //    || GameLoader.Instance.statesContainer.attackFinish_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
+            //{
+            //    return;
+            //}
 
-            ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.attack_Dictionary[control.characterSettings.AttackAbility_Alternate.attack_State.animation], transitionDuration: control.characterSettings.AttackAbility_Alternate.attackTimeDuration);
+            control.canUseAbility = false;
+
+            ChangeAnimationState_CrossFadeInFixedTime
+                (GameLoader.Instance.statesContainer.attack_Dictionary[control.characterSettings.AttackAbility_Alternate.attack_State.animation],
+                transitionDuration: control.characterSettings.AttackAbility_Alternate.attackTimeDuration);
         }
         #endregion
 
@@ -198,63 +207,68 @@ namespace Angry_Girls
                 var randomHitAnimation = control.characterSettings.hitReaction_States[UnityEngine.Random.Range(0, control.characterSettings.hitReaction_States.Count)].animation;
                 ChangeAnimationState(GameLoader.Instance.statesContainer.hitReaction_Dictionary[randomHitAnimation], transitionDuration: 0.1f);
 
-                if (control.isAttacking)
-                {
-                    control.FinishTurn();
-                }
+                //if (control.isAttacking)
+                //{
+                //    control.FinishTurn();
+                //}
                 return;
             }
 
             //CHECK AIRBONED
-            if (!control.isGrounded
-                && !control.isAttacking
-                && !control.isLanding)
+            //air
+            if (control.characterSettings.unitType == UnitType.Air)
             {
-                //Cant be airboned after finished attack for ground and Air unit for now...
-                if (!control.unitBehaviorIsAlternate && control.hasFinishedLaunchingTurn)
+                if (CurrentPhase.LaunchingPhase == GameLoader.Instance.turnManager.CurrentPhase && !control.hasUsedAbility && !control.hasFinishedLaunchingTurn)
                 {
-                    if (control.characterSettings.unitType == UnitType.Air)
-                        return;
+                    ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], transitionDuration: control.characterSettings.airbonedFlying_States.transitionDuration);
                 }
-
-                //personal ground unit condition
-                if (GameLoader.Instance.statesContainer.attackFinish_Dictionary.ContainsValue(hash))
-                {
-                    return;
-                }
-
-                //everyones logic
-                ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], transitionDuration: control.characterSettings.airbonedFlying_States.transitionDuration);
             }
+            else
+            //ground, air2ground
+            {
+
+                if (!control.isGrounded
+                    && !control.isAttacking
+                    && !control.isLanding)
+                {
+                    //personal ground unit condition
+                    if (GameLoader.Instance.statesContainer.attackFinish_Dictionary.ContainsValue(hash))
+                    {
+                        return;
+                    }
+
+                    //everyones logic
+                    ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], transitionDuration: control.characterSettings.airbonedFlying_States.transitionDuration);
+                }
+            }
+
+
 
             //CHECK LANDING
             if (control.isGrounded
                 && !control.unitGotHit
                 && control.characterSettings.unitType != UnitType.Air
-                && !GameLoader.Instance.statesContainer.landingNames_Dictionary.ContainsValue(hash)
-                && !GameLoader.Instance.statesContainer.idle_Dictionary.ContainsValue(hash))
+                && GameLoader.Instance.statesContainer.airbonedFlying_Dictionary.ContainsValue(hash))
             {
-                //airToGround unit condition
-                if (control.characterSettings.unitType == UnitType.AirToGround)
-                {
                     ChangeAnimationState_CrossFadeInFixedTime(
                         GameLoader.Instance.statesContainer.landingNames_Dictionary[control.characterSettings.landing_State.animation],
                         control.characterSettings.landing_State.transitionDuration);
                     return;
-                }
-
-                //Ground unit condition
-                if (GameLoader.Instance.statesContainer.airbonedFlying_Dictionary.ContainsValue(hash))
-                {
-                    ChangeAnimationState_CrossFadeInFixedTime(
-                        GameLoader.Instance.statesContainer.landingNames_Dictionary[control.characterSettings.landing_State.animation],
-                        control.characterSettings.landing_State.transitionDuration);
-
-                    return ;
-                }
             }
 
             //CHECK IDLE
+
+            //Exctra condition for an air unit
+            if (control.characterSettings.unitType == UnitType.Air)
+            {
+                if (control.isGrounded || (!control.canUseAbility && !control.isAttacking))
+                {
+                    var idleState = control.characterSettings.idle_States[UnityEngine.Random.Range(0, control.characterSettings.idle_States.Count)];
+                    ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.idle_Dictionary[idleState.animation], transitionDuration: idleState.transitionDuration);
+                    return;
+                }
+            }
+            //Ground and airToground units
             if (control.isGrounded && !control.isAttacking && !control.isLanding)
             {
                 if (GameLoader.Instance.statesContainer.idle_Dictionary.ContainsValue(hash))
@@ -262,18 +276,7 @@ namespace Angry_Girls
                     return;
                 }
 
-                //Exctra condition for an air unit
-                if (control.characterSettings.unitType == UnitType.Air)
-                {
-                    if (control.isGrounded || control.hasFinishedLaunchingTurn)
-                    {
-                        var idleState = control.characterSettings.idle_States[UnityEngine.Random.Range(0, control.characterSettings.idle_States.Count)];
-                        ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.idle_Dictionary[idleState.animation], transitionDuration: idleState.transitionDuration);
-                        return;
-                    }
-                }
 
-                //everyone else
                 if (GameLoader.Instance.statesContainer.attackFinish_Dictionary.ContainsValue(hash)
                         || GameLoader.Instance.statesContainer.hitReaction_Dictionary.ContainsValue(hash)
                         || GameLoader.Instance.statesContainer.landingNames_Dictionary.ContainsValue(hash))

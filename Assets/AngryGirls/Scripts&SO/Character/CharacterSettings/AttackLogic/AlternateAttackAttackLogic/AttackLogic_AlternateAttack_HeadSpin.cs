@@ -37,23 +37,19 @@ namespace Angry_Girls
             //Move character when casting ability
             control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed;
             control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed;
-            //control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementForce);
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
+            control.CheckAttackFinishCondition();
+
             if (control.rigidBody.velocity.y <= - 0.2f && !_haveShootedFirstTime)            
-                //if (!_haveShootedFirstTime && stateInfo.normalizedTime >= _timesToRepeat_Attack_State
-                //&& control.rigidBody.velocity.y <= - 0.2f)
             {
-
-
                 //Second cast, second character move
                 control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed;
-                //control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementForce);
                 ProcessFireballs(control, _firstShoot_ProjectileAngles);
                 _haveShootedFirstTime = true;
-                control.FinishTurn();
+                control.isAttacking = false;
             }
         }
 
@@ -62,8 +58,6 @@ namespace Angry_Girls
             control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed;
             ProcessFireballs(control, _secondShoot_ProjectileAngles);
             _haveShootedFirstTime = false;
-            control.FinishTurn();
-            //control.isAttacking = false;
         }
 
         private void ProcessFireballs(CControl control, Vector3[] angles, float moveDuration = 1.5f)
@@ -99,7 +93,6 @@ namespace Angry_Girls
                     enableCollider: control.characterSettings.AttackAbility_Alternate.enableCollider,
                     enableTrigger: control.characterSettings.AttackAbility_Alternate.enableTrigger,
                     owner: control.gameObject
-
                     );
             }
         }

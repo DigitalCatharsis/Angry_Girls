@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Drawing;
+using UnityEditor.ShaderGraph;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,11 +31,10 @@ namespace Angry_Girls
         public bool isDead = false;
         public bool unitGotHit = false;
         public bool hasUsedAbility = false;
+        public bool canUseAbility = false;
         public bool hasBeenLaunched = false;
-        public bool airToGroundUnit_FinishedAbility = false;
         public bool hasFinishedLaunchingTurn = false;
         public bool hasFinishedAlternateAttackTurn = true;
-        public bool timerForGroundedFinishTurnIsActivated = false;
 
         [Space(5)]
         public bool unitBehaviorIsAlternate = true;
@@ -57,7 +58,7 @@ namespace Angry_Girls
         [Space(5)]
         [Header("VFX")]
         public Transform projectileSpawnTransform;
-        public Color VFX_Color;
+        public UnityEngine.Color VFX_Color;
 
         [Header("Weapon")]
         [SerializeReference]
@@ -71,9 +72,10 @@ namespace Angry_Girls
             }
             else
             {
-                return  attackSystem_Data.alternate_AttackFinishLogic;
+                return attackSystem_Data.alternate_AttackFinishLogic;
             }
         }
+
         public AttackAbility Get_AttackAbility()
         {
             if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.LaunchingPhase)
@@ -86,37 +88,66 @@ namespace Angry_Girls
             }
         }
 
-        public void GiveTimeForAttackUntillFinishTurn(float timeToCheck)
+        public bool CheckAttackFinishCondition()
         {
-            var temp = this.name;
-            StartCoroutine(ExecuteFinishTurnTimer(timeToCheck));
-        }
-
-        private IEnumerator ExecuteFinishTurnTimer(float timeToCheck)
-        {
-            timerForGroundedFinishTurnIsActivated = true;
-            var time = Time.deltaTime;
-            while (!hasUsedAbility)
+            if (isDead)
             {
-                if (time >= timeToCheck)
+                return false;
+            }
+
+            if (unitGotHit)
+            {
+                return true;
+            }
+
+            if (characterSettings.unitType == UnitType.Air && hasUsedAbility == true)
+            {
+                return true;
+            }
+
+            if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.AlternatePhase)
+            {
+                if (hasFinishedAlternateAttackTurn)
                 {
-                    timerForGroundedFinishTurnIsActivated = false;
-                    FinishTurn();
-                    yield break;
+                    return false;
                 }
 
+                if (canUseAbility)
+                {
+                    return false;
+                }
+            }
+
+            if (isGrounded)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public void FinishTurn(float finishAttackTimer)
+        {
+            StopCoroutine(ExecuteFinishTurnTimer(finishAttackTimer));
+            isAttacking = false;
+
+            ColorDebugLog.Log("ExecuteFinishTurnTimer" + gameObject.name, KnownColor.Yellow);
+            //check for calls. Has been fixed, but to be sure
+            StartCoroutine(ExecuteFinishTurnTimer(finishAttackTimer));
+        }
+        private IEnumerator ExecuteFinishTurnTimer(float timeToCheck)
+        {
+            var time = Time.deltaTime;
+            while (time >= timeToCheck)
+            {
                 time += Time.deltaTime;
                 yield return null;
             }
-        }
 
-        public void FinishTurn()
-        {
             hasFinishedLaunchingTurn = true;
-            isAttacking = false;
             hasFinishedAlternateAttackTurn = true;
-            airToGroundUnit_FinishedAbility = true;
-            //ColorDebugLog.Log(this.name + "has finished turn", System.Drawing.KnownColor.Yellow);  //It calls a lot of times. Fix. TODO:
+            ColorDebugLog.Log("Finishing Trun" + gameObject.name, KnownColor.Yellow);
+            yield break;
         }
 
         public void JostleFromEnemy(GameObject enemy, float zValue)
@@ -155,10 +186,12 @@ namespace Angry_Girls
         {
             subComponentsController.OnUpdate();
         }
+
         private void FixedUpdate()
         {
             subComponentsController.OnFixedUpdate();
         }
+
         private void LateUpdate()
         {
             subComponentsController.OnLateUpdate();

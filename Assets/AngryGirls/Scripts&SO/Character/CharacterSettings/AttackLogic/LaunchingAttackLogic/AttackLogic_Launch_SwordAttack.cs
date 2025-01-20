@@ -25,6 +25,11 @@ namespace Angry_Girls
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
+            if (control.CheckAttackFinishCondition())
+            {
+                control.FinishTurn(2);
+            }
+
             if(control.isGrounded)
             {
                 control.isAttacking = false;

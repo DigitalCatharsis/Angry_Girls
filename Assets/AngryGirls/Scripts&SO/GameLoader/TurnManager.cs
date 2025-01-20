@@ -101,7 +101,10 @@ namespace Angry_Girls
             _currentPhase = CurrentPhase.AlternatePhase;
             foreach (var character in _charactersTurn_List)
             {
-                character.GetComponent<CControl>().hasFinishedAlternateAttackTurn = false;
+                var control = character.GetComponent<CControl>();
+                control.hasFinishedAlternateAttackTurn = false;
+                control.canUseAbility = true;
+                control.hasUsedAbility = false;
             }
         }
 

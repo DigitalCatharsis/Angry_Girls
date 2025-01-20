@@ -17,9 +17,10 @@ namespace Angry_Girls
         {
             if (stateInfo.normalizedTime >= 1 && control.isGrounded)
             {
-                control.FinishTurn();
+                control.isAttacking = false;
             }
         }
+
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
         }

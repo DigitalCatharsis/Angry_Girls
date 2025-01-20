@@ -154,6 +154,7 @@ namespace Angry_Girls
 
             control.checkGlobalBehavior = true;
             control.hasFinishedLaunchingTurn = false;
+            control.canUseAbility = true;
 
             GameLoader.Instance.cameraManager.ZoomOutCameraAfterLaunch();       
             
