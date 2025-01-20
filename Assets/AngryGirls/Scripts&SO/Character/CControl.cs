@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Drawing;
 using UnityEditor.ShaderGraph;
 using UnityEngine;
 using UnityEngine.UI;
@@ -57,7 +58,7 @@ namespace Angry_Girls
         [Space(5)]
         [Header("VFX")]
         public Transform projectileSpawnTransform;
-        public Color VFX_Color;
+        public UnityEngine.Color VFX_Color;
 
         [Header("Weapon")]
         [SerializeReference]
@@ -99,38 +100,27 @@ namespace Angry_Girls
                 return true;
             }
 
-            if (isGrounded)
+            if (characterSettings.unitType == UnitType.Air && hasUsedAbility == true)
             {
                 return true;
             }
 
-            if (GameLoader.Instance.statesContainer.idle_Dictionary.ContainsValue(animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
+            if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.AlternatePhase)
             {
-                if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.LaunchingPhase && !hasFinishedLaunchingTurn)
+                if (hasFinishedAlternateAttackTurn)
                 {
-                    return true;
+                    return false;
                 }
 
-                if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.AlternatePhase && hasUsedAbility)
+                if (canUseAbility)
                 {
-                    return true;
+                    return false;
                 }
             }
 
-            switch (characterSettings.unitType)
+            if (isGrounded)
             {
-                case UnitType.Ground:
-                    break;
-                case UnitType.AirToGround:
-                    break;
-                case UnitType.Air:
-                    if (hasUsedAbility == true)
-                    {
-                        return true;
-                    }
-                    break;
-                default:
-                    throw new Exception("Wrong Unit type");
+                return true;
             }
 
             return false;
@@ -138,26 +128,26 @@ namespace Angry_Girls
 
         public void FinishTurn(float finishAttackTimer)
         {
+            StopCoroutine(ExecuteFinishTurnTimer(finishAttackTimer));
             isAttacking = false;
 
+            ColorDebugLog.Log("ExecuteFinishTurnTimer" + gameObject.name, KnownColor.Yellow);
+            //check for calls. Has been fixed, but to be sure
             StartCoroutine(ExecuteFinishTurnTimer(finishAttackTimer));
-            //ColorDebugLog.Log(this.name + "has finished turn", System.Drawing.KnownColor.Yellow);  //It calls a lot of times. Fix. TODO:
         }
         private IEnumerator ExecuteFinishTurnTimer(float timeToCheck)
         {
             var time = Time.deltaTime;
-            while (!hasUsedAbility)
+            while (time >= timeToCheck)
             {
-                if (time >= timeToCheck)
-                {
-                    hasFinishedLaunchingTurn = true;
-                    hasFinishedAlternateAttackTurn = true;
-                    yield break;
-                }
-
                 time += Time.deltaTime;
                 yield return null;
             }
+
+            hasFinishedLaunchingTurn = true;
+            hasFinishedAlternateAttackTurn = true;
+            ColorDebugLog.Log("Finishing Trun" + gameObject.name, KnownColor.Yellow);
+            yield break;
         }
 
         public void JostleFromEnemy(GameObject enemy, float zValue)

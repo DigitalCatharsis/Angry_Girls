@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -20,6 +21,7 @@ namespace Angry_Girls
             //No need in this, cause of no crossfade
             if (stateInfo.normalizedTime >= 1)
             {
+                _control.isAttacking = false;
                 _control.isLanding = false;
                 _control.unitGotHit = false;
             }

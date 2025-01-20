@@ -56,7 +56,6 @@ namespace Angry_Girls
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             _haveShootedSecondTime = false;
-            //control.FinishTurn(2);
         }
 
         private void ProcessFireballs(CControl control, Vector3[] angles, float moveDuration = 1.5f)
@@ -92,7 +91,6 @@ namespace Angry_Girls
                     enableCollider: control.characterSettings.AttackAbility_Launch.enableCollider,
                     enableTrigger: control.characterSettings.AttackAbility_Launch.enableTrigger,
                     owner: control.gameObject
-
                     );
             }
         }

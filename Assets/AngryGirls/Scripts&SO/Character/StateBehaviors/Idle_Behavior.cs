@@ -14,25 +14,29 @@ namespace Angry_Girls
                 _control = animator.transform.root.GetComponent<CControl>();
             }
 
-            if (_control.playerOrAi == PlayerOrAi.Ai)
-            {
-                return;
-            }
-
             //no need in characterToLaunch
             if (_control.gameObject.layer == 14)
             {
                 return;
             }
 
+            if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.LaunchingPhase)
+            {
+                //Ai does not attack in launch phase
+                if (_control.playerOrAi == PlayerOrAi.Ai)
+                {
+                    return;
+                }
+                //already launched unit does not attack in launch phase
+                if (_control.playerOrAi == PlayerOrAi.Player && _control.hasFinishedLaunchingTurn)
+                {
+                    return;
+                }
+            }
+                        
             if (_control.CheckAttackFinishCondition())
             {
                 _control.FinishTurn(2f);
-            }
-
-
-            if (_control.characterSettings.unitType == UnitType.Air)
-            {
             }
         }
 

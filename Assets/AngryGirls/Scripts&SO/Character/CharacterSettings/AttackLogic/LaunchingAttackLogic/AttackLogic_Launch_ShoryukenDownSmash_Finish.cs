@@ -23,7 +23,7 @@ namespace Angry_Girls
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            control.FinishTurn(2);
+            //control.FinishTurn(2);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Angry_Girls
         {
             if (stateInfo.normalizedTime >= 1 && control.isGrounded)
             {
-                control.FinishTurn(2);
+                control.isAttacking = false;
             }
         }
 
