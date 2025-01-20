@@ -27,7 +27,8 @@ namespace Angry_Girls
         {
             if (control.CheckAttackFinishCondition())
             {
-                control.FinishTurn(2);
+                control.isAttacking = false;
+                //control.FinishTurn(2);
             }
 
             if(control.isGrounded)

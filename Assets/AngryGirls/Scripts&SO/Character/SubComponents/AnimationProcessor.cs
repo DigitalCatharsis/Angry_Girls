@@ -66,7 +66,8 @@ namespace Angry_Girls
 
             //CheckAttackPrep
             if (control.hasUsedAbility
-                && !control.isLanding)
+                && !control.isLanding
+                && !control.isAttacking)
             {
                 Launching_CheckAndProcess_AttackPrep();
             }
