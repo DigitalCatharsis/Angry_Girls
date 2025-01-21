@@ -15,6 +15,8 @@ namespace Angry_Girls
 
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
+            control.rigidBody.isKinematic = false;
+
             ColorDebugLog.Log("Loop" + _loopsCount, System.Drawing.KnownColor.Red);
             _loopsCount = 1;
             _timeInCurrentLoop = 0f;
@@ -55,8 +57,8 @@ namespace Angry_Girls
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            ColorDebugLog.Log("END" + _loopsCount, System.Drawing.KnownColor.Red);
             control.rigidBody.velocity = Vector3.zero;
+            control.rigidBody.isKinematic = true;
         }
 
         private void SendFireball(CControl control, Vector3 startPoint, Vector3 finalRotationDegree, float moveDuration = 1.5f)

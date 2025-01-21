@@ -15,6 +15,8 @@ namespace Angry_Girls
 
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
+            control.rigidBody.isKinematic = false;
+
             _loopsCount = 1;
             _timeInCurrentLoop = 0f;
             _fireballSentThisLoop = false;
@@ -55,6 +57,7 @@ namespace Angry_Girls
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             control.rigidBody.velocity = Vector3.zero;
+            control.rigidBody.isKinematic = true;
         }
 
         private void SendFireball(CControl control, Vector3 startPoint, Vector3 finalRotationDegree, float moveDuration = 1.5f)
@@ -63,6 +66,7 @@ namespace Angry_Girls
             var vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, VFX_Type.VFX_FireBall);
 
             //rotate fireball to proper way
+            //vfx.transform.forward = Quaternion.AngleAxis(-25f, Vector3.right) * control.transform.forward;
             vfx.transform.forward = control.transform.forward;
 
             //set impulse
@@ -72,13 +76,15 @@ namespace Angry_Girls
                 control.characterSettings.AttackAbility_Launch.projectileMovementSpeed.z * control.transform.forward.z
                 );
 
-            //MoveCharacter when cast fireball
-            //control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementForce * control.transform.forward.z); //turn it back
             control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed * control.transform.forward.z; //turn it back
 
             //Move fireball
             vfx.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);
-            vfx.transform.DORotate(endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * control.transform.forward.z), duration: moveDuration, mode: RotateMode.Fast).SetLink(vfx, LinkBehaviour.PauseOnDisableRestartOnEnable);
+            vfx.transform.DORotate(
+                endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * control.transform.forward.z), 
+                duration: moveDuration, 
+                mode: RotateMode.Fast)
+                .SetLink(vfx, LinkBehaviour.PauseOnDisableRestartOnEnable);
         }
     }
 }

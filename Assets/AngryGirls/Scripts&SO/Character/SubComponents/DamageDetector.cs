@@ -60,7 +60,7 @@ namespace Angry_Girls
 
         private void OnDamageTaken(float damage, Collider triggerCollider, VFX vfx)
         {
-            control.ApplyKnockback(triggerCollider.gameObject , 1000);
+            control.ApplyKnockback(triggerCollider.gameObject , 1);
             control.currentHealth -= damage;
             GameLoader.Instance.UIManager.UpdateHealthBarValueAndVision(control);
 
