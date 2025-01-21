@@ -260,9 +260,9 @@ namespace Angry_Girls
             //CHECK IDLE
 
             //Exctra condition for an air unit
-            if (control.characterSettings.unitType == UnitType.Air)
+            if (control.characterSettings.unitType == UnitType.Air && !control.isAttacking)
             {
-                if (control.isGrounded || (!control.canUseAbility && !control.isAttacking))
+                if (control.isGrounded  || (!control.canUseAbility))
                 {
                     var idleState = control.characterSettings.idle_States[UnityEngine.Random.Range(0, control.characterSettings.idle_States.Count)];
                     ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.idle_Dictionary[idleState.animation], transitionDuration: idleState.transitionDuration);

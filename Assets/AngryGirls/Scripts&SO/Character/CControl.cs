@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.ComponentModel;
 using System.Drawing;
 using UnityEditor.ShaderGraph;
 using UnityEngine;
@@ -150,9 +151,27 @@ namespace Angry_Girls
             yield break;
         }
 
-        public void JostleFromEnemy(GameObject enemy, float zValue)
+        public void ApplyKnockback(GameObject opponent, float knockbackForce)
         {
-            rigidBody.velocity = (new Vector3(0, 0, (transform.position.z - enemy.transform.position.z) * zValue));
+            var direction = transform.position - opponent.transform.position;
+
+            // Проверить, что объекты не находятся в одной точке
+            if (Math.Abs(direction.z) < 0.001f)
+            {
+                // Случайное направление
+                int randomDirection = UnityEngine.Random.Range(0, 2);
+                direction = new Vector3(0, 0, randomDirection == 0 ? -1 : 1);
+            }
+            else
+            {
+                // Нормализуем только z-компонент
+                direction.z /= Math.Abs(direction.z);
+            }
+
+            if (rigidBody != null)
+            {
+                rigidBody.AddForce(new Vector3(0, 0, direction.z * knockbackForce), ForceMode.Impulse);
+            }
         }
 
         private void Awake()
