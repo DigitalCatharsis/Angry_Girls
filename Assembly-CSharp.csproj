@@ -141,6 +141,7 @@
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUnityVersion.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\CollisionSpheres.cs" />
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
+    <Compile Include="Assets\FST\DemoScripts\DemoAnimationSelector.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackAbilities\AttackAbility.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\SpawnFactory\Factories\VFXFactory.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModulePhysics.cs" />

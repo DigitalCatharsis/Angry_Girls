@@ -52,6 +52,7 @@ namespace Angry_Girls
         HitReaction_5,
 
         Death_SweepFall,
+        A_Falling_Idle_HandAverage
     }
     public enum Idle_States
     {
@@ -76,6 +77,7 @@ namespace Angry_Girls
         NONE,
         Falling_General,
         Falling_Rolling,
+        A_Falling_Idle_HandAverage
     }
 
     public enum Landing_States

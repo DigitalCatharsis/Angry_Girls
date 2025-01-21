@@ -23,11 +23,8 @@ MonoBehaviour:
   - animation: 3
     transitionDuration: 0.25
   airbonedFlying_States:
-    animation: 2
+    animation: 3
     transitionDuration: 0.1
-  attackFininsh_State:
-    animation: 0
-    transitionDuration: 0
   landing_State:
     animation: 0
     transitionDuration: 0

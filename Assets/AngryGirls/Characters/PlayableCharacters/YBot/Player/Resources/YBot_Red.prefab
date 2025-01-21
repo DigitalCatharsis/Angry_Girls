@@ -125,6 +125,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6248809079511273368, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7121561051254715629, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: VFX_Color.b

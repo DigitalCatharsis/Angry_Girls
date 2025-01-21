@@ -83,6 +83,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: YBot_Green
       objectReference: {fileID: 0}
+    - target: {fileID: 3104179860921487690, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3481811570341924799, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: finishedGotHitAnimation
