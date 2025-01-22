@@ -7,7 +7,7 @@ namespace Angry_Girls
     {
         [Header("Setup")]
         [SerializeField] private readonly Vector3 _cameraStartPosition = new Vector3(13.25f, 1.44f, -0.00999999f);
-        [SerializeField] private const float startOrthographicCameraSize = 1.85f;
+        [SerializeField] private const float startOrthographicCameraSize = 3f;
         [SerializeField] private const float _secondsCameraWaitsAfterAttack = 2f;
         [SerializeField] private const float _zoomeCameraValueAfterLaunch = 5f;
 
@@ -39,13 +39,6 @@ namespace Angry_Girls
         // Center camera on character collider center
         private void CenterCameraAgainst(Rigidbody selectedObjectRigidbody)
         {
-            //ColorDebugLog.Log("Called CenterCamera", KnownColor.Orange);
-            //if (selectedObject.GetComponent<Collider>() == null)
-            //{
-            //    Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, selectedObject.transform.position.y, selectedObject.transform.position.z);
-            //    return;
-            //}
-            //var boundsCenter = selectedObject.GetComponent<Collider>().bounds.center;
             Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, selectedObjectRigidbody.transform.position.y, selectedObjectRigidbody.transform.position.z);
         }
 

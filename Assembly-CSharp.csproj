@@ -113,6 +113,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\GameLoader.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUtils.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\StatesContainer.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\CameraSizer.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponentMediator.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ColorDebugLog\ColorDebugLog.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\BoxColliderUpdater.cs" />

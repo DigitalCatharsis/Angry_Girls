@@ -424,6 +424,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3107b6ec9542fd41b391e05b9a2c518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &5895527518264970542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4981819973336482454}
+  - component: {fileID: 3196071833485005566}
+  m_Layer: 0
+  m_Name: CameraSizer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4981819973336482454
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5895527518264970542}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2958300703721250050}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3196071833485005566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5895527518264970542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9398efd125676344e98758a2ea5365d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5924608175922468923
 GameObject:
   m_ObjectHideFlags: 0
@@ -708,6 +752,7 @@ Transform:
   - {fileID: 2525660665349820317}
   - {fileID: 2507494046916107421}
   - {fileID: 5858850451879653574}
+  - {fileID: 4981819973336482454}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8142097811665119726
@@ -955,6 +1000,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50bc7a6f6c872f741baed283680f06f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _characterToFollow: {fileID: 0}
+  allowCameraFollow: 0
 --- !u!1 &7563067258013763144
 GameObject:
   m_ObjectHideFlags: 0

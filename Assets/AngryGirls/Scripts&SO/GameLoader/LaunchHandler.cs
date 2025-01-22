@@ -73,8 +73,7 @@ namespace Angry_Girls
             //Нажали
             if (Input.GetMouseButtonDown(0) && _canPressAtCharacters)
             {
-                Debug.Log("CLICK!");
-                Vector3 mousePosition = Input.mousePosition;
+                var mousePosition = Input.mousePosition;
                 Ray ray = Camera.main.ScreenPointToRay(mousePosition);
 
                 //CharacterToLaunch layer
