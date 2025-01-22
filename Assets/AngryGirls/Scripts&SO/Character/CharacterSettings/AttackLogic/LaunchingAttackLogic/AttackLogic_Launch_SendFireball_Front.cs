@@ -7,8 +7,8 @@ namespace Angry_Girls
     {
         private int _loopsCount;
         private float _timeInCurrentLoop;
-        private bool _fireballSentThisLoop = false;
         private int _timesToRepeat_Attack_State = 3;
+        private bool _fireballSentThisLoop = false;
         private float _spawnProjectile_TransitionOffset = 0.4f;
 
         private Vector3 _finalProjectileRotation = new Vector3(45f, 0, 0);

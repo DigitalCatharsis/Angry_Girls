@@ -6,6 +6,7 @@ namespace Angry_Girls
     {
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
+            control.isLanding = false;
             control.isAttacking = true;
             control.rigidBody.velocity = Vector3.zero;
 

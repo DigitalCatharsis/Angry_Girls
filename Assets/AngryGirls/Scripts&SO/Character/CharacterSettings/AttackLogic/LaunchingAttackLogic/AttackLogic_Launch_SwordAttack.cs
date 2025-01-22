@@ -7,6 +7,10 @@ namespace Angry_Girls
 {
     public class AttackLogic_Launch_SwordAttack : AttackAbilityLogic
     {
+        private int _loopsCount;
+        private float _timeInCurrentLoop;
+        private int _timesToRepeat_Attack_State = 2;
+
         private TweenerCore<Quaternion, Vector3, QuaternionOptions> _rotationTween;
         private GameObject _vfx;
 
@@ -15,32 +19,48 @@ namespace Angry_Girls
         
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            _savedRotation = control.transform.rotation;
+            _savedRotation = control.transform.GetChild(0).rotation;
             control.rigidBody.velocity = Vector3.zero;
             //rotation
             control.rigidBody.velocity = (new Vector3(0, 10, 2 * control.transform.forward.z));
-            _rotationTween = control.transform.DORotate(new Vector3(360, 0, 0), 0.3f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1);
+            _rotationTween = control.transform.GetChild(0).DORotate(new Vector3(360, 0, 0), 0.3f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1);
             _vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, control.characterSettings.AttackAbility_Launch.AttackVFX.GetComponent<VFX>().GetVFXType(), setAsOwner: true);
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            if (control.CheckAttackFinishCondition())
+            //if (control.CheckAttackFinishCondition())
+            //{
+            //    control.isAttacking = false;
+            //    //control.FinishTurn(2);
+            //}
+
+            // Проверка на окончание ВСЕХ циклов анимации
+            if (stateInfo.normalizedTime >= _timesToRepeat_Attack_State * stateInfo.length + 0.8f)
             {
+                _loopsCount = 0;
+                _timeInCurrentLoop = 0f;
+                _rotationTween.Kill();
                 control.isAttacking = false;
-                //control.FinishTurn(2);
             }
 
-            if(control.isGrounded)
+            //Сброс флага в конце цикла
+            if (_timeInCurrentLoop >= stateInfo.length)
             {
-                control.isAttacking = false;
+                _timeInCurrentLoop -= stateInfo.length;
+                _loopsCount++;
             }
+
+            //if(control.isGrounded)
+            //{
+            //    control.isAttacking = false;
+            //}
         }
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            control.transform.rotation = _savedRotation;
             _rotationTween.Kill();
+            control.transform.GetChild(0).rotation = _savedRotation;
             if (control.subComponentMediator.Notify_GetBottomContactPoint(control) != Vector3.zero)
             {
                 control.transform.position = control.subComponentMediator.Notify_GetBottomContactPoint(control);

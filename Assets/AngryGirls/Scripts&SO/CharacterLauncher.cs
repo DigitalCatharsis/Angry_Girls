@@ -17,7 +17,7 @@ namespace Angry_Girls
         private GameObject[] _trajectoryDots;
 
         //Positions
-        private Transform[] _positionTransforms;
+        [SerializeField] private Transform[] _positionTransforms;
 
         [Header("Launching Setup")]
         [SerializeField] private GameObject _positionsContainer;

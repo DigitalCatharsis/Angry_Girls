@@ -153,6 +153,10 @@ namespace Angry_Girls
 
         public void ApplyKnockback(GameObject opponent, float knockbackForce)
         {
+            if (rigidBody.velocity != Vector3.zero)
+            {
+                return;
+            }
             var direction = transform.position - opponent.transform.position;
 
             // Проверить, что объекты не находятся в одной точке
@@ -239,11 +243,11 @@ namespace Angry_Girls
         {
             if (playerOrAi == PlayerOrAi.Player)
             {
-                GameLoader.Instance.characterManager.playableCharacters.Add(this.gameObject);
+                GameLoader.Instance.characterManager.playableCharacters.Add(this);
             }
             else if (playerOrAi == PlayerOrAi.Ai)
             {
-                GameLoader.Instance.characterManager.enemyCharacters.Add(this.gameObject);
+                GameLoader.Instance.characterManager.enemyCharacters.Add(this);
             }
 
             subComponentsController.OnComponentEnable();

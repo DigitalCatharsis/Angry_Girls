@@ -19,15 +19,10 @@ namespace Angry_Girls
         [SerializeField] private bool _canPressAtCharacters = false;
         [Space(10)]
         [Header("Debug)")]
-        [SerializeField] private List<GameObject> _charactersToLaunchLeft;
-        [SerializeField] private List<GameObject> _launchedCharacters;
+        [SerializeField] private List<CControl> _charactersToLaunchLeft;
+        [SerializeField] private List<CControl> _launchedCharacters;
 
-        private GameObject CharacterToLaunch { get => _charactersToLaunchLeft[0]; }
-
-        //current launching character
-        //method to control his launch
-        //input manager? isPressed
-
+        private CControl CharacterToLaunch { get => _charactersToLaunchLeft[0]; }
 
         private void LateUpdate()
         {
@@ -41,27 +36,30 @@ namespace Angry_Girls
             UpdateCharacterPositions(_charactersToLaunchLeft);
             SetLaunchableCharactersBehavior(_charactersToLaunchLeft);
             _canPressAtCharacters = true;
-            GameLoader.Instance.cameraManager.FollowCamera(_characterLauncher.gameObject);
+            GameLoader.Instance.cameraManager.ReturnCameraToStartPosition(1f);
+            //GameLoader.Instance.cameraManager.CameraFollowForRigidBody(_charactersToLaunchLeft[0].rigidBody);
         }
 
-        private List<GameObject> SpawnAndGetCharacters(CharacterType[] selectedCharactersList)
+        private List<CControl> SpawnAndGetCharacters(CharacterType[] selectedCharactersList)
         {
-            var charList = new List<GameObject>();
+            var charList = new List<CControl>();
             for (var i = 0; i < selectedCharactersList.Count(); i++)
             {
                 charList.Add(GameLoader.Instance.poolManager.GetObject<CharacterType>
-                    (selectedCharactersList[i], GameLoader.Instance.poolManager.characterPoolDictionary, Vector3.zero, Quaternion.identity).gameObject);
+                    (selectedCharactersList[i], GameLoader.Instance.poolManager.characterPoolDictionary, Vector3.zero, Quaternion.identity).GetComponent<CControl>());
             }
             return charList;
         }
-        private void UpdateCharacterPositions(List<GameObject> charactersToLaunch)
+        private void UpdateCharacterPositions(List<CControl> charactersToLaunch)
         {
+            var transforms = _characterLauncher.GetPositionTransforms();
+
             for (var i = 0; i < charactersToLaunch.Count(); i++)
             {
-                charactersToLaunch[i].transform.position = _characterLauncher.GetPositionTransforms()[i].position;
+                charactersToLaunch[i].rigidBody.MovePosition(transforms[i].position);
             }
         }
-        private void SetLaunchableCharactersBehavior(List<GameObject> charactersToLaunchLeft)
+        private void SetLaunchableCharactersBehavior(List<CControl> charactersToLaunchLeft)
         {
             foreach (var character in charactersToLaunchLeft)
             {
@@ -75,6 +73,7 @@ namespace Angry_Girls
             //Нажали
             if (Input.GetMouseButtonDown(0) && _canPressAtCharacters)
             {
+                Debug.Log("CLICK!");
                 Vector3 mousePosition = Input.mousePosition;
                 Ray ray = Camera.main.ScreenPointToRay(mousePosition);
 
@@ -83,22 +82,29 @@ namespace Angry_Girls
 
                 if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
                 {
-                    if (_charactersToLaunchLeft.Contains(hit.collider.gameObject))
+                    if (hit.collider == null)
                     {
-                        // Center camera on character collider center
-                        GameLoader.Instance.cameraManager.FollowCamera(CharacterToLaunch);
 
-                        if (hit.collider.gameObject == CharacterToLaunch)
+                    }
+                    var characterCcontrol = hit.collider.gameObject.GetComponent<CControl>();
+
+                    if (_charactersToLaunchLeft.Contains(characterCcontrol))
+                    {
+                        if (hit.collider == CharacterToLaunch.boxCollider)
                         {
+                            // Center camera on character collider center
+                            GameLoader.Instance.cameraManager.CameraFollowForRigidBody(CharacterToLaunch.rigidBody);
                             //Launch
                             _isLaunchAllowed = true;
                         }
                         else
                         {
                             //Swap
-                            SwapCharacters(_charactersToLaunchLeft.IndexOf(hit.collider.gameObject), 0);
+                            SwapCharacters(_charactersToLaunchLeft.IndexOf(characterCcontrol), 0);
                             UpdateCharacterPositions(_charactersToLaunchLeft);
                             _isLaunchAllowed = false;
+                            // Center camera on character collider center
+                            //GameLoader.Instance.cameraManager.CameraFollowForRigidBody(_charactersToLaunchLeft[0].rigidBody);
                         }
                     }
                     else
@@ -111,11 +117,7 @@ namespace Angry_Girls
             //Держим
             if (Input.GetMouseButton(0) && _isLaunchAllowed)
             {
-
-                //// Center camera on character collider center
-                //GameLoader.Instance.cameraManager.FollowCamera(CharacterToLaunch);
-
-                _characterLauncher.AimingTheLaunch(CharacterToLaunch);
+                _characterLauncher.AimingTheLaunch(CharacterToLaunch.gameObject);
             }
 
             //Отпустили
@@ -131,16 +133,13 @@ namespace Angry_Girls
                 StartCoroutine(ControlUnitLaunch(CharacterToLaunch.GetComponent<CControl>()));
             }
 
-
             #endregion ButtonReaction (Except applyAttack)
 
-            //gameover
+            //TODO: replace to proper class. gameover
             if (_charactersToLaunchLeft.Count == 0 && _canPressAtCharacters)
             {
                 GameLoader.Instance.gameLogic.ExecuteGameOver();
             }
-
-
         }
 
         private void SwapCharacters(int indexA, int indexB)
@@ -171,9 +170,6 @@ namespace Angry_Girls
 
             while (!control.hasUsedAbility)
             {
-
-
-
                 if (control.hasFinishedLaunchingTurn)
                 {
                     break;
@@ -236,7 +232,7 @@ namespace Angry_Girls
             }
         }
 
-        private void UpdateCharactersLists(GameObject launchedCharacter)
+        private void UpdateCharactersLists(CControl launchedCharacter)
         {
             _charactersToLaunchLeft.Remove(launchedCharacter);
             _launchedCharacters.Add(launchedCharacter);

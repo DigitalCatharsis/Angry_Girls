@@ -22,7 +22,7 @@ namespace Angry_Girls
         private const float _timeToWentAfterUnitFinishedAttack = 2f;
         public float TimeToChangePhase { get => _timeToWentAfterUnitFinishedAttack; }
 
-        [SerializeField] private List<GameObject> _charactersTurn_List = new();
+        [SerializeField] private List<CControl> _charactersTurn_List = new();
 
         //props
         public int CurrentTurn => _currentTurn;
@@ -34,7 +34,7 @@ namespace Angry_Girls
             _currentTurn++;
         }
 
-        public void AddCharacterToTurnList(GameObject character)
+        public void AddCharacterToTurnList(CControl character)
         {
             _charactersTurn_List.Add(character);
         }
@@ -81,7 +81,7 @@ namespace Angry_Girls
                 }
 
                 //TODO: camera has to follow in Alternate state about several frames? so make a corutine?
-                GameLoader.Instance.cameraManager.FollowCamera(_charactersTurn_List[i]);
+                GameLoader.Instance.cameraManager.CameraFollowForRigidBody(_charactersTurn_List[i].rigidBody);
                 ColorDebugLog.Log(_charactersTurn_List[i].name.ToString() + " is attacking.", KnownColor.Aqua);
 
                 //Attack
@@ -121,8 +121,8 @@ namespace Angry_Girls
 
         private void SortCharactersTurnList()
         {
-            var tempCharacters = new List<GameObject>();
-            var tempEnemies = new List<GameObject>();
+            var tempCharacters = new List<CControl>();
+            var tempEnemies = new List<CControl>();
 
             foreach ( var character in _charactersTurn_List )
             {

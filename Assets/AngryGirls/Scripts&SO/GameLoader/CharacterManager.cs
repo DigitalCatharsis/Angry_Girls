@@ -5,19 +5,19 @@ namespace Angry_Girls
 {
     public class CharacterManager : MonoBehaviour
     {
-        public List<GameObject> playableCharacters = new List<GameObject>();
-        public List<GameObject> enemyCharacters = new List<GameObject>();
-        public GameObject GetPlaybleCharacter(GameObject character)
+        public List<CControl> playableCharacters = new List<CControl>();
+        public List<CControl> enemyCharacters = new List<CControl>();
+        public CControl GetPlaybleCharacter(CControl character)
         {
             return playableCharacters.Find(x => x == character);
         }
 
-        public GameObject GetEnemyCharacter(GameObject character)
+        public CControl GetEnemyCharacter(CControl character)
         {
             return enemyCharacters.Find(x => x == character);
         }
 
-        public GameObject GetCharacter(GameObject character)
+        public CControl GetCharacter(CControl character)
         {
             if(GetPlaybleCharacter(character))
             {

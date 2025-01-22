@@ -7,6 +7,10 @@ namespace Angry_Girls
 {
     public class AttackLogic_AlternateAttack_SwordAttack : AttackAbilityLogic
     {
+        private int _loopsCount;
+        private float _timeInCurrentLoop;
+        private int _timesToRepeat_Attack_State = 1;
+
         private TweenerCore<Quaternion, Vector3, QuaternionOptions> _rotationTween;
         private GameObject _vfx;
 
@@ -25,9 +29,20 @@ namespace Angry_Girls
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            if (control.isGrounded)
+            // Проверка на окончание ВСЕХ циклов анимации
+            if (stateInfo.normalizedTime >= _timesToRepeat_Attack_State * stateInfo.length + 0.8f)
             {
+                _loopsCount = 0;
+                _timeInCurrentLoop = 0f;
+                _rotationTween.Kill();
                 control.isAttacking = false;
+            }
+
+            //Сброс флага в конце цикла
+            if (_timeInCurrentLoop >= stateInfo.length)
+            {
+                _timeInCurrentLoop -= stateInfo.length;
+                _loopsCount++;
             }
         }
 
@@ -40,7 +55,6 @@ namespace Angry_Girls
                 control.transform.position = control.subComponentMediator.Notify_GetBottomContactPoint(control);
             }
             control.isAttacking = false;
-            //control.hasFinishedAlternateAttackTurn = true;
             _vfx.GetComponent<VFX>().Dispose();
         }
     }

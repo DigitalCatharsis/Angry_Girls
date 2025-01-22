@@ -22,8 +22,6 @@ namespace Angry_Girls
             control.isGrounded = IsGrounded();
         }
 
-
-
         private bool IsGrounded()
         {
             //Если что-то коллайдит главный BoxCollider
@@ -39,7 +37,6 @@ namespace Angry_Girls
                             continue;
                         }
                     }
-
 
                     var colliderBottom = (control.transform.position.y + control.boxCollider.center.y) - (control.boxCollider.size.y / 2f);
                     var yDiffirence = Mathf.Abs(contact.point.y - colliderBottom);

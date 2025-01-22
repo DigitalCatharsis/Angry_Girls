@@ -243,26 +243,39 @@ namespace Angry_Girls
                 }
             }
 
-
-
             //CHECK LANDING
             if (control.isGrounded
                 && !control.unitGotHit
                 && control.characterSettings.unitType != UnitType.Air
-                && GameLoader.Instance.statesContainer.airbonedFlying_Dictionary.ContainsValue(hash))
+                )
             {
+                if (GameLoader.Instance.statesContainer.airbonedFlying_Dictionary.ContainsValue(hash))
+                {
                     ChangeAnimationState_CrossFadeInFixedTime(
                         GameLoader.Instance.statesContainer.landingNames_Dictionary[control.characterSettings.landing_State.animation],
                         control.characterSettings.landing_State.transitionDuration);
                     return;
+                }
+
+                if (control.characterSettings.unitType == UnitType.AirToGround
+                    && GameLoader.Instance.statesContainer.attack_Dictionary.ContainsValue(hash)
+                    && control.animator.GetCurrentAnimatorStateInfo(0).length >= 0.9f)
+                {
+                    ChangeAnimationState_CrossFadeInFixedTime(
+                        GameLoader.Instance.statesContainer.landingNames_Dictionary[control.characterSettings.landing_State.animation],
+                        control.characterSettings.landing_State.transitionDuration);
+                    return;
+                }
+
             }
+
 
             //CHECK IDLE
 
             //Exctra condition for an air unit
             if (control.characterSettings.unitType == UnitType.Air && !control.isAttacking)
             {
-                if (control.isGrounded  || (!control.canUseAbility))
+                if (control.isGrounded || (!control.canUseAbility))
                 {
                     var idleState = control.characterSettings.idle_States[UnityEngine.Random.Range(0, control.characterSettings.idle_States.Count)];
                     ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.idle_Dictionary[idleState.animation], transitionDuration: idleState.transitionDuration);
@@ -365,7 +378,7 @@ namespace Angry_Girls
         private void TurnToTheClosestEnemy(PlayerOrAi playerOrAi)
         {
             float closestDistance = 9999f;
-            var collection = new List<GameObject>();
+            var collection = new List<CControl>();
 
             if (playerOrAi == PlayerOrAi.Player)
             {
