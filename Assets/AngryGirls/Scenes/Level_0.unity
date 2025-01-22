@@ -2901,7 +2901,7 @@ PrefabInstance:
     - target: {fileID: 6881014822654614173, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
       propertyPath: m_CollisionDetection
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2989,7 +2989,7 @@ PrefabInstance:
     - target: {fileID: 6881014822654614173, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
       propertyPath: m_CollisionDetection
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4057,7 +4057,7 @@ PrefabInstance:
     - target: {fileID: 6881014822654614173, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
       propertyPath: m_CollisionDetection
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7182899278863762668, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
@@ -4900,7 +4900,7 @@ PrefabInstance:
     - target: {fileID: 6881014822654614173, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
       propertyPath: m_CollisionDetection
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7182899278863762668, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
@@ -5993,7 +5993,7 @@ PrefabInstance:
     - target: {fileID: 6881014822654614173, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
       propertyPath: m_CollisionDetection
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7182899278863762668, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
@@ -6463,7 +6463,7 @@ PrefabInstance:
     - target: {fileID: 6881014822654614173, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
       propertyPath: m_CollisionDetection
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7182899278863762668, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
@@ -8319,7 +8319,7 @@ PrefabInstance:
     - target: {fileID: 6881014822654614173, guid: 7c3e43f3cd5074943a3b28e9b5fa428d,
         type: 3}
       propertyPath: m_CollisionDetection
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

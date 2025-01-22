@@ -1,3 +1,4 @@
+using System.Drawing;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -12,16 +13,39 @@ namespace Angry_Girls
 
         public float SecondsCameraWaitsAfterAttack => _secondsCameraWaitsAfterAttack;
 
-        // Center camera on character collider center
-        public void CenterCameraAgainst(GameObject selectedObject)
+        private Rigidbody _characterToFollow;
+        private bool allowCameraFollow = false;
+
+        private void LateUpdate()
         {
-            if (selectedObject.GetComponent<Collider>() == null)
+            if (_characterToFollow != null && allowCameraFollow)
             {
-                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, selectedObject.transform.position.y, selectedObject.transform.position.z);
-                return;
+                CenterCameraAgainst(_characterToFollow);
             }
-            var boundsCenter = selectedObject.GetComponent<Collider>().bounds.center;
-            Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, boundsCenter.y, boundsCenter.z);
+        }
+
+        public void FollowCamera(GameObject characterToFollow)
+        {
+            ColorDebugLog.Log("Called for FollowCamera", KnownColor.Orange);
+            _characterToFollow = characterToFollow.GetComponent<Rigidbody>();
+            allowCameraFollow  = true;
+        }
+        public void StopFollowCamera()
+        {
+            _characterToFollow = null;
+            allowCameraFollow = false;
+        }
+
+        // Center camera on character collider center
+        private void CenterCameraAgainst(Rigidbody selectedObjectRigidbody)
+        {
+            //if (selectedObject.GetComponent<Collider>() == null)
+            //{
+            //    Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, selectedObject.transform.position.y, selectedObject.transform.position.z);
+            //    return;
+            //}
+            //var boundsCenter = selectedObject.GetComponent<Collider>().bounds.center;
+            Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, selectedObjectRigidbody.transform.position.y, selectedObjectRigidbody.transform.position.z);
         }
 
         public void ZoomOutCameraAfterLaunch()
@@ -29,14 +53,15 @@ namespace Angry_Girls
              Camera.main.orthographicSize -= (Camera.main.orthographicSize / _zoomeCameraValueAfterLaunch);  
         }
 
-        public void MoveCameraTo(Vector3 placeToMove, float speed)
-        {
-            GameLoader.Instance.myExtentions.Lerp_Position(Camera.main.gameObject, startPosition: Camera.main.transform.position, endPosition: placeToMove, speed);
-            GameLoader.Instance.myExtentions.Lerp_OrthographicCamera_Size(Camera.main, startValue: Camera.main.orthographicSize, startOrthographicCameraSize, speed);
-        }
+        //public void MoveCameraTo(Vector3 placeToMove, float speed)
+        //{
+        //    GameLoader.Instance.myExtentions.Lerp_Position(Camera.main.gameObject, startPosition: Camera.main.transform.position, endPosition: placeToMove, speed);
+        //    GameLoader.Instance.myExtentions.Lerp_OrthographicCamera_Size(Camera.main, startValue: Camera.main.orthographicSize, startOrthographicCameraSize, speed);
+        //}
 
         public void ReturnCameraToStartPosition(float speed)
         {
+            StopFollowCamera();
             GameLoader.Instance.myExtentions.Lerp_Position(Camera.main.gameObject, startPosition: Camera.main.transform.position, endPosition: _cameraStartPosition, speed);
             GameLoader.Instance.myExtentions.Lerp_OrthographicCamera_Size(Camera.main, startValue: Camera.main.orthographicSize, startOrthographicCameraSize, speed);
         }

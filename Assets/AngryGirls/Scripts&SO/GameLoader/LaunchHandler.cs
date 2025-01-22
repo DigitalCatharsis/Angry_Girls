@@ -29,6 +29,11 @@ namespace Angry_Girls
         //input manager? isPressed
 
 
+        private void LateUpdate()
+        {
+            
+        }
+
         private void Start()
         {
             _characterLauncher.InitLauncher();
@@ -36,7 +41,7 @@ namespace Angry_Girls
             UpdateCharacterPositions(_charactersToLaunchLeft);
             SetLaunchableCharactersBehavior(_charactersToLaunchLeft);
             _canPressAtCharacters = true;
-            GameLoader.Instance.cameraManager.CenterCameraAgainst(_characterLauncher.gameObject);
+            GameLoader.Instance.cameraManager.FollowCamera(_characterLauncher.gameObject);
         }
 
         private List<GameObject> SpawnAndGetCharacters(CharacterType[] selectedCharactersList)
@@ -80,6 +85,9 @@ namespace Angry_Girls
                 {
                     if (_charactersToLaunchLeft.Contains(hit.collider.gameObject))
                     {
+                        // Center camera on character collider center
+                        GameLoader.Instance.cameraManager.FollowCamera(CharacterToLaunch);
+
                         if (hit.collider.gameObject == CharacterToLaunch)
                         {
                             //Launch
@@ -104,8 +112,8 @@ namespace Angry_Girls
             if (Input.GetMouseButton(0) && _isLaunchAllowed)
             {
 
-                // Center camera on character collider center
-                GameLoader.Instance.cameraManager.CenterCameraAgainst(CharacterToLaunch);
+                //// Center camera on character collider center
+                //GameLoader.Instance.cameraManager.FollowCamera(CharacterToLaunch);
 
                 _characterLauncher.AimingTheLaunch(CharacterToLaunch);
             }
@@ -156,14 +164,15 @@ namespace Angry_Girls
             control.hasFinishedLaunchingTurn = false;
             control.canUseAbility = true;
 
-            GameLoader.Instance.cameraManager.ZoomOutCameraAfterLaunch();       
-            
-            //yield return new WaitForSeconds(0.1f);
+            GameLoader.Instance.cameraManager.ZoomOutCameraAfterLaunch();
+
+            //Camera follow
+            //GameLoader.Instance.cameraManager.FollowCamera(control.gameObject);
 
             while (!control.hasUsedAbility)
             {
-                //Camera follow
-                GameLoader.Instance.cameraManager.CenterCameraAgainst(control.gameObject);
+
+
 
                 if (control.hasFinishedLaunchingTurn)
                 {
@@ -174,10 +183,12 @@ namespace Angry_Girls
                 yield return null;
             }
 
+            ////Camera follow
+            //GameLoader.Instance.cameraManager.FollowCamera(control.gameObject);
+
             while (!control.hasFinishedLaunchingTurn)
             {
-                //Camera follow
-                GameLoader.Instance.cameraManager.CenterCameraAgainst(control.gameObject);
+
                 yield return null;
             }
 

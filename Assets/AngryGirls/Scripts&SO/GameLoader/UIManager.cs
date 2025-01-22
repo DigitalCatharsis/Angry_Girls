@@ -47,14 +47,18 @@ namespace Angry_Girls
             gameOverUi.SetActive(true);
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             foreach (var elem in _healtBar_Dict)
             {
+                var rigid = elem.Key.GetComponent<Rigidbody>();
+                //var maxY = elem.Key.boxCollider.bounds.max.y + 0.35f;
+
                 elem.Value.transform.root.position = new Vector3(
-                    0, 
-                    elem.Key.boxCollider.bounds.max.y + 0.35f, 
-                    elem.Key.boxCollider.bounds.center.z
+                    0,
+                    rigid.transform.position.y + 1.2f,
+                    rigid.transform.position.z
+                    //elem.Key.boxCollider.bounds.center.z
                     ) ;
 
             }

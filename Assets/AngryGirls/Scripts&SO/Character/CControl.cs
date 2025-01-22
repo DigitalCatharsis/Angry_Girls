@@ -19,7 +19,7 @@ namespace Angry_Girls
     {
         [Space(15)]
         [Header("Debug")]
-        [Header("State Data")]
+        [Header("Pool object")]
         [SerializeField] private CharacterType _characterType;
 
         [Header("Health")]
@@ -188,6 +188,7 @@ namespace Angry_Girls
 
         private void OnCollisionStay(Collision collision)
         {
+            if (collision != null)
             boxColliderContacts = (collision.contacts);
         }
 

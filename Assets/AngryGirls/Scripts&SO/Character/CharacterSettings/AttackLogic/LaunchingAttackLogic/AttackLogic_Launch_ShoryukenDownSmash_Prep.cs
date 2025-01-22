@@ -6,7 +6,7 @@ namespace Angry_Girls
     {
         private GameObject _vfx;
         float tempZlocation;
-        
+
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             tempZlocation = control.transform.position.z;
@@ -20,13 +20,16 @@ namespace Angry_Girls
         {
             control.transform.position = new Vector3(0, control.transform.position.y, tempZlocation);
 
-            foreach (var contact in control.boxColliderContacts)
+            if (control.boxColliderContacts != null)
             {
-                var character = contact.otherCollider.gameObject.GetComponent<CControl>();
-                if (character != null)
+                foreach (var contact in control.boxColliderContacts)
                 {
-                    //character.JostleFromEnemy(3);
-                    control.transform.position = new Vector3(0, control.transform.position.y - 0.01f, tempZlocation);
+                    var character = contact.otherCollider.gameObject.GetComponent<CControl>();
+                    if (character != null)
+                    {
+                        //character.JostleFromEnemy(3);
+                        control.transform.position = new Vector3(0, control.transform.position.y - 0.01f, tempZlocation);
+                    }
                 }
             }
         }
