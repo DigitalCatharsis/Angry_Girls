@@ -34,3 +34,123 @@ MonoBehaviour:
         boxColliderCenter: {x: 0, y: -0.01338433, z: -0.1855023}
         boxColliderSize: {x: 0.2, y: 0.005595952, z: 0.9487329}
         changeSpeed: 50
+    - Key: 5
+      Value:
+        boxColliderCenter: {x: 0, y: 0.4552352, z: 0.1697536}
+        boxColliderSize: {x: 0.2, y: 0.942835, z: 0.5345581}
+        changeSpeed: 50
+    - Key: 6
+      Value:
+        boxColliderCenter: {x: 0, y: 0.4552352, z: 0.1697536}
+        boxColliderSize: {x: 0.2, y: 0.942835, z: 0.5345581}
+        changeSpeed: 50
+    - Key: 7
+      Value:
+        boxColliderCenter: {x: 0, y: 0.4552352, z: 0.1697536}
+        boxColliderSize: {x: 0.2, y: 0.942835, z: 0.5345581}
+        changeSpeed: 50
+    - Key: 8
+      Value:
+        boxColliderCenter: {x: 0, y: 0.4552352, z: 0.1697536}
+        boxColliderSize: {x: 0.2, y: 0.942835, z: 0.5345581}
+        changeSpeed: 50
+    - Key: 4
+      Value:
+        boxColliderCenter: {x: 0, y: 0.4552352, z: 0.01009538}
+        boxColliderSize: {x: 0.2, y: 0.942835, z: 0.2152416}
+        changeSpeed: 50
+    - Key: 15
+      Value:
+        boxColliderCenter: {x: 0, y: 0.4968109, z: 0.02314484}
+        boxColliderSize: {x: 0.2, y: 0.7634029, z: 0.3813846}
+        changeSpeed: 50
+    - Key: 17
+      Value:
+        boxColliderCenter: {x: 0, y: 0.2670932, z: 0.02314484}
+        boxColliderSize: {x: 0.2, y: 0.5215948, z: 0.3813846}
+        changeSpeed: 50
+    - Key: 32
+      Value:
+        boxColliderCenter: {x: 0, y: 0.6116874, z: 0.04272452}
+        boxColliderSize: {x: 0.2, y: 1.139117, z: 0.6390768}
+        changeSpeed: 50
+    - Key: 21
+      Value:
+        boxColliderCenter: {x: 0, y: 0.4088545, z: 0.01009538}
+        boxColliderSize: {x: 0.2, y: 0.942835, z: 0.2152416}
+        changeSpeed: 50
+    - Key: 3
+      Value:
+        boxColliderCenter: {x: 0, y: 0.5857111, z: 0}
+        boxColliderSize: {x: 0.2, y: 1.055481, z: 0.4560484}
+        changeSpeed: 50
+    - Key: 16
+      Value:
+        boxColliderCenter: {x: 0, y: 0, z: 0}
+        boxColliderSize: {x: 0.2, y: 0.6076189, z: 0.4560484}
+        changeSpeed: 50
+    - Key: 2
+      Value:
+        boxColliderCenter: {x: 0, y: 0.3697925, z: -0.009551652}
+        boxColliderSize: {x: 0.2, y: 0.6764749, z: 0.5119416}
+        changeSpeed: 50
+    - Key: 18
+      Value:
+        boxColliderCenter: {x: 0, y: 0.3697925, z: -0.009551652}
+        boxColliderSize: {x: 0.2, y: 0.6764749, z: 0.5119416}
+        changeSpeed: 50
+    - Key: 9
+      Value:
+        boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
+        boxColliderSize: {x: 0.2, y: 0.8602528, z: 0.3019529}
+        changeSpeed: 50
+    - Key: 10
+      Value:
+        boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
+        boxColliderSize: {x: 0.2, y: 0.8602528, z: 0.3019529}
+        changeSpeed: 50
+    - Key: 11
+      Value:
+        boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
+        boxColliderSize: {x: 0.2, y: 0.8602528, z: 0.3019529}
+        changeSpeed: 50
+    - Key: 12
+      Value:
+        boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
+        boxColliderSize: {x: 0.2, y: 0.8602528, z: 0.3019529}
+        changeSpeed: 50
+    - Key: 13
+      Value:
+        boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
+        boxColliderSize: {x: 0.2, y: 0.8602528, z: 0.3019529}
+        changeSpeed: 50
+    - Key: 14
+      Value:
+        boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
+        boxColliderSize: {x: 0.2, y: 0.8602528, z: 0.3019529}
+        changeSpeed: 50
+    - Key: 19
+      Value:
+        boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
+        boxColliderSize: {x: 0.2, y: 0.8602528, z: 0.3019529}
+        changeSpeed: 50
+    - Key: 23
+      Value:
+        boxColliderCenter: {x: 0, y: 0, z: 0.04335566}
+        boxColliderSize: {x: 0.2, y: 0.4500484, z: 0.612847}
+        changeSpeed: 50
+    - Key: 30
+      Value:
+        boxColliderCenter: {x: 0, y: 0, z: 0.04335566}
+        boxColliderSize: {x: 0.2, y: 0.4500484, z: 0.612847}
+        changeSpeed: 50
+    - Key: 31
+      Value:
+        boxColliderCenter: {x: 0, y: 0, z: 0.04335566}
+        boxColliderSize: {x: 0.2, y: 0.4500484, z: 0.612847}
+        changeSpeed: 50
+    - Key: 37
+      Value:
+        boxColliderCenter: {x: 0, y: 0.425, z: 0.04335566}
+        boxColliderSize: {x: 0.2, y: 0.8602528, z: 0.3019529}
+        changeSpeed: 50
