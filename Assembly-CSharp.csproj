@@ -137,6 +137,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\LaunchingAttackLogic\AttackLogic_Launch_ShoryukenDownSmash_Finish.cs" />
     <Compile Include="Assets\AngryGirls\UI\MenuButtonController.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\HitReaction_Behavior.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\SpawnFactory\Factories\BaseFactory.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_Prep_Shoryuken.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\HashManager.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUnityVersion.cs" />

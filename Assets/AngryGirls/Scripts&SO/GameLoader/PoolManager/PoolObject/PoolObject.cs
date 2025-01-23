@@ -6,7 +6,9 @@ namespace Angry_Girls
 {
     public abstract class PoolObject : MonoBehaviour, IDisposable
     {
-        [SerializeField][ShowOnly] private bool _isDisposed = false;
+        [SerializeField]
+        [ShowOnly]
+        private bool _isDisposed = false;
 
         // Do we need Dispose here?
         // ðåàëèçàöèÿ èíòåðôåéñà IDisposable.
@@ -15,10 +17,12 @@ namespace Angry_Girls
             // îñâîáîæäàåì íåóïðàâëÿåìûå ðåñóðñû
             Dispose(true);
         }
+
         private void OnEnable()
         {
             _isDisposed = false;
         }
+
         protected virtual void Dispose(bool disposing)
         {
             if (_isDisposed) return;
@@ -33,6 +37,7 @@ namespace Angry_Girls
             // îñâîáîæäàåì íåóïðàâëÿåìûå îáúåêòû
             _isDisposed = true;
         }
+
         protected abstract void ReturnToPool();
 
         public virtual void Init_PoolObject()
@@ -46,7 +51,6 @@ namespace Angry_Girls
             if (rigid != null)
             {
                 rigid.velocity = Vector3.zero;
-                //gameObject.GetComponent<Rigidbody>().rotation = Quaternion.identity;
                 rigid.angularVelocity = Vector3.zero;
             }
         }

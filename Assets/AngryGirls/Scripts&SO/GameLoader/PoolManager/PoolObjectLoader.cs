@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class PoolObjectLoader: MonoBehaviour
+    public class PoolObjectLoader : MonoBehaviour
     {
         public PoolObject InstantiatePrefab<T>(T objType, Vector3 position, Quaternion rotation)
         {
@@ -25,4 +25,4 @@ namespace Angry_Girls
             return GameLoader.Instance.spawnManager.vFXFactory.SpawnGameobject(poolObjectType, position, rotation).GetComponent<PoolObject>();
         }
     }
-} 
+}

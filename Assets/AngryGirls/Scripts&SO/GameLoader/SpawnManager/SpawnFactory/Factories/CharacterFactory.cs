@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -10,54 +12,16 @@ namespace Angry_Girls
         YBot_Yellow,
         YBot_Blue,
     }
-    public class CharacterFactory : MonoBehaviour, ICoreFactory<CharacterType> 
+    public class CharacterFactory : BaseFactory<CharacterType>
     {
-
-        [SerializeField] private GameObject yBotBluePrefab;
-        [SerializeField] private GameObject yBotOriginalrefab;
-        [SerializeField] private GameObject yBotGreenPrefab;
-        [SerializeField] private GameObject yBotYellowPrefab;
-        [SerializeField] private GameObject yBotRedPrefab;
-
-        private void Awake()
+        protected override Dictionary<CharacterType, Func<GameObject>> Prefabs => new Dictionary<CharacterType, Func<GameObject>>
         {
-            yBotBluePrefab = Resources.Load(CharacterType.YBot_Blue.ToString()) as GameObject;
-            yBotOriginalrefab = Resources.Load(CharacterType.YBot_Original.ToString()) as GameObject;
-            yBotRedPrefab = Resources.Load(CharacterType.YBot_Red.ToString()) as GameObject;
-            yBotGreenPrefab = Resources.Load(CharacterType.YBot_Green.ToString()) as GameObject;
-            yBotYellowPrefab = Resources.Load(CharacterType.YBot_Yellow.ToString()) as GameObject;
-        }
-
-        public PoolObject SpawnGameobject(CharacterType characterType, Vector3 position, Quaternion rotation)
-        {
-            switch (characterType)
-            {
-                case CharacterType.YBot_Original:
-                    {
-                        return (Instantiate(yBotOriginalrefab, position, rotation)).GetComponent<PoolObject>();
-                    }
-                case CharacterType.YBot_Yellow:
-                    {
-                        return (Instantiate(yBotYellowPrefab, position, rotation)).GetComponent<PoolObject>();
-                    }
-                case CharacterType.YBot_Green:
-                    {
-                        return (Instantiate(yBotGreenPrefab, position, rotation)).GetComponent<PoolObject>();
-                    }
-                case CharacterType.YBot_Red:
-                    {
-                        return (Instantiate(yBotRedPrefab, position, rotation)).GetComponent<PoolObject>();
-                    }
-                case CharacterType.YBot_Blue:
-                    {
-                        return (Instantiate(yBotBluePrefab, position, rotation)).GetComponent<PoolObject>();
-                    }
-                default:  //Интересно, как заткнуть эту дыру грамотно....
-                    {
-                        return null;
-                    }
-            }
-        }
+            { CharacterType.YBot_Original, () => Resources.Load(CharacterType.YBot_Original.ToString()) as GameObject },
+            { CharacterType.YBot_Yellow, () => Resources.Load(CharacterType.YBot_Yellow.ToString()) as GameObject },
+            { CharacterType.YBot_Green, () => Resources.Load(CharacterType.YBot_Green.ToString()) as GameObject },
+            { CharacterType.YBot_Red, () => Resources.Load(CharacterType.YBot_Red.ToString()) as GameObject },
+            { CharacterType.YBot_Blue, () => Resources.Load(CharacterType.YBot_Blue.ToString()) as GameObject }
+        };
     }
 
 }

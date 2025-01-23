@@ -14,7 +14,7 @@ namespace Angry_Girls
         public SerializedDictionary<VFX_Type, List<PoolObject>> vfxPoolDictionary = new SerializedDictionary<VFX_Type, List<PoolObject>>();
 
         #region SetupDictionary
-        private void SetUpDictionary<T>(Dictionary<T,List<PoolObject>> poolDictionary)
+        private void SetUpDictionary<T>(Dictionary<T, List<PoolObject>> poolDictionary)
         {
             T[] arr = Enum.GetValues(typeof(T)) as T[];
 
@@ -29,9 +29,9 @@ namespace Angry_Girls
         #endregion
 
         #region GetObjectFromPool
-        public PoolObject GetObject<T>(T objType, Dictionary<T, List<PoolObject>> poolDictionary,  Vector3 position, Quaternion rotation)
+        public PoolObject GetObject<T>(T objType, Dictionary<T, List<PoolObject>> poolDictionary, Vector3 position, Quaternion rotation)
         {
-                return ObjectGetter(poolDictionary, objType, position, rotation);
+            return ObjectGetter(poolDictionary, objType, position, rotation);
         }
 
         private PoolObject ObjectGetter<T>(Dictionary<T, List<PoolObject>> poolDictionary, T objType, Vector3 position, Quaternion rotation)
@@ -41,7 +41,7 @@ namespace Angry_Girls
                 SetUpDictionary(poolDictionary);
             }
 
-             List<PoolObject> list = poolDictionary[objType];
+            List<PoolObject> list = poolDictionary[objType];
 
             if (list.Count > 0)
             {
