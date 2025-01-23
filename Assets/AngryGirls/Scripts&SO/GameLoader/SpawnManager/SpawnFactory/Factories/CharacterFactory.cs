@@ -21,7 +21,7 @@ namespace Angry_Girls
             { CharacterType.YBot_Yellow, () => Resources.Load(CharacterType.YBot_Yellow.ToString()) as GameObject },
             { CharacterType.YBot_Green, () => Resources.Load(CharacterType.YBot_Green.ToString()) as GameObject },
             { CharacterType.YBot_Red, () => Resources.Load(CharacterType.YBot_Red.ToString()) as GameObject },
-            { CharacterType.YBot_Blue, () => Resources.Load(CharacterType.YBot_Blue.ToString()) as GameObject }
+            { CharacterType.YBot_Blue, () => Resources.Load(CharacterType.YBot_Blue.ToString()) as GameObject },
         };
     }
 }
