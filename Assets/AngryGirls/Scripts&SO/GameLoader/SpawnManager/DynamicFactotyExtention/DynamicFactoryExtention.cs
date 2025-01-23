@@ -159,91 +159,48 @@ using UnityEngine;
 
             // 1. Generate code for new method
             string newMethodCode = $@"
-        private PoolObject Instantiate{newFactoryName}({newEnumName} objType, Vector3 position, Quaternion rotation)
-        {{
-            return GameLoader.Instance.spawnManager.{newFactoryName}.SpawnGameobject(objType, position, rotation).GetComponent<PoolObject>();
-        }}
-    ";
+    private PoolObject Instantiate{newFactoryName}({newEnumName} objType, Vector3 position, Quaternion rotation)
+    {{
+        return GameLoader.Instance.spawnManager.{newFactoryName}.SpawnGameobject(objType, position, rotation).GetComponent<PoolObject>();
+    }}
+";
 
-            // 2. Find the insertion point (just before the last "}")
-            int insertionPoint = poolObjectLoaderCode.LastIndexOf("}");
-
-            // 3. Check for method duplication
-            if (poolObjectLoaderCode.Contains($"Instantiate{newFactoryName}"))
+            // 2. Find the insertion point for the new method (before the last "}")
+            int classClosingBraceIndex = poolObjectLoaderCode.LastIndexOf("}");
+            if (classClosingBraceIndex == -1)
             {
-                Debug.LogWarning($"Method Instantiate{newFactoryName} already exists in PoolObjectLoader. Skipping insertion.");
+                Debug.LogError("Couldn't find closing brace '}' for the class.");
                 return;
             }
 
-            // 4. Insert new method
-            poolObjectLoaderCode = poolObjectLoaderCode.Insert(insertionPoint, newMethodCode);
-
-            // 5. Find the switch statement and insert new case
-            int switchCaseIndex = poolObjectLoaderCode.IndexOf("objType switch");
-            if (switchCaseIndex == -1)
+            // Find the second-to-last closing brace (assuming it's the one before the class closing brace)
+            int secondToLastClosingBraceIndex = poolObjectLoaderCode.LastIndexOf("}", classClosingBraceIndex - 1);
+            if (secondToLastClosingBraceIndex == -1)
             {
-                Debug.LogError("objType switch");
+                Debug.LogError("Couldn't find second-to-last closing brace '}' for the class.");
                 return;
             }
 
-            int switchBodyStartIndex = poolObjectLoaderCode.IndexOf("{", switchCaseIndex) + 1;
-            if (switchBodyStartIndex == 0)
+            poolObjectLoaderCode = poolObjectLoaderCode.Insert(secondToLastClosingBraceIndex, newMethodCode);
+
+            // 3. Find the switch statement and insert new case (before "_ => throw")
+            int switchDefaultIndex = poolObjectLoaderCode.IndexOf("_ => throw");
+            if (switchDefaultIndex == -1)
             {
-                Debug.LogError("Cant find switchBodyStartIndex in " + poolObjectLoaderPath);
+                Debug.LogError("'_ => throw' not found in switch statement.");
                 return;
             }
-
-
-            int caseEndIndex = -1;
-            int tempIndex = switchBodyStartIndex;
-            while (true)
-            {
-
-                tempIndex = poolObjectLoaderCode.IndexOf("case", tempIndex);
-
-                if (tempIndex == -1)
-                {
-                    break;
-                }
-
-                caseEndIndex = poolObjectLoaderCode.IndexOf("=>", tempIndex);
-                if (caseEndIndex == -1)
-                {
-                    tempIndex = poolObjectLoaderCode.IndexOf("case", tempIndex + 1);
-
-                }
-                else
-                {
-                    tempIndex = caseEndIndex + 1;
-                }
-
-            }
-
-            if (caseEndIndex == -1)
-            {
-                caseEndIndex = poolObjectLoaderCode.IndexOf("default", switchBodyStartIndex);
-
-                if (caseEndIndex == -1)
-                {
-                    caseEndIndex = poolObjectLoaderCode.IndexOf("}", switchBodyStartIndex);
-                    if (caseEndIndex == -1)
-                    {
-                        Debug.LogError("Cant find case end in switch(objType) in PoolObjectLoader");
-                        return;
-                    }
-                }
-
-            }
-
 
             string newSwitchCase = $@"
-                 {newEnumName} {newEnumName.ToLower()}Type => Instantiate{newFactoryName}({newEnumName.ToLower()}Type, position, rotation),
-            ";
-            poolObjectLoaderCode = poolObjectLoaderCode.Insert(caseEndIndex, newSwitchCase);
+        {newEnumName} {newEnumName.ToLower()}Type => Instantiate{newFactoryName}({newEnumName.ToLower()}Type, position, rotation),
+    ";
+
+            poolObjectLoaderCode = poolObjectLoaderCode.Insert(switchDefaultIndex, newSwitchCase);
 
             File.WriteAllText(poolObjectLoaderPath, poolObjectLoaderCode);
             AssetDatabase.Refresh();
         }
+
 
         private string FindScriptPath(string className)
         {
