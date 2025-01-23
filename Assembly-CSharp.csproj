@@ -128,6 +128,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\DeathBehavior.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\CharacterManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\LaunchingAttackLogic\AttackLogic_Launch_SwordAttack.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\DynamicFactotyExtention\DynamicFactoryExtention.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolObjectLoader.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Mediator\IMediator.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\Attack_Fininsh_Behavior.cs" />
