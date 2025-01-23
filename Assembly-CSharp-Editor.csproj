@@ -65,6 +65,7 @@
     <Compile Include="Assets\AngryGirls\Helpers\LookAtPoint\Editor\LookAtPointEditor.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ShowOnlyAttribute\Editor\ShowOnlyDrawer.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LayerAdder\Editor\LayerChangerEditor.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\FactoryExtention\Editor\FactoryExtentionEditor.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\MaterialChaner\Editor\MaterialChangerEditor.cs" />
   </ItemGroup>
   <ItemGroup>

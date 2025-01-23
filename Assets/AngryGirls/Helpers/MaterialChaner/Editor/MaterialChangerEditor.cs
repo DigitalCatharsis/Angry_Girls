@@ -26,35 +26,13 @@ namespace Angry_Girls
 
             MaterialChanger changer = (MaterialChanger)target;
 
-            //Simple Material Changer
-
-            /*EditorGUILayout.Space();
-            GUILayout.BeginVertical("box");
-            EditorGUILayout.Space();
-            EditorGUILayout.HelpBox("Use this if character only has 1 material", MessageType.Info);
-            EditorGUILayout.Space();
-            EditorGUILayout.PropertyField(material);
-            EditorGUILayout.Space();
-            if (GUILayout.Button("Change Material"))
-            {
-                changer.ChangeMaterial();
-            }
-            EditorGUILayout.Space();
-            GUILayout.EndVertical();
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();*/
-
-            // Complext Material Changer
-
             EditorGUILayout.Space();
 
             GUILayout.BeginVertical("box");
 
             EditorGUILayout.Space();
 
-            //EditorGUILayout.HelpBox("Use this if character has multiple materials", MessageType.Info);
-            //EditorGUILayout.Space();
+
 
             if (GUILayout.Button("Identify Current Materials"))
             {

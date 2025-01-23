@@ -63,7 +63,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\LaunchingAttackLogic\AttackLogic_Launch_SendFireball_Front.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\BoxColliderUpdaters\BoxColliderUpdater_Data.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\AlternateAttack_Behavior_Airboned.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\SpawnFactory\Factories\CharacterFactory.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\MaterialChaner\MaterialChanger.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\UIManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\BlockingManager.cs" />
@@ -113,6 +112,8 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\GameLoader.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUtils.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\StatesContainer.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\FactoryExtention\FactoryExtention.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\SpawnFactory\Factories\Factories.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\CameraSizer.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponentMediator.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ColorDebugLog\ColorDebugLog.cs" />
@@ -145,7 +146,6 @@
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
     <Compile Include="Assets\FST\DemoScripts\DemoAnimationSelector.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackAbilities\AttackAbility.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\SpawnFactory\Factories\VFXFactory.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModulePhysics.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\DamageDetector.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\VFX.cs" />
