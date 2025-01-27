@@ -68,7 +68,8 @@ namespace Angry_Girls
                 var projectile = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(
                     vfx_Type: control.characterSettings.AttackAbility_Alternate.AttackVFX.GetComponent<VFX>().GetVFXType(),
                     control.projectileSpawnTransform.position,
-                    Quaternion.Euler(angles[i]));
+                    Quaternion.Euler(angles[i]),
+                    owner: control.gameObject);
 
                 //set final rotation value 
                 var finalRotationDegree = _finalProjectileRotation;
@@ -84,16 +85,7 @@ namespace Angry_Girls
                 projectile.transform.DORotate(endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * projectile.transform.forward.z), duration: moveDuration, mode: RotateMode.Fast);
 
                 //init and run
-                projectile.GetComponent<VFX>().InitAndRunVFX(
-                    timeToLive: control.characterSettings.AttackAbility_Alternate.timeToLive,
-                    isTimeToLiveIsNormilizedTime: control.characterSettings.AttackAbility_Alternate.isTimeToLiveIsNormilizedTime,
-                    destroyOnCollision: control.characterSettings.AttackAbility_Alternate.destroyOnCollision,
-                    destroyOnCharacterCollision: control.characterSettings.AttackAbility_Alternate.destroyOnCharacterCollision,
-                    damage: control.characterSettings.AttackAbility_Alternate.attackDamage,
-                    enableCollider: control.characterSettings.AttackAbility_Alternate.enableCollider,
-                    enableTrigger: control.characterSettings.AttackAbility_Alternate.enableTrigger,
-                    owner: control.gameObject
-                    );
+                projectile.GetComponent<VFX>().InitAndRunVFX_ByAbility(control.characterSettings.AttackAbility_Alternate, control);
             }
         }
     }

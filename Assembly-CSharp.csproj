@@ -107,7 +107,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\OverlapChecker.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleAudio.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolObject\PoolObject.cs" />
-    <Compile Include="Assets\AngryGirls\Helpers\Examples\MediatorExample.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CollisionDetection.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CharacterLauncher.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\GameLoader.cs" />

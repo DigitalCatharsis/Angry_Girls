@@ -1,10 +1,8 @@
-using TestNameSpace;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Angry_Girls
 {
-    public class GroundDetector : SubComponent<UnitLaunch_EventNames>
+    public class GroundDetector : SubComponent
     {
         [Header("Setup")]
         [SerializeField] private float _collidingBlockDistance;

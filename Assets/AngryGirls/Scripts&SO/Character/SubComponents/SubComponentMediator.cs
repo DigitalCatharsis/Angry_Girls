@@ -1,11 +1,9 @@
-using System;
 using UnityEngine;
 
 namespace Angry_Girls
 {
-    public enum UnitLaunch_EventNames
+    public enum Subcomponents
     {
-        Launch_Unit,
     }
 
     public enum NotifyContact_EventNames
@@ -24,7 +22,7 @@ namespace Angry_Girls
         DamageRecived
     }
 
-    public class SubComponentMediator : MonoBehaviour, IMediator<UnitLaunch_EventNames>
+    public class SubComponentMediator : MonoBehaviour/*, IMediator<UnitLaunch_EventNames>*/
     {
         private CControl _control;
         private AnimationProcessor _animationProcessor;
@@ -41,6 +39,7 @@ namespace Angry_Girls
 
         private void InitComponents()
         {
+            _control = GetComponentInParent<CControl>();
             _groundDetector = GetComponentInChildren<GroundDetector>();
             _animationProcessor = GetComponentInChildren<AnimationProcessor>();
             _collisionSpheres = GetComponentInChildren<CollisionSpheres>();
@@ -50,8 +49,19 @@ namespace Angry_Girls
         }
 
         //replace? Todo:
-        public void Notify(object sender, UnitLaunch_EventNames eventName)
+        public void Notify_DamageTaken(object sender, VFX vFX, Collider triggerCollider)
         {
+            _control.ApplyKnockback(triggerCollider.gameObject, vFX.projectileKnockBack);
+            _control.UpdateHealth(-vFX.projectileDamage);
+            GameLoader.Instance.UIManager.UpdateHealthBarValueAndVision(_control);
+            GameLoader.Instance.VFXManager.ShowDamageNumbers(triggerCollider, _control, vFX.projectileDamage);
+            GameLoader.Instance.audioManager.PlayRandomSound(AudioSourceType.CharacterHit);
+        }
+
+        public void Notify_Dead(object sender, Subcomponents eventName)
+        {
+            _control.isDead = true;
+            GameLoader.Instance.UIManager.RemoveHealthBar(_control);
         }
 
         public void Notify(object sender, NotifyContact_EventNames eventName, Collider collider)

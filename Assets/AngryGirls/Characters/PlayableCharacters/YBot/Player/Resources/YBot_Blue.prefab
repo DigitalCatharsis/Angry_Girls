@@ -120,6 +120,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
+      propertyPath: _currentHealth
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
       propertyPath: characterSettings
       value: 
       objectReference: {fileID: 11400000, guid: 28afea81c95372d4fb753c0287980f6c,

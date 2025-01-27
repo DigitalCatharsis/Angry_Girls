@@ -6,7 +6,7 @@ using UnityEngine.Rendering;
 
 namespace Angry_Girls
 {
-    public class AnimationProcessor : SubComponent<UnitLaunch_EventNames>
+    public class AnimationProcessor : SubComponent
     {
         public override void OnComponentEnable()
         {

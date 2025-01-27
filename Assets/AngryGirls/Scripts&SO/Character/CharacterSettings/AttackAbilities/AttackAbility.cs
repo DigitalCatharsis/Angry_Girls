@@ -19,7 +19,9 @@ namespace Angry_Girls
         [Header("Attack")]
         public float attackDamage = 25f;
         [Space(5)]
-        public float attackTimeDuration = 3f;
+        public float attackTimeDuration = 3f; [Space(5)]
+        [Header("Knockback")]
+        public float knockback = 1f;
         //public bool useAnimationNormalizedTimeDuration = false;
 
         [Space(5)]

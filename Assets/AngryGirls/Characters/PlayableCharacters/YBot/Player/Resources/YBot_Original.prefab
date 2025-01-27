@@ -1098,7 +1098,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isDisposed: 0
   _characterType: 0
-  currentHealth: 0
+  _currentHealth: 100
   healthSlider: {fileID: 0}
   isLanding: 0
   isGrounded: 0

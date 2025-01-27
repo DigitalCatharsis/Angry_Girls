@@ -29,17 +29,13 @@ namespace Angry_Girls
 
         private void InitHealthBar(CControl control)
         {
-            control.healthSlider.maxValue = control.currentHealth;
+            control.healthSlider.maxValue = control.CurrentHealth;
             UpdateHealthBarValueAndVision(control);
         }
 
         public void UpdateHealthBarValueAndVision(CControl control)
         {
-            control.healthSlider.value = control.currentHealth;
-            if (control.currentHealth <= 0)
-            {
-                _healtBar_Dict[control].gameObject.SetActive(false);
-            }
+            control.healthSlider.value = control.CurrentHealth;
         }
 
         public void ShowGameoverUI( )

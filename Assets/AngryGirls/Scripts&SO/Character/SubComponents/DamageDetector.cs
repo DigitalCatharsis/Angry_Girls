@@ -1,9 +1,10 @@
 using System.Drawing;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Angry_Girls
 {
-    public class DamageHandler : SubComponent<UnitLaunch_EventNames>
+    public class DamageHandler : SubComponent
     {
         private bool _isdead = false;
         public override void OnComponentEnable()
@@ -34,52 +35,38 @@ namespace Angry_Girls
             //aplly damage if no owner (damages everyone)
             if (vfx.vfxOwner == null && vfx.projectileDamage != 0)
             {
-                OnDamageTaken(vfx.projectileDamage, triggerCollider, vfx);
+                control.subComponentMediator.Notify_DamageTaken(this, vfx, triggerCollider);
             }
 
-            //no team fire
-            if (vfx.vfxOwner.GetComponent<CControl>().playerOrAi == control.playerOrAi)
+            if (vfx.vfxOwner.GetComponent<CControl>() == null | vfx.vfxOwner.GetComponent<CControl>().playerOrAi == control.playerOrAi)
             {
                 return;
             }
             else
             {
-                OnDamageTaken(vfx.projectileDamage, triggerCollider, vfx);
+                control.subComponentMediator.Notify_DamageTaken(this, vfx, triggerCollider);
             }
 
             //are we dead?
-            if (control.currentHealth <= 0)
+            if (control.CurrentHealth <= 0)
             {
                 control.isDead = true;
                 return;
             }
 
             //should set bool for hit animation
-            ColorDebugLog.Log(control.name + " has been hit by " + vfx.vfxOwner.name + " || " + vfx.GetVFXType().ToString() + " || " + "Damage: " + vfx.projectileDamage.ToString(), System.Drawing.KnownColor.Aquamarine );
+            ColorDebugLog.Log(control.name + " has been hit by " + vfx.vfxOwner.name + " || " + vfx.GetVFXType().ToString() + " || " + "Damage: " + vfx.projectileDamage.ToString(), System.Drawing.KnownColor.Aquamarine);
             control.unitGotHit = true;
         }
 
-        private void OnDamageTaken(float damage, Collider triggerCollider, VFX vfx)
-        {
-            control.ApplyKnockback(triggerCollider.gameObject , 1);
-            control.currentHealth -= damage;
-            GameLoader.Instance.UIManager.UpdateHealthBarValueAndVision(control);
-
-            var contactpoint = triggerCollider.ClosestPoint(transform.position);
-
-            var previewVfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_TestOnHitEffect, contactpoint, Quaternion.identity);
-            previewVfx.GetComponent<VFX>().InitAndRunVFX(1, false, false, false, damage, false, false, control.gameObject);
-
-            GameLoader.Instance.audioManager.PlayRandomSound(AudioSourceType.CharacterHit);
-        }
-
         public void SetParamsAfterDeath()
-        {   
+        {
+            ColorDebugLog.Log($"{control.name} called death", KnownColor.Yellow);
+
             control.FinishTurn(2);
             control.rigidBody.useGravity = true;
             control.rigidBody.isKinematic = false;
 
-            ColorDebugLog.Log("Control.name called death", KnownColor.Yellow);
 
             var animator = control.wingsTransform.GetComponentInChildren<Animator>();
             if (animator != null)

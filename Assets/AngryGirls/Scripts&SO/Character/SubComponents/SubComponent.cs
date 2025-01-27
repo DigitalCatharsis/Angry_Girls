@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public abstract class SubComponent<T> : BaseMediatorComponent<T> where T : Enum
+    public abstract class SubComponent : MonoBehaviour
     {
         public CControl control;
         public abstract void OnAwake();

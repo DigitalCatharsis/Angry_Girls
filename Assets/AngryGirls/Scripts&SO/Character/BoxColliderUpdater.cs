@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class BoxColliderUpdater : SubComponent<UnitLaunch_EventNames>
+    public class BoxColliderUpdater : SubComponent
     {
         public bool isUpdatingSpheres = false;
         public bool isUpdateColliderCondition = false;

@@ -23,8 +23,9 @@ namespace Angry_Girls
         [SerializeField] private CharacterType _characterType;
 
         [Header("Health")]
-        public float currentHealth;
+        [SerializeField] private float _currentHealth = 100f;
         public Slider healthSlider;
+        public float CurrentHealth => _currentHealth;
 
         public bool isLanding = false;
         public bool isGrounded = false;
@@ -65,6 +66,11 @@ namespace Angry_Girls
         [Header("Weapon")]
         [SerializeReference]
         public Transform weaponHolder;
+
+        public void UpdateHealth(float value)
+        {
+            _currentHealth += value;
+        }
 
         public AttackAbilityLogic Get_AttackFinish_AttackAbilityLogic()
         {
@@ -137,6 +143,7 @@ namespace Angry_Girls
             //check for calls. Has been fixed, but to be sure
             StartCoroutine(ExecuteFinishTurnTimer(finishAttackTimer));
         }
+
         private IEnumerator ExecuteFinishTurnTimer(float timeToCheck)
         {
             var time = Time.deltaTime;
@@ -154,10 +161,13 @@ namespace Angry_Girls
 
         public void ApplyKnockback(GameObject opponent, float knockbackForce)
         {
-            if (rigidBody.velocity != Vector3.zero)
+            if (rigidBody.velocity.z != 0)
             {
+                //ColorDebugLog.Log("Denied knockback", KnownColor.Orange);
                 return;
             }
+            //ColorDebugLog.Log("Applied knockback", KnownColor.Green);
+
             var direction = transform.position - opponent.transform.position;
 
             // Проверить, что объекты не находятся в одной точке

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class BlockingManager : SubComponent<UnitLaunch_EventNames>
+    public class BlockingManager : SubComponent
     {
         [Header("Setup")]
         [SerializeField] private float _frontBlocking_Distance = 0.125f;

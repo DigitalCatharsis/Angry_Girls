@@ -10,6 +10,6 @@ namespace Angry_Girls
     // на эти события  и передавать исполнение другим компонентам.
     public interface IMediator<T> where T : Enum
     {
-        public void Notify(object sender, T eventName);
+        //public void Notify(object sender, T eventName);
     }
 }

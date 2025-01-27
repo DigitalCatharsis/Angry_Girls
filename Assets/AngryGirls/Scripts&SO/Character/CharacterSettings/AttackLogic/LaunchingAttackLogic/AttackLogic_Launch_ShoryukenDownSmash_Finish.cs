@@ -10,8 +10,8 @@ namespace Angry_Girls
             control.isAttacking = true;
             control.rigidBody.velocity = Vector3.zero;
 
-            var _vfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Shouryken ,control.transform.position, Quaternion.identity);
-            _vfx.GetComponent<VFX>().InitAndRunVFX(1, false, false,false, control.characterSettings.AttackAbility_Launch.attackDamage, false, true, owner: control.gameObject);
+            var _vfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Shouryken ,control.transform.position, Quaternion.identity, owner: control.gameObject);
+            _vfx.GetComponent<VFX>().InitAndRunVFX_ByCustom(1, false, false,false, control.characterSettings.AttackAbility_Launch.attackDamage, knockbackValue: control.characterSettings.AttackAbility_Launch.knockback, false, true, owner: control.gameObject);
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)

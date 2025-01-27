@@ -1,5 +1,6 @@
+using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -35,44 +36,6 @@ namespace Angry_Girls
             vFX.Dispose();
         }
 
-        public GameObject SpawnVFX(
-            Transform parentsTransform, 
-            VFX_Type vfx_Type, 
-            Color VFXColor, 
-            Vector3 spawnPosition, 
-            Quaternion spawnRotation, 
-            float timeToLive,
-            bool isTimeToLiveIsNormilizedTime,
-            bool destroyOnCollision,
-            bool destroyOnCharacterCollision,
-            float VFXDamage, 
-            bool enableCollider = false, 
-            bool enableTrigger = false,
-            GameObject owner = null,
-            bool setAsOwner = false
-            )
-        {
-            //Spawn (taking from pool)
-            var poolManager = GameLoader.Instance.poolManager;
-            var vfx = poolManager.GetObject(vfx_Type, poolManager.vfxPoolDictionary, spawnPosition, spawnRotation);
-
-            //Set Color
-            if (vfx.GetComponentInChildren<VisualEffect>() != null)
-            {
-                vfx.GetComponentInChildren<VisualEffect>().SetVector4("Color", VFXColor);
-            }
-
-            if (setAsOwner)
-            {
-                //set parent and position
-                vfx.transform.parent = owner.transform;
-            }
-
-            //Init and run VFX
-            GetComponent<VFX>().InitAndRunVFX(timeToLive,isTimeToLiveIsNormilizedTime,destroyOnCollision, destroyOnCharacterCollision,VFXDamage, enableCollider, enableTrigger, owner: owner);
-            return vfx.gameObject;
-        }
-
         public GameObject SpawnVFX(CControl control, VFX_Type vfx_Type, bool setAsOwner = false)
         {
             //spawn 
@@ -97,41 +60,43 @@ namespace Angry_Girls
             if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.AlternatePhase)
             {
                 var AlternateAbility = control.characterSettings.AttackAbility_Alternate;
-                vfxComponent.InitAndRunVFX(
-                    AlternateAbility.timeToLive, 
-                    AlternateAbility.isTimeToLiveIsNormilizedTime, 
-                    AlternateAbility.destroyOnCollision, 
-                    AlternateAbility.destroyOnCharacterCollision, 
-                    AlternateAbility.attackDamage,
-                    AlternateAbility.enableCollider, 
-                    AlternateAbility.enableTrigger, 
-                    owner: control.gameObject
-                    );
+                vfxComponent.InitAndRunVFX_ByAbility(AlternateAbility, control);
             }
             else
             {
                 var launchingAbility = control.characterSettings.AttackAbility_Launch;
-                vfxComponent.InitAndRunVFX(
-                    launchingAbility.timeToLive, 
-                    launchingAbility.isTimeToLiveIsNormilizedTime,
-                    launchingAbility.destroyOnCollision,
-                    launchingAbility.destroyOnCharacterCollision,
-                    launchingAbility.attackDamage,
-                    launchingAbility.enableCollider, 
-                    launchingAbility.enableTrigger,
-                    owner: control.gameObject
-                    );
-            }           
+                vfxComponent.InitAndRunVFX_ByAbility(launchingAbility, control);
+            }
 
             return vfx.gameObject;
         }
 
-        public GameObject SpawnVFX_AtPosition(VFX_Type vfx_Type, Vector3 spawnPosition, Quaternion spawnRotation)
+        public GameObject SpawnVFX_AtPosition(VFX_Type vfx_Type, Vector3 spawnPosition, Quaternion spawnRotation, GameObject owner)
         {
             //Spawn (taking from pool)
             var poolManager = GameLoader.Instance.poolManager;
             var vfx = poolManager.GetObject(vfx_Type, poolManager.vfxPoolDictionary, spawnPosition, spawnRotation);
             return vfx.gameObject;
+        }
+
+        public void ShowDamageNumbers(Collider triggerCollider, CControl control, float damage)
+        {
+            var contactpoint = triggerCollider.ClosestPoint(control.transform.position);
+
+            var previewVfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_TestOnHitEffect, contactpoint, Quaternion.identity, owner: control.gameObject).GetComponent<VFX>();
+            previewVfx.InitAndRunVFX_ByCustom(
+                timeToLive: 1,
+                isTimeToLiveIsNormilizedTime: false,
+                destroyOnCollision: false,
+                destroyOnCharacterCollision: false,
+                damage: damage,
+                knockbackValue: 0,
+                enableCollider: false,
+                enableTrigger: false,
+                owner: control.gameObject);
+
+            previewVfx.GetComponentInChildren<TextMeshPro>().text = damage.ToString();
+            previewVfx.transform.DOMove(new Vector3(previewVfx.transform.position.x, previewVfx.transform.position.y + 1, previewVfx.transform.position.z), 1);
         }
     }
 }

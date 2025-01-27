@@ -17,12 +17,12 @@ namespace Angry_Girls
     {
         public static SubComponentsController Instance;
         
-        private SubComponent<UnitLaunch_EventNames>[] _arrSubComponents;
+        private SubComponent[] _arrSubComponents;
         
         public void OnAwake()
         {
-            _arrSubComponents = new SubComponent<UnitLaunch_EventNames>[Enum.GetNames(typeof(SubComponentType)).Length];
-            _arrSubComponents = GetComponentsInChildren<SubComponent<UnitLaunch_EventNames>>();
+            _arrSubComponents = new SubComponent[Enum.GetNames(typeof(SubComponentType)).Length];
+            _arrSubComponents = GetComponentsInChildren<SubComponent>();
 
             var control = GetComponentInParent<CControl>();
             foreach (var component in _arrSubComponents)
