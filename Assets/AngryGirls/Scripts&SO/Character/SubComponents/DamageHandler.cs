@@ -1,4 +1,5 @@
 using System.Drawing;
+using UnityEditor.ShaderGraph;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -6,20 +7,12 @@ namespace Angry_Girls
 {
     public class DamageHandler : SubComponent
     {
-        private bool _isdead = false;
         public override void OnComponentEnable()
         {
 
         }
         public override void OnUpdate()
         {
-            if (_isdead) return;
-
-            if (control.isDead)
-            {
-                SetParamsAfterDeath();
-                _isdead = true;
-            }
         }
 
         public void CheckForDamage(Collider triggerCollider)
@@ -50,7 +43,7 @@ namespace Angry_Girls
             //are we dead?
             if (control.CurrentHealth <= 0)
             {
-                control.isDead = true;
+                control.subComponentMediator.Notify_Dead(this);
                 return;
             }
 
@@ -59,10 +52,10 @@ namespace Angry_Girls
             control.unitGotHit = true;
         }
 
-        public void SetParamsAfterDeath()
+        public void SetDeathParams()
         {
             ColorDebugLog.Log($"{control.name} called death", KnownColor.Yellow);
-
+            control.isDead = true;
             control.FinishTurn(2);
             control.rigidBody.useGravity = true;
             control.rigidBody.isKinematic = false;

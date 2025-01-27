@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Angry_Girls
 {
-    public class UIManager : MonoBehaviour
+    public class GameLogic_UIManager : MonoBehaviour
     {
         [SerializeField] private SerializedDictionary<CControl, Slider> _healtBar_Dict;
         [SerializeField] private GameObject gameOverUi;
@@ -25,6 +25,11 @@ namespace Angry_Girls
         public void RemoveHealthBar(CControl control)
         {
             _healtBar_Dict.Remove(control);
+        }       
+
+        public void DisableHealthBar(CControl control)
+        {
+            _healtBar_Dict[control].gameObject.SetActive(false);
         }
 
         private void InitHealthBar(CControl control)
@@ -36,11 +41,6 @@ namespace Angry_Girls
         public void UpdateHealthBarValueAndVision(CControl control)
         {
             control.healthSlider.value = control.CurrentHealth;
-        }
-
-        public void ShowGameoverUI( )
-        {
-            gameOverUi.SetActive(true);
         }
 
         private void LateUpdate()
@@ -59,37 +59,9 @@ namespace Angry_Girls
 
             }
         }
-
-        public void RestartCurrentLevel()
+        public void ShowGameoverUI()
         {
-            StartCoroutine(KillAllTweensAndRestart());
-
-        }
-        public void BackToMainMenu()
-        {
-            StartCoroutine(KillAllTweensAnLoadLevel(0));
-
-        }
-
-        private IEnumerator KillAllTweensAndRestart()
-        {
-            var tweens = DOTween.PausedTweens() ?? new List<Tween>();
-            tweens.AddRange(DOTween.PlayingTweens());
-            for (int i = 0; i < tweens.Count; i++)
-                tweens[i]?.Kill();
-            yield return new WaitForEndOfFrame();
-
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-        private IEnumerator KillAllTweensAnLoadLevel(int levelIndex)
-        {
-            var tweens = DOTween.PausedTweens() ?? new List<Tween>();
-            tweens.AddRange(DOTween.PlayingTweens());
-            for (int i = 0; i < tweens.Count; i++)
-                tweens[i]?.Kill();
-            yield return new WaitForEndOfFrame();
-
-            SceneManager.LoadScene(levelIndex);
+            gameOverUi.SetActive(true);
         }
     }
 }

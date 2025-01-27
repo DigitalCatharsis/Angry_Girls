@@ -35,16 +35,7 @@ namespace Angry_Girls
 
             if (isUpdatingSpheres)
             {
-                //ColorDebugLog.Log(this.name + " triggers operation " + SubcomponentMediator_EventNames.Reposition_ColliderSpheres, System.Drawing.KnownColor.ControlLightLight);
-                control.subComponentMediator.Notify(this, NotifyCollision_EventNames.Character_Reposition_ColliderSpheres);
-
-                //if (control.subComponentProcessor.animationProcessor.isLanding)  //prevent bug when idle after catching corner of platform
-                //{
-                //    control.rigidBody.MovePosition(new Vector3(
-                //        0f,
-                //        control.subComponentProcessor.groundDetector.landingPosition.y,
-                //        this.transform.position.z));
-                //}
+                control.subComponentMediator.Notify_UpdatingColliderSpheres(this);
             }
         }
 

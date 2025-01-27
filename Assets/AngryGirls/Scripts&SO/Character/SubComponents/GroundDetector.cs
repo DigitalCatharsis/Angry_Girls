@@ -10,7 +10,6 @@ namespace Angry_Girls
         [Header("Debug")]
         //[SerializeField] private GameObject _ground;
         [ShowOnly] public Vector3 landingPosition = Vector3.zero;
-        public Vector3 bottomRaycastContactPoint;
 
         public override void OnComponentEnable()
         {
@@ -56,7 +55,7 @@ namespace Angry_Girls
                 foreach (var bottomSphere in control.collisionSpheresData.bottomSpheres)
                 {
                     var blockingObj = CollisionDetection.GetCollidingObject
-                        (control, bottomSphere.transform.position, -Vector3.up, _collidingBlockDistance, ref bottomRaycastContactPoint);
+                        (control, bottomSphere.transform.position, -Vector3.up, _collidingBlockDistance, ref control.bottomRaycastContactPoint);
 
                     if (blockingObj == null)
                     {
@@ -79,8 +78,8 @@ namespace Angry_Girls
 
                     landingPosition = new Vector3(
                         0f,
-                        bottomRaycastContactPoint.y,
-                        bottomRaycastContactPoint.z);
+                        control.bottomRaycastContactPoint.y,
+                        control.bottomRaycastContactPoint.z);
 
                     return true;
                 }

@@ -15,7 +15,7 @@ namespace Angry_Girls
         public StatesContainer statesContainer;
         public VFXManager VFXManager;
         public AudioManager audioManager;
-        public UIManager UIManager;
+        public GameLogic_UIManager gameLogic_UIManager;
         public AttackLogicContainer attackLogicContainer;
 
         public CameraManager cameraManager;
@@ -46,7 +46,7 @@ namespace Angry_Girls
             VFXManager = GetComponentInChildren<VFXManager>();
             statesContainer = GetComponentInChildren<StatesContainer>();
             audioManager = GetComponentInChildren<AudioManager>();
-            UIManager = GetComponentInChildren<UIManager>();
+            gameLogic_UIManager = GetComponentInChildren<GameLogic_UIManager>();
             attackLogicContainer = GetComponentInChildren<AttackLogicContainer>();
             gameLogic = GetComponentInChildren<GameLogic>();
             cameraSizer = GetComponentInChildren<CameraSizer>();

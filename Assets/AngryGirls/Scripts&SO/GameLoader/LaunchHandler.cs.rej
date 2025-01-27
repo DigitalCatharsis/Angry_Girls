@@ -1,9 +1,0 @@
-diff a/Assets/AngryGirls/Scripts&SO/GameLoader/LaunchHandler.cs b/Assets/AngryGirls/Scripts&SO/GameLoader/LaunchHandler.cs	(rejected hunks)
-@@ -73,6 +73,7 @@
-             //������
-             if (Input.GetMouseButtonDown(0) && _canPressAtCharacters)
-             {
-+                Debug.Log("CLICK!");
-                 Vector3 mousePosition = Input.mousePosition;
-                 Ray ray = Camera.main.ScreenPointToRay(mousePosition);
- 

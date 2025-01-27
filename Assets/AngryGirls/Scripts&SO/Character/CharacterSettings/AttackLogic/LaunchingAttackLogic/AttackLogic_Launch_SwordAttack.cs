@@ -61,9 +61,11 @@ namespace Angry_Girls
         {
             _rotationTween.Kill();
             control.transform.GetChild(0).rotation = _savedRotation;
-            if (control.subComponentMediator.Notify_GetBottomContactPoint(control) != Vector3.zero)
+
+
+            if (control.bottomRaycastContactPoint != Vector3.zero)
             {
-                control.transform.position = control.subComponentMediator.Notify_GetBottomContactPoint(control);
+                control.transform.position = control.bottomRaycastContactPoint;
             }
             control.isAttacking = false;
             _vfx.GetComponent<VFX>().Dispose();

@@ -8,7 +8,7 @@ public class GameLogic : MonoBehaviour
 
     public void ExecuteGameOver()
     {
-        GameLoader.Instance.UIManager.ShowGameoverUI();
+        GameLoader.Instance.gameLogic_UIManager.ShowGameoverUI();
         ColorDebugLog.Log("GAME OVER", KnownColor.Cyan);
     }
 }

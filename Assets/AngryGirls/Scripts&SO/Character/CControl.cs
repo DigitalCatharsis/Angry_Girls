@@ -53,6 +53,9 @@ namespace Angry_Girls
         [Space(10)]
         public CollisionSpheresData collisionSpheresData;
 
+        [Space(10)]
+        public Vector3 bottomRaycastContactPoint;
+
         [Header("Setup")]
         public PlayerOrAi playerOrAi;
         [Space(5)]
@@ -214,7 +217,7 @@ namespace Angry_Girls
                 return;
             }
 
-            subComponentMediator.Notify(this, NotifyContact_EventNames.CharacterCollider_Trigger_Enter, other);
+            subComponentMediator.Notify_CollissionCheck(this, other);
         }
 
         private void Update()
@@ -264,14 +267,14 @@ namespace Angry_Girls
             subComponentsController.OnComponentEnable();
 
             GameLoader.Instance.attackLogicContainer.SetCharacterAttackLogic(this);
-            GameLoader.Instance.UIManager.CreateHealthBar(this);
+            GameLoader.Instance.gameLogic_UIManager.CreateHealthBar(this);
         }
 
 
         //ObjectPooling
         protected override void Dispose(bool disposing)
         {
-            GameLoader.Instance.UIManager.RemoveHealthBar(this);
+            GameLoader.Instance.gameLogic_UIManager.RemoveHealthBar(this);
             base.Dispose(disposing);
         }
 
