@@ -219,7 +219,10 @@ namespace Angry_Girls
             //air
             if (control.characterSettings.unitType == UnitType.Air)
             {
-                if (CurrentPhase.LaunchingPhase == GameLoader.Instance.turnManager.CurrentPhase && !control.hasUsedAbility && !control.hasFinishedLaunchingTurn)
+                if (CurrentPhase.LaunchingPhase == GameLoader.Instance.turnManager.CurrentPhase 
+                    && control.playerOrAi == PlayerOrAi.Player
+                    && !control.hasUsedAbility 
+                    && !control.hasFinishedLaunchingTurn)
                 {
                     ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], transitionDuration: control.characterSettings.airbonedFlying_States.transitionDuration);
                 }
@@ -268,14 +271,16 @@ namespace Angry_Girls
                 }
 
             }
-
+             
 
             //CHECK IDLE
 
             //Exctra condition for an air unit
             if (control.characterSettings.unitType == UnitType.Air && !control.isAttacking)
             {
-                if (control.isGrounded || (!control.canUseAbility))
+                if (control.isGrounded 
+                    || (!control.canUseAbility) 
+                    || GameLoader.Instance.statesContainer.hitReaction_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
                 {
                     var idleState = control.characterSettings.idle_States[UnityEngine.Random.Range(0, control.characterSettings.idle_States.Count)];
                     ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.idle_Dictionary[idleState.animation], transitionDuration: idleState.transitionDuration);

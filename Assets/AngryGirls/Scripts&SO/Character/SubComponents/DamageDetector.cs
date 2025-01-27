@@ -1,3 +1,4 @@
+using System.Drawing;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -76,7 +77,16 @@ namespace Angry_Girls
         {   
             control.FinishTurn(2);
             control.rigidBody.useGravity = true;
-            //DeadBody
+            control.rigidBody.isKinematic = false;
+
+            ColorDebugLog.Log("Control.name called death", KnownColor.Yellow);
+
+            var animator = control.wingsTransform.GetComponentInChildren<Animator>();
+            if (animator != null)
+            {
+                animator.enabled = false;
+            }
+
             control.gameObject.layer = 12;
         }
 

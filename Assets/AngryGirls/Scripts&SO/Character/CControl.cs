@@ -59,6 +59,7 @@ namespace Angry_Girls
         [Space(5)]
         [Header("VFX")]
         public Transform projectileSpawnTransform;
+        public Transform wingsTransform;
         public UnityEngine.Color VFX_Color;
 
         [Header("Weapon")]
