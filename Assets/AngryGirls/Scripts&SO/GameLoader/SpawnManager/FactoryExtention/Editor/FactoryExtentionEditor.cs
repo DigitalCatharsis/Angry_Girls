@@ -1,3 +1,4 @@
+#if (UNITY_EDITOR) 
 using UnityEngine;
 using UnityEditor;
 
@@ -22,3 +23,5 @@ namespace Angry_Girls
         }
     }
 }
+
+#endif

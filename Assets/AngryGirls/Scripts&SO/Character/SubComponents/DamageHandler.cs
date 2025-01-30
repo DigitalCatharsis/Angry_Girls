@@ -1,7 +1,5 @@
 using System.Drawing;
-using UnityEditor.ShaderGraph;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace Angry_Girls
 {

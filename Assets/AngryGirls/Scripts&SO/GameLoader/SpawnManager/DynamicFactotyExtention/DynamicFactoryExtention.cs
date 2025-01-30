@@ -1,9 +1,8 @@
+#if (UNITY_EDITOR) 
+
 using UnityEngine;
 using UnityEditor;
 using System.IO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Angry_Girls
 {
@@ -226,3 +225,4 @@ using UnityEngine;
         }
     }
 }
+#endif

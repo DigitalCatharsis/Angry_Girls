@@ -1,3 +1,4 @@
+#if (UNITY_EDITOR) 
 using System;
 using System.IO;
 using System.Linq;
@@ -183,3 +184,4 @@ namespace Angry_Girls
         }
     }
 }
+#endif

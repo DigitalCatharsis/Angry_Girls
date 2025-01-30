@@ -343,7 +343,7 @@ GameObject:
   - component: {fileID: 65647000}
   - component: {fileID: 65647002}
   - component: {fileID: 65647001}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -366,7 +366,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00001907, y: 520.09094}
+  m_AnchoredPosition: {x: 0, y: 283.52}
   m_SizeDelta: {x: 1500, y: 425.0846}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &65647001
@@ -478,7 +478,7 @@ GameObject:
   - component: {fileID: 89277481}
   - component: {fileID: 89277480}
   - component: {fileID: 89277479}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Button_Restart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -549,8 +549,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1613998991}
-        m_TargetAssemblyTypeName: Angry_Girls.UIManager, Assembly-CSharp
+      - m_Target: {fileID: 459357624}
+        m_TargetAssemblyTypeName: Angry_Girls.GenericLevelMenuUI, Assembly-CSharp
         m_MethodName: RestartCurrentLevel
         m_Mode: 1
         m_Arguments:
@@ -617,7 +617,7 @@ GameObject:
   - component: {fileID: 149402468}
   - component: {fileID: 149402467}
   - component: {fileID: 149402466}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BackToMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -688,8 +688,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1613998991}
-        m_TargetAssemblyTypeName: Angry_Girls.UIManager, Assembly-CSharp
+      - m_Target: {fileID: 459357624}
+        m_TargetAssemblyTypeName: Angry_Girls.GenericLevelMenuUI, Assembly-CSharp
         m_MethodName: BackToMainMenu
         m_Mode: 1
         m_Arguments:
@@ -748,7 +748,7 @@ GameObject:
   m_Component:
   - component: {fileID: 206227225}
   - component: {fileID: 206227226}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Debug
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1310,7 +1310,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 385996289}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: __BUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1345,7 +1345,7 @@ GameObject:
   - component: {fileID: 391432962}
   - component: {fileID: 391432964}
   - component: {fileID: 391432963}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1604,7 +1604,7 @@ GameObject:
   - component: {fileID: 427565622}
   - component: {fileID: 427565624}
   - component: {fileID: 427565623}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1679,7 +1679,7 @@ GameObject:
   - component: {fileID: 447614918}
   - component: {fileID: 447614920}
   - component: {fileID: 447614919}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1702,7 +1702,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00001907, y: 520.09094}
+  m_AnchoredPosition: {x: 145, y: 287.4}
   m_SizeDelta: {x: 1500, y: 425.0846}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &447614919
@@ -1752,8 +1752,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 90.4
-  m_fontSizeBase: 90.4
+  m_fontSize: 41.36
+  m_fontSizeBase: 41.36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1815,7 +1815,7 @@ GameObject:
   - component: {fileID: 459357622}
   - component: {fileID: 459357621}
   - component: {fileID: 459357624}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1897,7 +1897,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 1599083949}
-  m_PlaneDistance: 100
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -1907,7 +1907,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &459357624
 MonoBehaviour:
@@ -1932,7 +1932,7 @@ GameObject:
   - component: {fileID: 485547024}
   - component: {fileID: 485547023}
   - component: {fileID: 485547022}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: EventSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2001,7 +2001,7 @@ GameObject:
   - component: {fileID: 496344866}
   - component: {fileID: 496344865}
   - component: {fileID: 496344864}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Restart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2072,8 +2072,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1613998991}
-        m_TargetAssemblyTypeName: Angry_Girls.UIManager, Assembly-CSharp
+      - m_Target: {fileID: 459357624}
+        m_TargetAssemblyTypeName: Angry_Girls.GenericLevelMenuUI, Assembly-CSharp
         m_MethodName: RestartCurrentLevel
         m_Mode: 1
         m_Arguments:
@@ -2342,7 +2342,7 @@ GameObject:
   - component: {fileID: 593947951}
   - component: {fileID: 593947953}
   - component: {fileID: 593947952}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2366,7 +2366,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1500, y: 1500}
+  m_SizeDelta: {x: 1207, y: 999.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &593947952
 MonoBehaviour:
@@ -2701,7 +2701,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 675413721}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Slide_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2741,7 +2741,7 @@ GameObject:
   - component: {fileID: 684534220}
   - component: {fileID: 684534222}
   - component: {fileID: 684534221}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2764,7 +2764,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -627}
+  m_AnchoredPosition: {x: 0, y: -440}
   m_SizeDelta: {x: 1125.8, y: 238.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &684534221
@@ -2875,7 +2875,7 @@ GameObject:
   - component: {fileID: 705799233}
   - component: {fileID: 705799235}
   - component: {fileID: 705799234}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3300,7 +3300,7 @@ GameObject:
   - component: {fileID: 824427949}
   - component: {fileID: 824427951}
   - component: {fileID: 824427950}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3546,7 +3546,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 929124923}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Slide_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3587,7 +3587,7 @@ GameObject:
   - component: {fileID: 937181695}
   - component: {fileID: 937181697}
   - component: {fileID: 937181696}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3719,7 +3719,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 937393767}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameOver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3735,7 +3735,7 @@ RectTransform:
   m_GameObject: {fileID: 937393766}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1374347221}
@@ -3889,7 +3889,7 @@ GameObject:
   - component: {fileID: 987801808}
   - component: {fileID: 987801807}
   - component: {fileID: 987801809}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4701,7 +4701,7 @@ GameObject:
   - component: {fileID: 1309562859}
   - component: {fileID: 1309562858}
   - component: {fileID: 1309562857}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4716,7 +4716,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1309562855}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4725,7 +4725,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 541, y: -674}
+  m_AnchoredPosition: {x: 556, y: -284}
   m_SizeDelta: {x: 287.19, y: 106.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1309562857
@@ -5296,7 +5296,7 @@ GameObject:
   - component: {fileID: 1369293650}
   - component: {fileID: 1369293652}
   - component: {fileID: 1369293651}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5430,7 +5430,7 @@ GameObject:
   - component: {fileID: 1374347221}
   - component: {fileID: 1374347223}
   - component: {fileID: 1374347222}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5630,7 +5630,7 @@ GameObject:
   - component: {fileID: 1470078786}
   - component: {fileID: 1470078788}
   - component: {fileID: 1470078787}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6950,18 +6950,6 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
---- !u!114 &1613998991 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1963108085314077142, guid: f357cbd9c7c57384d9adefa11c94295c,
-    type: 3}
-  m_PrefabInstance: {fileID: 2254117366917434766}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59b1bfe42e3473a40bfafdb0fe1da3e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1640448850
 GameObject:
   m_ObjectHideFlags: 0
@@ -7114,7 +7102,7 @@ GameObject:
   - component: {fileID: 1659317290}
   - component: {fileID: 1659317292}
   - component: {fileID: 1659317291}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7189,7 +7177,7 @@ GameObject:
   - component: {fileID: 1738422022}
   - component: {fileID: 1738422024}
   - component: {fileID: 1738422023}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7338,7 +7326,7 @@ GameObject:
   - component: {fileID: 1814042151}
   - component: {fileID: 1814042150}
   - component: {fileID: 1814042149}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7353,7 +7341,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1814042147}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7362,7 +7350,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 541, y: -668}
+  m_AnchoredPosition: {x: 388, y: -317}
   m_SizeDelta: {x: 289.01, y: 106.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1814042149
@@ -7726,7 +7714,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1894318979}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Slide_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7908,13 +7896,13 @@ GameObject:
   - component: {fileID: 1977836296}
   - component: {fileID: 1977836297}
   - component: {fileID: 1977836298}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: ExampleHowToPlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1977836296
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7935,7 +7923,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 940.84424, y: 599.1127}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1977836297
 CanvasRenderer:
@@ -7969,7 +7957,7 @@ GameObject:
   - component: {fileID: 2012114256}
   - component: {fileID: 2012114255}
   - component: {fileID: 2012114254}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7993,7 +7981,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 541, y: -671}
+  m_AnchoredPosition: {x: 541, y: -307}
   m_SizeDelta: {x: 289.01, y: 106.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2012114254
@@ -8218,7 +8206,7 @@ GameObject:
   - component: {fileID: 2047025292}
   - component: {fileID: 2047025294}
   - component: {fileID: 2047025293}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8352,7 +8340,7 @@ GameObject:
   - component: {fileID: 2049957040}
   - component: {fileID: 2049957042}
   - component: {fileID: 2049957041}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8375,7 +8363,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00001907, y: 520.09094}
+  m_AnchoredPosition: {x: 0, y: 315.71}
   m_SizeDelta: {x: 1500, y: 425.0846}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2049957041
