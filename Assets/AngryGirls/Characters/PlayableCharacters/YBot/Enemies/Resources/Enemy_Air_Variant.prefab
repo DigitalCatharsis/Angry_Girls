@@ -391,9 +391,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
+      propertyPath: _characterType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
       propertyPath: characterSettings
       value: 
-      objectReference: {fileID: 11400000, guid: 02aa6b36c76a8d7438cf83b50f435809,
+      objectReference: {fileID: 11400000, guid: 39a72c91194052d46a1d91ce975fbad1,
         type: 2}
     - target: {fileID: 4064820369690057526, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}

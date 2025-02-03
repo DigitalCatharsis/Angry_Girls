@@ -6,6 +6,7 @@ namespace Angry_Girls
 {
     public enum CharacterType
     {
+        NULL,
         YBot_Original,
         YBot_Red,
         YBot_Green,

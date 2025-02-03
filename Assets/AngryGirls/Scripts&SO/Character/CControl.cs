@@ -18,7 +18,7 @@ namespace Angry_Girls
         [Space(15)]
         [Header("Debug")]
         [Header("Pool object")]
-        [SerializeField] private CharacterType _characterType;
+        //[SerializeField] private CharacterType _characterType;
 
         [Header("Health")]
         [SerializeField] private float _currentHealth = 100f;
@@ -278,9 +278,9 @@ namespace Angry_Girls
 
         protected override void ReturnToPool()
         {
-            if (!GameLoader.Instance.poolManager.characterPoolDictionary[_characterType].Contains(this))
+            if (!GameLoader.Instance.poolManager.characterPoolDictionary[characterSettings.characterType].Contains(this))
             {
-                GameLoader.Instance.poolManager.AddObject(_characterType, GameLoader.Instance.poolManager.characterPoolDictionary, this);
+                GameLoader.Instance.poolManager.AddObject(characterSettings.characterType, GameLoader.Instance.poolManager.characterPoolDictionary, this);
             }
         }
     }

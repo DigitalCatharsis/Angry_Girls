@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Angry_Girls
 {
@@ -21,6 +22,8 @@ namespace Angry_Girls
         [Space(10)]
         [Header("Unit type")]
         public UnitType unitType;
+        public CharacterType characterType;
+        public Sprite portrait;
 
         [Space(5)]
         [Header("Speed and Force")]

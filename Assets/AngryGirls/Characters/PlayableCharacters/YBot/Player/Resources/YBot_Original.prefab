@@ -1097,7 +1097,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isDisposed: 0
-  _characterType: 0
+  _characterType: 1
   _currentHealth: 100
   healthSlider: {fileID: 0}
   isLanding: 0
@@ -1151,6 +1151,7 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
+  bottomRaycastContactPoint: {x: 0, y: 0, z: 0}
   playerOrAi: 0
   characterSettings: {fileID: 11400000, guid: 28afea81c95372d4fb753c0287980f6c, type: 2}
   projectileSpawnTransform: {fileID: 7260981478403319719}
@@ -1761,7 +1762,6 @@ MonoBehaviour:
   control: {fileID: 0}
   _collidingBlockDistance: 0.2
   landingPosition: {x: 0, y: 0, z: 0}
-  bottomRaycastContactPoint: {x: 0, y: 0, z: 0}
 --- !u!1 &4770912022852876395
 GameObject:
   m_ObjectHideFlags: 0

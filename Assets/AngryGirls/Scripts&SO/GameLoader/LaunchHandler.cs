@@ -1,3 +1,4 @@
+using AYellowpaper.SerializedCollections;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Angry_Girls
     public class LaunchHandler : MonoBehaviour
     {
         [Header("Setup")]
-        [SerializeField] private CharacterSelect characterSelectSO;
+        [SerializeField] private PlayerData characterSelectSO;
         [SerializeField] private CharacterLauncher _characterLauncher;
 
         [Space(10)]
@@ -26,7 +27,7 @@ namespace Angry_Girls
 
         private void LateUpdate()
         {
-            
+
         }
 
         private void Start()
@@ -40,13 +41,14 @@ namespace Angry_Girls
             //GameLoader.Instance.cameraManager.CameraFollowForRigidBody(_charactersToLaunchLeft[0].rigidBody);
         }
 
-        private List<CControl> SpawnAndGetCharacters(CharacterType[] selectedCharactersList)
+        private List<CControl> SpawnAndGetCharacters(SerializedDictionary<int, CharacterSettings> selectedCharactersList)
         {
             var charList = new List<CControl>();
-            for (var i = 0; i < selectedCharactersList.Count(); i++)
+
+            foreach (var character in selectedCharactersList)
             {
                 charList.Add(GameLoader.Instance.poolManager.GetObject<CharacterType>
-                    (selectedCharactersList[i], GameLoader.Instance.poolManager.characterPoolDictionary, Vector3.zero, Quaternion.identity).GetComponent<CControl>());
+                    (character.Value.characterType, GameLoader.Instance.poolManager.characterPoolDictionary, Vector3.zero, Quaternion.identity).GetComponent<CControl>());
             }
             return charList;
         }

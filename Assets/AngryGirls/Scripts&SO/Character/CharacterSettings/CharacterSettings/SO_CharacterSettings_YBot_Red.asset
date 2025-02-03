@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _notifyAboutNONEStates: 1
   unitType: 1
+  characterType: 2
+  portrait: {fileID: 21300000, guid: 6ced006bb16f0bd48880a97482788c43, type: 3}
   atHittingObstacle_Speed: {x: 0, y: -4, z: 0}
   groundAttackMovementSpeed: {x: 0, y: 0, z: 0}
   landingMovementSpeed: {x: 0, y: 0, z: 0}
