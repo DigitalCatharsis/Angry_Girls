@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Angry_Girls
@@ -10,6 +11,7 @@ namespace Angry_Girls
         [SerializeField] private GameObject currentTab;
         [SerializeField] private GameObject selectedCharactersGridTabPanel;
         [SerializeField] private GameObject avaibleCharactersGridTabPanel;
+        [SerializeField] private Button readyButton;
         [Space(10)]
         [SerializeField] private PlayerData _playerData;
         [Space(10)]
@@ -52,6 +54,7 @@ namespace Angry_Girls
             // Создаем экземпляр префаба
             var _go = Instantiate(_prefab);
 
+            _go.transform.localScale = Vector3.one * 0.85f;
             // Делаем его дочерним к avaibleCharactersGridTabPanel
             _go.transform.SetParent(GridTabPanel.transform, false);
             //_go.GetComponentInChildren<Button>().targetGraphic = null;
@@ -66,6 +69,28 @@ namespace Angry_Girls
                 var elem = _selectedCharactersHandlers[i];
                 elem.UpdateElement(_playerData.selectedCharacters, i); // Передаем массив и индекс
             }
+        }
+
+        private void Update()
+        {
+            if (_playerData.selectedCharacters[0] != null)
+            {
+                readyButton.interactable = true;
+            }
+            else 
+            { 
+                readyButton.interactable = false;
+            }
+        }
+
+        public void NewGame_Ready()
+        {
+            // Получаем индекс текущей сцены
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+            // Загружаем следующую сцену
+            SceneManager.LoadScene(currentSceneIndex + 1);
+            //SceneManager.LoadScene(1);
         }
 
         private void UpdateAvaible()

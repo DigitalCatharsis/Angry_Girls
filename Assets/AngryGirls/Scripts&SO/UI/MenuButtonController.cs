@@ -33,10 +33,12 @@ namespace Angry_Girls
 
         public void NewGame(GameObject sender)
         {
-            var animator = sender.GetComponentInParent<Animator>();
-            animator.SetBool("selected", false);
-            animator.SetBool("pressed", true);
-            SceneManager.LoadScene(1);
+            // Получаем индекс текущей сцены
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+            // Загружаем следующую сцену
+            SceneManager.LoadScene(currentSceneIndex + 1);
+            //SceneManager.LoadScene(1);
         }
 
         public void ExitGame()

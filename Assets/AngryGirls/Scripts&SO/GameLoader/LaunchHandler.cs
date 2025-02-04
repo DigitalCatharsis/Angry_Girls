@@ -47,6 +47,10 @@ namespace Angry_Girls
 
             foreach (var character in selectedCharactersList)
             {
+                if (character == null) 
+                {
+                    continue;
+                }
                 charList.Add(GameLoader.Instance.poolManager.GetObject<CharacterType>
                     (character.characterType, GameLoader.Instance.poolManager.characterPoolDictionary, Vector3.zero, Quaternion.identity).GetComponent<CControl>());
             }
