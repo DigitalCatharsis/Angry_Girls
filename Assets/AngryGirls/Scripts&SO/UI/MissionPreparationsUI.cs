@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,11 +13,10 @@ namespace Angry_Girls
         [Space(10)]
         [SerializeField] private PlayerData _playerData;
         [Space(10)]
-        [SerializeField] private GameObject[] _selectedCharactersHandlers;
+        [SerializeField] private UICharModel[] _selectedCharactersHandlers;
 
         [Header("Debug")]
-        [SerializeField] private GameObject[] _characterPoolHandlers;
-
+        [SerializeField] private List<UICharModel> _avaiblecharacterPoolHandlers;
 
         private void Start()
         {
@@ -25,42 +25,103 @@ namespace Angry_Girls
 
         private void InitSelectedAndAvaible()
         {
-            //init selected
-            for (int i = 0; i < _playerData.selectedCharacters.Count; i++)
-            {
-                var model = _selectedCharactersHandlers[i].GetComponent<UICharacterModel>();
-                model.characterType = _playerData.selectedCharacters[i].characterType;
-                var test = model.gameObject.GetComponentInChildren<Image>(); 
-                test.sprite = _playerData.selectedCharacters[i].portrait;
-            }
+            UpdateSelected();
 
-            //init avaible
+            // Init avaible
             for (int i = 0; i < _playerData.avaibleCharacterPool.Count; i++)
             {
+                if (_playerData.avaibleCharacterPool[i] == null)
+                {
+                    continue;
+                }
 
+                var _go = InstantiateUICharModel(avaibleCharactersGridTabPanel);
+                //в инспекторе не заданы реакции на клик, передаем через делегат. (не будет отображаться в инспекторе)
+                _go.GetComponentInChildren<Button>().onClick.AddListener(delegate { GetFromAvaible(_go.GetComponentInChildren<UICharModel>()); });
+                _avaiblecharacterPoolHandlers.Add(_go.GetComponent<UICharModel>());
+
+                _go.GetComponent<UICharModel>().UpdateElement(_playerData.avaibleCharacterPool, i); // Передаем массив и индекс
             }
         }
 
-        public void RemoveCharToAvaiblePool(CharacterType character)
+        private GameObject InstantiateUICharModel(GameObject GridTabPanel)
         {
+            // Загружаем префаб из Resources
+            var _prefab = Resources.Load("UICharModel") as GameObject;
+
+            // Создаем экземпляр префаба
+            var _go = Instantiate(_prefab);
+
+            // Делаем его дочерним к avaibleCharactersGridTabPanel
+            _go.transform.SetParent(GridTabPanel.transform, false);
+            //_go.GetComponentInChildren<Button>().targetGraphic = null;
+            return _go;
         }
 
-        public void AddCharToList(CharacterType selectedCharacter)
+        private void UpdateSelected()
         {
-            //var currentCharacters = _playerData.selectedCharacters;
+            // Init selected
+            for (int i = 0; i < _playerData.selectedCharacters.Length; i++)
+            {
+                var elem = _selectedCharactersHandlers[i];
+                elem.UpdateElement(_playerData.selectedCharacters, i); // Передаем массив и индекс
+            }
+        }
 
-            //if (currentCharacters.Length == 4)
-            //{
-            //    return;
-            //}
+        private void UpdateAvaible()
+        {
+            int maxIndex;
 
-            //for (int i = 0; i < currentCharacters.Length; i++)
-            //{
-            //    if (currentCharacters[i] == CharacterType.NULL)
-            //    {
-            //        currentCharacters[i] = selectedCharacter;
-            //    }
-            //}
+            if (_playerData.avaibleCharacterPool.Count >= _avaiblecharacterPoolHandlers.Count)
+            {
+                maxIndex = _playerData.avaibleCharacterPool.Count;
+
+                //спавним нужное колличество отсутсвующих Handler'ов
+                for (int i = 0; i < _playerData.avaibleCharacterPool.Count - _avaiblecharacterPoolHandlers.Count; i++)
+                {
+                    var model = InstantiateUICharModel(avaibleCharactersGridTabPanel).GetComponent<UICharModel>();
+                    _avaiblecharacterPoolHandlers.Add(model);
+                    //в инспекторе не заданы реакции на клик, передаем через делегат. (не будет отображаться в инспекторе)
+                    model.GetComponentInChildren<Button>().onClick.AddListener(delegate { GetFromAvaible(model); });
+                }
+            }
+            else
+            {
+                maxIndex = _avaiblecharacterPoolHandlers.Count;
+            }
+
+            //add handlers if needed
+            for (int i = 0; i < maxIndex; i++)
+            {
+                _avaiblecharacterPoolHandlers[i].UpdateElement(_playerData.avaibleCharacterPool, i);
+            }
+        }
+
+        public void RemoveFromSelected(UICharModel uICharModel)
+        {
+            if (uICharModel.Index < 0)
+            {
+                return;
+            }
+
+            Debug.Log("Removing from selected");
+            _playerData.RemoveFromSelected(uICharModel.Index);
+            UpdateSelected();
+            UpdateAvaible();
+        }
+
+        public void GetFromAvaible(UICharModel uICharModel)
+        {
+            if(uICharModel.Index < 0)
+            {
+                return;
+            }
+
+            if (_playerData.GetFromAvaible(uICharModel.Index))
+            {
+                UpdateSelected();
+                UpdateAvaible();
+            }
         }
 
         public void ChangeTab(GameObject selectedTab)

@@ -41,14 +41,14 @@ namespace Angry_Girls
             //GameLoader.Instance.cameraManager.CameraFollowForRigidBody(_charactersToLaunchLeft[0].rigidBody);
         }
 
-        private List<CControl> SpawnAndGetCharacters(SerializedDictionary<int, CharacterSettings> selectedCharactersList)
+        private List<CControl> SpawnAndGetCharacters(CharacterSettings[] selectedCharactersList)
         {
             var charList = new List<CControl>();
 
             foreach (var character in selectedCharactersList)
             {
                 charList.Add(GameLoader.Instance.poolManager.GetObject<CharacterType>
-                    (character.Value.characterType, GameLoader.Instance.poolManager.characterPoolDictionary, Vector3.zero, Quaternion.identity).GetComponent<CControl>());
+                    (character.characterType, GameLoader.Instance.poolManager.characterPoolDictionary, Vector3.zero, Quaternion.identity).GetComponent<CControl>());
             }
             return charList;
         }
