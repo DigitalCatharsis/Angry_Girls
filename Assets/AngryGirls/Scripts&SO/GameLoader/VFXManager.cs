@@ -81,7 +81,7 @@ namespace Angry_Girls
 
         public void ShowDamageNumbers(Collider triggerCollider, CControl control, float damage)
         {
-            var contactpoint = triggerCollider.ClosestPoint(control.transform.position);
+            var contactpoint = triggerCollider.ClosestPoint(control.rigidBody.position);
 
             var previewVfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_TestOnHitEffect, contactpoint, Quaternion.identity, owner: control.gameObject).GetComponent<VFX>();
             previewVfx.InitAndRunVFX_ByCustom(

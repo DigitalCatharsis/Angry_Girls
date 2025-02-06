@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Drawing;
 using UnityEngine;
 
@@ -28,7 +29,7 @@ namespace Angry_Girls
         {
             ColorDebugLog.Log("Called for FollowCamera", KnownColor.Orange);
             _characterToFollow = characterToFollow.GetComponent<Rigidbody>();
-            allowCameraFollow  = true;
+            allowCameraFollow = true;
         }
         public void StopCameraFollowForRigidBody()
         {
@@ -44,7 +45,7 @@ namespace Angry_Girls
 
         public void ZoomOutCameraAfterLaunch()
         {
-             Camera.main.orthographicSize -= (Camera.main.orthographicSize / _zoomeCameraValueAfterLaunch);  
+            Camera.main.orthographicSize -= (Camera.main.orthographicSize / _zoomeCameraValueAfterLaunch);
         }
 
         public void MoveCameraTo(Vector3 placeToMove, float speed)
@@ -66,5 +67,41 @@ namespace Angry_Girls
             screenPosition.z = camera.nearClipPlane + 1;
             return camera.ScreenToWorldPoint(screenPosition);
         }
+
+        public void ShakeCamera(float shakeDuration = 0.3f, float shakeMagnitude = 0.05f)
+        {
+            var originalPosition = Camera.main.transform.localPosition;
+            StartCoroutine(ShakeCoroutine(shakeDuration, shakeMagnitude, originalPosition));
+        }
+
+        private IEnumerator ShakeCoroutine(float shakeDuration, float shakeMagnitude, Vector3 originalPosition)
+        {
+            allowCameraFollow = false;
+            float elapsed = 0.0f;
+            var savedY = Camera.main.transform.localPosition.y;
+
+            while (elapsed < shakeDuration)
+            {
+                // Генерируем случайное смещение
+                float z = Random.Range(-1f, 1f) * shakeMagnitude;
+                float y = Random.Range(-1f, 1f) * shakeMagnitude;
+
+                // Применяем смещение к позиции камеры
+                Camera.main.transform.localPosition = originalPosition + new Vector3(0, y, z);
+
+                // Увеличиваем время
+                elapsed += Time.deltaTime;
+
+                // Ждем следующего кадра
+                yield return null;
+            }
+            Camera.main.transform.localPosition = new Vector3(Camera.main.transform.localPosition.x, savedY, Camera.main.transform.localPosition.z);
+            //yield return new WaitForSeconds(0.5f);
+            // Возвращаем камеру в исходную позицию
+            //Camera.main.transform.localPosition = originalPosition;
+            allowCameraFollow = true;
+        }
+
+
     }
 }

@@ -7,7 +7,8 @@ namespace Angry_Girls
         public static GameObject GetCollidingObject(CControl control, Vector3 start, Vector3 dir, float blockDistance, ref Vector3 collisionPoint)
         {
             // Игнор рейкастом слоя 9 (character) и 13 (projectile) 10(bot)
-            int layerMask = /*1 << 9 |*/ 1 << 13 /*| 1 << 10*/;
+            //int layerMask = 1 << 13;
+            int layerMask = LayerMask.GetMask("Projectile", "Pickable");
 
             collisionPoint = Vector3.zero;
 

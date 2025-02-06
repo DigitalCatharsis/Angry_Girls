@@ -398,7 +398,7 @@ namespace Angry_Girls
             {
                 if (character.GetComponent<CControl>().isDead) continue;
 
-                var distacne = transform.position.z - character.transform.position.z;
+                var distacne = control.rigidBody.position.z - character.rigidBody.position.z;
 
                 if (Math.Abs(closestDistance) > Math.Abs(distacne))
                 {
@@ -408,11 +408,11 @@ namespace Angry_Girls
 
             if (closestDistance > 0)
             {
-                control.transform.rotation = Quaternion.Euler(0, 180, 0);
+                control.rigidBody.rotation = Quaternion.Euler(0, 180, 0);
             }
             else if (closestDistance < 0)
             {
-                control.transform.rotation = Quaternion.Euler(0, 0, 0);
+                control.rigidBody.rotation = Quaternion.Euler(0, 0, 0);
             }
         }
 

@@ -19,11 +19,11 @@ namespace Angry_Girls
 
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            _savedRotation = control.transform.rotation;
+            _savedRotation = control.rigidBody.rotation;
             control.rigidBody.velocity = Vector3.zero;
             //rotation
             control.rigidBody.velocity = (new Vector3(0, 10, 2 * control.transform.forward.z));
-            _rotationTween = control.transform.DORotate(new Vector3(360, 0, 0), 0.3f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1);
+            _rotationTween = control.rigidBody.DORotate(new Vector3(360, 0, 0), 0.3f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1);
             _vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, control.characterSettings.AttackAbility_Launch.AttackVFX.GetComponent<VFX>().GetVFXType(), setAsOwner: true);
         }
 
@@ -48,11 +48,11 @@ namespace Angry_Girls
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            control.transform.rotation = _savedRotation;
+            control.rigidBody.rotation = _savedRotation;
             _rotationTween.Kill();
             if (control.bottomRaycastContactPoint != Vector3.zero)
             {
-                control.transform.position = control.bottomRaycastContactPoint;
+                control.rigidBody.position = control.bottomRaycastContactPoint;
             }
             control.isAttacking = false;
             _vfx.GetComponent<VFX>().Dispose();

@@ -35,7 +35,7 @@ namespace Angry_Girls
                         }
                     }
 
-                    var colliderBottom = (control.transform.position.y + control.boxCollider.center.y) - (control.boxCollider.size.y / 2f);
+                    var colliderBottom = (control.rigidBody.position.y + control.boxCollider.center.y) - (control.boxCollider.size.y / 2f);
                     var yDiffirence = Mathf.Abs(contact.point.y - colliderBottom);
 
                     if (yDiffirence < 0.13f)

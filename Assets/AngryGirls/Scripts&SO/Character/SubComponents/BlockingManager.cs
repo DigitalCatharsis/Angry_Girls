@@ -103,7 +103,7 @@ namespace Angry_Girls
         {
             foreach (KeyValuePair<GameObject, GameObject> data in _frontBlockingObjects_dictionary)
             {
-                if ((data.Value.transform.position - control.transform.position).z > 0f)
+                if ((data.Value.transform.position - control.rigidBody.position).z > 0f)
                 {
                     return true;
                 }
@@ -115,7 +115,7 @@ namespace Angry_Girls
         {
             foreach (KeyValuePair<GameObject, GameObject> data in _frontBlockingObjects_dictionary)
             {
-                if ((data.Value.transform.position - control.transform.position).z < 0f)
+                if ((data.Value.transform.position - control.rigidBody.position).z < 0f)
                 {
                     return true;
                 }

@@ -65,11 +65,15 @@ namespace Angry_Girls
 
             if (_directionVector.z > 0)
             {
-                characterToLaunch.transform.rotation = Quaternion.Euler(0, 180, 0);
+                characterToLaunch.rigidBody.rotation = Quaternion.Euler(0, 180, 0);
             }
             else if (_directionVector.z < 0)
             {
-                characterToLaunch.transform.rotation = Quaternion.Euler(0, 0, 0);
+                characterToLaunch.rigidBody.rotation = Quaternion.Euler(0, 0, 0);
+            }
+            else if (_directionVector.z == 0)
+            {
+                ColorDebugLog.Log("Direction vector = 0", System.Drawing.KnownColor.Red);
             }
 
             characterToLaunch.rigidBody.useGravity = true;

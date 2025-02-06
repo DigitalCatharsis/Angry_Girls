@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
 using DG.Tweening;
+using TMPro;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,8 +12,13 @@ namespace Angry_Girls
 {
     public class GameLogic_UIManager : MonoBehaviour
     {
-        [SerializeField] private SerializedDictionary<CControl, Slider> _healtBar_Dict;
+        [Header("Setup)")]
         [SerializeField] private GameObject gameOverUi;
+        [SerializeField] private GameObject scoreUi;
+
+        [Header("Deubg")]
+        [SerializeField] private SerializedDictionary<CControl, Slider> _healtBar_Dict;
+        [SerializeField] private int _score = 0;
         public void CreateHealthBar(CControl control)
         {
             var healthBar = Resources.Load("HealthBar") as GameObject;
@@ -41,6 +47,17 @@ namespace Angry_Girls
         public void UpdateHealthBarValueAndVision(CControl control)
         {
             control.healthSlider.value = control.CurrentHealth;
+        }
+
+        public void UpdateScore(int value)
+        {
+            _score += value;
+            scoreUi.GetComponentInChildren<TextMeshProUGUI>().text = $"Score: {_score}";
+        }
+
+        private void Start()
+        {
+            UpdateScore(0);
         }
 
         private void LateUpdate()

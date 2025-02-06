@@ -169,7 +169,7 @@ namespace Angry_Girls
             }
             //ColorDebugLog.Log("Applied knockback", KnownColor.Green);
 
-            var direction = transform.position - opponent.transform.position;
+            var direction = rigidBody.position - opponent.transform.position;
 
             // Проверить, что объекты не находятся в одной точке
             if (Math.Abs(direction.z) < 0.001f)

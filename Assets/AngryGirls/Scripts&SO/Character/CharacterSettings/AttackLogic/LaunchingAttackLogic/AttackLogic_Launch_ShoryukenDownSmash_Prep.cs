@@ -9,7 +9,7 @@ namespace Angry_Girls
 
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            tempZlocation = control.transform.position.z;
+            tempZlocation = control.rigidBody.position.z;
             control.isAttacking = true;
             control.rigidBody.velocity = control.characterSettings.AttackAbility_Launch.attackMovementSpeed;
 
@@ -18,7 +18,7 @@ namespace Angry_Girls
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            control.transform.position = new Vector3(0, control.transform.position.y, tempZlocation);
+            control.rigidBody.position = new Vector3(0, control.rigidBody.position.y, tempZlocation);
 
             if (control.boxColliderContacts != null)
             {
@@ -28,7 +28,7 @@ namespace Angry_Girls
                     if (character != null)
                     {
                         //character.JostleFromEnemy(3);
-                        control.transform.position = new Vector3(0, control.transform.position.y - 0.01f, tempZlocation);
+                        control.rigidBody.position = new Vector3(0, control.rigidBody.position.y - 0.01f, tempZlocation);
                     }
                 }
             }

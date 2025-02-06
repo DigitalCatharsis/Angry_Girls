@@ -19,21 +19,17 @@ namespace Angry_Girls
         
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            _savedRotation = control.transform.GetChild(0).rotation;
+            _savedRotation = control.rigidBody.rotation;
             control.rigidBody.velocity = Vector3.zero;
             //rotation
             control.rigidBody.velocity = (new Vector3(0, 10, 2 * control.transform.forward.z));
-            _rotationTween = control.transform.GetChild(0).DORotate(new Vector3(360, 0, 0), 0.3f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1);
+            //_rotationTween = control.transform.GetChild(0).DORotate(new Vector3(360, 0, 0), 0.3f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1);
+            _rotationTween = control.rigidBody.DORotate(new Vector3(360, 0, 0), 0.3f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1);
             _vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, control.characterSettings.AttackAbility_Launch.AttackVFX.GetComponent<VFX>().GetVFXType(), setAsOwner: true);
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            //if (control.CheckAttackFinishCondition())
-            //{
-            //    control.isAttacking = false;
-            //    //control.FinishTurn(2);
-            //}
 
             // Проверка на окончание ВСЕХ циклов анимации
             if (stateInfo.normalizedTime >= _timesToRepeat_Attack_State * stateInfo.length + 0.8f)
@@ -50,22 +46,17 @@ namespace Angry_Girls
                 _timeInCurrentLoop -= stateInfo.length;
                 _loopsCount++;
             }
-
-            //if(control.isGrounded)
-            //{
-            //    control.isAttacking = false;
-            //}
         }
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             _rotationTween.Kill();
-            control.transform.GetChild(0).rotation = _savedRotation;
-
+            control.rigidBody.rotation = _savedRotation;
+            Debug.Log(_savedRotation);
 
             if (control.bottomRaycastContactPoint != Vector3.zero)
             {
-                control.transform.position = control.bottomRaycastContactPoint;
+                control.rigidBody.position = control.bottomRaycastContactPoint;
             }
             control.isAttacking = false;
             _vfx.GetComponent<VFX>().Dispose();
