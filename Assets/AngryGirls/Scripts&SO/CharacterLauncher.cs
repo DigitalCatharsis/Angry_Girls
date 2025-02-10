@@ -36,7 +36,6 @@ namespace Angry_Girls
         [SerializeField] private int _dotsNumber;
 
         [Header("Zoom")]
-        [SerializeField] private float _zoomSpeed;
         [SerializeField] private float _minDistanceForZoom;
 
         public void InitLauncher()
@@ -98,7 +97,7 @@ namespace Angry_Girls
         private void CalculateDirection()
         {
             //Calculation direction
-            var pointerPosition = GameLoader.Instance.cameraManager.GetPointerWorldPosition(Camera.main);
+            var pointerPosition = GameLoader.Instance.cameraManager.GetPointerWorldPosition();
             _offsetEndPostion = new Vector3(0, pointerPosition.y, pointerPosition.z);
             _directionVector = _offsetEndPostion - _offsetStartPoint;
         }

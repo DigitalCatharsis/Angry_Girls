@@ -16,5 +16,6 @@ namespace Angry_Girls
         public override bool IsHeld => Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Stationary;
         public override bool IsReleased => Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended;
         public override Vector3 Position => Input.GetTouch(0).position;
+
     }
 }

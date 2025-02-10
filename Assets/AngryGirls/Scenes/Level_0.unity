@@ -11051,6 +11051,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: __RGameLoader
       objectReference: {fileID: 0}
+    - target: {fileID: 7343681493631909317, guid: f357cbd9c7c57384d9adefa11c94295c,
+        type: 3}
+      propertyPath: _movementSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7343681493631909317, guid: f357cbd9c7c57384d9adefa11c94295c,
+        type: 3}
+      propertyPath: _zoomSensitivity
+      value: 1.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Drawing;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -12,96 +11,168 @@ namespace Angry_Girls
         [SerializeField] private const float _secondsCameraWaitsAfterAttack = 2f;
         [SerializeField] private const float _zoomeCameraValueAfterLaunch = 5f;
 
+        [Header("Zoom Settings")]
+        [SerializeField] private float _zoomSensitivity = 7.0f;
+        [SerializeField] private float _minZoom = 1f;
+        [SerializeField] private float _maxZoom = 10f;
+
+        [Header("Camera Movement Settings")]
+        [SerializeField] private float _movementSpeed = 0.5f;
+        [SerializeField] private float _minCameraZ = -10f;
+        [SerializeField] private float _maxCameraZ = 30f;
+
         public float SecondsCameraWaitsAfterAttack => _secondsCameraWaitsAfterAttack;
 
         [SerializeField] private Rigidbody _characterToFollow;
-        [SerializeField] private bool allowCameraFollow = false;
+        [SerializeField] private bool _allowCameraFollow = false;
+
+        [Header("Debug")]
+        [SerializeField] private Camera _mainCamera;
+
+        private void Awake()
+        {
+            _mainCamera = Camera.main;
+        }
+
+        private void Update()
+        {
+            HandleZoom();
+            HandleMovement();
+        }
 
         private void LateUpdate()
         {
-            if (_characterToFollow != null && allowCameraFollow)
+            if (_characterToFollow != null && _allowCameraFollow)
             {
                 CenterCameraAgainst(_characterToFollow);
             }
         }
 
+        private void HandleZoom()
+        {
+            float zoomDelta = GameLoader.Instance.inputManager.GetZoomDelta();
+            if (zoomDelta != 0)
+            {
+                ApplyZoom(zoomDelta * _zoomSensitivity);
+            }
+        }
+
+        private void ApplyZoom(float delta)
+        {
+            if (delta != 0)
+            {
+                _allowCameraFollow = false;
+            }
+            _mainCamera.orthographicSize = Mathf.Clamp(
+                _mainCamera.orthographicSize - delta,
+                _minZoom,
+                _maxZoom
+            );
+        }
+
+        private void HandleMovement()
+        {
+            if (GameLoader.Instance.inputManager.IsDragging())
+            {
+                Vector2 delta = GameLoader.Instance.inputManager.GetDragDelta();
+                if (!IsPointerOverCharacter(GameLoader.Instance.inputManager.Position))
+                {
+                    MoveCamera(delta);
+                }
+            }
+        }
+
+        private bool IsPointerOverCharacter(Vector2 screenPosition)
+        {
+            Ray ray = _mainCamera.ScreenPointToRay(screenPosition);
+            int layerMask = 1 << 14; // Layer "CharacterToLaunch"
+            return Physics.Raycast(ray, Mathf.Infinity, layerMask);
+        }
+
+        private void MoveCamera(Vector2 delta)
+        {
+            if (delta.magnitude > 0)
+            {
+                _allowCameraFollow = false;
+            }
+
+            float speed = _movementSpeed * _mainCamera.orthographicSize * Time.deltaTime;
+            Vector3 newPosition = _mainCamera.transform.position + new Vector3(0, 0, -delta.x * speed);
+            newPosition.z = Mathf.Clamp(newPosition.z, _minCameraZ, _maxCameraZ);
+            _mainCamera.transform.position = newPosition;
+        }
+
         public void CameraFollowForRigidBody(Rigidbody characterToFollow)
         {
-            ColorDebugLog.Log("Called for FollowCamera", KnownColor.Orange);
-            _characterToFollow = characterToFollow.GetComponent<Rigidbody>();
-            allowCameraFollow = true;
+            _characterToFollow = characterToFollow;
+            _allowCameraFollow = true;
         }
+
         public void StopCameraFollowForRigidBody()
         {
             _characterToFollow = null;
-            allowCameraFollow = false;
+            _allowCameraFollow = false;
         }
 
-        // Center camera on character collider center
-        private void CenterCameraAgainst(Rigidbody selectedObjectRigidbody)
+        private void CenterCameraAgainst(Rigidbody target)
         {
-            Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, selectedObjectRigidbody.transform.position.y, selectedObjectRigidbody.transform.position.z);
+            Vector3 targetPosition = new Vector3(
+                _mainCamera.transform.position.x,
+                target.transform.position.y,
+                target.transform.position.z
+            );
+            _mainCamera.transform.position = targetPosition;
         }
 
         public void ZoomOutCameraAfterLaunch()
         {
-            Camera.main.orthographicSize -= (Camera.main.orthographicSize / _zoomeCameraValueAfterLaunch);
+            _mainCamera.orthographicSize -= (_mainCamera.orthographicSize / _zoomeCameraValueAfterLaunch);
         }
 
-        public void MoveCameraTo(Vector3 placeToMove, float speed)
+        public void MoveCameraTo(Vector3 targetPosition, float speed, bool resetZoom = false)
         {
-            GameLoader.Instance.myExtentions.Lerp_Position(Camera.main.gameObject, startPosition: Camera.main.transform.position, endPosition: placeToMove, speed);
-            GameLoader.Instance.myExtentions.Lerp_OrthographicCamera_Size(Camera.main, startValue: Camera.main.orthographicSize, startOrthographicCameraSize, speed);
+            StopCameraFollowForRigidBody();
+            GameLoader.Instance.myExtentions.Lerp_Position(_mainCamera.gameObject, _mainCamera.transform.position, targetPosition, speed);
+            if (resetZoom)
+            {
+                GameLoader.Instance.myExtentions.Lerp_OrthographicCamera_Size(_mainCamera, _mainCamera.orthographicSize, startOrthographicCameraSize, speed);
+            }
         }
 
         public void ReturnCameraToStartPosition(float speed)
         {
-            StopCameraFollowForRigidBody();
-            GameLoader.Instance.myExtentions.Lerp_Position(Camera.main.gameObject, startPosition: Camera.main.transform.position, endPosition: _cameraStartPosition, speed);
-            GameLoader.Instance.myExtentions.Lerp_OrthographicCamera_Size(Camera.main, startValue: Camera.main.orthographicSize, startOrthographicCameraSize, speed);
+            MoveCameraTo(_cameraStartPosition, speed, true);
         }
 
-        public Vector3 GetPointerWorldPosition(Camera camera)
+        public Vector3 GetPointerWorldPosition()
         {
             Vector3 screenPosition = GameLoader.Instance.inputManager.Position;
-            screenPosition.z = camera.nearClipPlane + 1;
-            return camera.ScreenToWorldPoint(screenPosition);
+            screenPosition.z = _mainCamera.nearClipPlane + 1;
+            return _mainCamera.ScreenToWorldPoint(screenPosition);
         }
 
         public void ShakeCamera(float shakeDuration = 0.3f, float shakeMagnitude = 0.05f)
         {
-            var originalPosition = Camera.main.transform.localPosition;
-            StartCoroutine(ShakeCoroutine(shakeDuration, shakeMagnitude, originalPosition));
+            StartCoroutine(ShakeCoroutine(shakeDuration, shakeMagnitude, _mainCamera.transform.localPosition));
         }
 
         private IEnumerator ShakeCoroutine(float shakeDuration, float shakeMagnitude, Vector3 originalPosition)
         {
-            allowCameraFollow = false;
+            _allowCameraFollow = false;
             float elapsed = 0.0f;
-            var savedY = Camera.main.transform.localPosition.y;
+            var savedY = _mainCamera.transform.localPosition.y;
 
             while (elapsed < shakeDuration)
             {
-                // Генерируем случайное смещение
                 float z = Random.Range(-1f, 1f) * shakeMagnitude;
                 float y = Random.Range(-1f, 1f) * shakeMagnitude;
 
-                // Применяем смещение к позиции камеры
-                Camera.main.transform.localPosition = originalPosition + new Vector3(0, y, z);
-
-                // Увеличиваем время
+                _mainCamera.transform.localPosition = originalPosition + new Vector3(0, y, z);
                 elapsed += Time.deltaTime;
-
-                // Ждем следующего кадра
                 yield return null;
             }
-            Camera.main.transform.localPosition = new Vector3(Camera.main.transform.localPosition.x, savedY, Camera.main.transform.localPosition.z);
-            //yield return new WaitForSeconds(0.5f);
-            // Возвращаем камеру в исходную позицию
-            //Camera.main.transform.localPosition = originalPosition;
-            allowCameraFollow = true;
+            _mainCamera.transform.localPosition = new Vector3(_mainCamera.transform.localPosition.x, savedY, _mainCamera.transform.localPosition.z);
+            _allowCameraFollow = true;
         }
-
-
     }
 }
