@@ -142,7 +142,7 @@ namespace Angry_Girls
             float zoomFactor = Mathf.Lerp(_zoomRange.x, _zoomRange.y, distance / _minDistanceForZoom);
 
             // Apply zoom to camera
-            if (zoomFactor >= _maxZoomFactorValue)  //TODO: set to field
+            if (zoomFactor >= _maxZoomFactorValue)
             {
                 Camera.main.orthographicSize = _maxZoomFactorValue;
             }

@@ -414,6 +414,10 @@ namespace Angry_Girls
             {
                 control.rigidBody.rotation = Quaternion.Euler(0, 0, 0);
             }
+            else if (closestDistance == 0)
+            {
+                return;
+            }
         }
 
         public override void OnAwake()

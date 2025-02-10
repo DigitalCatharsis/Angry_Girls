@@ -24,6 +24,8 @@ namespace Angry_Girls
         public GameLogic gameLogic;
         public CameraSizer cameraSizer;
 
+        public InputManager inputManager;
+
         private void OnEnable()
         {
             if (Instance != null && Instance != this)
@@ -50,6 +52,7 @@ namespace Angry_Girls
             attackLogicContainer = GetComponentInChildren<AttackLogicContainer>();
             gameLogic = GetComponentInChildren<GameLogic>();
             cameraSizer = GetComponentInChildren<CameraSizer>();
+            inputManager = GetComponentInChildren<InputManager>();
         }
     }
 }

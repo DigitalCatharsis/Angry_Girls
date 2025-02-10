@@ -63,7 +63,7 @@ namespace Angry_Girls
 
         public Vector3 GetPointerWorldPosition(Camera camera)
         {
-            Vector3 screenPosition = Input.mousePosition;
+            Vector3 screenPosition = GameLoader.Instance.inputManager.Position;
             screenPosition.z = camera.nearClipPlane + 1;
             return camera.ScreenToWorldPoint(screenPosition);
         }

@@ -56,6 +56,7 @@ namespace Angry_Girls
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             _haveShootedSecondTime = false;
+            control.isAttacking = false;
         }
 
         private void ProcessFireballs(CControl control, Vector3[] angles, float moveDuration = 1.5f)

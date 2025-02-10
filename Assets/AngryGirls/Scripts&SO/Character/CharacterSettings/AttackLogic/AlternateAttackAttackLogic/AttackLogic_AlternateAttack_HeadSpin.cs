@@ -58,6 +58,7 @@ namespace Angry_Girls
             control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed;
             ProcessFireballs(control, _secondShoot_ProjectileAngles);
             _haveShootedFirstTime = false;
+            control.isAttacking = false;
         }
 
         private void ProcessFireballs(CControl control, Vector3[] angles, float moveDuration = 1.5f)

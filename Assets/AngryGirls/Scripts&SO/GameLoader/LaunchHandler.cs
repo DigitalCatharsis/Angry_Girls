@@ -25,11 +25,6 @@ namespace Angry_Girls
 
         private CControl CharacterToLaunch { get => _charactersToLaunchLeft[0]; }
 
-        private void LateUpdate()
-        {
-
-        }
-
         private void Start()
         {
             _characterLauncher.InitLauncher();
@@ -38,7 +33,6 @@ namespace Angry_Girls
             SetLaunchableCharactersBehavior(_charactersToLaunchLeft);
             _canPressAtCharacters = true;
             GameLoader.Instance.cameraManager.ReturnCameraToStartPosition(1f);
-            //GameLoader.Instance.cameraManager.CameraFollowForRigidBody(_charactersToLaunchLeft[0].rigidBody);
         }
 
         private List<CControl> SpawnAndGetCharacters(CharacterSettings[] selectedCharactersList)
@@ -77,20 +71,15 @@ namespace Angry_Girls
         {
             #region ButtonReaction (Except applyAttack)
             //Нажали
-            if (Input.GetMouseButtonDown(0) && _canPressAtCharacters)
+            if (GameLoader.Instance.inputManager.IsPressed && _canPressAtCharacters)
             {
-                var mousePosition = Input.mousePosition;
-                Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+                Ray ray = Camera.main.ScreenPointToRay(GameLoader.Instance.inputManager.Position);
 
                 //CharacterToLaunch layer
                 int layerMask = 1 << 14;
 
                 if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
                 {
-                    if (hit.collider == null)
-                    {
-
-                    }
                     var characterCcontrol = hit.collider.gameObject.GetComponent<CControl>();
 
                     if (_charactersToLaunchLeft.Contains(characterCcontrol))
@@ -108,8 +97,6 @@ namespace Angry_Girls
                             SwapCharacters(_charactersToLaunchLeft.IndexOf(characterCcontrol), 0);
                             UpdateCharacterPositions(_charactersToLaunchLeft);
                             _isLaunchAllowed = false;
-                            // Center camera on character collider center
-                            //GameLoader.Instance.cameraManager.CameraFollowForRigidBody(_charactersToLaunchLeft[0].rigidBody);
                         }
                     }
                     else
@@ -120,13 +107,13 @@ namespace Angry_Girls
             }
 
             //Держим
-            if (Input.GetMouseButton(0) && _isLaunchAllowed)
+            if (GameLoader.Instance.inputManager.IsHeld && _isLaunchAllowed)
             {
                 _characterLauncher.AimingTheLaunch(CharacterToLaunch.gameObject);
             }
 
             //Отпустили
-            if (Input.GetMouseButtonUp(0) && _isLaunchAllowed)
+            if (GameLoader.Instance.inputManager.IsReleased && _isLaunchAllowed)
             {
                 Camera.main.orthographicSize /= 1.5f;
                 _canPressAtCharacters = false;
