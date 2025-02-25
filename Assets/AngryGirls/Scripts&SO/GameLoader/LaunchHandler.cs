@@ -122,6 +122,7 @@ namespace Angry_Girls
                 _characterLauncher.LaunchUnit(CharacterToLaunch.GetComponent<CControl>());
                 _isLaunchAllowed = false;
 
+                GameLoader.Instance.cameraManager.CameraFollowForRigidBody(CharacterToLaunch.GetComponent<Rigidbody>());
                 StartCoroutine(ControlUnitLaunch(CharacterToLaunch.GetComponent<CControl>()));
             }
 

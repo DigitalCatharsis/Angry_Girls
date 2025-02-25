@@ -52,7 +52,7 @@ namespace Angry_Girls
         {
             _rotationTween.Kill();
             control.rigidBody.rotation = _savedRotation;
-            Debug.Log(_savedRotation);
+
 
             if (control.bottomRaycastContactPoint != Vector3.zero)
             {

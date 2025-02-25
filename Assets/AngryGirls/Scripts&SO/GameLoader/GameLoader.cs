@@ -23,6 +23,8 @@ namespace Angry_Girls
         public TurnManager turnManager;
         public GameLogic gameLogic;
         public CameraSizer cameraSizer;
+        public GameLoader_Settings_Container gameLoaderSettingsContainer;
+        public PauseControl pauseControl;
 
         public InputManager inputManager;
 
@@ -53,6 +55,8 @@ namespace Angry_Girls
             gameLogic = GetComponentInChildren<GameLogic>();
             cameraSizer = GetComponentInChildren<CameraSizer>();
             inputManager = GetComponentInChildren<InputManager>();
+            gameLoaderSettingsContainer = GetComponentInChildren<GameLoader_Settings_Container>();
+            pauseControl = GetComponentInChildren<PauseControl>();
         }
     }
 }

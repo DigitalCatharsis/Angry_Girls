@@ -36,8 +36,11 @@ namespace Angry_Girls
 
         private void Update()
         {
-            HandleZoom();
-            HandleMovement();
+            if (!_allowCameraFollow)
+            {
+                HandleZoom();
+                HandleMovement();
+            }
         }
 
         private void LateUpdate()

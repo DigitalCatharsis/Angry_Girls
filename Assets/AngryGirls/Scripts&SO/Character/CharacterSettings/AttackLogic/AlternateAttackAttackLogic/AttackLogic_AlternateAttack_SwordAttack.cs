@@ -50,6 +50,7 @@ namespace Angry_Girls
         {
             control.rigidBody.rotation = _savedRotation;
             _rotationTween.Kill();
+
             if (control.bottomRaycastContactPoint != Vector3.zero)
             {
                 control.rigidBody.position = control.bottomRaycastContactPoint;

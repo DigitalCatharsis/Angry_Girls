@@ -63,13 +63,14 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\LaunchingAttackLogic\AttackLogic_Launch_SendFireball_Front.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\BoxColliderUpdaters\BoxColliderUpdater_Data.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\AlternateAttack_Behavior_Airboned.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\Settings\LevelSettings\LevelSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\SpawnFactory\Factories\CharacterFactory.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\MaterialChaner\MaterialChanger.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\Settings\PlayerData\PlayerData.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\BlockingManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\AnimationProcessor.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModulePhysics2D.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\CameraManager.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GenericLevelMenuUI.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Input\VirtualInput.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MenuButtonController.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolManager.cs" />
@@ -79,9 +80,9 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\AlternateAttack_Behavior_Prep.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Input\Inputs.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Mediator\BaseMediatorComponent.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\LevelSettings\LevelSettings.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LookAtPoint\LookAtPoint.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\DeathZone.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\Settings\GameSettings\GameSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\Idle_Behavior.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AttackAbilityLogic.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\AlternateAttack_Behavior_OnGround.cs" />
@@ -102,7 +103,6 @@
     <Compile Include="Assets\AngryGirls\Helpers\LayerAdder\LayerAdder.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLogic.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ShowOnlyAttribute\ShowOnlyAttribute.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\CharacterSelect\PlayerData.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_SwordAttack.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponent.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\UICharModel.cs" />
@@ -113,8 +113,10 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CollisionDetection.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\HowToPlayUI.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CharacterLauncher.cs" />
+    <Compile Include="Assets\OptionMenuControler.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\GameLoader.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUtils.cs" />
+    <Compile Include="Assets\GameLoader_Settings_Container.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\StatesContainer.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\FactoryExtention\FactoryExtention.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\CameraSizer.cs" />
@@ -137,6 +139,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\DynamicFactotyExtention\DynamicFactoryExtention.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolObjectLoader.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Mediator\IMediator.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\Settings\LevelSettings\LevelSettings_Data.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\Attack_Fininsh_Behavior.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\VFXManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\Landing_Behavior.cs" />
@@ -147,6 +150,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\SpawnFactory\Factories\BaseFactory.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_Prep_Shoryuken.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\HashManager.cs" />
+    <Compile Include="Assets\PauseControl.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\IPickable.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUnityVersion.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\CollisionSpheres.cs" />
@@ -162,7 +166,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\LaunchHandler.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CControl.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AudioManager\SoundClipsCollection.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\LevelSettings\LevelSettings_Data.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\GroundDetector.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\AlternateAttack_Behavior_Landing.cs" />
   </ItemGroup>

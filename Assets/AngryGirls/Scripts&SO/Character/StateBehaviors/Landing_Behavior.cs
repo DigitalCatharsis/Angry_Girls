@@ -27,7 +27,7 @@ namespace Angry_Girls
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            //_control.FinishTurn();
+            _control.FinishTurn(2f);
         }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()
