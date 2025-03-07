@@ -102,16 +102,16 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\MyExtentions.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\LayerAdder\LayerAdder.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLogic.cs" />
-    <Compile Include="Assets\AngryGirls\Helpers\ShowOnlyAttribute\ShowOnlyAttribute.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_SwordAttack.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponent.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\UICharModel.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Input\InputManager.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\OverlapChecker.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleAudio.cs" />
+    <Compile Include="Assets\AngryGirls\Helpers\HelperComponent\ReadOnlyDrawer.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolObject\PoolObject.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CollisionDetection.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\HowToPlayUI.cs" />
+    <Compile Include="Assets\AngryGirls\Helpers\HelperComponent\HelperComponent.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CharacterLauncher.cs" />
     <Compile Include="Assets\OptionMenuControler.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\GameLoader.cs" />
@@ -121,7 +121,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\FactoryExtention\FactoryExtention.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\CameraSizer.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\GameLogic_UIManager.cs" />
-    <Compile Include="Assets\AngryGirls\TEST.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponentMediator.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\ColorDebugLog\ColorDebugLog.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\BoxColliderUpdater.cs" />

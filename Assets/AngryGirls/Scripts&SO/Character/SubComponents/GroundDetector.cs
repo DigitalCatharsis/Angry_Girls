@@ -5,15 +5,19 @@ namespace Angry_Girls
     public class GroundDetector : SubComponent
     {
         [Header("Setup")]
-        [SerializeField] private float _collidingBlockDistance;
+        [SerializeField] private float _collidingBlockDistance = 0.13f;
 
         [Header("Debug")]
-        //[SerializeField] private GameObject _ground;
         [ShowOnly] public Vector3 landingPosition = Vector3.zero;
 
-        public override void OnComponentEnable()
+        private int _ignoreLayerMask;
+
+        public override void OnStart()
         {
+            // Игнорируем слои "Projectile", "Pickable", "Bot" и другие, если необходимо
+            _ignoreLayerMask = LayerMask.GetMask("Projectile", "Pickable");
         }
+
         public override void OnUpdate()
         {
             control.isGrounded = IsGrounded();
@@ -21,80 +25,86 @@ namespace Angry_Girls
 
         private bool IsGrounded()
         {
-            //Если что-то коллайдит главный BoxCollider
+            // Проверка столкновений с BoxCollider
             if (control.boxColliderContacts != null)
             {
                 foreach (var contact in control.boxColliderContacts)
                 {
-                    var contactCharacter = contact.otherCollider.GetComponent<CControl>();
-                    if (contactCharacter != null && contactCharacter.playerOrAi != control.playerOrAi)
+                    if (IsValidGroundContact(contact))
                     {
-                        if (contactCharacter.isDead)
-                        {
-                            continue;
-                        }
-                    }
-
-                    var colliderBottom = (control.rigidBody.position.y + control.boxCollider.center.y) - (control.boxCollider.size.y / 2f);
-                    var yDiffirence = Mathf.Abs(contact.point.y - colliderBottom);
-
-                    if (yDiffirence < 0.13f)
-                    {
-                        if (Mathf.Abs(control.rigidBody.velocity.y) < 0.001f)
-                        {
-                            landingPosition = new Vector3(0f, contact.point.y, contact.point.z);
-                            return true;
-                        }
+                        landingPosition = new Vector3(0f, contact.point.y, contact.point.z);
+                        return true;
                     }
                 }
             }
 
-            //Если падаем
+            // Проверка столкновений с нижними сферами
             if (control.rigidBody.velocity.y < 0.1f)
             {
                 foreach (var bottomSphere in control.collisionSpheresData.bottomSpheres)
                 {
-                    var blockingObj = CollisionDetection.GetCollidingObject
-                        (control, bottomSphere.transform.position, -Vector3.up, _collidingBlockDistance, ref control.bottomRaycastContactPoint);
-
-                    if (blockingObj == null)
+                    if (IsValidGroundRaycast(bottomSphere.transform.position))
                     {
-                        return false;
+                        return true;
                     }
+                }
+            }
 
+            return false;
+        }
 
-                    var contactCharacter = blockingObj.GetComponent<CControl>();
+        private bool IsValidGroundContact(ContactPoint contact)
+        {
+            // Игнорируем объекты с указанными слоями
+            if (((1 << contact.otherCollider.gameObject.layer) & _ignoreLayerMask) != 0)
+            {
+                return false;
+            }
 
-                    if (contactCharacter != null && contactCharacter.playerOrAi != control.playerOrAi)
-                    {
-                        if (contactCharacter.isDead)
-                        {
-                            continue;
-                        }
+            //ignore dead
+            //var contactCharacter = contact.otherCollider.GetComponent<CControl>();
+            //if (contactCharacter != null && contactCharacter.isDead)
+            //{
+            //    return false;
+            //}
 
-                        //control.JostleFromEnemy(2);
-                        return false;
-                    }
+            //var colliderBottom = (control.rigidBody.position.y + control.boxCollider.bounds.min.y);
+            var colliderBottom = (control.rigidBody.position.y + control.boxCollider.center.y) - (control.boxCollider.size.y / 2f);
+            var yDifference = Mathf.Abs(contact.point.y - colliderBottom);
 
-                    landingPosition = new Vector3(
-                        0f,
-                        control.bottomRaycastContactPoint.y,
-                        control.bottomRaycastContactPoint.z);
+            return yDifference < _collidingBlockDistance && Mathf.Abs(control.rigidBody.velocity.y) < 0.001f;
+        }
 
+        private bool IsValidGroundRaycast(Vector3 rayOrigin)
+        {
+            Debug.DrawRay(rayOrigin, -Vector3.up * _collidingBlockDistance, Color.yellow);
+
+            if (Physics.Raycast(rayOrigin, -Vector3.up, out var hit, _collidingBlockDistance, ~_ignoreLayerMask))
+            {
+                if (!IsOwnBodyPart(hit.collider))
+                {
+                    landingPosition = new Vector3(0f, hit.point.y, hit.point.z);
                     return true;
                 }
             }
-            //_ground = null;
+
             return false;
         }
-        public override void OnFixedUpdate()
+
+        private bool IsOwnBodyPart(Collider col)
+        {
+            return col.transform.root.gameObject == control.gameObject;
+        }
+
+        public override void OnAwake()
         {
         }
 
-        public override void OnStart()
+        public override void OnComponentEnable()
         {
         }
-        public override void OnAwake()
+
+        public override void OnFixedUpdate()
         {
         }
 

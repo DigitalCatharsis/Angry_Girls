@@ -186,7 +186,7 @@ namespace Angry_Girls
 
             if (rigidBody != null)
             {
-                rigidBody.AddForce(new Vector3(0, 0, direction.z * knockbackForce), ForceMode.Impulse);
+                rigidBody.AddForce(new Vector3(0, 0, direction.z * knockbackForce), ForceMode.VelocityChange);
             }
         }
 

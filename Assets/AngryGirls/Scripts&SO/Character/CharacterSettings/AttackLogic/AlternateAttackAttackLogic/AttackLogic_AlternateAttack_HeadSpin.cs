@@ -35,8 +35,7 @@ namespace Angry_Girls
             control.isAttacking = true;
 
             //Move character when casting ability
-            control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed;
-            control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed;
+            control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementSpeed, ForceMode.VelocityChange);
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
@@ -46,7 +45,7 @@ namespace Angry_Girls
             if (control.rigidBody.velocity.y <= - 0.2f && !_haveShootedFirstTime)            
             {
                 //Second cast, second character move
-                control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed;
+                control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementSpeed, ForceMode.VelocityChange);
                 ProcessFireballs(control, _firstShoot_ProjectileAngles);
                 _haveShootedFirstTime = true;
                 control.isAttacking = false;
@@ -55,7 +54,7 @@ namespace Angry_Girls
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            control.rigidBody.velocity = control.characterSettings.AttackAbility_Alternate.attackMovementSpeed;
+            control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementSpeed, ForceMode.VelocityChange);
             ProcessFireballs(control, _secondShoot_ProjectileAngles);
             _haveShootedFirstTime = false;
             control.isAttacking = false;
@@ -82,7 +81,7 @@ namespace Angry_Girls
                 var impulse = new Vector3(0, _impulseY * projectile.transform.forward.y, _impulseZ * projectile.transform.forward.z);
 
                 //add impulse and rotate
-                projectile.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.Impulse);
+                projectile.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);
                 projectile.transform.DORotate(endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * projectile.transform.forward.z), duration: moveDuration, mode: RotateMode.Fast);
 
                 //init and run

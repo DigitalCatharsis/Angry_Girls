@@ -12,13 +12,11 @@ namespace Angry_Girls
         [SerializeField] private Transform _front;
         [SerializeField] private Transform _back;
 
-        public override void OnAwake()
-        {
-        }
+        private Bounds _bounds;
+
         public override void OnComponentEnable()
         {
-            var test = new CollisionSpheresData();
-
+            _bounds = new Bounds(control.boxCollider.center, control.boxCollider.size);
             SetColliderSpheres();
         }
 
@@ -50,62 +48,34 @@ namespace Angry_Girls
 
         private void SetColliderSpheres()
         {
-            //bottom
-            for (int i = 0; i < 5; i++)
+            InitializeSpheres(control.collisionSpheresData.bottomSpheres, _bottom, 5, Reposition_BottomSpheres);
+            InitializeSpheres(control.collisionSpheresData.upSpheres, _up, 5, Reposition_UpSpheres);
+            InitializeSpheres(control.collisionSpheresData.frontSpheres, _front, 10, Reposition_FrontSpheres);
+            InitializeSpheres(control.collisionSpheresData.backSpheres, _back, 10, Reposition_BackSpheres);
+        }
+
+        private void InitializeSpheres(GameObject[] spheres, Transform parent, int count, System.Action repositionMethod)
+        {
+            for (int i = 0; i < count; i++)
             {
                 var sphere = LoadCollisionSpheres();
-                sphere.transform.parent = _bottom;
-                control.collisionSpheresData.bottomSpheres[i] = sphere;
+                sphere.transform.parent = parent;
+                spheres[i] = sphere;
             }
-
-            Reposition_BottomSpheres();
-
-            //top
-            for (int i = 0; i < 5; i++)
-            {
-                var sphere = LoadCollisionSpheres();
-                sphere.transform.parent = _up;
-                control.collisionSpheresData.upSpheres[i] = sphere;
-            }
-
-            Reposition_UpSpheres();
-
-            //front
-            for (int i = 0; i < 10; i++)
-            {
-                var sphere = LoadCollisionSpheres();
-                control.collisionSpheresData.frontSpheres[i] = sphere;
-                sphere.transform.parent = _front;
-            }
-
-            Reposition_FrontSpheres();
-
-            //back
-            for (int i = 0; i < 10; i++)
-            {
-                var sphere = LoadCollisionSpheres();
-                sphere.transform.parent = _back;
-                control.collisionSpheresData.backSpheres[i] = sphere;
-            }
-
-            Reposition_BackSpheres();
+            repositionMethod();
         }
 
         public void RepositionAllSpheres()
         {
-            //ColorDebugLog.Log(control.name + this.name + " proceed RepositionAllSpheres", System.Drawing.KnownColor.ControlLightLight);
             Reposition_FrontSpheres();
             Reposition_BottomSpheres();
             Reposition_BackSpheres();
             Reposition_UpSpheres();
         }
-
         public void Reposition_FrontSpheres()
         {
-            var bounds = new Bounds(control.boxCollider.center, control.boxCollider.size);
-
-            var upPosition = new Vector3(0, bounds.max.y, bounds.max.z);
-            var bottomPosition = new Vector3(0, bounds.min.y, bounds.max.z);
+            var upPosition = new Vector3(0, _bounds.max.y, _bounds.max.z);
+            var bottomPosition = new Vector3(0, _bounds.min.y, _bounds.max.z);
 
             control.collisionSpheresData.frontSpheres[0].transform.localPosition = upPosition;
             control.collisionSpheresData.frontSpheres[1].transform.localPosition = bottomPosition;
@@ -121,10 +91,8 @@ namespace Angry_Girls
 
         public void Reposition_BackSpheres()
         {
-            var bounds = new Bounds(control.boxCollider.center, control.boxCollider.size);
-
-            var upPosition = new Vector3(0, bounds.max.y, bounds.min.z);
-            var bottomPosition = new Vector3(0, bounds.min.y, bounds.min.z);
+            var upPosition = new Vector3(0, _bounds.max.y, _bounds.min.z);
+            var bottomPosition = new Vector3(0, _bounds.min.y, _bounds.min.z);
 
             control.collisionSpheresData.backSpheres[0].transform.localPosition = upPosition;
             control.collisionSpheresData.backSpheres[1].transform.localPosition = bottomPosition;
@@ -140,31 +108,25 @@ namespace Angry_Girls
 
         public void Reposition_BottomSpheres()
         {
+            var frontPosition = new Vector3(0, _bounds.min.y, _bounds.max.z);
+            var backPosition = new Vector3(0, _bounds.min.y, _bounds.min.z);
+
+            control.collisionSpheresData.bottomSpheres[0].transform.localPosition = frontPosition;
+            control.collisionSpheresData.bottomSpheres[1].transform.localPosition = backPosition;
+
+            float interval = (frontPosition.z - backPosition.z) / 4;
+
+            for (int i = 2; i < control.collisionSpheresData.bottomSpheres.Length; i++)
             {
-                var bounds = new Bounds(control.boxCollider.center, control.boxCollider.size);
-
-                var frontPosition = new Vector3(0, bounds.min.y, bounds.max.z);
-                var backPosition = new Vector3(0, bounds.min.y, bounds.min.z);
-
-                control.collisionSpheresData.bottomSpheres[0].transform.localPosition = frontPosition;
-                control.collisionSpheresData.bottomSpheres[1].transform.localPosition = backPosition;
-
-                float interval = (frontPosition.z - backPosition.z) / 4;
-
-                for (int i = 2; i < control.collisionSpheresData.bottomSpheres.Length; i++)
-                {
-                    control.collisionSpheresData.bottomSpheres[i].transform.localPosition =
-                        new Vector3(0f, frontPosition.y, frontPosition.z - (interval * (i - 1)));
-                }
+                control.collisionSpheresData.bottomSpheres[i].transform.localPosition =
+                    new Vector3(0f, frontPosition.y, frontPosition.z - (interval * (i - 1)));
             }
         }
 
         public void Reposition_UpSpheres()
         {
-            var bounds = new Bounds(control.boxCollider.center, control.boxCollider.size);
-
-            var frontPosition = new Vector3(0, bounds.max.y, bounds.max.z);
-            var backPosition = new Vector3(0, bounds.max.y, bounds.min.z);
+            var frontPosition = new Vector3(0, _bounds.max.y, _bounds.max.z);
+            var backPosition = new Vector3(0, _bounds.max.y, _bounds.min.z);
 
             control.collisionSpheresData.upSpheres[0].transform.localPosition = frontPosition;
             control.collisionSpheresData.upSpheres[1].transform.localPosition = backPosition;
@@ -182,9 +144,14 @@ namespace Angry_Girls
         {
         }
 
+        public override void OnAwake()
+        {
+        }
+
         public override void OnFixedUpdate()
         {
         }
+
         public override void OnStart()
         {
         }
@@ -193,7 +160,6 @@ namespace Angry_Girls
         {
         }
     }
-
 
     [Serializable]
     public class CollisionSpheresData

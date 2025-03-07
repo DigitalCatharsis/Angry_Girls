@@ -11,7 +11,7 @@ namespace Angry_Girls
         {
             tempZlocation = control.rigidBody.position.z;
             control.isAttacking = true;
-            control.rigidBody.velocity = control.characterSettings.AttackAbility_Launch.attackMovementSpeed;
+            control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementSpeed, ForceMode.VelocityChange);
 
             _vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, control.characterSettings.AttackAbility_Launch.AttackVFX.GetComponent<VFX>().GetVFXType(), setAsOwner: true);
         }

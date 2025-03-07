@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5126304737274311978}
   - component: {fileID: 8386809405219144835}
   - component: {fileID: 7055105772043150883}
-  - component: {fileID: 5604837188744919303}
   m_Layer: 0
   m_Name: OffsetSphere
   m_TagString: Untagged
@@ -84,15 +83,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5604837188744919303
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6977181466952526126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdf848c7755d95340933a3f7b33dfc12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

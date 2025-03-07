@@ -8,75 +8,55 @@ namespace Angry_Girls
     {
         [Header("Setup")]
         [SerializeField] private float _frontBlocking_Distance = 0.125f;
+
         [Header("Debug")]
         [SerializeField] private SerializedDictionary<GameObject, GameObject> _frontBlockingObjects_dictionary = new(); //key refers to the sphere where the raycast is coming from, and value is the actual gameobject being hit
         [SerializeField] private Vector3 raycastContactPoint;
         [SerializeField] private GameObject[] _frontSpheresArray;
 
-        public override void OnComponentEnable()
+        private int _ignoreLayerMask;
+
+        public override void OnStart()
         {
+            _ignoreLayerMask = LayerMask.GetMask("Projectile", "Pickable");
+        }
+
+        public override void OnFixedUpdate()
+        {
+            DefineFrontSpheres();
+            CheckFrontBlocking();
         }
 
         private bool IsForwardReversed()
         {
-            if (control.gameObject.transform.forward.z < 0)
-            {
-                return true;
-            }
-            if (control.gameObject.transform.forward.z > 0)
-            {
-                return false;
-            }
-
-            return false;
+            return control.gameObject.transform.forward.z < 0;
         }
+
         private void DefineFrontSpheres()
         {
-            if (IsForwardReversed() == true)
-            {
-                //ColorDebugLog.Log(this.name + " triggers operation " + SubcomponentMediator_EventNames.Get_Back_CollisionSpheres, System.Drawing.KnownColor.ControlLightLight);
-                _frontSpheresArray = control.collisionSpheresData.backSpheres;
-                //_frontSpheresArray = control.subComponentMediator.collisionSpheres.backSpheres;
-            }
-            else
-            {
-                //ColorDebugLog.Log(this.name + " triggers operation " + SubcomponentMediator_EventNames.Get_Back_CollisionSpheres, System.Drawing.KnownColor.ControlLightLight);
-                _frontSpheresArray = control.collisionSpheresData.frontSpheres;
-                //_frontSpheresArray = control.subComponentMediator.collisionSpheres.frontSpheres;
-            }
+            _frontSpheresArray = IsForwardReversed() ? control.collisionSpheresData.backSpheres : control.collisionSpheresData.frontSpheres;
         }
 
         private void CheckFrontBlocking()
         {
-            for (var i = 0; i < _frontSpheresArray.Length; i++)
+            foreach (var sphere in _frontSpheresArray)
             {
-                var blockingObj = CollisionDetection.GetCollidingObject(
-                    control: control,
-                    start: _frontSpheresArray[i].transform.position,
-                    dir: transform.forward * _frontBlocking_Distance,
-                    blockDistance: _frontBlocking_Distance,
-                    collisionPoint: ref raycastContactPoint);  //25 is just for visual ray
+                if (Physics.Raycast(sphere.transform.position, transform.forward, out var hit, _frontBlocking_Distance, ~_ignoreLayerMask))
+                {
+                    if (!IsOwnBodyPart(hit.collider))
+                    {
+                        AddBlockingObjToDictionary(_frontBlockingObjects_dictionary, sphere, hit.collider.gameObject);
+                        continue;
+                    }
+                }
 
-                if (blockingObj != null)
-                {
-                    AddBlockingObjToDictionary(_frontBlockingObjects_dictionary, _frontSpheresArray[i], blockingObj);
-                }
-                else
-                {
-                    RemoveBlockingObjFromDictionary(_frontBlockingObjects_dictionary, _frontSpheresArray[i]);
-                }
+                RemoveBlockingObjFromDictionary(_frontBlockingObjects_dictionary, sphere);
             }
         }
+
         private void AddBlockingObjToDictionary(SerializedDictionary<GameObject, GameObject> dic, GameObject key, GameObject value)
         {
-            if (dic.ContainsKey(key))
-            {
-                dic[key] = value;
-            }
-            else
-            {
-                dic.Add(key, value);
-            }
+            dic[key] = value;
         }
 
         private void RemoveBlockingObjFromDictionary(SerializedDictionary<GameObject, GameObject> dic, GameObject key)
@@ -89,21 +69,15 @@ namespace Angry_Girls
 
         public bool IsFrontBlocked()
         {
-            if (IsForwardReversed() == false)
-            {
-                return IsRightSideBlocked();
-            }
-            else
-            {
-                return IsLeftSideBlocked();
-            }
+            return IsForwardReversed() ? IsSideBlocked(true) : IsSideBlocked(false);
         }
 
-        private bool IsRightSideBlocked()
+        private bool IsSideBlocked(bool isLeftSide)
         {
-            foreach (KeyValuePair<GameObject, GameObject> data in _frontBlockingObjects_dictionary)
+            foreach (var data in _frontBlockingObjects_dictionary)
             {
-                if ((data.Value.transform.position - control.rigidBody.position).z > 0f)
+                var zDifference = (data.Value.transform.position - control.rigidBody.position).z;
+                if (isLeftSide ? zDifference < 0f : zDifference > 0f)
                 {
                     return true;
                 }
@@ -111,23 +85,12 @@ namespace Angry_Girls
             return false;
         }
 
-        private bool IsLeftSideBlocked()
+        private bool IsOwnBodyPart(Collider col)
         {
-            foreach (KeyValuePair<GameObject, GameObject> data in _frontBlockingObjects_dictionary)
-            {
-                if ((data.Value.transform.position - control.rigidBody.position).z < 0f)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return col.transform.root.gameObject == control.gameObject;
         }
 
         public override void OnAwake()
-        {
-
-        }
-        public override void OnStart()
         {
         }
 
@@ -135,10 +98,8 @@ namespace Angry_Girls
         {
         }
 
-        public override void OnFixedUpdate()
+        public override void OnComponentEnable()
         {
-            DefineFrontSpheres();
-            CheckFrontBlocking();
         }
 
         public override void OnLateUpdate()
