@@ -4,7 +4,7 @@ namespace Angry_Girls
 {
     public class BoxColliderUpdater : SubComponent
     {
-        public bool isUpdatingSpheres = false;
+        //public bool isUpdatingSpheres = false;
         public bool isUpdateColliderCondition = false;
 
         public override void OnComponentEnable()
@@ -20,7 +20,6 @@ namespace Angry_Girls
             var stateHash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
             var stateName = GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesContainer.stateNames_Dictionary, stateHash);
 
-            //if (!control.characterSettings.boxcolliderContainer.boxColliderAnimationData.ContainsKey(control.currentStateData.currentStateName))
             if (!control.characterSettings.boxcolliderContainer.boxColliderAnimationData.ContainsKey(stateName))
             {
                 return;
@@ -28,15 +27,15 @@ namespace Angry_Girls
 
             isUpdateColliderCondition = true;
 
-            isUpdatingSpheres = false;
+            //isUpdatingSpheres = false;
 
             UpdateBoxCollider_Size();
             UpdateBoxCollider_Center();
 
-            if (isUpdatingSpheres)
-            {
-                control.subComponentMediator.Notify_UpdatingColliderSpheres(this);
-            }
+            //if (isUpdatingSpheres)
+            //{
+            //    control.subComponentMediator.Notify_UpdatingColliderSpheres(this);
+            //}
         }
 
         private void UpdateBoxCollider_Size()
@@ -49,7 +48,6 @@ namespace Angry_Girls
             var stateHash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
             var stateName = GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesContainer.stateNames_Dictionary, stateHash);
 
-            //var data = control.characterSettings.boxcolliderContainer.boxColliderAnimationData[currentState.currentStateName];
             var data = control.characterSettings.boxcolliderContainer.boxColliderAnimationData[stateName];
             if (Vector3.SqrMagnitude(control.boxCollider.size - data.boxColliderSize) > 0.00001f || Vector3.SqrMagnitude(control.boxCollider.size - data.boxColliderSize) < 0.00001f)
             {
@@ -58,7 +56,7 @@ namespace Angry_Girls
                     data.boxColliderSize,
                     Time.deltaTime * data.changeSpeed);
 
-                isUpdatingSpheres = true;
+                //isUpdatingSpheres = true;
             }
         }
 
@@ -80,7 +78,7 @@ namespace Angry_Girls
                     data.boxColliderCenter,
                     Time.deltaTime * data.changeSpeed);
 
-                isUpdatingSpheres = true;
+                //isUpdatingSpheres = true;
             }
         }
 

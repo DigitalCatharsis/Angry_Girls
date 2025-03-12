@@ -48,8 +48,8 @@ namespace Angry_Girls
         public Animator animator;
         public AttackSystem_Data attackSystem_Data;
         public ContactPoint[] boxColliderContacts;
-        [Space(10)]
-        public CollisionSpheresData collisionSpheresData;
+        //[Space(10)]
+        //public CollisionSpheresData collisionSpheresData;
 
         [Space(10)]
         public Vector3 bottomRaycastContactPoint;

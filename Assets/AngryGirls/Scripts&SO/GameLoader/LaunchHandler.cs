@@ -69,6 +69,11 @@ namespace Angry_Girls
 
         private void Update()
         {
+            if (GameLoader.Instance.gameLogic.GameOver)
+            {
+                return;
+            }
+
             #region ButtonReaction (Except applyAttack)
             //Нажали
             if (GameLoader.Instance.inputManager.IsPressed && _canPressAtCharacters)

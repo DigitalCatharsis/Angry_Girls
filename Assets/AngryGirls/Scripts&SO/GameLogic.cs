@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class GameLogic : MonoBehaviour
 {
-    public bool gameOver = false;
+    private bool _gameOver = false;
+    public bool GameOver => _gameOver;
+
 
     public void ExecuteGameOver()
     {
+        _gameOver = true;
         GameLoader.Instance.gameLogic_UIManager.ShowGameoverUI();
         ColorDebugLog.Log("GAME OVER", KnownColor.Cyan);
     }

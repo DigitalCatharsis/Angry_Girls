@@ -15,6 +15,12 @@ namespace Angry_Girls
 
         public void CheckForDamage(Collider triggerCollider)
         {
+            if (triggerCollider.gameObject.layer == LayerMask.NameToLayer("DeathZone"))
+            {
+                control.subComponentMediator.Notify_Dead(this);
+                return;
+            }
+
             //Does it VFX?
             var vfx = triggerCollider.gameObject.transform.GetComponent<VFX>();
 

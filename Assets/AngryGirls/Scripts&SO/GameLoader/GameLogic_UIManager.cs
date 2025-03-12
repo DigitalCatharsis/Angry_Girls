@@ -19,12 +19,23 @@ namespace Angry_Girls
         [Header("Deubg")]
         [SerializeField] private SerializedDictionary<CControl, Slider> _healtBar_Dict;
         [SerializeField] private int _score = 0;
+        [SerializeField] private GameObject _healthBarsContainer;
+
+
         public void CreateHealthBar(CControl control)
         {
+            if (_healthBarsContainer == null)
+            {
+                _healthBarsContainer = new GameObject("HealthBarContainer");
+            }
+
             var healthBar = Resources.Load("HealthBar") as GameObject;
-            var HealthBarGameobject = Instantiate(healthBar);
-            control.healthSlider = HealthBarGameobject.GetComponentInChildren<Slider>();
+            var healthBarGameobject = Instantiate(healthBar);
+            healthBarGameobject.name = "HealthBar_" + control.name;
+            healthBarGameobject.transform.SetParent(_healthBarsContainer.transform, true);
+            control.healthSlider = healthBarGameobject.GetComponentInChildren<Slider>();
             _healtBar_Dict.Add(control, control.healthSlider);
+
             InitHealthBar(control);
         }
 
@@ -62,20 +73,23 @@ namespace Angry_Girls
 
         private void LateUpdate()
         {
+            UpdateHealthBarsPositions();
+        }
+
+        private void UpdateHealthBarsPositions()
+        {
             foreach (var elem in _healtBar_Dict)
             {
                 var rigid = elem.Key.GetComponent<Rigidbody>();
-                //var maxY = elem.Key.boxCollider.bounds.max.y + 0.35f;
 
-                elem.Value.transform.root.position = new Vector3(
+                elem.Value.transform.parent.position = new Vector3(
                     0,
                     rigid.transform.position.y + 1.2f,
                     rigid.transform.position.z
-                    //elem.Key.boxCollider.bounds.center.z
-                    ) ;
-
+                    );
             }
         }
+
         public void ShowGameoverUI()
         {
             gameOverUi.SetActive(true);

@@ -109,7 +109,6 @@
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleAudio.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\HelperComponent\ReadOnlyDrawer.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolObject\PoolObject.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CollisionDetection.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\HowToPlayUI.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\HelperComponent\HelperComponent.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CharacterLauncher.cs" />

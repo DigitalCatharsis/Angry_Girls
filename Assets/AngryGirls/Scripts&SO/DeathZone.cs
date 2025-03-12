@@ -8,11 +8,7 @@ namespace Angry_Girls
     {
         private void OnTriggerEnter(Collider other)
         {
-            var chararacter = other.GetComponent<CControl>();
-            if (chararacter != null)
-            {
-                chararacter.isDead = true;
-            }
+
         }
     }
 }

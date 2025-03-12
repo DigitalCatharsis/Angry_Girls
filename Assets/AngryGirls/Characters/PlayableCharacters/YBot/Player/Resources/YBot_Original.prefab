@@ -115,10 +115,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   control: {fileID: 0}
-  _up: {fileID: 7602889664975225330}
-  _bottom: {fileID: 5334764737914758433}
-  _front: {fileID: 6856069825757993094}
-  _back: {fileID: 5321384789249125008}
 --- !u!1 &449259334719681513
 GameObject:
   m_ObjectHideFlags: 0
@@ -1097,7 +1093,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isDisposed: 0
-  _characterType: 1
   _currentHealth: 100
   healthSlider: {fileID: 0}
   isLanding: 0
@@ -1116,41 +1111,6 @@ MonoBehaviour:
   rigidBody: {fileID: 0}
   boxCollider: {fileID: 0}
   animator: {fileID: 0}
-  collisionSpheresData:
-    bottomSpheres:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    frontSpheres:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    backSpheres:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    upSpheres:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
   bottomRaycastContactPoint: {x: 0, y: 0, z: 0}
   playerOrAi: 0
   characterSettings: {fileID: 11400000, guid: 28afea81c95372d4fb753c0287980f6c, type: 2}
@@ -1760,8 +1720,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   control: {fileID: 0}
-  _collidingBlockDistance: 0.2
-  landingPosition: {x: 0, y: 0, z: 0}
+  _groundCheckDistance: 0.1
+  _ignoreLayerMask:
+    serializedVersion: 2
+    m_Bits: 62464
+  _groundCheckPoint: {fileID: 8322040185008855113}
 --- !u!1 &4770912022852876395
 GameObject:
   m_ObjectHideFlags: 0
@@ -2327,11 +2290,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   control: {fileID: 0}
-  _frontBlocking_Distance: 0.125
-  _frontBlockingObjects_dictionary:
-    _serializedList: []
-  raycastContactPoint: {x: 0, y: 0, z: 0}
-  _frontSpheresArray: []
 --- !u!1 &6050039227792400111
 GameObject:
   m_ObjectHideFlags: 0
@@ -2916,7 +2874,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   control: {fileID: 0}
-  isUpdatingSpheres: 0
   isUpdateColliderCondition: 0
 --- !u!1 &7792407306361366937
 GameObject:

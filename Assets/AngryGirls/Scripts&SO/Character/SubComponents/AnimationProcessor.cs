@@ -171,17 +171,6 @@ namespace Angry_Girls
             //DEAD
             if (control.isDead)
             {
-                if (control.characterSettings.deathByAnimation == true)
-                {
-                    var randomDeathAnimation = control.characterSettings.death_States[UnityEngine.Random.Range(0, control.characterSettings.death_States.Count)].animation; //0 = none            
-                                                                                                                                                                            //no crossFade for instant animations changes at fast damage recive
-                    ChangeAnimationState(GameLoader.Instance.statesContainer.death_States_Dictionary[randomDeathAnimation], transitionDuration: 0.1f);
-                }
-                else
-                {
-                    //TODO: Implement
-                    //TriggerRagroll();
-                }
                 return;
             }
 
@@ -430,6 +419,24 @@ namespace Angry_Girls
 
         public override void OnLateUpdate()
         {
+        }
+
+        public void SetDeath()
+        {
+            if (control.characterSettings.deathByAnimation == true)
+            {
+                Debug.Log("death");
+                var randomDeathAnimation = control.characterSettings.death_States[UnityEngine.Random.Range(0, control.characterSettings.death_States.Count)].animation; //0 = none            
+                                                                                                                                                                        //no crossFade for instant animations changes at fast damage recive
+                ChangeAnimationState(GameLoader.Instance.statesContainer.death_States_Dictionary[randomDeathAnimation], transitionDuration: 0.1f);
+                control.FinishTurn(0);
+            }
+            else
+            {
+                //TODO: Implement
+                //TriggerRagroll();
+            }
+            return;
         }
     }
 }

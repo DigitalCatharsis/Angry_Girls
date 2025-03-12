@@ -41,6 +41,7 @@ namespace Angry_Girls
         {            
             GameLoader.Instance.gameLogic_UIManager.DisableHealthBar(_control);
             _damageHandler.SetDeathParams();
+            _animationProcessor.SetDeath();
         }
 
         public void Notify_CollissionCheck(object sender, Collider collider)
@@ -48,9 +49,9 @@ namespace Angry_Girls
             _damageHandler.CheckForDamage(collider);
         }
 
-        public void Notify_UpdatingColliderSpheres(object sender)
-        {
-            _collisionSpheres.RepositionAllSpheres();
-        }
+        //public void Notify_UpdatingColliderSpheres(object sender)
+        //{
+        //    _collisionSpheres.RepositionAllSpheres();
+        //}
     }
 }
