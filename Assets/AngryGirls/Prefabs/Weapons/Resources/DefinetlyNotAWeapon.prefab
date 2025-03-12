@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 20836143682428046}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: DefinetlyNotAWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 2805494783817704252}
   - component: {fileID: 3618496948819451977}
   - component: {fileID: 8787596225632006068}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: DefinetlyNotAWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

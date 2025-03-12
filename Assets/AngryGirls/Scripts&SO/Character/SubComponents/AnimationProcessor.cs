@@ -231,7 +231,9 @@ namespace Angry_Girls
                     }
 
                     //everyones logic
-                    ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], transitionDuration: control.characterSettings.airbonedFlying_States.transitionDuration);
+                    ChangeAnimationState_CrossFadeInFixedTime(
+                        GameLoader.Instance.statesContainer.airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], 
+                        transitionDuration: control.characterSettings.airbonedFlying_States.transitionDuration);
                 }
             }
 

@@ -14,7 +14,7 @@ namespace Angry_Girls
 
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-
+            control.rigidBody.velocity = Vector3.zero;  
             control.isAttacking = true;
 
             //Move character when casting ability

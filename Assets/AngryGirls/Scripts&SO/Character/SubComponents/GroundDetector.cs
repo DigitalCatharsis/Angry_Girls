@@ -4,95 +4,126 @@ namespace Angry_Girls
 {
     public class GroundDetector : SubComponent
     {
-        [SerializeField] private float _groundCheckDistance = 0.1f; // Дистанция для проверки земли
-        [SerializeField] private LayerMask _ignoreLayerMask; // Слои, которые игнорируются
-
-        private bool _isGrounded;
         private BoxCollider _boxCollider;
         private Rigidbody _rigidbody;
-
-        public bool IsGrounded => _isGrounded;
+        private LayerMask _ignoreLayerMask;
+        private bool _isGrounded;
+        private bool _wasGroundedLastFrame;
 
         public override void OnAwake()
         {
-            // Инициализация компонентов из control
             _boxCollider = control.boxCollider;
             _rigidbody = control.rigidBody;
-
-            // Проверяем, что компоненты найдены
-            if (_boxCollider == null || _rigidbody == null)
-            {
-                Debug.LogError("BoxCollider или Rigidbody не найдены в control!");
-            }
         }
 
         public override void OnStart()
         {
-            // Инициализация маски слоев (пример из твоего кода)
-            _ignoreLayerMask = LayerMask.GetMask("Projectile", "Pickable", "Bot");
-        }
+            //string layerToAdd;
+            //if (control.playerOrAi == PlayerOrAi.Player)
+            //{
+            //    layerToAdd = "Character";
+            //}
+            //else
+            //{
+            //    layerToAdd = "Bot";
+            //}
 
-        public override void OnUpdate()
-        {
-            CheckGround();
-            control.isGrounded = IsGrounded;
+            // Получаем номер слоя корневого объекта
+            //int rootLayer = transform.root.gameObject.layer;
+
+            // Получаем маску для стандартных слоев
+            _ignoreLayerMask = LayerMask.GetMask("Projectile", "Pickable", "CharacterToLaunch", "Character", "Bot" /*layerToAdd*/);
         }
 
         public override void OnFixedUpdate()
         {
-            // Можно добавить логику, если нужно
-        }
+            CheckIfGrounded();
 
-        public override void OnComponentEnable()
-        {
-            // Логика при включении компонента
-        }
+            // Обновляем control.isGrounded
+            control.isGrounded = _isGrounded;
 
-        public override void OnLateUpdate()
-        {
-            // Логика после обновления
-        }
-
-        private void CheckGround()
-        {
-            // Инвертируем маску, чтобы исключить ненужные слои
-            LayerMask groundLayerMask = ~_ignoreLayerMask;
-
-            // Получаем текущие параметры BoxCollider
-            Vector3 boxColliderCenter = _boxCollider.center;
-            Vector3 boxColliderSize = _boxCollider.size;
-
-            // Вычисляем точку для проверки земли (нижняя часть BoxCollider)
-            Vector3 groundCheckPosition = transform.position + boxColliderCenter - Vector3.up * (boxColliderSize.y / 2);
-
-            // Выполняем проверку с помощью Raycast
-            bool hitGround = Physics.Raycast(
-                groundCheckPosition,
-                Vector3.down,
-                _groundCheckDistance,
-                groundLayerMask
-            );
-
-            // Обновляем состояние
-            _isGrounded = hitGround;
-        }
-
-        // Визуализация для дебага (можно убрать в финальной версии)
-        private void OnDrawGizmos()
-        {
-            if (_boxCollider != null)
+            // Проверка момента приземления
+            if (_isGrounded && !_wasGroundedLastFrame && _rigidbody.velocity.y <= 0)
             {
-                // Получаем текущие параметры BoxCollider
-                Vector3 boxColliderCenter = _boxCollider.center;
-                Vector3 boxColliderSize = _boxCollider.size;
+                OnLanding();
+            }
 
-                // Вычисляем точку для проверки земли (нижняя часть BoxCollider)
-                Vector3 groundCheckPosition = transform.position + boxColliderCenter - Vector3.up * (boxColliderSize.y / 2);
+            _wasGroundedLastFrame = _isGrounded;
+        }
 
-                // Рисуем луч для визуализации
-                Gizmos.color = _isGrounded ? Color.green : Color.red;
-                Gizmos.DrawLine(groundCheckPosition, groundCheckPosition + Vector3.down * _groundCheckDistance);
+        private void CheckIfGrounded()
+        {
+            if (_boxCollider == null || !_boxCollider.enabled) return;
+
+            // Нижняя точка коллайдера
+            Vector3 bottomPoint = new Vector3(_boxCollider.bounds.center.x, _boxCollider.bounds.min.y, _boxCollider.bounds.center.z);
+
+            // Центр BoxCast области (0.13 выше нижней точки)
+            Vector3 boxCenter = bottomPoint + Vector3.up * 0.13f;
+
+            // Размер BoxCast области (ширина и глубина как у коллайдера, высота небольшая)
+            Vector3 boxSize = new Vector3(_boxCollider.size.x, 0.1f, _boxCollider.size.z);
+
+            // Длина луча (0.13 вниз от центра BoxCast)
+            float rayLength = 0.13f;
+
+            // Рисуем Gizmos для отладки
+            Debug.DrawLine(boxCenter, boxCenter + Vector3.down * rayLength, Color.cyan, 0.1f);
+
+            RaycastHit hit;
+            _isGrounded = Physics.BoxCast(boxCenter, boxSize / 2, Vector3.down, out hit, Quaternion.identity, rayLength, ~_ignoreLayerMask);
+
+            // Логирование для отладки
+            if (_isGrounded && control.name == "YBot_Red(Clone)")
+            {
+                Debug.Log("На земле. Нормаль: " + hit.normal + ", Точка: " + hit.point);
+                Debug.Log(hit.collider.name);
+            }
+            else
+            {
+                //Debug.Log("В воздухе.");
             }
         }
+
+        private void OnLanding()
+        {
+            Debug.Log("Приземление!");
+            // Здесь можно добавить логику для момента приземления
+        }
+
+        // Отрисовка Gizmos
+        private void OnDrawGizmos()
+        {
+            if (_boxCollider == null || !_boxCollider.enabled) return;
+
+            // Нижняя точка коллайдера
+            Vector3 bottomPoint = new Vector3(_boxCollider.bounds.center.x, _boxCollider.bounds.min.y, _boxCollider.bounds.center.z);
+
+            // Центр BoxCast области (0.13 выше нижней точки)
+            Vector3 boxCenter = bottomPoint + Vector3.up * 0.13f;
+
+            // Размер BoxCast области
+            Vector3 boxSize = new Vector3(_boxCollider.size.x, 0.1f, _boxCollider.size.z);
+
+            // Цвет в зависимости от состояния
+            Gizmos.color = _isGrounded ? Color.green : Color.red;
+
+            // Рисуем BoxCast область
+            Gizmos.DrawWireCube(boxCenter, boxSize);
+
+            // Если есть пересечение, рисуем нормаль и точку пересечения
+            RaycastHit hit;
+            if (Physics.BoxCast(boxCenter, boxSize / 2, Vector3.down, out hit, Quaternion.identity, 0.13f, ~_ignoreLayerMask))
+            {
+                Gizmos.color = Color.blue;
+                Gizmos.DrawLine(hit.point, hit.point + hit.normal); // Нормаль поверхности
+                Gizmos.DrawSphere(hit.point, 0.1f); // Точка пересечения
+            }
+        }
+
+        // Остальные методы интерфейса SubComponent
+        public override void OnUpdate() { }
+        public override void OnComponentEnable() { }
+        public override void OnLateUpdate() { }
     }
 }

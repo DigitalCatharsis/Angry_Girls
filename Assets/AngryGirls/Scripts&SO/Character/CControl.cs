@@ -204,8 +204,13 @@ namespace Angry_Girls
 
         private void OnCollisionStay(Collision collision)
         {
-            if (collision != null)
-            boxColliderContacts = (collision.contacts);
+            //if (collision != null)
+            //boxColliderContacts = (collision.contacts);
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            Debug.Log(collision.collider);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -243,6 +248,12 @@ namespace Angry_Girls
             {
                 var weaponPrefab = Resources.Load("DefinetlyNotAWeapon") as GameObject;
                 var weapon = Instantiate(weaponPrefab, weaponHolder.transform.position, Quaternion.identity);
+
+                weapon.gameObject.layer = this.gameObject.layer;
+                foreach (Transform child in weapon.transform)
+                {
+                    child.gameObject.layer = this.gameObject.layer;
+                }
 
                 weapon.transform.parent = weaponHolder;
                 weapon.transform.localScale = weaponHolder.transform.localScale;
