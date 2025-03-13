@@ -44,7 +44,7 @@ namespace Angry_Girls
             _animationProcessor.SetDeath();
         }
 
-        public void Notify_CollissionCheck(object sender, Collider collider)
+        public void Notify_TriggerCheck(object sender, Collider collider)
         {
             _damageHandler.CheckForDamage(collider);
         }

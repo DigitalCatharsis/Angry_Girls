@@ -20,7 +20,7 @@ namespace Angry_Girls
         [Header("Gizmos Settings")]
         [SerializeField] private bool _showCenterOfMass = false;
 
-        private void Awake()
+        private void OnEnable()
         {
             _rb = GetComponent<Rigidbody>();
         }

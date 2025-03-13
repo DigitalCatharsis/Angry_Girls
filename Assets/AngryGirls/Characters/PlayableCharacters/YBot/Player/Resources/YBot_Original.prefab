@@ -1095,6 +1095,9 @@ MonoBehaviour:
   _isDisposed: 0
   _currentHealth: 100
   healthSlider: {fileID: 0}
+  _repelForce: 5
+  _repelForceDelta: 0.075
+  _maxRepelForce: 7
   isLanding: 0
   isGrounded: 0
   isAttacking: 0
@@ -1720,7 +1723,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   control: {fileID: 0}
-  _groundCheckBuffer: 0
 --- !u!1 &4770912022852876395
 GameObject:
   m_ObjectHideFlags: 0

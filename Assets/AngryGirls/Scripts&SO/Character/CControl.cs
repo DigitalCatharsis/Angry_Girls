@@ -15,15 +15,18 @@ namespace Angry_Girls
     [Serializable]
     public class CControl : PoolObject
     {
-        [Space(15)]
-        [Header("Debug")]
-        [Header("Pool object")]
-        //[SerializeField] private CharacterType _characterType;
-
         [Header("Health")]
         [SerializeField] private float _currentHealth = 100f;
         public Slider healthSlider;
         public float CurrentHealth => _currentHealth;
+
+        [Header("Repel Settings")]
+        [SerializeField] private float _repelForce = 0.25f; // Базовая сила отталкивания
+        [SerializeField] private float _repelForceDelta = 0.05f; // Дельта увеличения силы
+        [SerializeField] private float _maxRepelForce = 1f; // Максимальная сила отталкивания
+        private float _currentRepelForce; // Текущая сила отталкивания
+        private int _hangCounter; // Счетчик "висения" на другом персонаже
+        private bool _isHanging; // Флаг, что персонаж "висит" на другом
 
         public bool isLanding = false;
         public bool isGrounded = false;
@@ -48,8 +51,6 @@ namespace Angry_Girls
         public Animator animator;
         public AttackSystem_Data attackSystem_Data;
         public ContactPoint[] boxColliderContacts;
-        //[Space(10)]
-        //public CollisionSpheresData collisionSpheresData;
 
         [Space(10)]
         public Vector3 bottomRaycastContactPoint;
@@ -164,10 +165,8 @@ namespace Angry_Girls
         {
             if (rigidBody.velocity.z != 0)
             {
-                //ColorDebugLog.Log("Denied knockback", KnownColor.Orange);
                 return;
             }
-            //ColorDebugLog.Log("Applied knockback", KnownColor.Green);
 
             var direction = rigidBody.position - opponent.transform.position;
 
@@ -204,13 +203,83 @@ namespace Angry_Girls
 
         private void OnCollisionStay(Collision collision)
         {
-            //if (collision != null)
-            //boxColliderContacts = (collision.contacts);
+            HandleCharacterCollision(collision.collider);
         }
 
         private void OnCollisionEnter(Collision collision)
         {
-            Debug.Log(collision.collider);
+            HandleCharacterCollision(collision.collider);
+        }
+
+        private void HandleCharacterCollision(Collider other)
+        {
+            // Проверяем, что это другой персонаж (слой "Character" или "Bot")
+            var otherLayer = other.gameObject.layer;
+            if (otherLayer != LayerMask.NameToLayer("Character") && otherLayer != LayerMask.NameToLayer("Bot"))
+                return;
+
+            // Получаем Rigidbody другого персонажа
+            var otherRigidbody = other.attachedRigidbody;
+            if (otherRigidbody == null)
+                return;
+
+            // Проверяем, что текущий персонаж движется вниз
+            if (rigidBody.velocity.y >= 0)
+                return;
+
+            // Проверяем, что другой персонаж стоит на земле или неподвижен
+            var otherIsGrounded = otherRigidbody.velocity.magnitude < 0.1f; // Примерное условие
+            if (!otherIsGrounded)
+                return;
+
+            // Увеличиваем счетчик "висения"
+            _hangCounter++;
+            _isHanging = true;
+
+            // Увеличиваем силу отталкивания, но не больше максимальной
+            _currentRepelForce = Mathf.Min(_repelForce + _hangCounter * _repelForceDelta, _maxRepelForce);
+
+            // Вычисляем разницу по оси Z между текущим персонажем и другим
+            var zDifference = rigidBody.transform.position.z - otherRigidbody.transform.position.z;
+
+            // Определяем направление отталкивания
+            Vector3 repelDirection;
+            if (zDifference > 0)
+            {
+                // Текущий персонаж впереди другого, отталкиваем вперед
+                repelDirection = Vector3.forward;
+            }
+            else if (zDifference < 0)
+            {
+                // Текущий персонаж сзади другого, отталкиваем назад
+                repelDirection = Vector3.back;
+            }
+            else
+            {
+                // Разница по Z равна нулю, отталкиваем в случайную сторону
+                repelDirection = UnityEngine.Random.Range(0, 2) == 0 ? Vector3.back : Vector3.forward;
+            }
+
+            // Смещаем персонажа плавно, без изменения скорости
+            Vector3 repelOffset = repelDirection * (_currentRepelForce * Time.fixedDeltaTime);
+            rigidBody.MovePosition(rigidBody.position + repelOffset);
+        }
+
+        private void FixedUpdate()
+        {
+            subComponentsController.OnFixedUpdate();
+
+            // Если персонаж больше не "висит", сбрасываем счетчик и силу отталкивания
+            if (!_isHanging)
+            {
+                _hangCounter = 0;
+                _currentRepelForce = _repelForce;
+            }
+
+
+            // Сбрасываем флаг "висения" каждый кадр
+            _isHanging = false;
+
         }
 
         private void OnTriggerEnter(Collider other)
@@ -220,17 +289,12 @@ namespace Angry_Girls
                 return;
             }
 
-            subComponentMediator.Notify_CollissionCheck(this, other);
+            subComponentMediator.Notify_TriggerCheck(this, other);
         }
 
         private void Update()
         {
             subComponentsController.OnUpdate();
-        }
-
-        private void FixedUpdate()
-        {
-            subComponentsController.OnFixedUpdate();
         }
 
         private void LateUpdate()
