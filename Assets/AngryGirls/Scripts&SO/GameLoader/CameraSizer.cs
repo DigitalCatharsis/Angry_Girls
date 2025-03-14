@@ -4,9 +4,9 @@ namespace Angry_Girls
 {
     public class CameraSizer : MonoBehaviour
     {
-        private const float _targetSizeX = 1920.0f;
-        private const float _targetSizeY = 1080.0f;
-        private const float _halfSize = 540.0f; // 1/2 of height in pixels
+        private const float _targetSizeX = 1280.0f;
+        private const float _targetSizeY = 720.0f;
+        private const float _halfSize = 360.0f; // 1/2 of height in pixels
 
         private void Awake()
         {

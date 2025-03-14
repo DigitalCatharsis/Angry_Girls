@@ -12,14 +12,14 @@ namespace Angry_Girls
         public GameObject farObject;
 
         [Header("Values")]
-        [ShowOnlyAttribute] public float distanceBetweenObjects;
-        [ShowOnlyAttribute] public float SqrMagnitude;
-        [ShowOnlyAttribute] public Vector3 vectorToObject;
+        [ShowOnly] public float distanceBetweenObjects;
+        [ShowOnly] public float SqrMagnitude;
+        [ShowOnly] public Vector3 vectorToObject;
 
         [Space(10)]
-        [ShowOnlyAttribute] public Vector3 target_WorldPosition;
+        [ShowOnly] public Vector3 target_WorldPosition;
         [Space(1)]
-        [ShowOnlyAttribute] public Vector3 farObject_WorldPosition;
+        [ShowOnly] public Vector3 farObject_WorldPosition;
 
         private void Update()
         {

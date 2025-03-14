@@ -13,19 +13,22 @@ MonoBehaviour:
   m_Name: SO_PlayerData
   m_EditorClassIdentifier: 
   selectedCharacters:
-  - {fileID: 11400000, guid: 28afea81c95372d4fb753c0287980f6c, type: 2}
+  - {fileID: 11400000, guid: 263490b01e5a26a4eab11fef160f8338, type: 2}
+  - {fileID: 11400000, guid: a778f59384ee71745baa1bd3d66b00e8, type: 2}
   - {fileID: 11400000, guid: 02aa6b36c76a8d7438cf83b50f435809, type: 2}
-  - {fileID: 11400000, guid: a778f59384ee71745baa1bd3d66b00e8, type: 2}
-  - {fileID: 11400000, guid: a778f59384ee71745baa1bd3d66b00e8, type: 2}
   - {fileID: 11400000, guid: 28afea81c95372d4fb753c0287980f6c, type: 2}
+  - {fileID: 0}
   - {fileID: 0}
   avaibleCharacterPool:
   - {fileID: 11400000, guid: 28afea81c95372d4fb753c0287980f6c, type: 2}
   - {fileID: 11400000, guid: 28afea81c95372d4fb753c0287980f6c, type: 2}
+  - {fileID: 11400000, guid: 28afea81c95372d4fb753c0287980f6c, type: 2}
   - {fileID: 11400000, guid: 02aa6b36c76a8d7438cf83b50f435809, type: 2}
+  - {fileID: 11400000, guid: 02aa6b36c76a8d7438cf83b50f435809, type: 2}
+  - {fileID: 11400000, guid: 02aa6b36c76a8d7438cf83b50f435809, type: 2}
+  - {fileID: 11400000, guid: 263490b01e5a26a4eab11fef160f8338, type: 2}
   - {fileID: 11400000, guid: 263490b01e5a26a4eab11fef160f8338, type: 2}
   - {fileID: 11400000, guid: 263490b01e5a26a4eab11fef160f8338, type: 2}
   - {fileID: 11400000, guid: a778f59384ee71745baa1bd3d66b00e8, type: 2}
   - {fileID: 11400000, guid: a778f59384ee71745baa1bd3d66b00e8, type: 2}
-  - {fileID: 11400000, guid: 02aa6b36c76a8d7438cf83b50f435809, type: 2}
-  - {fileID: 11400000, guid: 263490b01e5a26a4eab11fef160f8338, type: 2}
+  - {fileID: 11400000, guid: a778f59384ee71745baa1bd3d66b00e8, type: 2}
