@@ -1723,6 +1723,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   control: {fileID: 0}
+  _multiCollisionTimeThreshold: 3
 --- !u!1 &4770912022852876395
 GameObject:
   m_ObjectHideFlags: 0

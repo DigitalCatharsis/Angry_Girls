@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
 using UnityEngine.UI;
@@ -50,7 +51,8 @@ namespace Angry_Girls
         public BoxCollider boxCollider;
         public Animator animator;
         public AttackSystem_Data attackSystem_Data;
-        public ContactPoint[] boxColliderContacts;
+        private List<Collider> _currentCollisions = new List<Collider>(); // Список текущих столкновений
+
 
         [Space(10)]
         public Vector3 bottomRaycastContactPoint;
@@ -201,35 +203,82 @@ namespace Angry_Girls
             subComponentsController.OnAwake();
         }
 
-        private void OnCollisionStay(Collision collision)
-        {
-            HandleCharacterCollision(collision.collider);
-        }
-
         private void OnCollisionEnter(Collision collision)
         {
-            HandleCharacterCollision(collision.collider);
+            // Добавляем коллайдер в список текущих столкновений
+            if (!_currentCollisions.Contains(collision.collider))
+            {
+                _currentCollisions.Add(collision.collider);
+            }
+
+            HandleCharacterCollision();
         }
 
-        private void HandleCharacterCollision(Collider other)
+        private void OnCollisionStay(Collision collision)
         {
-            // Проверяем, что это другой персонаж (слой "Character" или "Bot")
-            var otherLayer = other.gameObject.layer;
-            if (otherLayer != LayerMask.NameToLayer("Character") && otherLayer != LayerMask.NameToLayer("Bot"))
+            HandleCharacterCollision();
+        }
+
+        private void OnCollisionExit(Collision collision)
+        {
+            // Удаляем коллайдер из списка текущих столкновений
+            if (_currentCollisions.Contains(collision.collider))
+            {
+                _currentCollisions.Remove(collision.collider);
+            }
+        }
+
+        private void HandleCharacterCollision()
+        {
+            if (_currentCollisions.Count == 0)
                 return;
 
+            // Находим ближайшего противника
+            Collider nearestCollider = null;
+            float nearestDistance = float.MaxValue;
+
+            foreach (var collider in _currentCollisions)
+            {
+                // Проверяем, что это другой персонаж (слой "Character" или "Bot")
+                var otherLayer = collider.gameObject.layer;
+                if (otherLayer != LayerMask.NameToLayer("Character") && otherLayer != LayerMask.NameToLayer("Bot"))
+                    continue;
+
+                // Получаем Rigidbody другого персонажа
+                var otherRigidbody = collider.attachedRigidbody;
+                if (otherRigidbody == null)
+                    continue;
+
+                // Проверяем, что текущий персонаж движется вниз
+                if (rigidBody.velocity.y >= 0)
+                    continue;
+
+                // Проверяем, что другой персонаж стоит на земле или неподвижен
+                var otherIsGrounded = otherRigidbody.velocity.magnitude < 0.1f; // Примерное условие
+                if (!otherIsGrounded)
+                    continue;
+
+                // Вычисляем расстояние до противника
+                float distance = Vector3.Distance(rigidBody.transform.position, otherRigidbody.transform.position);
+                if (distance < nearestDistance)
+                {
+                    nearestDistance = distance;
+                    nearestCollider = collider;
+                }
+            }
+
+            // Если ближайший противник найден, обрабатываем отталкивание
+            if (nearestCollider != null)
+            {
+                HandleRepel(nearestCollider);
+            }
+        }
+
+        private void HandleRepel(Collider other)
+        {
             // Получаем Rigidbody другого персонажа
             var otherRigidbody = other.attachedRigidbody;
             if (otherRigidbody == null)
-                return;
-
-            // Проверяем, что текущий персонаж движется вниз
-            if (rigidBody.velocity.y >= 0)
-                return;
-
-            // Проверяем, что другой персонаж стоит на земле или неподвижен
-            var otherIsGrounded = otherRigidbody.velocity.magnitude < 0.1f; // Примерное условие
-            if (!otherIsGrounded)
                 return;
 
             // Увеличиваем счетчик "висения"

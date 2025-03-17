@@ -6,9 +6,14 @@ namespace Angry_Girls
     {
         private BoxCollider _boxCollider;
         private Rigidbody _rigidbody;
-        private LayerMask _ignoreLayerMask;
+        private LayerMask _ignoreLayerMask; // Маска для первого BoxCast (игнорируемые слои)
+        private LayerMask _enemyLayerMask; // Маска для второго BoxCast (только противники)
         private bool _isGrounded;
         private bool _wasGroundedLastFrame;
+
+        [Header("Multi-Collision Grounded Settings")]
+        [SerializeField] private float _multiCollisionTimeThreshold = 4f; // Время для установки grounded
+        private float _multiCollisionTimer; // Таймер для multi-collision
 
         public override void OnAwake()
         {
@@ -18,8 +23,9 @@ namespace Angry_Girls
 
         public override void OnStart()
         {
-            // Получаем маску для стандартных слоев
-            _ignoreLayerMask = LayerMask.GetMask("Projectile", "Pickable", "CharacterToLaunch", "Character", "Bot" /*layerToAdd*/);
+            // Инициализация масок слоев
+            _ignoreLayerMask = LayerMask.GetMask("Projectile", "Pickable", "CharacterToLaunch","Character","Bot");
+            _enemyLayerMask = LayerMask.GetMask("Bot");
         }
 
         public override void OnFixedUpdate()
@@ -46,9 +52,31 @@ namespace Angry_Girls
             // Длина луча (0.13 вниз от центра BoxCast)
             float rayLength = 0.13f;
 
-            // Рисуем Gizmos для отладки
-            Debug.DrawLine(boxCenter, boxCenter + Vector3.down * rayLength, Color.cyan, 0.1f);
+            // Проверяем второй BoxCast (только противники)
+            var enemyHits = Physics.BoxCastAll(boxCenter, boxSize / 2, Vector3.down, Quaternion.identity, rayLength, _enemyLayerMask);
 
+            // Если второй BoxCast пересекает больше одного коллайдера
+            if (enemyHits.Length >= 1 && control.playerOrAi != PlayerOrAi.Ai)
+            {
+                // Увеличиваем таймер
+                _multiCollisionTimer += Time.fixedDeltaTime;
+
+                ColorDebugLog.Log(control.name + "  " + _multiCollisionTimer.ToString(), System.Drawing.KnownColor.Red);
+
+                // Если таймер превышает порог, устанавливаем isGrounded = true
+                if (_multiCollisionTimer >= _multiCollisionTimeThreshold)
+                {
+                    _isGrounded = true;
+                    return; // Не проверяем первый BoxCast
+                }
+            }
+            else
+            {
+                // Сбрасываем таймер, если коллайдеров меньше двух
+                _multiCollisionTimer = 0f;
+            }
+
+            // Проверяем первый BoxCast (обычная проверка приземления)
             RaycastHit hit;
             _isGrounded = Physics.BoxCast(boxCenter, boxSize / 2, Vector3.down, out hit, Quaternion.identity, rayLength, ~_ignoreLayerMask);
         }
