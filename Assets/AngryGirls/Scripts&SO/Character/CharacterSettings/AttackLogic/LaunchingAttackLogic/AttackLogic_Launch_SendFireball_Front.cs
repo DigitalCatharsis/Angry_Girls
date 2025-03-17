@@ -64,9 +64,6 @@ namespace Angry_Girls
         {
             //spawn fireball
             var vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, VFX_Type.VFX_FireBall);
-
-            //rotate fireball to proper way
-            //vfx.transform.forward = Quaternion.AngleAxis(-25f, Vector3.right) * control.transform.forward;
             vfx.transform.forward = control.transform.forward;
 
             //set impulse

@@ -69,7 +69,7 @@ namespace Angry_Girls
                     owner: control.gameObject);
         }
 
-        public void InitAndRunVFX_ByCustom(float timeToLive, bool isTimeToLiveIsNormilizedTime, bool destroyOnCollision, bool destroyOnCharacterCollision, float damage, float knockbackValue, bool enableCollider, bool enableTrigger, GameObject owner)
+        public void InitAndRunVFX_ByCustom(float timeToLive, bool isTimeToLiveIsNormilizedTime, bool destroyOnCollision, bool destroyOnCharacterCollision, float damage, float knockbackValue, bool enableCollider, bool enableTrigger, GameObject owner = null)
         {
             //set owner for future trigger logic
             vfxOwner = owner;
@@ -140,7 +140,7 @@ namespace Angry_Girls
 
         private void SpawnSmashVFXAndDestroyThis()
         {
-            var vfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Shouryken, transform.position, Quaternion.identity, vfxOwner);
+            var vfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Shouryken, transform.position, Quaternion.identity);
             vfx.GetComponent<VFX>().InitAndRunVFX_ByCustom(timeToLive: 1, isTimeToLiveIsNormilizedTime: true, destroyOnCollision: false, destroyOnCharacterCollision: false, damage: 0, knockbackValue: 0, enableCollider: false, enableTrigger: false, owner: vfxOwner);
             Dispose();
         }

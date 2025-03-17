@@ -61,7 +61,7 @@ namespace Angry_Girls
                 // Увеличиваем таймер
                 _multiCollisionTimer += Time.fixedDeltaTime;
 
-                ColorDebugLog.Log(control.name + "  " + _multiCollisionTimer.ToString(), System.Drawing.KnownColor.Red);
+                //ColorDebugLog.Log(control.name + "  " + _multiCollisionTimer.ToString(), System.Drawing.KnownColor.Red);
 
                 // Если таймер превышает порог, устанавливаем isGrounded = true
                 if (_multiCollisionTimer >= _multiCollisionTimeThreshold)

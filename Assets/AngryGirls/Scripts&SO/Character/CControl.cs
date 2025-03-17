@@ -29,6 +29,8 @@ namespace Angry_Girls
         private int _hangCounter; // —четчик "висени€" на другом персонаже
         private bool _isHanging; // ‘лаг, что персонаж "висит" на другом
 
+        private const float _finishTurnTimerValue = 3f;
+
         public bool isLanding = false;
         public bool isGrounded = false;
         public bool isAttacking = false;
@@ -138,7 +140,7 @@ namespace Angry_Girls
             return false;
         }
 
-        public void FinishTurn(float finishAttackTimer)
+        public void FinishTurn(float finishAttackTimer = _finishTurnTimerValue)
         {
             StopCoroutine(ExecuteFinishTurnTimer(finishAttackTimer));
             isAttacking = false;

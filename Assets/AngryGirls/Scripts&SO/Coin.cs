@@ -1,4 +1,5 @@
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 namespace Angry_Girls
 {
@@ -22,13 +23,31 @@ namespace Angry_Girls
 
             _tween.Kill();
             Destroy(gameObject);
+            GameLoader.Instance.audioManager.PlayCustomSound(AudioSourceType.Coins, 1, false);
+            ShowCoinsValue();
         }
 
+
+        public void ShowCoinsValue()
+        {
+            var previewVfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_CoinValue, transform.position, Quaternion.identity).GetComponent<VFX>();
+            previewVfx.InitAndRunVFX_ByCustom(
+                timeToLive: 1,
+                isTimeToLiveIsNormilizedTime: false,
+                destroyOnCollision: false,
+                destroyOnCharacterCollision: false,
+                damage: 0,
+                knockbackValue: 0,
+                enableCollider: false,
+                enableTrigger: false);
+
+            previewVfx.GetComponentInChildren<TextMeshPro>().text = _coinValue.ToString();
+            previewVfx.transform.DOMove(new Vector3(previewVfx.transform.position.x, previewVfx.transform.position.y + 1, previewVfx.transform.position.z), 1);
+        }
 
         void Start()
         {
             _tween = transform.DORotate(_rotationVector3, _duration, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(-1);
-            //transform.DORotate(new Vector3(360, 0, 0), 0.3f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1);
         }
     }
 }

@@ -68,8 +68,7 @@ namespace Angry_Girls
                 var projectile = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(
                     vfx_Type: control.characterSettings.AttackAbility_Alternate.AttackVFX.GetComponent<VFX>().GetVFXType(),
                     control.projectileSpawnTransform.position,
-                    Quaternion.Euler(angles[i]),
-                    owner: control.gameObject);
+                    Quaternion.Euler(angles[i]));
 
                 //set final rotation value 
                 var finalRotationDegree = _finalProjectileRotation;

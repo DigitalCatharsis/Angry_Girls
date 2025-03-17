@@ -12,6 +12,7 @@ namespace Angry_Girls
         VFX_Flame2,
         VFX_TestOnHitEffect,
         VFX_Eclipse,
+	VFX_CoinValue,
     }
 
 
@@ -27,6 +28,8 @@ namespace Angry_Girls
             { VFX_Type.VFX_Flame2, () => Resources.Load(VFX_Type.VFX_Flame2.ToString()) as GameObject },
             { VFX_Type.VFX_TestOnHitEffect, () => Resources.Load(VFX_Type.VFX_TestOnHitEffect.ToString()) as GameObject },
             { VFX_Type.VFX_Eclipse, () => Resources.Load(VFX_Type.VFX_Eclipse.ToString()) as GameObject }
+,
+	{ VFX_Type.VFX_CoinValue, () => Resources.Load(VFX_Type.VFX_CoinValue.ToString()) as GameObject }
         };
     }
 }

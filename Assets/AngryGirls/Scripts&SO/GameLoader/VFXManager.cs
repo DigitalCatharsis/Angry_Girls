@@ -71,7 +71,7 @@ namespace Angry_Girls
             return vfx.gameObject;
         }
 
-        public GameObject SpawnVFX_AtPosition(VFX_Type vfx_Type, Vector3 spawnPosition, Quaternion spawnRotation, GameObject owner)
+        public GameObject SpawnVFX_AtPosition(VFX_Type vfx_Type, Vector3 spawnPosition, Quaternion spawnRotation)
         {
             //Spawn (taking from pool)
             var poolManager = GameLoader.Instance.poolManager;
@@ -83,7 +83,7 @@ namespace Angry_Girls
         {
             var contactpoint = triggerCollider.ClosestPoint(control.rigidBody.position);
 
-            var previewVfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_TestOnHitEffect, contactpoint, Quaternion.identity, owner: control.gameObject).GetComponent<VFX>();
+            var previewVfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_TestOnHitEffect, contactpoint, Quaternion.identity).GetComponent<VFX>();
             previewVfx.InitAndRunVFX_ByCustom(
                 timeToLive: 1,
                 isTimeToLiveIsNormilizedTime: false,

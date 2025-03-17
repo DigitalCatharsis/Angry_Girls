@@ -60,7 +60,7 @@ namespace Angry_Girls
         {
             ColorDebugLog.Log($"{control.name} called death", KnownColor.Yellow);
             control.isDead = true;
-            control.FinishTurn(2);
+            control.FinishTurn();
             control.rigidBody.useGravity = true;
             control.rigidBody.isKinematic = false;
 

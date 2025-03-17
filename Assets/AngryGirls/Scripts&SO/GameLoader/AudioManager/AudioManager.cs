@@ -8,6 +8,7 @@ namespace Angry_Girls
     {
         CharacterHit,
         LevelMusic,
+        Coins,
     }
 
     public class AudioManager : MonoBehaviour
@@ -72,7 +73,7 @@ namespace Angry_Girls
                     case (AudioSourceType.LevelMusic):
                         source.volume = _gameSettings.volumeMusic;
                         break;
-                    case (AudioSourceType.CharacterHit):
+                    default:
                         source.volume = _gameSettings.volumeSounds;
                         break;
                 }
