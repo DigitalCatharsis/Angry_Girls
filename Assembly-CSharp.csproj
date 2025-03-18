@@ -67,7 +67,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\SpawnManager\SpawnFactory\Factories\CharacterFactory.cs" />
     <Compile Include="Assets\AngryGirls\Helpers\MaterialChaner\MaterialChanger.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\Settings\PlayerData\PlayerData.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\BlockingManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\AnimationProcessor.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModulePhysics2D.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\CameraManager.cs" />
@@ -151,7 +150,6 @@
     <Compile Include="Assets\PauseControl.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\IPickable.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUnityVersion.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\CollisionSpheres.cs" />
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
     <Compile Include="Assets\FST\DemoScripts\DemoAnimationSelector.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackAbilities\AttackAbility.cs" />

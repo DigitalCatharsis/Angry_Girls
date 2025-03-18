@@ -25,6 +25,7 @@ namespace Angry_Girls
         public CameraSizer cameraSizer;
         public GameLoader_Settings_Container gameLoaderSettingsContainer;
         public PauseControl pauseControl;
+        public LevelSettings levelSettings;
 
         public InputManager inputManager;
 
@@ -49,7 +50,6 @@ namespace Angry_Girls
             poolObjectLoader = GetComponentInChildren<PoolObjectLoader>();
             VFXManager = GetComponentInChildren<VFXManager>();
             statesContainer = GetComponentInChildren<StatesContainer>();
-            audioManager = GetComponentInChildren<AudioManager>();
             gameLogic_UIManager = GetComponentInChildren<GameLogic_UIManager>();
             attackLogicContainer = GetComponentInChildren<AttackLogicContainer>();
             gameLogic = GetComponentInChildren<GameLogic>();
@@ -57,6 +57,8 @@ namespace Angry_Girls
             inputManager = GetComponentInChildren<InputManager>();
             gameLoaderSettingsContainer = GetComponentInChildren<GameLoader_Settings_Container>();
             pauseControl = GetComponentInChildren<PauseControl>();
+            levelSettings = GetComponentInChildren<LevelSettings>();
+            audioManager = GetComponentInChildren<AudioManager>();
         }
     }
 }

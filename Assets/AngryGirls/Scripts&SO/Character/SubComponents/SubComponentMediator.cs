@@ -7,9 +7,7 @@ namespace Angry_Girls
         private CControl _control;
         private AnimationProcessor _animationProcessor;
         private DamageHandler _damageHandler;
-        private CollisionSpheres _collisionSpheres;
         private BoxColliderUpdater _boxColliderUpdater;
-        private BlockingManager _blockingManager;
         private GroundDetector _groundDetector;
 
         public void OnAwake()
@@ -22,9 +20,7 @@ namespace Angry_Girls
             _control = GetComponentInParent<CControl>();
             _groundDetector = GetComponentInChildren<GroundDetector>();
             _animationProcessor = GetComponentInChildren<AnimationProcessor>();
-            _collisionSpheres = GetComponentInChildren<CollisionSpheres>();
             _boxColliderUpdater = GetComponentInChildren<BoxColliderUpdater>();
-            _blockingManager = GetComponentInChildren<BlockingManager>();
             _damageHandler = GetComponentInChildren<DamageHandler>();
         }
 
@@ -48,10 +44,5 @@ namespace Angry_Girls
         {
             _damageHandler.CheckForDamage(collider);
         }
-
-        //public void Notify_UpdatingColliderSpheres(object sender)
-        //{
-        //    _collisionSpheres.RepositionAllSpheres();
-        //}
     }
 }

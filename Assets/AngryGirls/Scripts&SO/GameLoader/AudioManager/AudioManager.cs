@@ -27,12 +27,17 @@ namespace Angry_Girls
 
         private void Start()
         {
-            GameLoader.Instance.pauseControl.onPauseChanged += PauseUnpauseMusic;
+
+
+            if (GameLoader.Instance.pauseControl != null)
+            {
+                GameLoader.Instance.pauseControl.onPauseChanged += PauseUnpauseMusic;
+            }
         }
 
         private void PauseUnpauseMusic(bool isPaused)
         {
-            if(isPaused)
+            if (isPaused)
             {
                 foreach (var soundData in _soundDataDict.Values)
                 {
