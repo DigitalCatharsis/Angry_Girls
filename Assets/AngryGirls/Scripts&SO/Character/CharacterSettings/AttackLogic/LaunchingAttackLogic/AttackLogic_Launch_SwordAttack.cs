@@ -7,6 +7,9 @@ namespace Angry_Girls
 {
     public class AttackLogic_Launch_SwordAttack : AttackAbilityLogic
     {
+        public AttackLogic_Launch_SwordAttack(AttackAbilityData attackAbilityData) : base(attackAbilityData) { }
+
+
         private int _loopsCount;
         private float _timeInCurrentLoop;
         private int _timesToRepeat_Attack_State = 2;

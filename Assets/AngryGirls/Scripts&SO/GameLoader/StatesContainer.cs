@@ -29,21 +29,20 @@ namespace Angry_Girls
         Landing_Rolling,
         Landing_SwordAttack,
 
-        Launch_Shoryuken_DownSmash_Prep,
+        Launch_Uppercut_Prep,
         Launch_SendFireball_Front,
         Launch_HeadSpin_Attack,
         Launch_SwordAttack_Attack,
         Launch_SwordAttack_Prep,
-        Alternate_Shoryuken_Prep,
+        Alternate_Uppercut_Prep,
         Alternate_SendFireball_Front,
         Alternate_HeadSpin_Attack_Prep,
         Alternate_HeadSpin_Attack,
         Alternate_SwordAttack_Prep,
         Alternate_SwordAttack_Attack,
-        Alternate_Shoryuken_Landing,
 
-        Launch_Shoryuken_DownSmash_Finish, 
-        Alternate_Shoryuken_DownSmash_Finish,
+        Launch_Uppercut_Finish, 
+        Alternate_Uppercut_Finish,
 
         HitReaction_1,
         HitReaction_2,
@@ -86,18 +85,17 @@ namespace Angry_Girls
         Landing_General,
         Landing_Rolling,
         Landing_SwordAttack,
-        Landing_Shoryuken,
     }
 
     public enum Attack_States
     {
         NONE,
-        Launch_Shoryuken_DownSmash_Prep,
+        Launch_Uppercut_Prep,
         Launch_SendFireball_Front,
         Launch_HeadSpin_Attack,
         Launch_SwordAttack_Attack,
         Launch_SwordAttack_Prep,
-        Alternate_Shoryuken_Prep,
+        Alternate_Uppercut_Prep,
         Alternate_SendFireball_Front,
         Alternate_HeadSpin_Attack,
         Alternate_SwordAttack_Prep,
@@ -106,8 +104,8 @@ namespace Angry_Girls
     public enum AttackFinish_States
     {
         NONE,
-        Launch_Shoryuken_DownSmash_Finish,  
-        Alternate_Shoryuken_DownSmash_Finish,
+        Launch_Uppercut_Finish,  
+        Alternate_Uppercut_Finish,
     }
 
 

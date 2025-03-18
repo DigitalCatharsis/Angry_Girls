@@ -6,6 +6,9 @@ namespace Angry_Girls
 {
     public class AttackLogic_Launch_HeadSpinAttack : AttackAbilityLogic
     {
+        public AttackLogic_Launch_HeadSpinAttack(AttackAbilityData attackAbilityData) : base(attackAbilityData) { }
+
+
         private float _impulseY = 7f;
         private float _impulseZ = 5f;
         private Vector3 _finalProjectileRotation = new Vector3(75f, 0, 0);
@@ -18,7 +21,7 @@ namespace Angry_Girls
             control.isAttacking = true;
 
             //Move character when casting ability
-            control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementSpeed, ForceMode.VelocityChange);
+            control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementForce, ForceMode.VelocityChange);
 
             Vector3[] angles = {
                   new Vector3(170f,0,0),
@@ -45,7 +48,7 @@ namespace Angry_Girls
             };
 
                 //Second cast, second character move
-                control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementSpeed, ForceMode.VelocityChange);
+                control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementForce, ForceMode.VelocityChange);
                 ProcessFireballs(control, angles);
                 _haveShootedSecondTime = true;
                 control.isAttacking = false;

@@ -129,10 +129,10 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 5643619976631800241}
-    m_Position: {x: -180, y: -230, z: 0}
+    m_Position: {x: -180, y: -240, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 9133210536440718375}
-    m_Position: {x: -180, y: -180, z: 0}
+    m_Position: {x: -180, y: -170, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8136383390607080391}
     m_Position: {x: -420, y: -180, z: 0}
@@ -162,7 +162,7 @@ AnimatorStateMachine:
     m_Position: {x: -430, y: 100, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7449458965342569785}
-    m_Position: {x: -190, y: 50, z: 0}
+    m_Position: {x: -190, y: 60, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 837440603570837909}
     m_Position: {x: 70, y: -190, z: 0}
@@ -1443,14 +1443,14 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Alternate_Shoryuken_Prep
+  m_Name: Alternate_Uppercut_Prep
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
   - {fileID: -3709281650002115960}
   m_Position: {x: 50, y: 50, z: 0}
-  m_IKOnFeet: 0
+  m_IKOnFeet: 1
   m_WriteDefaultValues: 1
   m_Mirror: 0
   m_SpeedParameterActive: 0
@@ -1711,7 +1711,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Launch_Shoryuken_DownSmash_Prep
+  m_Name: Launch_Uppercut_Prep
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -1892,8 +1892,8 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Alternate_Shoryuken_DownSmash_Finish
-  m_Speed: 1
+  m_Name: Alternate_Uppercut_Finish
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
@@ -2054,18 +2054,6 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!114 &8698796865406591401
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca0d438ce21533d47a7e9760fa0aca9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8944916876470103029
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2085,13 +2073,12 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Launch_Shoryuken_DownSmash_Finish
+  m_Name: Launch_Uppercut_Finish
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
   - {fileID: 5233527835147740005}
-  - {fileID: 8698796865406591401}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 1
   m_WriteDefaultValues: 1
@@ -2100,7 +2087,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 1827226128182048838, guid: d8118fbe2c4a7ea4fae242814e2568b2,
+  m_Motion: {fileID: 1827226128182048838, guid: de382edcdd53f6e4fa29bb48f2693514,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 

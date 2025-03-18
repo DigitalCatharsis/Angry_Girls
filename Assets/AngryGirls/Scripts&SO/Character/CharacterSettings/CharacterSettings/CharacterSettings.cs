@@ -27,8 +27,6 @@ namespace Angry_Girls
 
         [Space(5)]
         [Header("Speed and Force")]
-        public Vector3 atHittingObstacle_Speed = new Vector3(0, -2, 0);
-        public Vector3 groundAttackMovementSpeed = new Vector3(0, 0, 0);
         public Vector3 landingMovementSpeed = new Vector3(0, 0, 0);
 
         [Header("BoxColliders")]
@@ -45,10 +43,11 @@ namespace Angry_Girls
         public bool deathByAnimation = true; //TODO: implement ragdoll
 
         [Header("Launched Attack Ability")]
-        [SerializeReference]
-        public AttackAbility AttackAbility_Launch;
+        //[SerializeReference]
+        public AttackAbilityData AttackAbility_Launch;
+
         [Header("Alternate Attack Ability")]
-        public AttackAbility AttackAbility_Alternate;
+        public AttackAbilityData AttackAbility_Alternate;
 
         private void  NotifyForNONE_Value<T>(CharAnimationData<T> charAnimationData, CControl control) where T : Enum
         {

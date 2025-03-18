@@ -90,7 +90,7 @@ namespace Angry_Girls
             }
         }
 
-        public AttackAbility Get_AttackAbility()
+        public AttackAbilityData Get_AttackAbility()
         {
             if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.LaunchingPhase)
             {
@@ -142,6 +142,7 @@ namespace Angry_Girls
 
         public void FinishTurn(float finishAttackTimer = _finishTurnTimerValue)
         {
+            canUseAbility = false;
             StopCoroutine(ExecuteFinishTurnTimer(finishAttackTimer));
             isAttacking = false;
 
@@ -232,6 +233,11 @@ namespace Angry_Girls
 
         private void HandleCharacterCollision()
         {
+            if (isGrounded)
+            {
+                return;
+            }
+
             if (_currentCollisions.Count == 0)
                 return;
 
@@ -375,6 +381,11 @@ namespace Angry_Girls
                 weapon.transform.position = weaponHolder.transform.position;
                 weapon.transform.rotation = weaponHolder.transform.rotation;
             }
+        }
+
+        private void SetCharacterAttackLogic2()
+        {
+
         }
 
         private void OnEnable()

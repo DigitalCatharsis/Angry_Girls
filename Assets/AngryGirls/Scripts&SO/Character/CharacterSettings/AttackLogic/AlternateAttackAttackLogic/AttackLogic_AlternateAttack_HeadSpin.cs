@@ -6,6 +6,7 @@ namespace Angry_Girls
 {
     public class AttackLogic_AlternateAttack_HeadSpin : AttackAbilityLogic
     {
+        public AttackLogic_AlternateAttack_HeadSpin(AttackAbilityData attackAbilityData): base(attackAbilityData) { }
         private float _impulseY = 7f;
         private float _impulseZ = 5f;
         private Vector3 _finalProjectileRotation = new Vector3(75f, 0, 0);
@@ -31,11 +32,7 @@ namespace Angry_Girls
 
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-
-            control.isAttacking = true;
-
-            //Move character when casting ability
-            control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementSpeed, ForceMode.VelocityChange);
+            base.OnStateEnter(control, animator, stateInfo);
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
@@ -45,7 +42,7 @@ namespace Angry_Girls
             if (control.rigidBody.velocity.y <= - 0.2f && !_haveShootedFirstTime)            
             {
                 //Second cast, second character move
-                control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementSpeed, ForceMode.VelocityChange);
+                control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementForce, ForceMode.VelocityChange);
                 ProcessFireballs(control, _firstShoot_ProjectileAngles);
                 _haveShootedFirstTime = true;
                 control.isAttacking = false;
@@ -54,7 +51,7 @@ namespace Angry_Girls
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementSpeed, ForceMode.VelocityChange);
+            control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementForce, ForceMode.VelocityChange);
             ProcessFireballs(control, _secondShoot_ProjectileAngles);
             _haveShootedFirstTime = false;
             control.isAttacking = false;

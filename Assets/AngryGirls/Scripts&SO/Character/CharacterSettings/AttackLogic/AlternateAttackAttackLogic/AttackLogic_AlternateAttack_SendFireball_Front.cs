@@ -5,6 +5,8 @@ namespace Angry_Girls
 {
     public class AttackLogic_AlternateAttack_SendFireball_Front : AttackAbilityLogic
     {
+        public AttackLogic_AlternateAttack_SendFireball_Front(AttackAbilityData attackAbilityData) : base(attackAbilityData) { }
+
         private int _loopsCount;
         private float _timeInCurrentLoop;
         private bool _fireballSentThisLoop = false;
@@ -77,7 +79,7 @@ namespace Angry_Girls
                 );
 
             //MoveCharacter when cast fireball
-            control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementSpeed * control.transform.forward.z, ForceMode.VelocityChange); //turn it back
+            control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementForce * control.transform.forward.z, ForceMode.VelocityChange); //turn it back
 
             //Move fireball
             vfx.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);

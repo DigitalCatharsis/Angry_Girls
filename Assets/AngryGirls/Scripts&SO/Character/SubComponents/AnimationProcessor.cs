@@ -153,7 +153,7 @@ namespace Angry_Girls
 
             ChangeAnimationState_CrossFadeInFixedTime
                 (GameLoader.Instance.statesContainer.attack_Dictionary[control.characterSettings.AttackAbility_Alternate.attack_State.animation],
-                transitionDuration: control.characterSettings.AttackAbility_Alternate.attackTimeDuration);
+                transitionDuration: control.characterSettings.AttackAbility_Alternate.attack_State.transitionDuration);
         }
         #endregion
 

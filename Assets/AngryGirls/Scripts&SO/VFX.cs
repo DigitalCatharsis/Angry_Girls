@@ -56,14 +56,14 @@ namespace Angry_Girls
             transform.DOMove(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), 1);
         }
 
-        public void InitAndRunVFX_ByAbility(AttackAbility ability, CControl control)
+        public void InitAndRunVFX_ByAbility(AttackAbilityData ability, CControl control)
         {
             InitAndRunVFX_ByCustom(timeToLive: ability.timeToLive,
                     isTimeToLiveIsNormilizedTime: ability.isTimeToLiveIsNormilizedTime,
                     destroyOnCollision: ability.destroyOnCollision,
                     destroyOnCharacterCollision: ability.destroyOnCharacterCollision,
                     damage: ability.attackDamage,
-                    knockbackValue: ability.knockback,
+                    knockbackValue: ability.enemyKnockbackValue,
                     enableCollider: ability.enableCollider,
                     enableTrigger: ability.enableTrigger,
                     owner: control.gameObject);
@@ -140,7 +140,7 @@ namespace Angry_Girls
 
         private void SpawnSmashVFXAndDestroyThis()
         {
-            var vfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Shouryken, transform.position, Quaternion.identity);
+            var vfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Uppercut, transform.position, Quaternion.identity);
             vfx.GetComponent<VFX>().InitAndRunVFX_ByCustom(timeToLive: 1, isTimeToLiveIsNormilizedTime: true, destroyOnCollision: false, destroyOnCharacterCollision: false, damage: 0, knockbackValue: 0, enableCollider: false, enableTrigger: false, owner: vfxOwner);
             Dispose();
         }

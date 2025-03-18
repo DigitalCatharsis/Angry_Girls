@@ -1,9 +1,10 @@
+using AYellowpaper.SerializedCollections;
 using System;
 using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class AttackLogicContainer: MonoBehaviour
+    public class AttackLogicContainer : MonoBehaviour
     {
         public void SetCharacterAttackLogic(CControl control)
         {
@@ -13,16 +14,16 @@ namespace Angry_Girls
                 switch (control.characterSettings.AttackAbility_Launch.attack_State.animation)
                 {
                     case Attack_States.Launch_SendFireball_Front:
-                        control.attackSystem_Data.Launch_AttackLogic = new AttackLogic_Launch_SendFireball_Front();
+                        control.attackSystem_Data.Launch_AttackLogic = new AttackLogic_Launch_SendFireball_Front(control.characterSettings.AttackAbility_Launch);
                         break;
-                    case Attack_States.Launch_Shoryuken_DownSmash_Prep:
-                        control.attackSystem_Data.Launch_AttackLogic = new AttackLogic_Launch_ShoryukenDownSmash_Prep();
+                    case Attack_States.Launch_Uppercut_Prep:
+                        control.attackSystem_Data.Launch_AttackLogic = new AttackLogic_Launch_Uppercut_Prep(control.characterSettings.AttackAbility_Launch);
                         break;
                     case Attack_States.Launch_HeadSpin_Attack:
-                        control.attackSystem_Data.Launch_AttackLogic = new AttackLogic_Launch_HeadSpinAttack();
+                        control.attackSystem_Data.Launch_AttackLogic = new AttackLogic_Launch_HeadSpinAttack(control.characterSettings.AttackAbility_Launch);
                         break;
                     case Attack_States.Launch_SwordAttack_Prep:
-                        control.attackSystem_Data.Launch_AttackLogic = new AttackLogic_Launch_SwordAttack();
+                        control.attackSystem_Data.Launch_AttackLogic = new AttackLogic_Launch_SwordAttack(control.characterSettings.AttackAbility_Launch);
                         break;
                     default:
                         throw new Exception("No logic for state like " + control.characterSettings.AttackAbility_Launch.attack_State.animation.ToString());
@@ -35,8 +36,8 @@ namespace Angry_Girls
             {
                 switch (control.characterSettings.AttackAbility_Launch.attackFininsh_State.animation)
                 {
-                    case AttackFinish_States.Launch_Shoryuken_DownSmash_Finish:
-                        control.attackSystem_Data.launch_AttackFinishLogic = new AttackLogic_Launch_ShoryukenDownSmash_Finish();
+                    case AttackFinish_States.Launch_Uppercut_Finish:
+                        control.attackSystem_Data.launch_AttackFinishLogic = new AttackLogic_Launch_UppercutDownSmash_Finish(control.characterSettings.AttackAbility_Launch);
                         break;
                     //default:
                     //    throw new Exception("No attackFinish logic for " + control.characterSettings.AttackAbility_Launch.attackFininsh_State);
@@ -46,8 +47,8 @@ namespace Angry_Girls
             //for alternate
             switch (control.characterSettings.AttackAbility_Alternate.attackFininsh_State.animation)
             {
-                case AttackFinish_States.Alternate_Shoryuken_DownSmash_Finish:
-                    control.attackSystem_Data.alternate_AttackFinishLogic = new AttackLogic_AlternateAttack_Shoryuken_DownSmash_Finish();
+                case AttackFinish_States.Alternate_Uppercut_Finish:
+                    control.attackSystem_Data.alternate_AttackFinishLogic = new AttackLogic_AlternateAttack_UppercutDownSmash_Finish(control.characterSettings.AttackAbility_Alternate);
                     break;
                 //default:
                 //    throw new Exception("No logic for state like " + control.characterSettings.AttackAbility_Alternate.attackFininsh_State);
@@ -58,17 +59,17 @@ namespace Angry_Girls
             //Alternate_Attack
             switch (control.characterSettings.AttackAbility_Alternate.attack_State.animation)
             {
-                case Attack_States.Alternate_Shoryuken_Prep:
-                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_Prep_Shoryuken();
+                case Attack_States.Alternate_Uppercut_Prep:
+                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_Uppercut_Prep(control.characterSettings.AttackAbility_Alternate);
                     break;
                 case Attack_States.Alternate_SendFireball_Front:
-                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_Launch_SendFireball_Front();
+                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_Launch_SendFireball_Front(control.characterSettings.AttackAbility_Alternate);
                     break;
                 case Attack_States.Alternate_HeadSpin_Attack:
-                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_HeadSpin();
+                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_HeadSpin(control.characterSettings.AttackAbility_Alternate);
                     break;
                 case Attack_States.Alternate_SwordAttack_Prep:
-                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_SwordAttack();
+                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_SwordAttack(control.characterSettings.AttackAbility_Alternate);
                     break;
                 default:
                     throw new Exception("No Alternate_Attack logic for " + control.name);

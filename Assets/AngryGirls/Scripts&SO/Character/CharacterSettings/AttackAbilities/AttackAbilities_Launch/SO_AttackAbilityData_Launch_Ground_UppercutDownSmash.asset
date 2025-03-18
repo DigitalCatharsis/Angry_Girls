@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cc6f2d4e64007046b4da3c7e3c53b04, type: 3}
+  m_Name: SO_AttackAbilityData_Launch_Ground_UppercutDownSmash
+  m_EditorClassIdentifier: 
+  attack_State:
+    animation: 1
+    transitionDuration: 0.1
+  attackFininsh_State:
+    animation: 1
+    transitionDuration: 0.1
+  attackDamage: 25
+  attackTimeDuration: 3
+  enemyKnockbackValue: 1
+  attackMovementForce: {x: 0, y: -10, z: 0}
+  AttackVFX: {fileID: 4078025661996777973, guid: b6c04b95478e0774ba78823585d2be99,
+    type: 3}
+  timeToLive: 99
+  isTimeToLiveIsNormilizedTime: 0
+  projectileMovementSpeed: {x: 0, y: 0, z: 0}
+  destroyOnCollision: 0
+  destroyOnCharacterCollision: 0
+  enableCollider: 0
+  enableTrigger: 1

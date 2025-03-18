@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Angry_Girls

@@ -1,0 +1,51 @@
+using UnityEngine;
+
+namespace Angry_Girls
+{
+    [CreateAssetMenu(fileName = "Settings", menuName = "Angry_Girls/CharacterSettings/AttackAbilityData")]
+    [System.Serializable]
+    public class AttackAbilityData : ScriptableObject
+    {
+        [Header("Setup")]
+        [Header("Animation")]
+        public CharAnimationData<Attack_States> attack_State;
+
+        [Header("AttackFinish state (if unit is ground type)")]
+        public CharAnimationData<AttackFinish_States> attackFininsh_State;
+
+        [Space(5)]
+        [Header("Attack")]
+        public float attackDamage = 25f;
+        [Space(5)]
+        public float attackTimeDuration = 3f; 
+        [Space(5)]
+        [Header("Enemy Knockback")]
+        public float enemyKnockbackValue = 1f;
+
+        [Space(5)]
+        [Header("Character Phyciscs")]
+        public Vector3 attackMovementForce = new Vector3(0, 0, 0);
+
+        [Space(15)]
+        [Header("Projectile")]
+        [Space(5)]
+        [Header("VFX")]
+        public GameObject AttackVFX;
+
+        [Header("Lifetime")]
+        [Space(5)]
+        public float timeToLive = 1f;
+        public bool isTimeToLiveIsNormilizedTime = false;
+
+        [Space(5)]
+        [Header("Projectile Phyciscs")]
+        public Vector3 projectileMovementSpeed = new Vector3(0, 0, 0);  //?
+        public bool destroyOnCollision = false;
+        public bool destroyOnCharacterCollision = false;
+
+        [Space(5)]
+        [Header("Projectile Colliders")]
+        public bool enableCollider = false;
+        public bool enableTrigger = false;
+    }
+}
