@@ -107,7 +107,7 @@ namespace Angry_Girls
                 audiosource.pitch = (UnityEngine.Random.Range(audiosource.volume - _minRandomDiff, audiosource.volume));
             }
 
-            Debug.Log(audiosource.volume + "  " + _gameSettings.volumeMusic);
+            //Debug.Log(audiosource.volume + "  " + _gameSettings.volumeMusic);
             audiosource.PlayOneShot(audioclipCollection.audioClips[index], 1);
         }
 

@@ -52,7 +52,7 @@ namespace Angry_Girls
             }
 
             //should set bool for hit animation
-            ColorDebugLog.Log(control.name + " has been hit by " + vfx.vfxOwner.name + " || " + vfx.GetVFXType().ToString() + " || " + "Damage: " + vfx.projectileDamage.ToString(), System.Drawing.KnownColor.Aquamarine);
+            //ColorDebugLog.Log(control.name + " has been hit by " + vfx.vfxOwner.name + " || " + vfx.GetVFXType().ToString() + " || " + "Damage: " + vfx.projectileDamage.ToString(), System.Drawing.KnownColor.Aquamarine);
             control.unitGotHit = true;
         }
 

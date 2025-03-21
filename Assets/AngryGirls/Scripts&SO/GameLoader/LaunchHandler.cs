@@ -123,7 +123,7 @@ namespace Angry_Girls
                 Camera.main.orthographicSize /= 1.5f;
                 _canPressAtCharacters = false;
 
-                ColorDebugLog.Log(CharacterToLaunch.name + this.name + " proceed ProcessLaunch", System.Drawing.KnownColor.ControlLightLight);
+                //ColorDebugLog.Log(CharacterToLaunch.name + this.name + " proceed ProcessLaunch", System.Drawing.KnownColor.ControlLightLight);
                 _characterLauncher.LaunchUnit(CharacterToLaunch.GetComponent<CControl>());
                 _isLaunchAllowed = false;
 
@@ -200,7 +200,7 @@ namespace Angry_Girls
             {
                 //process ability
                 control.hasUsedAbility = true;
-                ColorDebugLog.Log("Ability has been used", System.Drawing.KnownColor.Magenta);
+                //ColorDebugLog.Log("Ability has been used", System.Drawing.KnownColor.Magenta);
             }
         }
 

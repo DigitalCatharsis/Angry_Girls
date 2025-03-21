@@ -146,7 +146,7 @@ namespace Angry_Girls
             StopCoroutine(ExecuteFinishTurnTimer(finishAttackTimer));
             isAttacking = false;
 
-            ColorDebugLog.Log("ExecuteFinishTurnTimer" + gameObject.name, KnownColor.Yellow);
+            //ColorDebugLog.Log("ExecuteFinishTurnTimer" + gameObject.name, KnownColor.Yellow);
             //check for calls. Has been fixed, but to be sure
             StartCoroutine(ExecuteFinishTurnTimer(finishAttackTimer));
         }
@@ -162,7 +162,7 @@ namespace Angry_Girls
 
             hasFinishedLaunchingTurn = true;
             hasFinishedAlternateAttackTurn = true;
-            ColorDebugLog.Log("Finishing Trun" + gameObject.name, KnownColor.Yellow);
+            //ColorDebugLog.Log("Finishing Trun" + gameObject.name, KnownColor.Yellow);
             yield break;
         }
 

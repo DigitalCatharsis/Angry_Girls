@@ -59,11 +59,11 @@ namespace Angry_Girls
             //Alternate_Attack
             switch (control.characterSettings.AttackAbility_Alternate.attack_State.animation)
             {
-                case Attack_States.Alternate_Uppercut_Prep:
-                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_Uppercut_Prep(control.characterSettings.AttackAbility_Alternate);
-                    break;
+                //case Attack_States.Alternate_Uppercut_Prep:
+                //    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_Uppercut_Prep(control.characterSettings.AttackAbility_Alternate);
+                //    break;
                 case Attack_States.Alternate_SendFireball_Front:
-                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_Launch_SendFireball_Front(control.characterSettings.AttackAbility_Alternate);
+                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_SendFireball_Front(control.characterSettings.AttackAbility_Alternate);
                     break;
                 case Attack_States.Alternate_HeadSpin_Attack:
                     control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_HeadSpin(control.characterSettings.AttackAbility_Alternate);

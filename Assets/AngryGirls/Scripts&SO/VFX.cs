@@ -86,7 +86,7 @@ namespace Angry_Girls
             {
                 _timeToLive = timeToLive;
             }
-            
+
             _destroyOnCollision = destroyOnCollision;
             _destroyOnCharacterTrigger = destroyOnCharacterCollision;
 

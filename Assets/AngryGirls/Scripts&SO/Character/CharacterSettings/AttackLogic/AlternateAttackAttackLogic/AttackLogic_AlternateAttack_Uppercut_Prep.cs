@@ -12,8 +12,9 @@ namespace Angry_Girls
         {
             base.OnStateEnter(control, animator, stateInfo);
             _runningVFX = GameLoader.Instance.VFXManager.SpawnVFX(control, control.characterSettings.AttackAbility_Alternate.AttackVFX.GetComponent<VFX>().GetVFXType(), setAsOwner: true);
-
+            _runningVFX.GetComponent<VFX>().InitAndRunVFX_ByAbility(control.characterSettings.AttackAbility_Alternate, control);
         }
+
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
         }

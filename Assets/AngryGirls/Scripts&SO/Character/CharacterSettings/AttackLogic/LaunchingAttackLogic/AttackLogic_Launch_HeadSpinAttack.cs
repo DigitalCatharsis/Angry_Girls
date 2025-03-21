@@ -17,11 +17,7 @@ namespace Angry_Girls
 
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            control.rigidBody.velocity = Vector3.zero;  
-            control.isAttacking = true;
-
-            //Move character when casting ability
-            control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementForce, ForceMode.VelocityChange);
+            base.OnStateEnter(control, animator, stateInfo);
 
             Vector3[] angles = {
                   new Vector3(170f,0,0),

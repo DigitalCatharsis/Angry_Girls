@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attack_State:
     animation: 6
-    transitionDuration: 0
+    transitionDuration: 0.1
   attackFininsh_State:
     animation: 2
-    transitionDuration: 0
+    transitionDuration: 0.1
   attackDamage: 25
   attackTimeDuration: 3
   enemyKnockbackValue: 1

@@ -9717,8 +9717,9 @@ MonoBehaviour:
   _isTimeToLiveIsNormilizedTime: 0
   _particleSystem: {fileID: 5921108591417898}
   projectileDamage: 0
+  projectileKnockBack: 0
   _destroyOnCollision: 1
-  _destroyOnCharacterCollision: 0
+  _destroyOnCharacterTrigger: 0
   vfxOwner: {fileID: 0}
 --- !u!65 &2069930466965192653
 BoxCollider:

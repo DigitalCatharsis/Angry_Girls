@@ -82,7 +82,7 @@ namespace Angry_Girls
 
                 //TODO: camera has to follow in Alternate state about several frames? so make a corutine?
                 GameLoader.Instance.cameraManager.CameraFollowForRigidBody(_charactersTurn_List[i].rigidBody);
-                ColorDebugLog.Log(_charactersTurn_List[i].name.ToString() + " is attacking.", KnownColor.Aqua);
+                //ColorDebugLog.Log(_charactersTurn_List[i].name.ToString() + " is attacking.", KnownColor.Aqua);
 
                 //Attack
                 _charactersTurn_List[i].GetComponent<CControl>().isAttacking = true;

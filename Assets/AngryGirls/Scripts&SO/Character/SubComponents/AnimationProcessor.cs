@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace Angry_Girls
 {
@@ -177,18 +175,15 @@ namespace Angry_Girls
             //if idle turn to enemy
             if (GameLoader.Instance.statesContainer.idle_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
             {
-                if (control.hasFinishedLaunchingTurn)
-                {
 
-                    if (control.playerOrAi == PlayerOrAi.Player)
+                    if (control.playerOrAi == PlayerOrAi.Player && control.hasFinishedLaunchingTurn)
                     {
                         TurnToTheClosestEnemy(PlayerOrAi.Ai);
                     }
-                    else
+                    else if (control.playerOrAi == PlayerOrAi.Ai)
                     {
                         TurnToTheClosestEnemy(PlayerOrAi.Player);
                     }
-                }
             }
 
             //GOT HIT

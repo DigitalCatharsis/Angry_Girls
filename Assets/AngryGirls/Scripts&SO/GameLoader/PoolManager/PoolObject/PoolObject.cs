@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using UnityEngine;
 using UnityEngine.VFX;
@@ -30,6 +31,8 @@ namespace Angry_Girls
             {
                 this.gameObject.SetActive(false);
 
+                DOTween.Kill(transform);
+
                 ResetRigidbody();
                 ResetTransform();
                 ReturnToPool();
@@ -52,6 +55,8 @@ namespace Angry_Girls
             {
                 rigid.velocity = Vector3.zero;
                 rigid.angularVelocity = Vector3.zero;
+                rigid.transform.position = Vector3.zero;
+                rigid.rotation = Quaternion.identity;
             }
         }
 

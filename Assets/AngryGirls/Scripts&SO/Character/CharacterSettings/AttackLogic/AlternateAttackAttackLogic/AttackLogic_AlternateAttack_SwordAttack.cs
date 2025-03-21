@@ -7,10 +7,7 @@ namespace Angry_Girls
 {
     public class AttackLogic_AlternateAttack_SwordAttack : AttackAbilityLogic
     {
-        public AttackLogic_AlternateAttack_SwordAttack(AttackAbilityData attackAbilityData) : base(attackAbilityData)
-        {
-
-        }
+        public AttackLogic_AlternateAttack_SwordAttack(AttackAbilityData attackAbilityData) : base(attackAbilityData) { }
 
         private int _loopsCount;
         private float _timeInCurrentLoop;
@@ -25,9 +22,9 @@ namespace Angry_Girls
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             _savedRotation = control.rigidBody.rotation;
-            control.rigidBody.velocity = Vector3.zero;
+            base.OnStateEnter(control, animator, stateInfo );
+
             //rotation
-            control.rigidBody.AddForce(new Vector3(0, 10, 2 * control.transform.forward.z), ForceMode.VelocityChange);
             _rotationTween = control.rigidBody.DORotate(new Vector3(360, 0, 0), 0.3f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1);
             _vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, control.characterSettings.AttackAbility_Launch.AttackVFX.GetComponent<VFX>().GetVFXType(), setAsOwner: true);
         }

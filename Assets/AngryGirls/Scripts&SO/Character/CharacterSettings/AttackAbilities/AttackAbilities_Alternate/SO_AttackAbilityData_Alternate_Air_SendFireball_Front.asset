@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cc6f2d4e64007046b4da3c7e3c53b04, type: 3}
   m_Name: SO_AttackAbilityData_Alternate_Air_SendFireball_Front
   m_EditorClassIdentifier: 
-  attackType: 0
   attack_State:
-    animation: 0
+    animation: 7
     transitionDuration: 0
   attackFininsh_State:
     animation: 0
@@ -22,12 +21,13 @@ MonoBehaviour:
   attackDamage: 25
   attackTimeDuration: 3
   enemyKnockbackValue: 1
-  attackMovementForce: {x: 0, y: 0, z: 0}
-  AttackVFX: {fileID: 0}
-  timeToLive: 1
+  attackMovementForce: {x: 0, y: 0, z: -0.2}
+  AttackVFX: {fileID: 5238815803969079422, guid: 3e9f49843884c504281b8bcdb82a7cdb,
+    type: 3}
+  timeToLive: 7
   isTimeToLiveIsNormilizedTime: 0
-  projectileMovementSpeed: {x: 0, y: 0, z: 0}
-  destroyOnCollision: 0
+  projectileMovementSpeed: {x: 0, y: 0, z: 10}
+  destroyOnCollision: 1
   destroyOnCharacterCollision: 0
-  enableCollider: 0
-  enableTrigger: 0
+  enableCollider: 1
+  enableTrigger: 1
