@@ -37,10 +37,9 @@ namespace Angry_Girls
 
         protected override void ReturnToPool() //Запихать в дочерний класс
         {
-            var vfx = GetComponent<VFX>().GetVFXType();
-            if (!GameLoader.Instance.poolManager.vfxPoolDictionary[vfx].Contains(this))
+            if (!GameLoader.Instance.poolManager.vfxPoolDictionary[_vfxType].Contains(this))
             {
-                GameLoader.Instance.poolManager.AddObject(vfx, GameLoader.Instance.poolManager.vfxPoolDictionary, this);
+                GameLoader.Instance.poolManager.AddObject(_vfxType, GameLoader.Instance.poolManager.vfxPoolDictionary, this);
             }
         }
 
@@ -143,11 +142,6 @@ namespace Angry_Girls
             var vfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Uppercut, transform.position, Quaternion.identity);
             vfx.GetComponent<VFX>().InitAndRunVFX_ByCustom(timeToLive: 1, isTimeToLiveIsNormilizedTime: true, destroyOnCollision: false, destroyOnCharacterCollision: false, damage: 0, knockbackValue: 0, enableCollider: false, enableTrigger: false, owner: vfxOwner);
             Dispose();
-        }
-
-        public VFX_Type GetVFXType()
-        {
-            return _vfxType;
         }
     }
 }

@@ -83,6 +83,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\DeathZone.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\Settings\GameSettings\GameSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\Idle_Behavior.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_Alternate_Uppercut_Prep.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AttackAbilityLogic.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\AlternateAttack_Behavior_OnGround.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\DamageHandler.cs" />
@@ -124,7 +125,6 @@
     <Compile Include="Assets\AngryGirls\Helpers\ColorDebugLog\ColorDebugLog.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\BoxColliderUpdater.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AudioManager\AudioManager.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_Uppercut_Prep.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponentsController.cs" />
     <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleSprite.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\BackGround.cs" />

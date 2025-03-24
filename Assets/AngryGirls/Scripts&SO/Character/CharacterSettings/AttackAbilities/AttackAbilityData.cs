@@ -28,9 +28,6 @@ namespace Angry_Girls
 
         [Space(15)]
         [Header("Projectile")]
-        [Space(5)]
-        [Header("VFX")]
-        public GameObject AttackVFX;
 
         [Header("Lifetime")]
         [Space(5)]

@@ -27,7 +27,7 @@ namespace Angry_Girls
 
             //rotation
             _rotationTween = control.rigidBody.DORotate(new Vector3(360, 0, 0), 0.3f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1);
-            _vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, control.characterSettings.AttackAbility_Launch.AttackVFX.GetComponent<VFX>().GetVFXType(), setAsOwner: true);
+            _vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, VFX_Type.VFX_Eclipse, setAsOwner: true);
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
