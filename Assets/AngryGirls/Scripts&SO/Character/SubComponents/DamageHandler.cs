@@ -5,31 +5,21 @@ namespace Angry_Girls
 {
     public class DamageHandler : SubComponent
     {
-        public override void OnComponentEnable()
-        {
-
-        }
-        public override void OnUpdate()
-        {
-        }
-
         public void CheckForDamage(Collider triggerCollider)
         {
+            if (control.isDead) { return; }
+
             if (triggerCollider.gameObject.layer == LayerMask.NameToLayer("DeathZone"))
             {
-                control.subComponentMediator.Notify_Dead(this);
+                control.subComponentMediator.Notify_DeathZoneContact(triggerCollider);
                 return;
             }
 
-            //Does it VFX?
             var vfx = triggerCollider.gameObject.transform.GetComponent<VFX>();
 
-            if (vfx == null)
-            {
-                return;
-            }
+            if (vfx == null) { return; }
 
-            //aplly damage if no owner (damages everyone)
+            //apply damage if no owner (damages everyone)
             if (vfx.vfxOwner == null && vfx.projectileDamage != 0)
             {
                 control.subComponentMediator.Notify_DamageTaken(this, vfx, triggerCollider);
@@ -45,14 +35,12 @@ namespace Angry_Girls
             }
 
             //are we dead?
-            if (control.CurrentHealth <= 0)
+            if (control.Health.CurrentHealth <= 0)
             {
                 control.subComponentMediator.Notify_Dead(this);
                 return;
             }
 
-            //should set bool for hit animation
-            //ColorDebugLog.Log(control.name + " has been hit by " + vfx.vfxOwner.name + " || " + vfx.GetVFXType().ToString() + " || " + "Damage: " + vfx.projectileDamage.ToString(), System.Drawing.KnownColor.Aquamarine);
             control.unitGotHit = true;
         }
 
@@ -74,20 +62,11 @@ namespace Angry_Girls
             control.gameObject.layer = 12;
         }
 
-        public override void OnAwake()
-        {
-        }
-        public override void OnFixedUpdate()
-        {
-        }
-        public override void OnLateUpdate()
-        {
-        }
-        public override void OnStart()
-        {
-        }
-
-
+        public override void OnAwake() { }
+        public override void OnFixedUpdate() { }
+        public override void OnLateUpdate() { }
+        public override void OnStart() { }
+        public override void OnComponentEnable() { }
+        public override void OnUpdate() { }
     }
-
 }

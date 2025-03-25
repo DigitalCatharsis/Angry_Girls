@@ -51,13 +51,13 @@ namespace Angry_Girls
 
         private void InitHealthBar(CControl control)
         {
-            control.healthSlider.maxValue = control.CurrentHealth;
+            control.healthSlider.maxValue = control.Health.CurrentHealth;
             UpdateHealthBarValueAndVision(control);
         }
 
         public void UpdateHealthBarValueAndVision(CControl control)
         {
-            control.healthSlider.value = control.CurrentHealth;
+            control.healthSlider.value = control.Health.CurrentHealth;
         }
 
         public void UpdateScore(int value)

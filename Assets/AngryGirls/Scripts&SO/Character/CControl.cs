@@ -15,10 +15,11 @@ namespace Angry_Girls
     [Serializable]
     public class CControl : PoolObject
     {
+        public CharacterHealth Health { get; private set; }
+
+
         [Header("Health")]
-        [SerializeField] private float _currentHealth = 100f;
         public Slider healthSlider;
-        public float CurrentHealth => _currentHealth;
 
         [Header("Repel Settings")]
         [SerializeField] private float _repelForce = 0.25f; // Базовая сила отталкивания
@@ -72,9 +73,19 @@ namespace Angry_Girls
         [SerializeReference]
         public Transform weaponHolder;
 
-        public void UpdateHealth(float value)
+        private void Awake()
         {
-            _currentHealth += value;
+            Health = GetComponent<CharacterHealth>();
+            Health.Initialize();
+
+            rigidBody = GetComponent<Rigidbody>();
+            animator = GetComponent<Animator>();
+            boxCollider = gameObject.GetComponent<BoxCollider>();
+            subComponentMediator = GetComponentInChildren<SubComponentMediator>();
+            subComponentsController = GetComponentInChildren<SubComponentsController>();
+
+            subComponentMediator.OnAwake();
+            subComponentsController.OnAwake();
         }
 
         public AttackAbilityLogic Get_AttackFinish_AttackAbilityLogic()
@@ -193,17 +204,6 @@ namespace Angry_Girls
             }
         }
 
-        private void Awake()
-        {
-            rigidBody = GetComponent<Rigidbody>();
-            animator = GetComponent<Animator>();
-            boxCollider = gameObject.GetComponent<BoxCollider>();
-            subComponentMediator = GetComponentInChildren<SubComponentMediator>();
-            subComponentsController = GetComponentInChildren<SubComponentsController>();
-
-            subComponentMediator.OnAwake();
-            subComponentsController.OnAwake();
-        }
 
         private void OnCollisionEnter(Collision collision)
         {
@@ -345,7 +345,10 @@ namespace Angry_Girls
                 return;
             }
 
-            subComponentMediator.Notify_TriggerCheck(this, other);
+            if (other.gameObject.layer == LayerMask.NameToLayer("Projectile"))
+            {
+                subComponentMediator.Notify_TriggerCheckVfx(this, other);
+            }
         }
 
         private void Update()
@@ -382,11 +385,6 @@ namespace Angry_Girls
             }
         }
 
-        private void SetCharacterAttackLogic2()
-        {
-
-        }
-
         private void OnEnable()
         {
             if (playerOrAi == PlayerOrAi.Player)
@@ -404,8 +402,6 @@ namespace Angry_Girls
             GameLoader.Instance.gameLogic_UIManager.CreateHealthBar(this);
         }
 
-
-        //ObjectPooling
         protected override void Dispose(bool disposing)
         {
             GameLoader.Instance.gameLogic_UIManager.RemoveHealthBar(this);

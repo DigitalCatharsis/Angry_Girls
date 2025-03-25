@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class SubComponentMediator : MonoBehaviour/*, IMediator<UnitLaunch_EventNames>*/
+    public class SubComponentMediator : MonoBehaviour
     {
         private CControl _control;
         private AnimationProcessor _animationProcessor;
@@ -23,14 +23,23 @@ namespace Angry_Girls
             _boxColliderUpdater = GetComponentInChildren<BoxColliderUpdater>();
             _damageHandler = GetComponentInChildren<DamageHandler>();
         }
+        public void Notify_TriggerCheckVfx(object sender, Collider collider)
+        {
+            _damageHandler.CheckForDamage(collider);
+        }
 
         public void Notify_DamageTaken(object sender, VFX vFX, Collider triggerCollider)
         {
             _control.ApplyKnockback(triggerCollider.gameObject, vFX.projectileKnockBack);
-            _control.UpdateHealth(-vFX.projectileDamage);
+            _control.Health.ApplyDamage(vFX.projectileDamage);
             GameLoader.Instance.gameLogic_UIManager.UpdateHealthBarValueAndVision(_control);
             GameLoader.Instance.VFXManager.ShowDamageNumbers(triggerCollider, _control, vFX.projectileDamage);
             GameLoader.Instance.audioManager.PlayRandomSound(AudioSourceType.CharacterHit);
+        }
+        public void Notify_DeathZoneContact(object sender)
+        {
+            _control.Health.ApplyDamage(_control.Health.CurrentHealth);
+            Notify_Dead(this);
         }
 
         public void Notify_Dead(object sender)
@@ -38,11 +47,6 @@ namespace Angry_Girls
             GameLoader.Instance.gameLogic_UIManager.DisableHealthBar(_control);
             _damageHandler.SetDeathParams();
             _animationProcessor.SetDeath();
-        }
-
-        public void Notify_TriggerCheck(object sender, Collider collider)
-        {
-            _damageHandler.CheckForDamage(collider);
         }
     }
 }
