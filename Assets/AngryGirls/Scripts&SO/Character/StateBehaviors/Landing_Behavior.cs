@@ -12,7 +12,7 @@ namespace Angry_Girls
                 _control = animator.transform.root.GetComponent<CControl>();
             }
 
-            _control.rigidBody.velocity = _control.characterSettings.landingMovementSpeed;
+            _control.CharacterMovement.SetVelocity(_control.characterSettings.landingMovementSpeed);
             _control.canUseAbility = false;
             _control.isLanding = true;
         }

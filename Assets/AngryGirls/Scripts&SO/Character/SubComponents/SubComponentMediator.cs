@@ -30,7 +30,7 @@ namespace Angry_Girls
 
         public void Notify_DamageTaken(object sender, VFX vFX, Collider triggerCollider)
         {
-            _control.ApplyKnockback(triggerCollider.gameObject, vFX.projectileKnockBack);
+            _control.CharacterMovement.ApplyKnockbackFromEnemy(triggerCollider.gameObject, vFX.projectileKnockBack);
             _control.Health.ApplyDamage(vFX.projectileDamage);
             GameLoader.Instance.gameLogic_UIManager.UpdateHealthBarValueAndVision(_control);
             GameLoader.Instance.VFXManager.ShowDamageNumbers(triggerCollider, _control, vFX.projectileDamage);

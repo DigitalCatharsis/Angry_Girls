@@ -19,9 +19,9 @@ namespace Angry_Girls
 
             control.isAttacking = true;
 
-            control.rigidBody.velocity = Vector3.zero;
+            control.CharacterMovement.ResetVelocity();
 
-            control.rigidBody.AddForce(new Vector3(0, _attackAbility.attackMovementForce.y,_attackAbility.attackMovementForce.z * control.transform.forward.z), ForceMode.VelocityChange);
+            control.CharacterMovement.ApplyRigidForce(new Vector3(0, _attackAbility.attackMovementForce.y,_attackAbility.attackMovementForce.z * control.transform.forward.z), ForceMode.VelocityChange);
 
         }
 

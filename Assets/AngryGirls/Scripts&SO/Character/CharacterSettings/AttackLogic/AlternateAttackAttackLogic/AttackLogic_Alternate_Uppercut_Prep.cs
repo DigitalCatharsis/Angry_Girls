@@ -21,13 +21,7 @@ namespace Angry_Girls
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            //var colliders = _vFX.GetComponent<VFX>().GetComponents<Collider>();
-            //foreach (Collider collider in colliders)
-            //{
-            //    collider.isTrigger = false;
-            //}
-
-            control.rigidBody.velocity = Vector3.zero;
+            control.CharacterMovement.ResetVelocity();
             GameLoader.Instance.VFXManager.FadeOutFlame_And_Dispose(vFX: _vFX.GetComponent<VFX>(), disposeDuration: 2f, fadeDuration: 3.5f);
         }
     }

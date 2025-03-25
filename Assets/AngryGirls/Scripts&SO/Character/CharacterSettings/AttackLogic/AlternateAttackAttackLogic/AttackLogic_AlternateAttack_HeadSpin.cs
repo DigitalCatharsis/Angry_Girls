@@ -39,10 +39,10 @@ namespace Angry_Girls
         {
             control.CheckAttackFinishCondition();
 
-            if (control.rigidBody.velocity.y <= - 0.2f && !_haveShootedFirstTime)            
+            if (control.CharacterMovement.Rigidbody.velocity.y <= - 0.2f && !_haveShootedFirstTime)            
             {
                 //Second cast, second character move
-                control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementForce, ForceMode.VelocityChange);
+                control.CharacterMovement.ApplyRigidForce(control.characterSettings.AttackAbility_Alternate.attackMovementForce, ForceMode.VelocityChange);
                 ProcessFireballs(control, _firstShoot_ProjectileAngles);
                 _haveShootedFirstTime = true;
                 control.isAttacking = false;
@@ -51,7 +51,7 @@ namespace Angry_Girls
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            control.rigidBody.AddForce(control.characterSettings.AttackAbility_Alternate.attackMovementForce, ForceMode.VelocityChange);
+            control.CharacterMovement.ApplyRigidForce(control.characterSettings.AttackAbility_Alternate.attackMovementForce, ForceMode.VelocityChange);
             ProcessFireballs(control, _secondShoot_ProjectileAngles);
             _haveShootedFirstTime = false;
             control.isAttacking = false;

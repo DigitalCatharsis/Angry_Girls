@@ -9,7 +9,6 @@ namespace Angry_Girls
         [SerializeField] private float _currentHealth;
 
         public float CurrentHealth => _currentHealth;
-        public float NormalizedHealth => _currentHealth / _maxHealth;
 
         public void Initialize()
         {

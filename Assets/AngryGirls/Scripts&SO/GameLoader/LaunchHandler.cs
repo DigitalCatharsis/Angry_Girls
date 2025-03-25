@@ -56,7 +56,7 @@ namespace Angry_Girls
 
             for (var i = 0; i < charactersToLaunch.Count(); i++)
             {
-                charactersToLaunch[i].rigidBody.MovePosition(transforms[i].position);
+                charactersToLaunch[i].CharacterMovement.Teleport(transforms[i].position);
             }
         }
         private void SetLaunchableCharactersBehavior(List<CControl> charactersToLaunchLeft)
@@ -92,7 +92,7 @@ namespace Angry_Girls
                         if (hit.collider == CharacterToLaunch.boxCollider)
                         {
                             // Center camera on character collider center
-                            GameLoader.Instance.cameraManager.CameraFollowForRigidBody(CharacterToLaunch.rigidBody);
+                            GameLoader.Instance.cameraManager.CameraFollowForRigidBody(CharacterToLaunch.CharacterMovement.Rigidbody);
                             //Launch
                             _isLaunchAllowed = true;
                         }

@@ -64,19 +64,19 @@ namespace Angry_Girls
 
             if (_directionVector.z > 0)
             {
-                characterToLaunch.rigidBody.rotation = Quaternion.Euler(0, 180, 0);
+                characterToLaunch.CharacterMovement.SetRotation(Quaternion.Euler(0, 180, 0));
             }
             else if (_directionVector.z < 0)
             {
-                characterToLaunch.rigidBody.rotation = Quaternion.Euler(0, 0, 0);
+                characterToLaunch.CharacterMovement.SetRotation(Quaternion.Euler(0, 0, 0));
             }
             else if (_directionVector.z == 0)
             {
                 ColorDebugLog.Log("Direction vector = 0", System.Drawing.KnownColor.Red);
             }
 
-            characterToLaunch.rigidBody.useGravity = true;
-            characterToLaunch.rigidBody.velocity = new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward);
+            characterToLaunch.CharacterMovement.Rigidbody.useGravity = true;
+            characterToLaunch.CharacterMovement.SetVelocity(new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward));
         }       
 
 

@@ -5,7 +5,6 @@ namespace Angry_Girls
     public class GroundDetector : SubComponent
     {
         private BoxCollider _boxCollider;
-        private Rigidbody _rigidbody;
         private LayerMask _ignoreLayerMask; // Маска для первого BoxCast (игнорируемые слои)
         private LayerMask _enemyLayerMask; // Маска для второго BoxCast (только противники)
         private bool _isGrounded;
@@ -18,7 +17,6 @@ namespace Angry_Girls
         public override void OnAwake()
         {
             _boxCollider = control.boxCollider;
-            _rigidbody = control.rigidBody;
         }
 
         public override void OnStart()

@@ -44,7 +44,7 @@ namespace Angry_Girls
             };
 
                 //Second cast, second character move
-                control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementForce, ForceMode.VelocityChange);
+                control.CharacterMovement.ApplyRigidForce(control.characterSettings.AttackAbility_Launch.attackMovementForce, ForceMode.VelocityChange);
                 ProcessFireballs(control, angles);
                 _haveShootedSecondTime = true;
                 control.isAttacking = false;

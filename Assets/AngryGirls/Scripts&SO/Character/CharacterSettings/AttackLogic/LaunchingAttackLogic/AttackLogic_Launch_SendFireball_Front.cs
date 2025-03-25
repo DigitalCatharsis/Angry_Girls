@@ -16,14 +16,14 @@ namespace Angry_Girls
         private float _attackAngleChangeValue = 0f;
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            control.rigidBody.isKinematic = false;
+            control.CharacterMovement.Rigidbody.isKinematic = false;
 
             _loopsCount = 1;
             _timeInCurrentLoop = 0f;
             _fireballSentThisLoop = false;
 
             base.OnStateEnter(control, animator, stateInfo);
-            control.rigidBody.useGravity = false;
+            control.CharacterMovement.Rigidbody.useGravity = false;
             _attackAngleChangeValue = 0f;
         }
 
@@ -32,7 +32,7 @@ namespace Angry_Girls
             _timeInCurrentLoop += Time.deltaTime;
 
             // Определяем целевое вращение по осям X и Y
-            var targetEuler = control.rigidBody.transform.forward.z > 0
+            var targetEuler = control.CharacterMovement.Rigidbody.transform.forward.z > 0
                 ? new Vector3(45, 0, 0) // Поворот вниз
                 : new Vector3(45, 180, 0); // Поворот вверх
 
@@ -65,8 +65,8 @@ namespace Angry_Girls
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             _attackAngleChangeValue = 0f;
-            control.rigidBody.velocity = Vector3.zero;
-            control.rigidBody.isKinematic = true;
+            control.CharacterMovement.Rigidbody.velocity = Vector3.zero;
+            control.CharacterMovement.Rigidbody.isKinematic = true;
         }
         private void SendFireball(CControl control, Vector3 startPoint, Vector3 targetEuler, float attackAngleChangeValue, float rotationDuration = 1.5f)
         {
@@ -77,7 +77,7 @@ namespace Angry_Girls
             vfx.transform.position = startPoint;
 
             // Определяем начальное вращение в зависимости от направления control
-            float initialYRotation = control.rigidBody.transform.forward.z > 0 ? 0f : 180f;
+            float initialYRotation = control.CharacterMovement.Rigidbody.transform.forward.z > 0 ? 0f : 180f;
             var initialRotation = Quaternion.Euler(
                 attackAngleChangeValue * 4, // Наклон по оси X
                 initialYRotation, // Направление по оси Y (0 или 180)
@@ -117,7 +117,7 @@ namespace Angry_Girls
             ColorDebugLog.Log("got the force: " + vfx.transform.rotation.eulerAngles, System.Drawing.KnownColor.Yellow);
 
             // Применяем силу к control.rigidBody
-            control.rigidBody.AddForce(control.characterSettings.AttackAbility_Launch.attackMovementForce * control.rigidBody.transform.forward.z, ForceMode.VelocityChange);
+            control.CharacterMovement.ApplyRigidForce(control.characterSettings.AttackAbility_Launch.attackMovementForce * control.CharacterMovement.Rigidbody.transform.forward.z, ForceMode.VelocityChange);
         }
     }
 }

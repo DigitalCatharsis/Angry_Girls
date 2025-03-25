@@ -927,6 +927,7 @@ GameObject:
   - component: {fileID: 4064820369690057526}
   - component: {fileID: 3541158604538972460}
   - component: {fileID: 7578795930857353084}
+  - component: {fileID: 4742198649305962292}
   m_Layer: 14
   m_Name: YBot_Original
   m_TagString: Untagged
@@ -1014,9 +1015,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isDisposed: 0
   healthSlider: {fileID: 0}
-  _repelForce: 5
-  _repelForceDelta: 0.075
-  _maxRepelForce: 7
   isLanding: 0
   isGrounded: 0
   isAttacking: 0
@@ -1030,7 +1028,6 @@ MonoBehaviour:
   unitBehaviorIsAlternate: 1
   checkGlobalBehavior: 0
   subComponentMediator: {fileID: 0}
-  rigidBody: {fileID: 0}
   boxCollider: {fileID: 0}
   animator: {fileID: 0}
   bottomRaycastContactPoint: {x: 0, y: 0, z: 0}
@@ -1075,6 +1072,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHealth: 100
   _currentHealth: 0
+--- !u!114 &4742198649305962292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2640689163874789523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f1372afe4f6e5b4f842db1a5338aeb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _repelForce: 0.25
+  _repelForceDelta: 0.1
+  _maxRepelForce: 1
 --- !u!1 &2688569752745844030
 GameObject:
   m_ObjectHideFlags: 0

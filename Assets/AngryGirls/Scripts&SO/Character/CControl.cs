@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,18 +17,18 @@ namespace Angry_Girls
     public class CControl : PoolObject
     {
         public CharacterHealth Health { get; private set; }
-
+        public CharacterMovement CharacterMovement { get; private set; }
 
         [Header("Health")]
         public Slider healthSlider;
 
-        [Header("Repel Settings")]
-        [SerializeField] private float _repelForce = 0.25f; // Базовая сила отталкивания
-        [SerializeField] private float _repelForceDelta = 0.05f; // Дельта увеличения силы
-        [SerializeField] private float _maxRepelForce = 1f; // Максимальная сила отталкивания
-        private float _currentRepelForce; // Текущая сила отталкивания
-        private int _hangCounter; // Счетчик "висения" на другом персонаже
-        private bool _isHanging; // Флаг, что персонаж "висит" на другом
+        //[Header("Repel Settings")]
+        //[SerializeField] private float _repelForce = 0.25f; // Базовая сила отталкивания
+        //[SerializeField] private float _repelForceDelta = 0.05f; // Дельта увеличения силы
+        //[SerializeField] private float _maxRepelForce = 1f; // Максимальная сила отталкивания
+        //private float _currentRepelForce; // Текущая сила отталкивания
+        //private int _hangCounter; // Счетчик "висения" на другом персонаже
+        //private bool _isHanging; // Флаг, что персонаж "висит" на другом
 
         private const float _finishTurnTimerValue = 3f;
 
@@ -49,15 +50,9 @@ namespace Angry_Girls
         public SubComponentMediator subComponentMediator;
         private SubComponentsController subComponentsController;
 
-        public Rigidbody rigidBody;
         public BoxCollider boxCollider;
         public Animator animator;
         public AttackSystem_Data attackSystem_Data;
-        private List<Collider> _currentCollisions = new List<Collider>(); // Список текущих столкновений
-
-
-        [Space(10)]
-        public Vector3 bottomRaycastContactPoint;
 
         [Header("Setup")]
         public PlayerOrAi playerOrAi;
@@ -73,17 +68,35 @@ namespace Angry_Girls
         [SerializeReference]
         public Transform weaponHolder;
 
+        private void OnEnable()
+        {
+            if (playerOrAi == PlayerOrAi.Player)
+            {
+                GameLoader.Instance.characterManager.playableCharacters.Add(this);
+            }
+            else if (playerOrAi == PlayerOrAi.Ai)
+            {
+                GameLoader.Instance.characterManager.enemyCharacters.Add(this);
+            }
+
+            subComponentsController.OnComponentEnable();
+
+            GameLoader.Instance.attackLogicContainer.SetCharacterAttackLogic(this);
+            GameLoader.Instance.gameLogic_UIManager.CreateHealthBar(this);
+        }
+
         private void Awake()
         {
             Health = GetComponent<CharacterHealth>();
             Health.Initialize();
 
-            rigidBody = GetComponent<Rigidbody>();
+            CharacterMovement = GetComponent<CharacterMovement>();
+            CharacterMovement.Initialize(this);
+
             animator = GetComponent<Animator>();
             boxCollider = gameObject.GetComponent<BoxCollider>();
             subComponentMediator = GetComponentInChildren<SubComponentMediator>();
             subComponentsController = GetComponentInChildren<SubComponentsController>();
-
             subComponentMediator.OnAwake();
             subComponentsController.OnAwake();
         }
@@ -175,167 +188,9 @@ namespace Angry_Girls
             //ColorDebugLog.Log("Finishing Trun" + gameObject.name, KnownColor.Yellow);
             yield break;
         }
-
-        public void ApplyKnockback(GameObject opponent, float knockbackForce)
-        {
-            if (rigidBody.velocity.z != 0)
-            {
-                return;
-            }
-
-            var direction = rigidBody.position - opponent.transform.position;
-
-            // Проверить, что объекты не находятся в одной точке
-            if (Math.Abs(direction.z) < 0.001f)
-            {
-                // Случайное направление
-                int randomDirection = UnityEngine.Random.Range(0, 2);
-                direction = new Vector3(0, 0, randomDirection == 0 ? -1 : 1);
-            }
-            else
-            {
-                // Нормализуем только z-компонент
-                direction.z /= Math.Abs(direction.z);
-            }
-
-            if (rigidBody != null)
-            {
-                rigidBody.AddForce(new Vector3(0, 0, direction.z * knockbackForce), ForceMode.VelocityChange);
-            }
-        }
-
-
-        private void OnCollisionEnter(Collision collision)
-        {
-            // Добавляем коллайдер в список текущих столкновений
-            if (!_currentCollisions.Contains(collision.collider))
-            {
-                _currentCollisions.Add(collision.collider);
-            }
-
-            HandleCharacterCollision();
-        }
-
-        private void OnCollisionStay(Collision collision)
-        {
-            HandleCharacterCollision();
-        }
-
-        private void OnCollisionExit(Collision collision)
-        {
-            // Удаляем коллайдер из списка текущих столкновений
-            if (_currentCollisions.Contains(collision.collider))
-            {
-                _currentCollisions.Remove(collision.collider);
-            }
-        }
-
-        private void HandleCharacterCollision()
-        {
-            if (isGrounded)
-            {
-                return;
-            }
-
-            if (_currentCollisions.Count == 0)
-                return;
-
-            // Находим ближайшего противника
-            Collider nearestCollider = null;
-            float nearestDistance = float.MaxValue;
-
-            foreach (var collider in _currentCollisions)
-            {
-                // Проверяем, что это другой персонаж (слой "Character" или "Bot")
-                var otherLayer = collider.gameObject.layer;
-                if (otherLayer != LayerMask.NameToLayer("Character") && otherLayer != LayerMask.NameToLayer("Bot"))
-                    continue;
-
-                // Получаем Rigidbody другого персонажа
-                var otherRigidbody = collider.attachedRigidbody;
-                if (otherRigidbody == null)
-                    continue;
-
-                // Проверяем, что текущий персонаж движется вниз
-                if (rigidBody.velocity.y >= 0)
-                    continue;
-
-                // Проверяем, что другой персонаж стоит на земле или неподвижен
-                var otherIsGrounded = otherRigidbody.velocity.magnitude < 0.1f; // Примерное условие
-                if (!otherIsGrounded)
-                    continue;
-
-                // Вычисляем расстояние до противника
-                float distance = Vector3.Distance(rigidBody.transform.position, otherRigidbody.transform.position);
-                if (distance < nearestDistance)
-                {
-                    nearestDistance = distance;
-                    nearestCollider = collider;
-                }
-            }
-
-            // Если ближайший противник найден, обрабатываем отталкивание
-            if (nearestCollider != null)
-            {
-                HandleRepel(nearestCollider);
-            }
-        }
-
-        private void HandleRepel(Collider other)
-        {
-            // Получаем Rigidbody другого персонажа
-            var otherRigidbody = other.attachedRigidbody;
-            if (otherRigidbody == null)
-                return;
-
-            // Увеличиваем счетчик "висения"
-            _hangCounter++;
-            _isHanging = true;
-
-            // Увеличиваем силу отталкивания, но не больше максимальной
-            _currentRepelForce = Mathf.Min(_repelForce + _hangCounter * _repelForceDelta, _maxRepelForce);
-
-            // Вычисляем разницу по оси Z между текущим персонажем и другим
-            var zDifference = rigidBody.transform.position.z - otherRigidbody.transform.position.z;
-
-            // Определяем направление отталкивания
-            Vector3 repelDirection;
-            if (zDifference > 0)
-            {
-                // Текущий персонаж впереди другого, отталкиваем вперед
-                repelDirection = Vector3.forward;
-            }
-            else if (zDifference < 0)
-            {
-                // Текущий персонаж сзади другого, отталкиваем назад
-                repelDirection = Vector3.back;
-            }
-            else
-            {
-                // Разница по Z равна нулю, отталкиваем в случайную сторону
-                repelDirection = UnityEngine.Random.Range(0, 2) == 0 ? Vector3.back : Vector3.forward;
-            }
-
-            // Смещаем персонажа плавно, без изменения скорости
-            Vector3 repelOffset = repelDirection * (_currentRepelForce * Time.fixedDeltaTime);
-            rigidBody.MovePosition(rigidBody.position + repelOffset);
-        }
-
         private void FixedUpdate()
         {
             subComponentsController.OnFixedUpdate();
-
-            // Если персонаж больше не "висит", сбрасываем счетчик и силу отталкивания
-            if (!_isHanging)
-            {
-                _hangCounter = 0;
-                _currentRepelForce = _repelForce;
-            }
-
-
-            // Сбрасываем флаг "висения" каждый кадр
-            _isHanging = false;
-
         }
 
         private void OnTriggerEnter(Collider other)
@@ -383,23 +238,6 @@ namespace Angry_Girls
                 weapon.transform.position = weaponHolder.transform.position;
                 weapon.transform.rotation = weaponHolder.transform.rotation;
             }
-        }
-
-        private void OnEnable()
-        {
-            if (playerOrAi == PlayerOrAi.Player)
-            {
-                GameLoader.Instance.characterManager.playableCharacters.Add(this);
-            }
-            else if (playerOrAi == PlayerOrAi.Ai)
-            {
-                GameLoader.Instance.characterManager.enemyCharacters.Add(this);
-            }
-
-            subComponentsController.OnComponentEnable();
-
-            GameLoader.Instance.attackLogicContainer.SetCharacterAttackLogic(this);
-            GameLoader.Instance.gameLogic_UIManager.CreateHealthBar(this);
         }
 
         protected override void Dispose(bool disposing)

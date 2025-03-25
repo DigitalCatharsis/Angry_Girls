@@ -49,8 +49,8 @@ namespace Angry_Girls
             ColorDebugLog.Log($"{control.name} called death", KnownColor.Yellow);
             control.isDead = true;
             control.FinishTurn();
-            control.rigidBody.useGravity = true;
-            control.rigidBody.isKinematic = false;
+            control.CharacterMovement.Rigidbody.useGravity = true;
+            control.CharacterMovement.Rigidbody.isKinematic = false;
 
 
             var animator = control.wingsTransform.GetComponentInChildren<Animator>();
