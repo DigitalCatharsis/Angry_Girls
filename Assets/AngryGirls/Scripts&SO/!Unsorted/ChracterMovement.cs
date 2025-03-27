@@ -16,7 +16,7 @@ namespace Angry_Girls
         private bool _isHanging; // Флаг, что персонаж "висит" на другом
 
 
-        public Vector3 bottomRaycastContactPoint;
+        //public Vector3 bottomRaycastContactPoint;
         private List<Collider> _currentCollisions = new List<Collider>(); // Список текущих столкновений
 
         [Header("Core")]

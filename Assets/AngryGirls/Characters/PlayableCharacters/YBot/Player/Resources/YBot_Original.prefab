@@ -1030,7 +1030,6 @@ MonoBehaviour:
   subComponentMediator: {fileID: 0}
   boxCollider: {fileID: 0}
   animator: {fileID: 0}
-  bottomRaycastContactPoint: {x: 0, y: 0, z: 0}
   playerOrAi: 0
   characterSettings: {fileID: 11400000, guid: 28afea81c95372d4fb753c0287980f6c, type: 2}
   projectileSpawnTransform: {fileID: 7260981478403319719}
@@ -1085,8 +1084,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _repelForce: 0.25
-  _repelForceDelta: 0.1
-  _maxRepelForce: 1
+  _repelForceDelta: 0.75
+  _maxRepelForce: 3
 --- !u!1 &2688569752745844030
 GameObject:
   m_ObjectHideFlags: 0

@@ -248,7 +248,7 @@ namespace Angry_Girls
 
                 if (control.characterSettings.unitType == UnitType.AirToGround
                     && GameLoader.Instance.statesContainer.attack_Dictionary.ContainsValue(hash)
-                    && control.animator.GetCurrentAnimatorStateInfo(0).length >= 0.9f)
+                    && control.animator.GetCurrentAnimatorStateInfo(0).length >= 0.3f)
                 {
                     ChangeAnimationState_CrossFadeInFixedTime(
                         GameLoader.Instance.statesContainer.landingNames_Dictionary[control.characterSettings.landing_State.animation],

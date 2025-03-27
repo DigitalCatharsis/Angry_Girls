@@ -147,7 +147,7 @@ AnimatorStateMachine:
     m_Position: {x: -660, y: -250, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2857668563841484423}
-    m_Position: {x: -660, y: -180, z: 0}
+    m_Position: {x: -660, y: -170, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4306501587470874553}
     m_Position: {x: -660, y: -20, z: 0}
@@ -166,9 +166,6 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: 837440603570837909}
     m_Position: {x: 70, y: -190, z: 0}
-  - serializedVersion: 1
-    m_State: {fileID: -6993515064146901414}
-    m_Position: {x: 403.88525, y: -166.0618, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -355,32 +352,6 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: -203655887218126122, guid: 1dad8f7c5cb80434b86e0d420108f2ac,
     type: 3}
-  m_Tag: 
-  m_SpeedParameter: 
-  m_MirrorParameter: 
-  m_CycleOffsetParameter: 
-  m_TimeParameter: 
---- !u!1102 &-6993515064146901414
-AnimatorState:
-  serializedVersion: 6
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Archer_Fly_ShootArrow
-  m_Speed: 1
-  m_CycleOffset: 0
-  m_Transitions: []
-  m_StateMachineBehaviours: []
-  m_Position: {x: 50, y: 50, z: 0}
-  m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
-  m_Mirror: 0
-  m_SpeedParameterActive: 0
-  m_MirrorParameterActive: 0
-  m_CycleOffsetParameterActive: 0
-  m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: ccfd4b4ad58d51745a64b707ea4e9ab9, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -769,7 +740,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Launch_SwordAttack_Attack
-  m_Speed: 1
+  m_Speed: 6
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
@@ -782,7 +753,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 989e2ce5a26ed994ab0bbff97f0dd861, type: 2}
+  m_Motion: {fileID: 7400000, guid: cf6847507b6924b46a359658317b13a5, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -808,7 +779,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Alternate_SwordAttack_Attack
-  m_Speed: 1
+  m_Speed: 6
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
@@ -821,7 +792,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 989e2ce5a26ed994ab0bbff97f0dd861, type: 2}
+  m_Motion: {fileID: 7400000, guid: cf6847507b6924b46a359658317b13a5, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
