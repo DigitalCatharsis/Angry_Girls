@@ -45,7 +45,7 @@ namespace Angry_Girls
             control.FinishTurn();
             control.CharacterMovement.Rigidbody.useGravity = true;
             control.CharacterMovement.Rigidbody.isKinematic = false;
-            control.CharacterMovement.Rigidbody.constraints = RigidbodyConstraints.None;
+            //control.CharacterMovement.Rigidbody.constraints = RigidbodyConstraints.None;
 
 
             var animator = control.wingsTransform.GetComponentInChildren<Animator>();

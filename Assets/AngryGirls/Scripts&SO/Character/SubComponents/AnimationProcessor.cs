@@ -1,439 +1,228 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Angry_Girls
 {
     public class AnimationProcessor : SubComponent
     {
-        public override void OnComponentEnable()
-        {
-            //Init start Animation
-            AnimatorStateInfo stateInfo = control.animator.GetCurrentAnimatorStateInfo(0);
-        }
+        private AnimationStateMachine _stateMachine;
+        private AnimationController _animationController;
 
         public override void OnStart()
         {
-            //for debug
             control.characterSettings.CheckForNoneValues(control);
 
-            //have to disable Global behavior for launching units (done by default), untill they are launched, and enable for AI
             if (control.playerOrAi == PlayerOrAi.Ai)
             {
                 control.checkGlobalBehavior = true;
             }
 
-            //should start from idle when the game starts
-            var idleState = control.characterSettings.idle_States[UnityEngine.Random.Range(0, control.characterSettings.idle_States.Count)];
+            _animationController = new AnimationController(
+                control.animator,
+                GameLoader.Instance.hashManager,
+                GameLoader.Instance.statesContainer);
 
-            ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.idle_Dictionary[idleState.animation], transitionDuration: idleState.transitionDuration);
+            InitializeStateMachine();
         }
+
+        private void InitializeStateMachine()
+        {
+            var states = new IAnimationState[]
+            {
+                new State_Idle(control, _animationController),
+                new State_Attack(control, _animationController),
+                new State_Attack(control, _animationController),
+                new State_AttackFinish(control, _animationController),
+                new State_HitReaction(control, _animationController),
+                new State_Death(control, _animationController),
+                new State_Landing(control, _animationController),
+                new State_Airborned(control, _animationController),
+            };
+
+            _stateMachine = new AnimationStateMachine(states);
+            _stateMachine.ChangeState<State_Idle>();
+        }
+
 
         public override void OnFixedUpdate()
         {
-            //On Launching behavior phase
-            if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.LaunchingPhase
-                && control.hasBeenLaunched == true)
-            {
-                LaunchingPhase_Logic();
-            }
-
-            //On Alternate behavior phase
-            if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.AlternatePhase)
-            {
-                CheckUnit_AlternatePhase();
-            }
-
-            CheckUnit_GlobalPhase();
+            ProcessPhaseBehavior();
+            _stateMachine.Update();
         }
 
-
-        #region Launching behavior methods
-        private void LaunchingPhase_Logic()
+        private void ProcessPhaseBehavior()
         {
-            if (control.hasFinishedLaunchingTurn)
+            var currentPhase = GameLoader.Instance.turnManager.CurrentPhase;
+
+            if (currentPhase == CurrentPhase.LaunchingPhase && control.hasBeenLaunched && !control.hasFinishedLaunchingTurn)
             {
-                return;
+                ProcessLaunchingPhase();
+            }
+            else if (currentPhase == CurrentPhase.AlternatePhase && !control.hasFinishedAlternateAttackTurn && control.isAttacking)
+            {
+                ProcessAlternatePhase();
             }
 
-            //Check Ground attack (ground Unit Only)
-            if (control.characterSettings.unitType == UnitType.Ground)
-            {
-                CheckAndProcess_GroundAttackFinish();
-            }
-
-            //CheckAttackPrep
-            if (control.hasUsedAbility
-                && !control.isLanding
-                && !control.isAttacking)
-            {
-                Launching_CheckAndProcess_AttackPrep();
-            }
-        }
-        private void CheckAndProcess_GroundAttackFinish()
-        {
-            //Ground attack
-            if (control.isAttacking && control.isGrounded)
-            {
-                control.animator.StopPlayback();
-                ChangeAnimationStateFixedTime(GameLoader.Instance.statesContainer.attackFinish_Dictionary[control.Get_AttackAbility().attackFininsh_State.animation], transitionDuration: control.Get_AttackAbility().attackFininsh_State.transitionDuration);
-            }
+            ProcessGlobalBehavior();
         }
 
-        private void Launching_CheckAndProcess_AttackPrep()
+        private void ProcessLaunchingPhase()
         {
-            if (!control.canUseAbility)
+            if (ShouldFinishGroundAttack())
             {
-                return;
+                _stateMachine.ChangeState<State_AttackFinish>();
             }
-
-
-            //AirToGround unit personal condition
-            if (control.characterSettings.unitType == UnitType.AirToGround)
+            else if (ShouldStartAttackPrep())
             {
-                if (control.isGrounded
-                    || control.isAttacking)
-                {
-                    return;
-                }
-
-                //if (GameLoader.Instance.statesDispatcher.attackPrep_Dictionary.ContainsValue(control.currentStateData.hash))
-                if (GameLoader.Instance.statesContainer.attack_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
-                {
-                    return;
-                }
-            }
-
-            //for ground unit
-            if (GameLoader.Instance.statesContainer.attackFinish_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
-            {
-                return;
-            }
-
-            control.canUseAbility = false;
-            control.isAttacking = true;
-            ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.attack_Dictionary[control.characterSettings.AttackAbility_Launch.attack_State.animation], control.characterSettings.AttackAbility_Launch.attack_State.transitionDuration);
-            return;
-        }
-        #endregion
-
-        #region Alternate behavior methods
-        private void CheckUnit_AlternatePhase()
-        {
-            if (!control.hasFinishedAlternateAttackTurn
-                && control.isAttacking)
-            {
-                //Check Ground attack (ground Unit Only)
-                if (control.characterSettings.unitType == UnitType.Ground
-                    && GameLoader.Instance.statesContainer.attack_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
-                {
-                    CheckAndProcess_GroundAttackFinish();
-                    return;
-                }
-
-                Alternate_CheckAndProcessAttack();
+                _stateMachine.ChangeState<State_Attack>();
             }
         }
-
-        private void Alternate_CheckAndProcessAttack()
+        private void ProcessAlternatePhase()
         {
-            if (!control.canUseAbility)
+            if (ShouldFinishGroundAttack())
             {
-                return;
+                _stateMachine.ChangeState<State_AttackFinish>();
             }
-            //if (GameLoader.Instance.statesContainer.attack_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash)
-            //    || GameLoader.Instance.statesContainer.attackFinish_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
-            //{
-            //    return;
-            //}
-
-            control.canUseAbility = false;
-
-            ChangeAnimationState_CrossFadeInFixedTime
-                (GameLoader.Instance.statesContainer.attack_Dictionary[control.characterSettings.AttackAbility_Alternate.attack_State.animation],
-                transitionDuration: control.characterSettings.AttackAbility_Alternate.attack_State.transitionDuration);
-        }
-        #endregion
-
-        #region Global Behavior Methods
-
-        private void CheckUnit_GlobalPhase()
-        {
-            var hash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
-
-            if (control.checkGlobalBehavior == false)
+            // Обработка основной атаки
+            else if (control.canUseAbility)
             {
-                return;
-            }
-
-            //DEAD
-            if (control.isDead)
-            {
-                return;
-            }
-
-            //if idle turn to enemy
-            if (GameLoader.Instance.statesContainer.idle_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
-            {
-
-                    if (control.playerOrAi == PlayerOrAi.Player && control.hasFinishedLaunchingTurn)
-                    {
-                        TurnToTheClosestEnemy(PlayerOrAi.Ai);
-                    }
-                    else if (control.playerOrAi == PlayerOrAi.Ai)
-                    {
-                        TurnToTheClosestEnemy(PlayerOrAi.Player);
-                    }
-            }
-
-            //GOT HIT
-            if (control.unitGotHit)
-            {
-                var randomHitAnimation = control.characterSettings.hitReaction_States[UnityEngine.Random.Range(0, control.characterSettings.hitReaction_States.Count)].animation;
-                ChangeAnimationState(GameLoader.Instance.statesContainer.hitReaction_Dictionary[randomHitAnimation], transitionDuration: 0.1f);
-
-                //if (control.isAttacking)
-                //{
-                //    control.FinishTurn();
-                //}
-                return;
-            }
-
-            //CHECK AIRBONED
-            //air
-            if (control.characterSettings.unitType == UnitType.Air)
-            {
-                if (CurrentPhase.LaunchingPhase == GameLoader.Instance.turnManager.CurrentPhase 
-                    && control.playerOrAi == PlayerOrAi.Player
-                    && !control.hasUsedAbility 
-                    && !control.hasFinishedLaunchingTurn)
-                {
-                    ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], transitionDuration: control.characterSettings.airbonedFlying_States.transitionDuration);
-                }
-            }
-            else
-            //ground, air2ground
-            {
-
-                if (!control.isGrounded
-                    && !control.isAttacking
-                    && !control.isLanding)
-                {
-                    //personal ground unit condition
-                    if (GameLoader.Instance.statesContainer.attackFinish_Dictionary.ContainsValue(hash))
-                    {
-                        return;
-                    }
-
-                    //everyones logic
-                    ChangeAnimationState_CrossFadeInFixedTime(
-                        GameLoader.Instance.statesContainer.airbonedFlying_Dictionary[control.characterSettings.airbonedFlying_States.animation], 
-                        transitionDuration: control.characterSettings.airbonedFlying_States.transitionDuration);
-                }
-            }
-
-            //CHECK LANDING
-            if (control.isGrounded
-                && !control.unitGotHit
-                && control.characterSettings.unitType != UnitType.Air
-                )
-            {
-                if (GameLoader.Instance.statesContainer.airbonedFlying_Dictionary.ContainsValue(hash))
-                {
-                    ChangeAnimationState_CrossFadeInFixedTime(
-                        GameLoader.Instance.statesContainer.landingNames_Dictionary[control.characterSettings.landing_State.animation],
-                        control.characterSettings.landing_State.transitionDuration);
-                    return;
-                }
-
-                if (control.characterSettings.unitType == UnitType.AirToGround
-                    && GameLoader.Instance.statesContainer.attack_Dictionary.ContainsValue(hash)
-                    && control.animator.GetCurrentAnimatorStateInfo(0).length >= 0.3f)
-                {
-                    ChangeAnimationState_CrossFadeInFixedTime(
-                        GameLoader.Instance.statesContainer.landingNames_Dictionary[control.characterSettings.landing_State.animation],
-                        control.characterSettings.landing_State.transitionDuration);
-                    return;
-                }
-
-            }
-             
-
-            //CHECK IDLE
-
-            //Exctra condition for an air unit
-            if (control.characterSettings.unitType == UnitType.Air && !control.isAttacking)
-            {
-                if (control.isGrounded 
-                    || (!control.canUseAbility) 
-                    || GameLoader.Instance.statesContainer.hitReaction_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
-                {
-                    var idleState = control.characterSettings.idle_States[UnityEngine.Random.Range(0, control.characterSettings.idle_States.Count)];
-                    ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.idle_Dictionary[idleState.animation], transitionDuration: idleState.transitionDuration);
-                    return;
-                }
-            }
-            //Ground and airToground units
-            if (control.isGrounded && !control.isAttacking && !control.isLanding)
-            {
-                if (GameLoader.Instance.statesContainer.idle_Dictionary.ContainsValue(hash))
-                {
-                    return;
-                }
-
-
-                if (GameLoader.Instance.statesContainer.attackFinish_Dictionary.ContainsValue(hash)
-                        || GameLoader.Instance.statesContainer.hitReaction_Dictionary.ContainsValue(hash)
-                        || GameLoader.Instance.statesContainer.landingNames_Dictionary.ContainsValue(hash))
-                {
-                    var idleState = control.characterSettings.idle_States[UnityEngine.Random.Range(0, control.characterSettings.idle_States.Count)];
-                    ChangeAnimationState_CrossFadeInFixedTime(GameLoader.Instance.statesContainer.idle_Dictionary[idleState.animation], transitionDuration: idleState.transitionDuration);
-                    return;
-                }
+                _stateMachine.ChangeState<State_Attack>();
             }
         }
-
-        private void TriggerRagroll()
+        private bool ShouldFinishGroundAttack()
         {
-            //change components layers from character to DeadBody to prevent unnessesary collisions.
-            var bodypartsTransforms_Array = control.gameObject.GetComponentsInChildren<Transform>();
-            foreach (var transform in bodypartsTransforms_Array)
-            {
-                transform.gameObject.layer = LayerMask.NameToLayer("DeadBody");
-            }
-
-            //turn off animator, avatar
-            control.animator.enabled = false;
-            control.animator.avatar = null;
+            return control.characterSettings.unitType == UnitType.Ground &&
+                   control.isAttacking &&
+                   control.isGrounded &&
+                   (GameLoader.Instance.statesContainer.attack_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash) ||
+                   GameLoader.Instance.statesContainer.attackFinish_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash));
         }
 
-        #endregion
-
-        #region Conditions
-        public bool IsLauchingAttackStateOver(float attackAnimationRepeatRate)
+        private bool ShouldStartAttackPrep()
         {
-            bool airAttack = GameLoader.Instance.statesContainer.attack_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash);
-            bool groundAttack = GameLoader.Instance.statesContainer.attackFinish_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash);
-
-            //���� ��������, �� ������ normilized time � ������ ������ ��������.
-            if ((airAttack || groundAttack)
-                && (control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= attackAnimationRepeatRate))
-            {
-                return false;
-            }
-            return true;
-        }
-        #endregion
-
-        #region Change State
-        public void ChangeAnimationState_CrossFadeInFixedTime(int newStateHash, float transitionDuration, int layer = 0)
-        {
-            var shortNameHash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
-
-            if (GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesContainer.stateNames_Dictionary, newStateHash) == StateNames.NONE)
-            {
-                return;
-            }
-
-            if (shortNameHash == newStateHash || control.animator.IsInTransition(layer))
-            {
-                return;
-            }
-            control.animator.CrossFadeInFixedTime(newStateHash, fixedTransitionDuration: transitionDuration, layer: layer, fixedTimeOffset: 0f, normalizedTransitionTime: 0.0f);
-        }
-
-
-
-        public void ChangeAnimationState(int newStateHash, int layer = 0, float transitionDuration = 1f)
-        {
-            if (control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash == newStateHash)
-            {
-                return;
-            }
-            control.animator.Play(newStateHash, layer, transitionDuration);
-
-
-        }
-        public void ChangeAnimationStateFixedTime(int newStateHash, int layer = 0, float transitionDuration = 0f)
-        {
-            if (control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash == newStateHash)
-            {
-                return;
-            }
-            control.animator.PlayInFixedTime(newStateHash, layer, transitionDuration);
-
-
-        }
-        #endregion
-
-        private void TurnToTheClosestEnemy(PlayerOrAi playerOrAi)
-        {
-            float closestDistance = 9999f;
-            var collection = new List<CControl>();
-
-            if (playerOrAi == PlayerOrAi.Player)
-            {
-                collection = GameLoader.Instance.characterManager.playableCharacters;
-            }
-            else
-            {
-                collection = GameLoader.Instance.characterManager.enemyCharacters;
-            }
-
-            foreach (var character in collection)
-            {
-                if (character.GetComponent<CControl>().isDead) continue;
-
-                var distacne = control.CharacterMovement.Rigidbody.position.z - character.CharacterMovement.Rigidbody.position.z;
-
-                if (Math.Abs(closestDistance) > Math.Abs(distacne))
-                {
-                    closestDistance = distacne;
-                }
-            }
-
-            if (closestDistance > 0)
-            {
-                control.CharacterMovement.SetRotation(Quaternion.Euler(0, 180, 0));
-            }
-            else if (closestDistance < 0)
-            {
-                control.CharacterMovement.SetRotation(Quaternion.Euler(0, 0, 0));
-            }
-            else if (closestDistance == 0)
-            {
-                return;
-            }
-        }
-
-        public override void OnAwake()
-        {
-        }
-
-        public override void OnUpdate()
-        {
-        }
-
-        public override void OnLateUpdate()
-        {
+            return control.hasUsedAbility &&
+                   !control.isLanding &&
+                   !control.isAttacking &&
+                   control.canUseAbility;
         }
 
         public void SetDeath()
         {
-            if (control.characterSettings.deathByAnimation == true)
+            if (control.characterSettings.deathByAnimation)
             {
-                Debug.Log("death");
-                var randomDeathAnimation = control.characterSettings.death_States[UnityEngine.Random.Range(0, control.characterSettings.death_States.Count)].animation; //0 = none            
-                                                                                                                                                                        //no crossFade for instant animations changes at fast damage recive
-                ChangeAnimationState(GameLoader.Instance.statesContainer.death_States_Dictionary[randomDeathAnimation], transitionDuration: 0.1f);
+                _stateMachine.ChangeState<State_Death>();
                 control.FinishTurn(0);
             }
-            else
-            {
-                //TODO: Implement
-                //TriggerRagroll();
-            }
-            return;
         }
+
+        private void ProcessGlobalBehavior()
+        {
+            if (!control.checkGlobalBehavior || control.isDead) return;
+
+            var currentStateHash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
+            var states = GameLoader.Instance.statesContainer;
+
+            if (control.unitGotHit)
+            {
+                _stateMachine.ChangeState<State_HitReaction>();
+                return;
+            }
+
+            if (ShouldEnterAirborne(currentStateHash, states))
+            {
+                _stateMachine.ChangeState<State_Airborned>();
+                return;
+            }
+
+            if (ShouldEnterLanding(currentStateHash, states))
+            {
+                _stateMachine.ChangeState<State_Landing>();
+                return;
+            }
+
+            if (ShouldReturnToIdle(currentStateHash, states))
+            {
+                _stateMachine.ChangeState<State_Idle>();
+            }
+        }
+
+        private bool ShouldEnterAirborne(int currentStateHash, StatesContainer states)
+        {
+            // AIR
+            if (control.characterSettings.unitType == UnitType.Air)
+            {
+                return GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.LaunchingPhase &&
+                       control.playerOrAi == PlayerOrAi.Player &&
+                       !control.hasUsedAbility &&
+                       !control.hasFinishedLaunchingTurn;
+            }
+
+            //AirToGround
+            return !control.isGrounded &&
+                   !control.isAttacking &&
+                   !control.isLanding &&
+                   !states.attackFinish_Dictionary.ContainsValue(currentStateHash);
+        }
+
+        private bool ShouldEnterLanding(int currentStateHash, StatesContainer states)
+        {
+            if (control.characterSettings.unitType == UnitType.Air) return false;
+
+            return control.isGrounded &&
+                   !control.unitGotHit &&
+                   (states.airbonedFlying_Dictionary.ContainsValue(currentStateHash) ||
+                    (control.characterSettings.unitType == UnitType.AirToGround &&
+                     states.attack_Dictionary.ContainsValue(currentStateHash) &&
+                     IsAnimationEnding(currentStateHash)));
+        }
+
+        private bool ShouldReturnToIdle(int currentStateHash, StatesContainer states)
+        {
+            // If already in idle
+            if (states.idle_Dictionary.ContainsValue(currentStateHash))
+            {
+                if (_stateMachine.CurrentState is not State_Idle)
+                {
+                    //Bugfix after restart level
+                    _stateMachine.ChangeState<State_Idle>();
+                }
+
+                return false;
+            }
+
+            // Air
+            if (control.characterSettings.unitType == UnitType.Air)
+            {
+                return (control.isGrounded || !control.canUseAbility) &&
+                       !control.isAttacking &&
+                       (states.hitReaction_Dictionary.ContainsValue(currentStateHash) ||
+                        IsAnimationEnding(currentStateHash));
+            }
+
+            // Air2Ground
+            bool shouldTransitionFromAttackFinish = states.attackFinish_Dictionary.ContainsValue(currentStateHash) &&
+                                                  IsAnimationEnding(currentStateHash);
+
+            bool shouldTransitionFromOtherStates = states.hitReaction_Dictionary.ContainsValue(currentStateHash) ||
+                                                  states.landingNames_Dictionary.ContainsValue(currentStateHash);
+
+            return control.isGrounded &&
+                   !control.isAttacking &&
+                   !control.isLanding &&
+                   (shouldTransitionFromAttackFinish || shouldTransitionFromOtherStates);
+        }
+
+        private bool IsAnimationEnding(int stateHash)
+        {
+            var stateInfo = control.animator.GetCurrentAnimatorStateInfo(0);
+            return stateInfo.shortNameHash == stateHash && stateInfo.normalizedTime >= 0.95f;
+        }
+
+        public override void OnUpdate() { }
+
+        public override void OnComponentEnable() { }
+
+        public override void OnLateUpdate() { }
+
+        public override void OnAwake() { }
     }
 }

@@ -39,18 +39,20 @@ namespace Angry_Girls
 
         private IEnumerator KillAllTweensAnLoadLevel(int levelIndex)
         {
-            var tweens = DOTween.PausedTweens() ?? new List<Tween>();
+            DOTween.KillAll(); // Полная очистка всех твинов
+            //GameLoader.Instance?.Dispose();
+            //var tweens = DOTween.PausedTweens() ?? new List<Tween>();
 
-            if (DOTween.PlayingTweens() != null)
-            {
-                tweens.AddRange(DOTween.PlayingTweens());
-                for (int i = 0; i < tweens.Count; i++)
-                    tweens[i]?.Kill();
-            }
+            //if (DOTween.PlayingTweens() != null)
+            //{
+            //    tweens.AddRange(DOTween.PlayingTweens());
+            //    for (int i = 0; i < tweens.Count; i++)
+            //        tweens[i]?.Kill();
+            //}
 
             yield return new WaitForEndOfFrame();
 
-            SceneManager.LoadScene(levelIndex);
+            SceneManager.LoadScene(levelIndex, LoadSceneMode.Single);
         }
 
         public void SelectButton(GameObject sender)
