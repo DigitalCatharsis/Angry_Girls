@@ -9,12 +9,6 @@ namespace Angry_Girls
         {
             if (control.isDead) { return; }
 
-            if (triggerCollider.gameObject.layer == LayerMask.NameToLayer("DeathZone"))
-            {
-                control.subComponentMediator.Notify_DeathZoneContact(triggerCollider);
-                return;
-            }
-
             var vfx = triggerCollider.gameObject.transform.GetComponent<VFX>();
 
             if (vfx == null) { return; }
@@ -51,6 +45,7 @@ namespace Angry_Girls
             control.FinishTurn();
             control.CharacterMovement.Rigidbody.useGravity = true;
             control.CharacterMovement.Rigidbody.isKinematic = false;
+            control.CharacterMovement.Rigidbody.constraints = RigidbodyConstraints.None;
 
 
             var animator = control.wingsTransform.GetComponentInChildren<Animator>();

@@ -203,6 +203,13 @@ namespace Angry_Girls
             if (other.gameObject.layer == LayerMask.NameToLayer("Projectile"))
             {
                 subComponentMediator.Notify_TriggerCheckVfx(this, other);
+                return;
+            }
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("DeathZone"))
+            {
+                subComponentMediator.Notify_DeathZoneContact(other);
+                return;
             }
         }
 
