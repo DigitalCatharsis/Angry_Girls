@@ -49,6 +49,7 @@ namespace Angry_Girls
     {
         private readonly Dictionary<Type, IAnimationState> _states = new();
         private IAnimationState _currentState;
+        private GameObject _owner;
 
         public IAnimationState CurrentState => _currentState;
 
@@ -60,7 +61,7 @@ namespace Angry_Girls
             }
         }
 
-        public void ChangeState<T>() where T : IAnimationState
+        public void ChangeState<T>(GameObject owner) where T : IAnimationState
         {
             var newStateType = typeof(T);
             if (!_states.TryGetValue(newStateType, out var newState))
@@ -69,6 +70,7 @@ namespace Angry_Girls
             if (_currentState != null && !_currentState.CanTransitionTo(newState))
                 return;
 
+            ColorDebugLog.Log(owner.name + " changing from State: " + _currentState + " to state: "+ newState, System.Drawing.KnownColor.Yellow);
             _currentState?.OnExit();
             _currentState = newState;
             _currentState.OnEnter();

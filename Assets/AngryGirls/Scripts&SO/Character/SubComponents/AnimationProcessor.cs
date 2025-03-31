@@ -1,3 +1,5 @@
+using AYellowpaper.SerializedCollections;
+using System;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -6,6 +8,14 @@ namespace Angry_Girls
     {
         private AnimationStateMachine _stateMachine;
         private AnimationController _animationController;
+
+        [ShowOnly][SerializeField] private string _probablyCurrentState;
+
+
+        private void Update()
+        {
+            _probablyCurrentState = _stateMachine.CurrentState.ToString();
+        }
 
         public override void OnStart()
         {
@@ -39,7 +49,7 @@ namespace Angry_Girls
             };
 
             _stateMachine = new AnimationStateMachine(states);
-            _stateMachine.ChangeState<State_Idle>();
+            _stateMachine.ChangeState<State_Idle>(control.gameObject);
         }
 
 
@@ -69,32 +79,38 @@ namespace Angry_Girls
         {
             if (ShouldFinishGroundAttack())
             {
-                _stateMachine.ChangeState<State_AttackFinish>();
+                _stateMachine.ChangeState<State_AttackFinish>(control.gameObject);
             }
             else if (ShouldStartAttackPrep())
             {
-                _stateMachine.ChangeState<State_Attack>();
+                _stateMachine.ChangeState<State_Attack>(control.gameObject);
             }
         }
         private void ProcessAlternatePhase()
         {
             if (ShouldFinishGroundAttack())
             {
-                _stateMachine.ChangeState<State_AttackFinish>();
+                _stateMachine.ChangeState<State_AttackFinish>(control.gameObject);
             }
             // Обработка основной атаки
             else if (control.canUseAbility)
             {
-                _stateMachine.ChangeState<State_Attack>();
+                _stateMachine.ChangeState<State_Attack>(control.gameObject);
             }
         }
         private bool ShouldFinishGroundAttack()
         {
-            return control.characterSettings.unitType == UnitType.Ground &&
-                   control.isAttacking &&
-                   control.isGrounded &&
-                   (GameLoader.Instance.statesContainer.attack_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash) ||
-                   GameLoader.Instance.statesContainer.attackFinish_Dictionary.ContainsValue(control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash));
+            var currentStateHash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
+
+            if (control.characterSettings.unitType != UnitType.Ground) { return false; }
+
+            if (_stateMachine.CurrentState is State_AttackFinish) { return false; }
+
+            if (!control.isAttacking) { return false; }
+
+            if (!control.isGrounded) { return false; }
+
+            return IsAnimationEnding(currentStateHash, GameLoader.Instance.statesContainer.attack_Dictionary);
         }
 
         private bool ShouldStartAttackPrep()
@@ -109,7 +125,7 @@ namespace Angry_Girls
         {
             if (control.characterSettings.deathByAnimation)
             {
-                _stateMachine.ChangeState<State_Death>();
+                _stateMachine.ChangeState<State_Death>(control.gameObject);
                 control.FinishTurn(0);
             }
         }
@@ -119,102 +135,140 @@ namespace Angry_Girls
             if (!control.checkGlobalBehavior || control.isDead) return;
 
             var currentStateHash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
-            var states = GameLoader.Instance.statesContainer;
 
             if (control.unitGotHit)
             {
-                _stateMachine.ChangeState<State_HitReaction>();
+                _stateMachine.ChangeState<State_HitReaction>(control.gameObject);
                 return;
             }
 
-            if (ShouldEnterAirborne(currentStateHash, states))
+            if (ShouldEnterLanding(currentStateHash))
             {
-                _stateMachine.ChangeState<State_Airborned>();
+                _stateMachine.ChangeState<State_Landing>(control.gameObject);
+                return;
+            }
+            if (ShouldEnterAirborne(currentStateHash))
+            {
+                _stateMachine.ChangeState<State_Airborned>(control.gameObject);
                 return;
             }
 
-            if (ShouldEnterLanding(currentStateHash, states))
-            {
-                _stateMachine.ChangeState<State_Landing>();
-                return;
-            }
 
-            if (ShouldReturnToIdle(currentStateHash, states))
+            if (ShouldReturnToIdle(currentStateHash))
             {
-                _stateMachine.ChangeState<State_Idle>();
+                _stateMachine.ChangeState<State_Idle>(control.gameObject);
             }
         }
 
-        private bool ShouldEnterAirborne(int currentStateHash, StatesContainer states)
+        private bool ShouldEnterAirborne(int currentStateHash)
         {
+            if (_stateMachine.CurrentState is State_Airborned)
+            {
+                return false;
+            }
+
             // AIR
             if (control.characterSettings.unitType == UnitType.Air)
             {
-                return GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.LaunchingPhase &&
-                       control.playerOrAi == PlayerOrAi.Player &&
-                       !control.hasUsedAbility &&
-                       !control.hasFinishedLaunchingTurn;
+                if (GameLoader.Instance.turnManager.CurrentPhase != CurrentPhase.LaunchingPhase) { return false; }
+
+                if (control.playerOrAi != PlayerOrAi.Player) { return false; }
+
+                if (control.hasUsedAbility) { return false; }
+
+                if (control.hasFinishedLaunchingTurn) { return false; }
+
+                return true;
             }
 
-            //AirToGround
-            return !control.isGrounded &&
-                   !control.isAttacking &&
-                   !control.isLanding &&
-                   !states.attackFinish_Dictionary.ContainsValue(currentStateHash);
+            if (control.isGrounded) { return false; }
+
+            if (control.isAttacking) { return false; }
+
+            if (control.isLanding) { return false; }
+
+            //if (_stateMachine.CurrentState is State_Attack) { return false; }
+
+            //AirToGround and ground
+            return true;
         }
 
-        private bool ShouldEnterLanding(int currentStateHash, StatesContainer states)
+        private bool ShouldEnterLanding(int currentStateHash)
         {
+            if (_stateMachine.CurrentState is State_Landing) { return false; }
+
             if (control.characterSettings.unitType == UnitType.Air) return false;
 
-            return control.isGrounded &&
-                   !control.unitGotHit &&
-                   (states.airbonedFlying_Dictionary.ContainsValue(currentStateHash) ||
-                    (control.characterSettings.unitType == UnitType.AirToGround &&
-                     states.attack_Dictionary.ContainsValue(currentStateHash) &&
-                     IsAnimationEnding(currentStateHash)));
+            if (!control.isGrounded) { return false; };
+
+            if (control.unitGotHit) { return false; }
+
+            if (control.characterSettings.unitType == UnitType.AirToGround && _stateMachine.CurrentState is State_Attack)
+            {
+                if (IsAnimationEnding(currentStateHash, GameLoader.Instance.statesContainer.attack_Dictionary))
+                {
+                    return true;
+                }
+            }
+
+            if (_stateMachine.CurrentState is State_Airborned)
+            {
+                return true;
+            }
+
+            return false;
         }
 
-        private bool ShouldReturnToIdle(int currentStateHash, StatesContainer states)
+        private bool ShouldReturnToIdle(int currentStateHash)
         {
             // If already in idle
-            if (states.idle_Dictionary.ContainsValue(currentStateHash))
+            if (_stateMachine.CurrentState is State_Idle)
             {
-                if (_stateMachine.CurrentState is not State_Idle)
+                return false;
+            }
+
+            //everyone
+            if (control.isAttacking) { return false; }
+
+            // Air
+            if (control.characterSettings.unitType == UnitType.Air)
+            {
+                if (_stateMachine.CurrentState is State_HitReaction)
                 {
-                    //Bugfix after restart level
-                    _stateMachine.ChangeState<State_Idle>();
+                    return IsAnimationEnding(currentStateHash, GameLoader.Instance.statesContainer.hitReaction_Dictionary);
+                }
+
+                if (control.isGrounded || !control.canUseAbility)
+                {
+                    return true;
                 }
 
                 return false;
             }
 
-            // Air
-            if (control.characterSettings.unitType == UnitType.Air)
-            {
-                return (control.isGrounded || !control.canUseAbility) &&
-                       !control.isAttacking &&
-                       (states.hitReaction_Dictionary.ContainsValue(currentStateHash) ||
-                        IsAnimationEnding(currentStateHash));
-            }
+            //Ground and Air2Ground
+            if (control.isLanding) { return false; }
 
-            // Air2Ground
-            bool shouldTransitionFromAttackFinish = states.attackFinish_Dictionary.ContainsValue(currentStateHash) &&
-                                                  IsAnimationEnding(currentStateHash);
+            if (!control.isGrounded) { return false; }
 
-            bool shouldTransitionFromOtherStates = states.hitReaction_Dictionary.ContainsValue(currentStateHash) ||
-                                                  states.landingNames_Dictionary.ContainsValue(currentStateHash);
+            bool shouldTransitionFromAttackFinish = _stateMachine.CurrentState is State_AttackFinish && IsAnimationEnding(currentStateHash, GameLoader.Instance.statesContainer.attackFinish_Dictionary);
 
-            return control.isGrounded &&
-                   !control.isAttacking &&
-                   !control.isLanding &&
-                   (shouldTransitionFromAttackFinish || shouldTransitionFromOtherStates);
+            bool shouldTransitionFromOtherStates = _stateMachine.CurrentState is State_HitReaction || _stateMachine.CurrentState is State_Landing;
+
+            return shouldTransitionFromAttackFinish || shouldTransitionFromOtherStates;
         }
 
-        private bool IsAnimationEnding(int stateHash)
+        private bool IsAnimationEnding<T>(int stateHash, SerializedDictionary<T, int> dict) where T : Enum
         {
-            var stateInfo = control.animator.GetCurrentAnimatorStateInfo(0);
-            return stateInfo.shortNameHash == stateHash && stateInfo.normalizedTime >= 0.95f;
+            if (dict.ContainsValue(stateHash))
+            {
+                return control.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f;
+            }
+            else
+            {
+                return false;
+                //throw new Exception(dict.ToString() +" does not contain such value as " + stateHash +". Supposed to be " + GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesContainer.stateNames_Dictionary, stateHash));
+            }
         }
 
         public override void OnUpdate() { }

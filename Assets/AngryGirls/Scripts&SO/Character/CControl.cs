@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +10,6 @@ namespace Angry_Girls
         Ai,
     }
 
-    [Serializable]
     public class CControl : PoolObject
     {
         public CharacterHealth Health { get; private set; }
@@ -21,14 +17,6 @@ namespace Angry_Girls
 
         [Header("Health")]
         public Slider healthSlider;
-
-        //[Header("Repel Settings")]
-        //[SerializeField] private float _repelForce = 0.25f; // Базовая сила отталкивания
-        //[SerializeField] private float _repelForceDelta = 0.05f; // Дельта увеличения силы
-        //[SerializeField] private float _maxRepelForce = 1f; // Максимальная сила отталкивания
-        //private float _currentRepelForce; // Текущая сила отталкивания
-        //private int _hangCounter; // Счетчик "висения" на другом персонаже
-        //private bool _isHanging; // Флаг, что персонаж "висит" на другом
 
         private const float _finishTurnTimerValue = 3f;
 
@@ -65,7 +53,6 @@ namespace Angry_Girls
         public UnityEngine.Color VFX_Color;
 
         [Header("Weapon")]
-        [SerializeReference]
         public Transform weaponHolder;
 
         private void OnEnable()

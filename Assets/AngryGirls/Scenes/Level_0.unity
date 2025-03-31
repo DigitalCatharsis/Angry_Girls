@@ -12331,6 +12331,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4275657372811343919, guid: 3786e2a2769906d4485f2139027caae5,
+        type: 3}
+      propertyPath: isGrounded
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13549,6 +13554,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemyt_AirToGround_Yellow_Variant (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2853760304677653386, guid: 3786e2a2769906d4485f2139027caae5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3245904147040073079, guid: 3786e2a2769906d4485f2139027caae5,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -13588,6 +13598,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0.51561874
+      objectReference: {fileID: 0}
+    - target: {fileID: 4275657372811343919, guid: 3786e2a2769906d4485f2139027caae5,
+        type: 3}
+      propertyPath: isGrounded
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4536307346347938433, guid: 3786e2a2769906d4485f2139027caae5,
         type: 3}

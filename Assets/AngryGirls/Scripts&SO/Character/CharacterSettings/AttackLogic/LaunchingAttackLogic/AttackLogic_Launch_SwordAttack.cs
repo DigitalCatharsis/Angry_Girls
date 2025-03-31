@@ -11,7 +11,7 @@ namespace Angry_Girls
 
         private int _loopsCount;
         private float _timeInCurrentLoop;
-        private int _timesToRepeat_Attack_State = 36;
+        private int _timesToRepeat_Attack_State = 22;
         private GameObject _vfx;
 
         //set proper rotation aftet changing state (landing for exmaple)
