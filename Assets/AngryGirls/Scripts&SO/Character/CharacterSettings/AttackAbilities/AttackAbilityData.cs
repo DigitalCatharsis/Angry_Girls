@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -44,5 +45,12 @@ namespace Angry_Girls
         [Header("Projectile Colliders")]
         public bool enableCollider = false;
         public bool enableTrigger = false;
+
+        [Space(5)]
+        [Header("SFX")]
+        public AudioSourceType spawnSourceType;
+        public int spawnIndex;
+        public AudioSourceType destroySourceType;
+        public int destoyIndex;
     }
 }

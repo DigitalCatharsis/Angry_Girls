@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -10,11 +11,23 @@ namespace Angry_Girls
 
         private GameObject _vfx;
 
+        private AudioSource _auidioSource;
+
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-
-            _vfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Uppercut ,control.CharacterMovement.Rigidbody.position, Quaternion.identity);
-            _vfx.GetComponent<VFX>().InitAndRunVFX_ByCustom(1, false, false,false, control.characterSettings.AttackAbility_Launch.attackDamage, knockbackValue: control.characterSettings.AttackAbility_Launch.enemyKnockbackValue, false, true, owner: control.gameObject);
+            _vfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Uppercut, control.CharacterMovement.Rigidbody.position, Quaternion.identity);
+            _vfx.GetComponent<VFX>().InitAndRunVFX_ByCustom(
+                1,
+                false,
+                false,
+                false,
+                control.characterSettings.AttackAbility_Alternate.attackDamage,
+                knockbackValue: control.characterSettings.AttackAbility_Alternate.enemyKnockbackValue,
+                false,
+                true,
+                owner: control.gameObject,
+                spawnSound: new Tuple<AudioSourceType, int>(AudioSourceType.SFX_Impact, 2))
+                ;
 
         }
 

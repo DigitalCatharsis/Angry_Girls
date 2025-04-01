@@ -27,13 +27,13 @@ MonoBehaviour:
     transitionDuration: 0.15
   landing_State:
     animation: 1
-    transitionDuration: 0
+    transitionDuration: 0.1
   hitReaction_States:
   - animation: 4
     transitionDuration: 0.1
   death_States:
   - animation: 1
-    transitionDuration: 0
+    transitionDuration: 0.1
   deathByAnimation: 1
   AttackAbility_Launch: {fileID: 0}
   AttackAbility_Alternate: {fileID: 11400000, guid: 545cd1a24618d664dacdb2ed9f6a62fd,

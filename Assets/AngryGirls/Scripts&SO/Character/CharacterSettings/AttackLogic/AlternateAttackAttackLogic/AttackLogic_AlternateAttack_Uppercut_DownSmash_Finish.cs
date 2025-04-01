@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class AttackLogic_AlternateAttack_UppercutDownSmash_Finish : AttackAbilityLogic
+    public class AttackLogic_Alternate_UppercutDownSmash_Finish : AttackAbilityLogic
     {
-        public AttackLogic_AlternateAttack_UppercutDownSmash_Finish(AttackAbilityData attackAbilityData) : base(attackAbilityData) { }
+        public AttackLogic_Alternate_UppercutDownSmash_Finish(AttackAbilityData attackAbilityData) : base(attackAbilityData) { }
 
         private bool _cameraShaked = false;
 
@@ -14,7 +14,18 @@ namespace Angry_Girls
         {
 
             _vfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Uppercut, control.CharacterMovement.Rigidbody.position, Quaternion.identity);
-            _vfx.GetComponent<VFX>().InitAndRunVFX_ByCustom(1, false, false, false, control.characterSettings.AttackAbility_Alternate.attackDamage, knockbackValue: control.characterSettings.AttackAbility_Alternate.enemyKnockbackValue, false, true, owner: control.gameObject);
+            _vfx.GetComponent<VFX>().InitAndRunVFX_ByCustom(
+                1, 
+                false, 
+                false, 
+                false, 
+                control.characterSettings.AttackAbility_Alternate.attackDamage, 
+                knockbackValue: control.characterSettings.AttackAbility_Alternate.enemyKnockbackValue, 
+                false, 
+                true, 
+                owner: control.gameObject,
+                spawnSound: new Tuple<AudioSourceType, int>(AudioSourceType.SFX_Impact, 2))
+                ;
 
         }
 

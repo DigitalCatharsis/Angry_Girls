@@ -1315,6 +1315,11 @@ PrefabInstance:
       propertyPath: _soundDataDict._serializedList.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8981918162828465471, guid: bbc4eb858c83bcb4a82053f6ed286119,
+        type: 3}
+      propertyPath: _soundDataDict._serializedList.Array.data[0].Key
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 9084393753429103889, guid: bbc4eb858c83bcb4a82053f6ed286119,
         type: 3}
       propertyPath: m_IsActive

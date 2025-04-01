@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -21,11 +22,22 @@ namespace Angry_Girls
         [SerializeField] private bool _destroyOnCollision;
         [SerializeField] private bool _destroyOnCharacterTrigger;
 
+        [SerializeField] private Tuple<AudioSourceType, int> _spawnSound;
+        [SerializeField] private Tuple<AudioSourceType, int> _destroySound;
+
         [Space(5)]
         public GameObject vfxOwner;
 
         protected override void Dispose(bool disposing)
         {
+            if (_destroySound != null && _destroySound.Item1 != AudioSourceType.None)
+            {
+                GameLoader.Instance.audioManager.PlayCustomSound(_destroySound.Item1, _destroySound.Item2);
+            }
+
+            _destroySound = null;
+            _spawnSound = null;
+
             var visualEffect = GetComponentInChildren<VisualEffect>();
             if (visualEffect != null)
             {
@@ -45,7 +57,12 @@ namespace Angry_Girls
 
         private IEnumerator VFXLiving_Routine()
         {
+            if (_spawnSound != null && _spawnSound.Item1 != AudioSourceType.None)
+            {
+                GameLoader.Instance.audioManager.PlayCustomSound(_spawnSound.Item1, _spawnSound.Item2, false);
+            }
             yield return new WaitForSeconds(_timeToLive);
+
             Dispose();
         }
 
@@ -65,10 +82,23 @@ namespace Angry_Girls
                     knockbackValue: ability.enemyKnockbackValue,
                     enableCollider: ability.enableCollider,
                     enableTrigger: ability.enableTrigger,
-                    owner: control.gameObject);
+                    owner: control.gameObject,
+                    spawnSound: new Tuple<AudioSourceType, int>(ability.spawnSourceType, ability.spawnIndex),
+                    destroySound: new Tuple<AudioSourceType, int>(ability.destroySourceType, ability.destoyIndex));
         }
 
-        public void InitAndRunVFX_ByCustom(float timeToLive, bool isTimeToLiveIsNormilizedTime, bool destroyOnCollision, bool destroyOnCharacterCollision, float damage, float knockbackValue, bool enableCollider, bool enableTrigger, GameObject owner = null)
+        public void InitAndRunVFX_ByCustom(
+            float timeToLive,
+            bool isTimeToLiveIsNormilizedTime,
+            bool destroyOnCollision,
+            bool destroyOnCharacterCollision,
+            float damage,
+            float knockbackValue,
+            bool enableCollider,
+            bool enableTrigger,
+            GameObject owner = null,
+            Tuple<AudioSourceType, int> spawnSound = null,
+            Tuple<AudioSourceType, int> destroySound = null)
         {
             //set owner for future trigger logic
             vfxOwner = owner;
@@ -104,6 +134,9 @@ namespace Angry_Girls
                 }
             }
 
+            _spawnSound = spawnSound;
+            _destroySound = destroySound;
+
             //Start Living Routine
             StartCoroutine(VFXLiving_Routine());
         }
@@ -118,7 +151,8 @@ namespace Angry_Girls
                 if (control != null
                     && control.playerOrAi != vfxOwner.GetComponent<CControl>().playerOrAi)
                 {
-                    SpawnSmashVFXAndDestroyThis();
+                    Dispose();
+                    //SpawnSmashVFXAndDestroyThis();
                 }
             }
         }
@@ -133,7 +167,8 @@ namespace Angry_Girls
 
             if (_destroyOnCollision)
             {
-                SpawnSmashVFXAndDestroyThis();
+                Dispose();
+                //SpawnSmashVFXAndDestroyThis();
             }
         }
 

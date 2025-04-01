@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class AttackLogic_AlternateAttack_HeadSpin : AttackAbilityLogic
+    public class AttackLogic_Alternate_HeadSpin : AttackAbilityLogic
     {
-        public AttackLogic_AlternateAttack_HeadSpin(AttackAbilityData attackAbilityData): base(attackAbilityData) { }
+        public AttackLogic_Alternate_HeadSpin(AttackAbilityData attackAbilityData): base(attackAbilityData) { }
         private float _impulseY = 7f;
         private float _impulseZ = 5f;
         private Vector3 _finalProjectileRotation = new Vector3(75f, 0, 0);

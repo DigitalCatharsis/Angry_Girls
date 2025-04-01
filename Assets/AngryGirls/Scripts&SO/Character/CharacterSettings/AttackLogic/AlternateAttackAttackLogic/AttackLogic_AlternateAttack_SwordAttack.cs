@@ -1,55 +1,76 @@
-using DG.Tweening;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Options;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class AttackLogic_AlternateAttack_SwordAttack : AttackAbilityLogic
+    public class AttackLogic_Alternate_SwordAttack : AttackAbilityLogic
     {
-        public AttackLogic_AlternateAttack_SwordAttack(AttackAbilityData attackAbilityData) : base(attackAbilityData) { }
+        public AttackLogic_Alternate_SwordAttack(AttackAbilityData attackAbilityData) : base(attackAbilityData) { }
 
-        private int _loopsCount;
         private float _timeInCurrentLoop;
         private int _timesToRepeat_Attack_State = 22;
         private GameObject _vfx;
+        private bool _hasEnteredAttackState = false;
 
-        //set proper rotation aftet changing state (landing for exmaple)
-        //private Quaternion _savedRotation;
+        // Настройки звуков: моменты normalizedTime, когда они должны играть (например, 0.0 - начало, 0.5 - середина)
+        private readonly float[] _soundTriggers = { 0.0f, 0.5f }; // Можно изменить на {0.0f, 0.3f, 0.7f} и т.д.
+        private bool[] _hasPlayedSoundInThisCycle; // Отслеживает, какие звуки уже сыграли
 
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            //_savedRotation = control.CharacterMovement.Rigidbody.rotation;
-            base.OnStateEnter(control, animator, stateInfo );
-
-            //rotation
-            //_rotationTween = control.CharacterMovement.Rigidbody.DORotate(new Vector3(360, 0, 0), 0.3f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1);
+            base.OnStateEnter(control, animator, stateInfo);
             _vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, VFX_Type.VFX_Eclipse, setAsOwner: true);
+
+            if (!_hasEnteredAttackState)
+            {
+                GameLoader.Instance.audioManager.PlayCustomSound(AudioSourceType.SFX_Impact, 4);
+                _hasEnteredAttackState = true;
+            }
+
+            // Инициализируем массив для отслеживания звуков в этом цикле
+            _hasPlayedSoundInThisCycle = new bool[_soundTriggers.Length];
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            // Проверка на окончание ВСЕХ циклов анимации
-            if (stateInfo.normalizedTime >= _timesToRepeat_Attack_State * stateInfo.length /*+ 0.8f*/)
+            float normalizedTime = stateInfo.normalizedTime % 1; // Текущая позиция в цикле [0, 1)
+
+            // Проверяем все триггеры звуков
+            for (int i = 0; i < _soundTriggers.Length; i++)
             {
-                _loopsCount = 0;
-                _timeInCurrentLoop = 0f;
-                control.isAttacking = false;
+                // Если прошли триггер и ещё не играли звук
+                if (normalizedTime >= _soundTriggers[i] && !_hasPlayedSoundInThisCycle[i])
+                {
+                    GameLoader.Instance.audioManager.PlayCustomSound(AudioSourceType.SFX_Impact, 4);
+                    _hasPlayedSoundInThisCycle[i] = true;
+                }
             }
 
-            //Сброс флага в конце цикла
-            if (_timeInCurrentLoop >= stateInfo.length)
+            // Если цикл завершился (normalizedTime перескочил с ~1.0 на 0.0)
+            if (normalizedTime < _timeInCurrentLoop)
             {
-                _timeInCurrentLoop -= stateInfo.length;
-                _loopsCount++;
+                // Сбрасываем флаги для нового цикла
+                _hasPlayedSoundInThisCycle = new bool[_soundTriggers.Length];
+            }
+
+            _timeInCurrentLoop = normalizedTime;
+
+            // Проверка на завершение всей анимации
+            if (stateInfo.normalizedTime >= _timesToRepeat_Attack_State)
+            {
+                _timeInCurrentLoop = 0f;
+                control.isAttacking = false;
+                _hasEnteredAttackState = false;
             }
         }
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            //control.CharacterMovement.SetRotation(_savedRotation);
             control.isAttacking = false;
-            _vfx.GetComponent<VFX>().Dispose();
+            _hasEnteredAttackState = false;
+
+            if (_vfx != null)
+                _vfx.GetComponent<VFX>().Dispose();
         }
     }
 }

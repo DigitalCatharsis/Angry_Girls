@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c8c6a245cd7843429bb9eaf46b05e8e, type: 3}
   m_Name: LevelSettings_Data_Level0
   m_EditorClassIdentifier: 
-  audioSourceType: 1
+  audioSourceType: 2
   audioClipEllementIndex: 1

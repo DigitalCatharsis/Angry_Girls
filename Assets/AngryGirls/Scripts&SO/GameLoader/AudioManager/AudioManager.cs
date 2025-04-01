@@ -6,9 +6,11 @@ namespace Angry_Girls
 {
     public enum AudioSourceType
     {
-        CharacterHit,
-        LevelMusic,
-        Coins,
+        None = 0,
+        CharacterHit =1,
+        LevelMusic =2,
+        Coins =3 ,
+        SFX_Impact =4,
     }
 
     public class AudioManager : MonoBehaviour
@@ -109,6 +111,7 @@ namespace Angry_Girls
 
             //Debug.Log(audiosource.volume + "  " + _gameSettings.volumeMusic);
             audiosource.PlayOneShot(audioclipCollection.audioClips[index], 1);
+
         }
 
         private AudioClip GetRandomAudioClip(SoundClipsCollection clipsCollection)

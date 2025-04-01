@@ -48,7 +48,7 @@ namespace Angry_Girls
             switch (control.characterSettings.AttackAbility_Alternate.attackFininsh_State.animation)
             {
                 case AttackFinish_States.Alternate_Uppercut_Finish:
-                    control.attackSystem_Data.alternate_AttackFinishLogic = new AttackLogic_AlternateAttack_UppercutDownSmash_Finish(control.characterSettings.AttackAbility_Alternate);
+                    control.attackSystem_Data.alternate_AttackFinishLogic = new AttackLogic_Alternate_UppercutDownSmash_Finish(control.characterSettings.AttackAbility_Alternate);
                     break;
                 //default:
                 //    throw new Exception("No logic for state like " + control.characterSettings.AttackAbility_Alternate.attackFininsh_State);
@@ -63,13 +63,13 @@ namespace Angry_Girls
                     control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_Alternate_Uppercut_Prep(control.characterSettings.AttackAbility_Alternate);
                     break;
                 case Attack_States.Alternate_SendFireball_Front:
-                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_SendFireball_Front(control.characterSettings.AttackAbility_Alternate);
+                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_Alternate_SendFireball_Front(control.characterSettings.AttackAbility_Alternate);
                     break;
                 case Attack_States.Alternate_HeadSpin_Attack:
-                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_HeadSpin(control.characterSettings.AttackAbility_Alternate);
+                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_Alternate_HeadSpin(control.characterSettings.AttackAbility_Alternate);
                     break;
                 case Attack_States.Alternate_SwordAttack_Prep:
-                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_AlternateAttack_SwordAttack(control.characterSettings.AttackAbility_Alternate);
+                    control.attackSystem_Data.AlternateAttackLogic_Prep = new AttackLogic_Alternate_SwordAttack(control.characterSettings.AttackAbility_Alternate);
                     break;
                 default:
                     throw new Exception("No Alternate_Attack logic for " + control.name);

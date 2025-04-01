@@ -11,7 +11,6 @@ namespace Angry_Girls
 
         [ShowOnly][SerializeField] private string _probablyCurrentState;
 
-
         private void Update()
         {
             _probablyCurrentState = _stateMachine.CurrentState.ToString();

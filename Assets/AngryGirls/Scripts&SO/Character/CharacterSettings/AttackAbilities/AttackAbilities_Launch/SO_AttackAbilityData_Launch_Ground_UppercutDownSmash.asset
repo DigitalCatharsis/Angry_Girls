@@ -29,3 +29,7 @@ MonoBehaviour:
   destroyOnCharacterCollision: 0
   enableCollider: 0
   enableTrigger: 1
+  spawnSourceType: 4
+  spawnIndex: 3
+  destroySourceType: 0
+  destoyIndex: 0

@@ -70,7 +70,6 @@ namespace Angry_Girls
         }
         private void SendFireball(CControl control, Vector3 startPoint, Vector3 targetEuler, float attackAngleChangeValue, float rotationDuration = 1.5f)
         {
-            // Spawn fireball
             var vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, VFX_Type.VFX_FireBall);
 
             // Устанавливаем начальное положение
@@ -94,15 +93,8 @@ namespace Angry_Girls
                 0 // Оставляем Z неизменным
             );
 
-            // Логируем начальное и целевое вращение
-            ColorDebugLog.Log("Start: " + vfx.transform.rotation.eulerAngles, System.Drawing.KnownColor.Yellow);
-            ColorDebugLog.Log("Goal: " + targetEulerAngles, System.Drawing.KnownColor.Yellow);
-
             // Применяем поворот с помощью DOTween (только по оси X)
             vfx.transform.DORotate(targetEulerAngles, rotationDuration, RotateMode.Fast);
-
-            // Логируем вращение после начала анимации
-            ColorDebugLog.Log("rotating start:: " + vfx.transform.rotation.eulerAngles, System.Drawing.KnownColor.Yellow);
 
             // Устанавливаем импульс
             var impulse = new Vector3(
@@ -112,9 +104,6 @@ namespace Angry_Girls
             );
 
             vfx.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);
-
-            // Логируем вращение после применения силы
-            ColorDebugLog.Log("got the force: " + vfx.transform.rotation.eulerAngles, System.Drawing.KnownColor.Yellow);
 
             // Применяем силу к control.rigidBody
             control.CharacterMovement.ApplyRigidForce(control.characterSettings.AttackAbility_Launch.attackMovementForce * control.CharacterMovement.Rigidbody.transform.forward.z, ForceMode.VelocityChange);

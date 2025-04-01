@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class AttackLogic_AlternateAttack_SendFireball_Front : AttackAbilityLogic
+    public class AttackLogic_Alternate_SendFireball_Front : AttackAbilityLogic
     {
-        public AttackLogic_AlternateAttack_SendFireball_Front(AttackAbilityData attackAbilityData) : base(attackAbilityData) { }
+        public AttackLogic_Alternate_SendFireball_Front(AttackAbilityData attackAbilityData) : base(attackAbilityData) { }
 
         private int _loopsCount;
         private float _timeInCurrentLoop;
