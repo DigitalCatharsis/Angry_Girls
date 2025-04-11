@@ -1,11 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
-using DG.Tweening;
 using TMPro;
-using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Angry_Girls

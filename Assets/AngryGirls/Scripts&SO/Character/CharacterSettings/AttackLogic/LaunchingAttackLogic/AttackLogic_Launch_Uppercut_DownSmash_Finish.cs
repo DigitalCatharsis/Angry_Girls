@@ -15,20 +15,29 @@ namespace Angry_Girls
 
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            _vfx = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(VFX_Type.VFX_Uppercut, control.CharacterMovement.Rigidbody.position, Quaternion.identity);
-            _vfx.GetComponent<VFX>().InitAndRunVFX_ByCustom(
-                1,
-                false,
-                false,
-                false,
-                control.characterSettings.AttackAbility_Alternate.attackDamage,
-                knockbackValue: control.characterSettings.AttackAbility_Alternate.enemyKnockbackValue,
-                false,
-                true,
-                owner: control.gameObject,
-                spawnSound: new Tuple<AudioSourceType, int>(AudioSourceType.SFX_Impact, 2))
-                ;
+            var ability = control.characterSettings.AttackAbility_Launch;
 
+            _vfx = GameLoader.Instance.VFXManager.SpawnByProjectileAbility
+                (
+                destroyOnCollision: false,
+                spawnTramsform: control.transform,
+                originator: control.gameObject,
+                destroyOnCharacterTrigger: false,
+                attackDamageValue: ability.attackDamage,
+                enemyKnockBackValue: ability.enemyKnockbackValue,
+                enableCollider: false,
+                enableTrigger: true,
+                spawnSound: new Tuple<AudioSourceType, int>(AudioSourceType.SFX_Impact, 2),
+                destroySound: null,
+                layerMask: control.GetVfxLayermask(),
+                vfxType: VFX_Type.VFX_Downsmash,
+                vfxColor: Color.white,
+                timeToLive: 1f,
+                connectToOriginator: false,
+                teamfire: false
+                );
+
+            _vfx.transform.position = control.CharacterMovement.Rigidbody.position;
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
@@ -48,7 +57,7 @@ namespace Angry_Girls
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            _vfx.GetComponent<VFX>().Dispose();
+            GameLoader.Instance.VFXManager.CallVFXDispose(_vfx);
             control.isAttacking = false;
             _cameraShaked = false;
         }

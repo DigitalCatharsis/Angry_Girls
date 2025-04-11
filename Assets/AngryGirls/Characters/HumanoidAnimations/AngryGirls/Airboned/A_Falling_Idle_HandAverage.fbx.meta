@@ -33,7 +33,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: A_Falling_Idle_HandAverage
+      name: Falling_Idle_HandAverage
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0

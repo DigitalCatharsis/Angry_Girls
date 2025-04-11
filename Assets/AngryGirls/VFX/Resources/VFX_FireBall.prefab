@@ -9676,6 +9676,7 @@ GameObject:
   - component: {fileID: 2069930466965192653}
   - component: {fileID: -5860992727677275382}
   - component: {fileID: 8380759687567671478}
+  - component: {fileID: -614882188602679520}
   m_Layer: 13
   m_Name: VFX_FireBall
   m_TagString: Untagged
@@ -9712,15 +9713,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isDisposed: 0
-  _vfxType: 2
-  _timeToLive: 11
-  _isTimeToLiveIsNormilizedTime: 0
-  _particleSystem: {fileID: 5921108591417898}
-  projectileDamage: 0
-  projectileKnockBack: 0
-  _destroyOnCollision: 1
-  _destroyOnCharacterTrigger: 0
-  vfxOwner: {fileID: 0}
 --- !u!65 &2069930466965192653
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9790,6 +9782,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 32
   m_CollisionDetection: 2
+--- !u!114 &-614882188602679520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5238815803969079422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00f7b65d2805181478e06186179873d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _audioSource: {fileID: 0}
 --- !u!1 &5553841013541593787
 GameObject:
   m_ObjectHideFlags: 0

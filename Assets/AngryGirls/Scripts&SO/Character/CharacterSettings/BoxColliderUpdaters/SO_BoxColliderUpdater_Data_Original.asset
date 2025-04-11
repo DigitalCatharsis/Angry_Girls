@@ -104,6 +104,11 @@ MonoBehaviour:
         boxColliderCenter: {x: 0, y: 0, z: 0}
         boxColliderSize: {x: 0.2, y: 0.6076189, z: 0.4560484}
         changeSpeed: 50
+    - Key: 39
+      Value:
+        boxColliderCenter: {x: 0, y: 0.5120553, z: 0.07839298}
+        boxColliderSize: {x: 0.2, y: 0.8709371, z: 0.9879303}
+        changeSpeed: 50
     - Key: 15
       Value:
         boxColliderCenter: {x: 0, y: 0.4968109, z: 0}
@@ -148,9 +153,4 @@ MonoBehaviour:
       Value:
         boxColliderCenter: {x: 0, y: 0.4552352, z: 0}
         boxColliderSize: {x: 0.2, y: 0.942835, z: 0.2152416}
-        changeSpeed: 50
-    - Key: 39
-      Value:
-        boxColliderCenter: {x: 0, y: -0.01338433, z: 0}
-        boxColliderSize: {x: 0.2, y: 0.005595952, z: 0.9487329}
         changeSpeed: 50

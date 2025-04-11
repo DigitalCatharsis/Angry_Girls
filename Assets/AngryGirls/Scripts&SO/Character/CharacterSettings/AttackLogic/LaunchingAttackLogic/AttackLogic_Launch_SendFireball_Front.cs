@@ -70,7 +70,7 @@ namespace Angry_Girls
         }
         private void SendFireball(CControl control, Vector3 startPoint, Vector3 targetEuler, float attackAngleChangeValue, float rotationDuration = 1.5f)
         {
-            var vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, VFX_Type.VFX_FireBall);
+            var vfx = GameLoader.Instance.VFXManager.SpawnByProjectileAbility(control);
 
             // Устанавливаем начальное положение
             vfx.transform.position = startPoint;

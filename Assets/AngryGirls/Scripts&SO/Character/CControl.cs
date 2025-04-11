@@ -50,7 +50,7 @@ namespace Angry_Girls
         [Header("VFX")]
         public Transform projectileSpawnTransform;
         public Transform wingsTransform;
-        public UnityEngine.Color VFX_Color;
+        public Color vfxColor;
 
         [Header("Weapon")]
         public Transform weaponHolder;
@@ -67,7 +67,6 @@ namespace Angry_Girls
             }
 
             subComponentsController.OnComponentEnable();
-
             GameLoader.Instance.attackLogicContainer.SetCharacterAttackLogic(this);
             GameLoader.Instance.gameLogic_UIManager.CreateHealthBar(this);
         }
@@ -81,11 +80,17 @@ namespace Angry_Girls
             CharacterMovement.Initialize(this);
 
             animator = GetComponent<Animator>();
-            boxCollider = gameObject.GetComponent<BoxCollider>();
+            boxCollider = GetComponent<BoxCollider>();
             subComponentMediator = GetComponentInChildren<SubComponentMediator>();
             subComponentsController = GetComponentInChildren<SubComponentsController>();
             subComponentMediator.OnAwake();
             subComponentsController.OnAwake();
+
+            GameLoader.Instance.interactionManager.Register(gameObject, new InteractionConfig
+            {
+                type = InteractionMemberType.Character,
+                ownerGO = gameObject
+            });
         }
 
         public AttackAbilityLogic Get_AttackFinish_AttackAbilityLogic()
@@ -155,9 +160,6 @@ namespace Angry_Girls
             canUseAbility = false;
             StopCoroutine(ExecuteFinishTurnTimer(finishAttackTimer));
             isAttacking = false;
-
-            //ColorDebugLog.Log("ExecuteFinishTurnTimer" + gameObject.name, KnownColor.Yellow);
-            //check for calls. Has been fixed, but to be sure
             StartCoroutine(ExecuteFinishTurnTimer(finishAttackTimer));
         }
 
@@ -172,31 +174,23 @@ namespace Angry_Girls
 
             hasFinishedLaunchingTurn = true;
             hasFinishedAlternateAttackTurn = true;
-            //ColorDebugLog.Log("Finishing Trun" + gameObject.name, KnownColor.Yellow);
             yield break;
         }
+
         private void FixedUpdate()
         {
             subComponentsController.OnFixedUpdate();
         }
 
-        private void OnTriggerEnter(Collider other)
+        public int GetVfxLayermask()
         {
-            if (isDead)
+            if (playerOrAi == PlayerOrAi.Player)
             {
-                return;
+                return LayerMask.NameToLayer("Projectile_Character");
             }
-
-            if (other.gameObject.layer == LayerMask.NameToLayer("Projectile"))
+            else
             {
-                subComponentMediator.Notify_TriggerCheckVfx(this, other);
-                return;
-            }
-
-            if (other.gameObject.layer == LayerMask.NameToLayer("DeathZone"))
-            {
-                subComponentMediator.Notify_DeathZoneContact(other);
-                return;
+                return LayerMask.NameToLayer("Projectile_Bot");
             }
         }
 
@@ -214,8 +208,6 @@ namespace Angry_Girls
         {
             subComponentsController.OnStart();
 
-            //TEST WEAPON
-            //TODO: implement properly
             if (weaponHolder != null)
             {
                 var weaponPrefab = Resources.Load("DefinetlyNotAWeapon") as GameObject;
@@ -236,6 +228,7 @@ namespace Angry_Girls
 
         protected override void Dispose(bool disposing)
         {
+            GameLoader.Instance.interactionManager.CleanUpForOwner(gameObject);
             GameLoader.Instance.gameLogic_UIManager.RemoveHealthBar(this);
             base.Dispose(disposing);
         }
@@ -246,6 +239,11 @@ namespace Angry_Girls
             {
                 GameLoader.Instance.poolManager.AddObject(characterSettings.characterType, GameLoader.Instance.poolManager.characterPoolDictionary, this);
             }
+        }
+
+        public bool IsAlly(CControl anotherControl)
+        {
+            return playerOrAi == anotherControl.playerOrAi;
         }
     }
 }

@@ -4842,6 +4842,7 @@ GameObject:
   - component: {fileID: 1015842480466330066}
   - component: {fileID: 8360445735767069557}
   - component: {fileID: 3276512258842389222}
+  - component: {fileID: -2207667014446755335}
   m_Layer: 13
   m_Name: VFX_Eclipse
   m_TagString: Untagged
@@ -4878,13 +4879,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isDisposed: 0
-  _vfxType: 6
-  _timeToLive: 1
-  _isTimeToLiveIsNormilizedTime: 0
-  _particleSystem: {fileID: 0}
-  projectileDamage: 0
-  _destroyOnCollision: 0
-  vfxOwner: {fileID: 0}
 --- !u!65 &8360445735767069557
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4927,3 +4921,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.1, y: 4, z: 4}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-2207667014446755335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4588421622435289864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00f7b65d2805181478e06186179873d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _audioSource: {fileID: 0}

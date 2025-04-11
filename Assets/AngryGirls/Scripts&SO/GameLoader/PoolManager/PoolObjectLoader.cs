@@ -5,6 +5,15 @@ namespace Angry_Girls
 {
     public class PoolObjectLoader : MonoBehaviour
     {
+        private CharacterFactory _characterFactory;
+        private VFXFactory _vFXFactory;
+
+        private void Awake()
+        {
+            _characterFactory = gameObject.AddComponent(typeof(CharacterFactory)) as CharacterFactory;
+            _vFXFactory = gameObject.AddComponent(typeof(VFXFactory)) as VFXFactory;
+        }
+
         public PoolObject InstantiatePrefab<T>(T objType, Vector3 position, Quaternion rotation)
         {
             return objType switch
@@ -17,12 +26,12 @@ namespace Angry_Girls
 
         private PoolObject InstantiateCharacter(CharacterType poolObjectType, Vector3 position, Quaternion rotation)
         {
-            return GameLoader.Instance.spawnManager.CharacterFactory.SpawnGameobject(poolObjectType, position, rotation).GetComponent<PoolObject>();
+            return _characterFactory.SpawnGameobject(poolObjectType, position, rotation).GetComponent<PoolObject>();
         }
 
         private PoolObject InstantiateVFX(VFX_Type poolObjectType, Vector3 position, Quaternion rotation)
         {
-            return GameLoader.Instance.spawnManager.vFXFactory.SpawnGameobject(poolObjectType, position, rotation).GetComponent<PoolObject>();
+            return _vFXFactory.SpawnGameobject(poolObjectType, position, rotation).GetComponent<PoolObject>();
         }
     }
 }

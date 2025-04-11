@@ -47,13 +47,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49d18267dcc029e4fac167ae161938d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _vfxType: 3
-  _timeToLive: 1
-  _isTimeToLiveIsNormilizedTime: 0
+  _isDisposed: 0
+  _vfxType: 0
   _particleSystem: {fileID: 0}
-  projectileDamage: 0
+  _isTimeToLiveNormalized: 0
   _destroyOnCollision: 0
-  vfxOwner: {fileID: 0}
+  _destroyOnCharacterTrigger: 0
+  _audioSource: {fileID: 0}
 --- !u!65 &-1893633089817046530
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -19,7 +18,7 @@ namespace Angry_Girls
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             base.OnStateEnter(control, animator, stateInfo);
-            _vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, VFX_Type.VFX_Eclipse, setAsOwner: true);
+            _vfx = GameLoader.Instance.VFXManager.SpawnByProjectileAbility(control);
 
             if (!_hasEnteredAttackState)
             {
@@ -70,7 +69,7 @@ namespace Angry_Girls
             _hasEnteredAttackState = false;
 
             if (_vfx != null)
-                _vfx.GetComponent<VFX>().Dispose();
+                GameLoader.Instance.VFXManager.CallVFXDispose(_vfx);
         }
     }
 }

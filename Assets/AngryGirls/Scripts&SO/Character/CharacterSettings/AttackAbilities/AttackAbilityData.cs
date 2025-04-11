@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -29,11 +28,14 @@ namespace Angry_Girls
 
         [Space(15)]
         [Header("Projectile")]
+        public VFX_Type vfxType;
+        public Color vfxColor = Color.white;
+        public bool connectToOwner;
+        public bool teamfire;
 
         [Header("Lifetime")]
         [Space(5)]
         public float timeToLive = 1f;
-        public bool isTimeToLiveIsNormilizedTime = false;
 
         [Space(5)]
         [Header("Projectile Phyciscs")]

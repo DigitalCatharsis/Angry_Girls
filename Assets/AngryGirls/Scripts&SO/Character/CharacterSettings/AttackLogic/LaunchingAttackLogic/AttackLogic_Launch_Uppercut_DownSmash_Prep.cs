@@ -12,8 +12,7 @@ namespace Angry_Girls
         {
             base.OnStateEnter(control, animator, stateInfo);
 
-            _vfx = GameLoader.Instance.VFXManager.SpawnVFX(control, VFX_Type.VFX_Flame2, setAsOwner: true);
-            _vfx.GetComponent<VFX>().InitAndRunVFX_ByAbility(control.characterSettings.AttackAbility_Launch, control);
+            _vfx = GameLoader.Instance.VFXManager.SpawnByProjectileAbility(control);
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
@@ -22,14 +21,8 @@ namespace Angry_Girls
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            //var colliders = _vfx.GetComponent<VFX>().GetComponents<Collider>();
-            //foreach (Collider collider in colliders)
-            //{
-            //    collider.isTrigger = false;
-            //}
-
             //TODO: fix
-            GameLoader.Instance.VFXManager.FadeOutFlame_And_Dispose(_vfx.GetComponent<VFX>(), 2f, 3f);
+            GameLoader.Instance.VFXManager.FadeOutAndDisposeVFX(_vfx, 2f, 3f);
         }
     }
 }

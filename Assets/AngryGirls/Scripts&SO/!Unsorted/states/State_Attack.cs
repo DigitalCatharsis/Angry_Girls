@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace Angry_Girls
 {
     public class State_Attack : AnimationStateBase

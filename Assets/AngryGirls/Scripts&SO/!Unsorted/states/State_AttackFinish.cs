@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Angry_Girls
 {
     public class State_AttackFinish : AnimationStateBase

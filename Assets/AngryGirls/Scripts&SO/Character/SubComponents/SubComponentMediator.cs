@@ -23,30 +23,31 @@ namespace Angry_Girls
             _boxColliderUpdater = GetComponentInChildren<BoxColliderUpdater>();
             _damageHandler = GetComponentInChildren<DamageHandler>();
         }
-        public void Notify_TriggerCheckVfx(object sender, Collider collider)
+        public void Notyfy_CheckForDamage(ProjectileConfig projectileConfig, InteractionData interactionData)
         {
-            _damageHandler.CheckForDamage(collider);
+            _damageHandler.CheckForDamage(projectileConfig, interactionData);
         }
 
-        public void Notify_DamageTaken(object sender, VFX vFX, Collider triggerCollider)
+        public void Notify_DamageTaken(ProjectileConfig projectileConfig, InteractionData interactionData)
         {
-            _control.CharacterMovement.ApplyKnockbackFromEnemy(triggerCollider.gameObject, vFX.projectileKnockBack);
-            _control.Health.ApplyDamage(vFX.projectileDamage);
+            _control.CharacterMovement.ApplyKnockbackFromEnemy(interactionData.target, projectileConfig.enemyKnockBackValue);
+            _control.Health.ApplyDamage(projectileConfig.damage);
             GameLoader.Instance.gameLogic_UIManager.UpdateHealthBarValueAndVision(_control);
-            GameLoader.Instance.VFXManager.ShowDamageNumbers(triggerCollider, _control, vFX.projectileDamage);
+            GameLoader.Instance.VFXManager.ShowDamageNumbers(interactionData.targetCollider, projectileConfig.VFXConfig.originator, projectileConfig.damage);
             GameLoader.Instance.audioManager.PlayRandomSound(AudioSourceType.CharacterHit);
         }
-        public void Notify_DeathZoneContact(object sender)
+        public void NotifyDeathZoneContact(object sender)
         {
             _control.Health.ApplyDamage(_control.Health.CurrentHealth);
-            Notify_Dead(this);
+            Notify_Dead();
         }
 
-        public void Notify_Dead(object sender)
+        public void Notify_Dead()
         {            
             GameLoader.Instance.gameLogic_UIManager.DisableHealthBar(_control);
             _damageHandler.SetDeathParams();
             _animationProcessor.SetDeath();
+            _control.isDead = true;
         }
     }
 }

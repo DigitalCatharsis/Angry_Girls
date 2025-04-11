@@ -1,5 +1,3 @@
-using DG.Tweening;
-using System;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -8,10 +6,6 @@ namespace Angry_Girls
     {
         public AttackLogic_Launch_HeadSpinAttack(AttackAbilityData attackAbilityData) : base(attackAbilityData) { }
 
-
-        private float _impulseY = 7f;
-        private float _impulseZ = 5f;
-        private Vector3 _finalProjectileRotation = new Vector3(75f, 0, 0);
         private int _timesToRepeat_Attack_State = 2;
         private bool _haveShootedSecondTime = false;
 
@@ -28,7 +22,7 @@ namespace Angry_Girls
                   new Vector3(230f,-180f,0)
             };
 
-            ProcessFireballs(control, angles);
+            GameLoader.Instance.VFXManager.ProcessFireballs_HeadSpin(control, angles);
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
@@ -45,7 +39,7 @@ namespace Angry_Girls
 
                 //Second cast, second character move
                 control.CharacterMovement.ApplyRigidForce(control.characterSettings.AttackAbility_Launch.attackMovementForce, ForceMode.VelocityChange);
-                ProcessFireballs(control, angles);
+                GameLoader.Instance.VFXManager.ProcessFireballs_HeadSpin(control, angles);
                 _haveShootedSecondTime = true;
                 control.isAttacking = false;
             }
@@ -55,34 +49,6 @@ namespace Angry_Girls
         {
             _haveShootedSecondTime = false;
             control.isAttacking = false;
-        }
-
-        private void ProcessFireballs(CControl control, Vector3[] angles, float moveDuration = 1.5f)
-        {
-            //spawn
-            for (var i = 0; i < angles.Length; i++)
-            {
-                var projectile = GameLoader.Instance.VFXManager.SpawnVFX_AtPosition(
-                    VFX_Type.VFX_FireBall,
-                    control.projectileSpawnTransform.position,
-                    Quaternion.Euler(angles[i]));
-
-                //set final rotation value 
-                var finalRotationDegree = _finalProjectileRotation;
-                if (Math.Sign(projectile.transform.forward.z) < 0)
-                {
-                    finalRotationDegree.y += 180f;
-                }
-
-                var impulse = new Vector3(0, _impulseY * projectile.transform.forward.y, _impulseZ * projectile.transform.forward.z);
-
-                //add impulse and rotate
-                projectile.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);
-                projectile.transform.DORotate(endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * projectile.transform.forward.z), duration: moveDuration, mode: RotateMode.Fast);
-
-                //init and run
-                projectile.GetComponent<VFX>().InitAndRunVFX_ByAbility(control.characterSettings.AttackAbility_Launch, control);
-            }
         }
     }
 }

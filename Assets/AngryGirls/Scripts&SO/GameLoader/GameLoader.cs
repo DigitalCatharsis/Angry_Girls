@@ -6,7 +6,7 @@ namespace Angry_Girls
     {
         public static GameLoader Instance { get; private set; }
         public MyExtentions myExtentions;
-        public SpawnManager spawnManager;
+        //public SpawnManager spawnManager;
         public PoolManager poolManager;
         public PoolObjectLoader poolObjectLoader;
 
@@ -28,6 +28,7 @@ namespace Angry_Girls
         public LevelSettings levelSettings;
 
         public InputManager inputManager;
+        public InteractionManager interactionManager;
 
         private void OnEnable()
         {
@@ -44,7 +45,6 @@ namespace Angry_Girls
             cameraManager = GetComponentInChildren<CameraManager>();
             launchManager = GetComponentInChildren<LaunchHandler>();
             hashManager = GetComponentInChildren<HashManager>();
-            spawnManager = GetComponentInChildren<SpawnManager>();
             turnManager = GetComponentInChildren<TurnManager>();
             poolManager = GetComponentInChildren<PoolManager>();
             poolObjectLoader = GetComponentInChildren<PoolObjectLoader>();
@@ -59,6 +59,7 @@ namespace Angry_Girls
             pauseControl = GetComponentInChildren<PauseControl>();
             levelSettings = GetComponentInChildren<LevelSettings>();
             audioManager = GetComponentInChildren<AudioManager>();
+            interactionManager = GetComponentInChildren<InteractionManager>();
         }
     }
 }

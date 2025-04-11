@@ -18,13 +18,13 @@ TagManager:
   - Bot
   - Ground
   - DeadBody
-  - Projectile
+  - 
   - CharacterToLaunch
   - Pickable
   - DeathZone
   - 
-  - 
-  - 
+  - Projectile_Character
+  - Projectile_Bot
   - 
   - 
   - 

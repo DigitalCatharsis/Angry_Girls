@@ -5,33 +5,21 @@ namespace Angry_Girls
 {
     public class DamageHandler : SubComponent
     {
-        public void CheckForDamage(Collider triggerCollider)
+        public void CheckForDamage(ProjectileConfig projectileConfig, InteractionData interactionData)
         {
             if (control.isDead) { return; }
 
-            var vfx = triggerCollider.gameObject.transform.GetComponent<VFX>();
-
-            if (vfx == null) { return; }
-
-            //apply damage if no owner (damages everyone)
-            if (vfx.vfxOwner == null && vfx.projectileDamage != 0)
-            {
-                control.subComponentMediator.Notify_DamageTaken(this, vfx, triggerCollider);
-            }
-
-            if (vfx.vfxOwner.GetComponent<CControl>() == null | vfx.vfxOwner.GetComponent<CControl>().playerOrAi == control.playerOrAi)
+            if (projectileConfig.damage == 0)
             {
                 return;
             }
-            else
-            {
-                control.subComponentMediator.Notify_DamageTaken(this, vfx, triggerCollider);
-            }
+
+            control.subComponentMediator.Notify_DamageTaken(projectileConfig, interactionData);
 
             //are we dead?
             if (control.Health.CurrentHealth <= 0)
             {
-                control.subComponentMediator.Notify_Dead(this);
+                control.subComponentMediator.Notify_Dead();
                 return;
             }
 
@@ -45,7 +33,6 @@ namespace Angry_Girls
             control.FinishTurn();
             control.CharacterMovement.Rigidbody.useGravity = true;
             control.CharacterMovement.Rigidbody.isKinematic = false;
-            //control.CharacterMovement.Rigidbody.constraints = RigidbodyConstraints.None;
 
 
             var animator = control.wingsTransform.GetComponentInChildren<Animator>();

@@ -13,28 +13,37 @@ namespace Angry_Girls
         [SerializedDictionary("VFXType", "Values")]
         public SerializedDictionary<VFX_Type, List<PoolObject>> vfxPoolDictionary = new SerializedDictionary<VFX_Type, List<PoolObject>>();
 
+        // Счетчики для каждого типа объектов (автоматическая инициализация)
+        private Dictionary<Enum, int> _instanceCounters = new Dictionary<Enum, int>();
+
         #region SetupDictionary
-        private void SetUpDictionary<T>(Dictionary<T, List<PoolObject>> poolDictionary)
+        private void SetUpDictionary<T>(Dictionary<T, List<PoolObject>> poolDictionary) where T: Enum
         {
             T[] arr = Enum.GetValues(typeof(T)) as T[];
 
-            foreach (T p in arr)
+            foreach (T type in arr)
             {
-                if (!poolDictionary.ContainsKey(p))
+                if (!poolDictionary.ContainsKey(type))
                 {
-                    poolDictionary.Add(p, new List<PoolObject>());
+                    poolDictionary.Add(type, new List<PoolObject>());
+                }
+
+                // Инициализация счетчика при первом обращении
+                if (!_instanceCounters.ContainsKey(type))
+                {
+                    _instanceCounters.Add(type, 0);
                 }
             }
         }
         #endregion
 
         #region GetObjectFromPool
-        public PoolObject GetObject<T>(T objType, Dictionary<T, List<PoolObject>> poolDictionary, Vector3 position, Quaternion rotation)
+        public PoolObject GetObject<T>(T objType, Dictionary<T, List<PoolObject>> poolDictionary, Vector3 position, Quaternion rotation) where T : Enum
         {
             return ObjectGetter(poolDictionary, objType, position, rotation);
         }
 
-        private PoolObject ObjectGetter<T>(Dictionary<T, List<PoolObject>> poolDictionary, T objType, Vector3 position, Quaternion rotation)
+        private PoolObject ObjectGetter<T>(Dictionary<T, List<PoolObject>> poolDictionary, T objType, Vector3 position, Quaternion rotation) where T : Enum
         {
             if (poolDictionary.Count == 0)
             {
@@ -58,12 +67,22 @@ namespace Angry_Girls
             {
                 var obj = GameLoader.Instance.poolObjectLoader.InstantiatePrefab(objType, position, rotation);
                 obj.Init_PoolObject();
+
+                // Добавляем нумерацию только для новых объектов
+                obj.gameObject.name = $"{obj.gameObject.name}_{GetNextInstanceNumber(objType)}";
+
                 return obj;
             }
         }
+
+        private int GetNextInstanceNumber<T>(T enumValue) where T : Enum
+        {
+            return ++_instanceCounters[enumValue];
+        }
+
         #endregion
 
-        public void AddObject<T>(T objType, Dictionary<T, List<PoolObject>> poolDictionary, PoolObject poolGameObject)
+        public void AddObject<T>(T objType, Dictionary<T, List<PoolObject>> poolDictionary, PoolObject poolGameObject) where T : Enum
         {
             var listOfGameObjects = poolDictionary[(T)objType];
             listOfGameObjects.Add(poolGameObject);

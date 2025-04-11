@@ -1,6 +1,5 @@
 using AYellowpaper.SerializedCollections;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Angry_Girls

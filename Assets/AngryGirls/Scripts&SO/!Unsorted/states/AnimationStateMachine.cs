@@ -70,7 +70,7 @@ namespace Angry_Girls
             if (_currentState != null && !_currentState.CanTransitionTo(newState))
                 return;
 
-            ColorDebugLog.Log(owner.name + " changing from State: " + _currentState + " to state: "+ newState, System.Drawing.KnownColor.Yellow);
+            //ColorDebugLog.Log(owner.name + " changing from State: " + _currentState + " to state: "+ newState, System.Drawing.KnownColor.Yellow);
             _currentState?.OnExit();
             _currentState = newState;
             _currentState.OnEnter();

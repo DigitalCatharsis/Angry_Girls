@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.VFX;
 
 namespace Angry_Girls
 {
@@ -11,8 +10,7 @@ namespace Angry_Girls
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             base.OnStateEnter(control, animator, stateInfo);
-            _vFX = GameLoader.Instance.VFXManager.SpawnVFX(control, VFX_Type.VFX_Flame2, setAsOwner: true);
-            _vFX.GetComponent<VFX>().InitAndRunVFX_ByAbility(control.characterSettings.AttackAbility_Alternate, control);
+            _vFX = GameLoader.Instance.VFXManager.SpawnByProjectileAbility(control);
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
@@ -22,7 +20,7 @@ namespace Angry_Girls
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             control.CharacterMovement.ResetVelocity();
-            GameLoader.Instance.VFXManager.FadeOutFlame_And_Dispose(vFX: _vFX.GetComponent<VFX>(), disposeDuration: 2f, fadeDuration: 3.5f);
+            GameLoader.Instance.VFXManager.FadeOutAndDisposeVFX(_vFX, disposeDuration: 2f, fadeDuration: 3.5f);
         }
     }
 }

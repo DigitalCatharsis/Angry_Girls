@@ -22,7 +22,11 @@ MonoBehaviour:
   attackTimeDuration: 3
   enemyKnockbackValue: 1
   attackMovementForce: {x: 0, y: 4, z: 0}
-  timeToLive: 7
+  vfxType: 2
+  vfxColor: {r: 1, g: 1, b: 1, a: 1}
+  connectToOwner: 0
+  teamfire: 0
+  timeToLive: 99
   isTimeToLiveIsNormilizedTime: 0
   projectileMovementSpeed: {x: 0, y: 0, z: 0}
   destroyOnCollision: 1
