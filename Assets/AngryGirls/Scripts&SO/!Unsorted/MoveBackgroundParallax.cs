@@ -14,7 +14,7 @@ namespace Angry_Girls
         {
             _startPosition = transform.position;
 
-            _offset = GetComponent<SpriteRenderer>().bounds.size.z;
+            _offset = GetComponent<SpriteRenderer>().bounds.size.z /4;
         }
 
         // Update is called once per frame
