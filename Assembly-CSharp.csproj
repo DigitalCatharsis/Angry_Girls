@@ -158,9 +158,11 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\LocalRotation.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\comps\ChracterMovement.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\states\State_Attack.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\MoveBackgroundParallax.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameObjectExtensions.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\HitReaction_Behavior.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\states\AnimationStateBase.cs" />
+    <Compile Include="Assets\Free Pixel Art Forest\Demo\MoveBackground.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\HashManager.cs" />
     <Compile Include="Assets\PauseControl.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\IPickable.cs" />
@@ -196,6 +198,7 @@
     <None Include="Assets\AngryGirls\DOTween\DOTween.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\Free Pixel Art Forest\Lisense.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\AngryGirls\DOTween\readme.txt" />
@@ -1111,6 +1114,10 @@
     </Reference>
     <Reference Include="Unity.Rider.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Config.Runtime">
