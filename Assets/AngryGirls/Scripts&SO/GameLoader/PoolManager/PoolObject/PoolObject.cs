@@ -6,9 +6,7 @@ namespace Angry_Girls
 {
     public abstract class PoolObject : MonoBehaviour, IDisposable
     {
-        [SerializeField]
-        [ShowOnly]
-        private bool _isDisposed = false;
+        [SerializeField] private bool _isDisposed = false;
 
         // Do we need Dispose here?
         // ðåàëèçàöèÿ èíòåðôåéñà IDisposable.

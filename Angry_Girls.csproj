@@ -10,10 +10,10 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{EF5F3347-10A7-EF17-7F37-A3EA74E28473}</ProjectGuid>
+    <ProjectGuid>{376284A3-CADE-6057-2FF4-2C81F6C5F7F2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <AssemblyName>Angry_Girls</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
@@ -60,44 +60,126 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.23f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModulePhysics2D.cs" />
-    <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUI.cs" />
-    <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleEPOOutline.cs" />
-    <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleAudio.cs" />
-    <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUtils.cs" />
-    <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleSprite.cs" />
-    <Compile Include="Assets\Free Pixel Art Forest\Demo\MoveBackground.cs" />
-    <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModuleUnityVersion.cs" />
-    <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
-    <Compile Include="Assets\FST\DemoScripts\DemoAnimationSelector.cs" />
-    <Compile Include="Assets\AngryGirls\DOTween\Modules\DOTweenModulePhysics.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\LaunchingAttackLogic\AttackLogic_Launch_SendFireball_Front.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\FactoryExtention\FactoryExtention.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\states\AnimationStateMachine.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\BoxColliderUpdaters\BoxColliderUpdater_Data.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\AlternateAttack_Behavior_Airboned.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\Settings\LevelSettings\LevelSettings.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\MaterialChaner\MaterialChanger.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\TODO.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\FactoryExtention\Editor\FactoryExtentionEditor.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\Settings\PlayerData\PlayerData.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\AnimationProcessor.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\CameraManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\states\State_AttackFinish.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_Alternate_SendFireball_Front.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Input\VirtualInput.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MenuButtonController.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\DebugInfo.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\comps\CharacterHealth.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\CharacterSettings\CharacterSettings.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\AlternateAttack_Behavior_Prep.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\Settings\FrameSettings.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Input\Inputs.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Mediator\BaseMediatorComponent.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\DeathZone.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\Settings\GameSettings\GameSettings.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\SpawnFactory\Factories\BaseFactory.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\states\State_Airboned.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\Idle_Behavior.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\states\State_HitReaction.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_Alternate_Uppercut_Prep.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\InteractionManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\DistanceBetweenTwoObjects\DistanceBetweenTwoObjects.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AttackAbilityLogic.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\SpawnFactory\Factories\IFactory.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\states\State_Death.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\AlternateAttack_Behavior_OnGround.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\DamageHandler.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AttackLogicContainer.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\TurnManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\SpawnFactory\Factories\VFXFactory.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\DynamicFactotyExtention\Editor\DynamicFactoryExtentionEditor.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\InsperctorHierarchyLabel\Editor\HierarchyLabel.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LayerAdder\Editor\LayerAdderEditor.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\MyExtentions.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\AppController.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLogic.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_SwordAttack.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponent.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\UICharModel.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Input\InputManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\states\State_Idle.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LayerAdder\Editor\LayerChangerEditor.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolObject\PoolObject.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_Uppercut_DownSmash_Finish.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\LaunchingAttackLogic\AttackLogic_Launch_Uppercut_DownSmash_Finish.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LookAtPoint\LookAtPoint.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\HowToPlayUI.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CharacterLauncher.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\GameLoader.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\MaterialChaner\Editor\MaterialChangerEditor.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackAbilities\AttackAbilityData.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LayerAdder\LayerChanger.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\StatesContainer.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\Projectile.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\CameraSizer.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\GameLogic_UIManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\states\State_Landing.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponentMediator.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\PauseControl.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\HelperComponent\HelperComponent.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\BoxColliderUpdater.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AudioManager\AudioManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\DynamicFactotyExtention\DynamicFactoryExtention.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_Alternate_HeadSpin.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\HelperComponent\ReadOnlyDrawer.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponentsController.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\BackGround.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\LaunchingAttackLogic\AttackLogic_Launch_Uppercut_DownSmash_Prep.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\LaunchAttack_Behavior_Prep.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\GameLoader_Settings_Container.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LayerAdder\LayerAdder.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LookAtPoint\Editor\LookAtPointEditor.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\LaunchingAttackLogic\AttackLogic_Launch_HeadSpinAttack.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\DeathBehavior.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Coin.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\OptionMenuControler.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\CharacterManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\LaunchingAttackLogic\AttackLogic_Launch_SwordAttack.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolObjectLoader.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Mediator\IMediator.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\Settings\LevelSettings\LevelSettings_Data.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\Settings\Settings.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\Attack_Fininsh_Behavior.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\VFXManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\Landing_Behavior.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\ColorDebugLog\ColorDebugLog.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\LocalRotation.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\comps\ChracterMovement.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\states\State_Attack.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\MoveBackgroundParallax.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameObjectExtensions.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\HitReaction_Behavior.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\states\AnimationStateBase.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\HashManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\IPickable.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\Settings\PhysicsSettings.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparationsUI.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\VFX.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\LaunchHandler.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\SpawnFactory\Factories\CharacterFactory.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CControl.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AudioManager\SoundClipsCollection.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\GroundDetector.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\ListOfLists\SerializableList.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\AlternateAttack_Behavior_Landing.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\ShowOnlyAttribute\Editor\ShowOnlyDrawer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
-    <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
-    <None Include="Assets\AngryGirls\DOTween\DOTween.XML" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
-    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
-    <None Include="Assets\AngryGirls\DOTween\DOTween.dll" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
-    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
-    <None Include="Assets\Free Pixel Art Forest\Lisense.txt" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
-    <None Include="Assets\AngryGirls\DOTween\readme.txt" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
-    <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
+    <None Include="Assets\AngryGirls\Scripts&amp;SO\Angry_Girls.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -420,12 +502,64 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.23f1\Editor\Data\Managed\UnityEngine\UnityEditor.UnityConnectModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEditor.Graphs">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.23f1\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEditor.WebGL.Extensions">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.23f1\Editor\Data\PlaybackEngines\WebGLSupport\UnityEditor.WebGL.Extensions.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEditor.Android.Extensions">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.23f1\Editor\Data\PlaybackEngines\AndroidPlayer\UnityEditor.Android.Extensions.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.23f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEditor.WindowsStandalone.Extensions">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.23f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.YamlDotNet">
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="unityplastic">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.3.1\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Plastic.Antlr3.Runtime">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.3.1\Lib\Editor\PlasticSCM\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Plastic.Newtonsoft.Json">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.3.1\Lib\Editor\PlasticSCM\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="log4netPlastic">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.3.1\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.IonicZip">
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="DOTween">
       <HintPath>Assets\AngryGirls\DOTween\DOTween.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DOTweenEditor">
+      <HintPath>Assets\AngryGirls\DOTween\Editor\DOTweenEditor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.TextureAssets">
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
@@ -936,187 +1070,23 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.23f1\Editor\Data\NetStandard\compat\2.1.0\shims\netfx\System.Xml.Serialization.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VSCode.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.EditorCoroutines.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.EditorCoroutines.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualEffectGraph.Runtime">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualEffectGraph.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Core.Runtime">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Universal.Runtime">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Burst.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Burst">
-      <HintPath>Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.PlasticSCM.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Timeline.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Shared.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Shared.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.ShaderGraph.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualStudio.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.VisualScripting.Core">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Core.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.VisualScripting.Core.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Core.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Rider.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Universal.Config.Runtime">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Config.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Core.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualEffectGraph.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualEffectGraph.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Flow">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Flow.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Mathematics.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Timeline">
-      <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.SettingsProvider.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.SettingsProvider.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.State.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="PPv2URPConverters">
-      <HintPath>Library\ScriptAssemblies\PPv2URPConverters.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Mathematics">
-      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.InternalAPIEditorBridgeDev.001">
-      <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEditorBridgeDev.001.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Searcher.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Searcher.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Universal.Shaders">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.State">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Play.Publisher.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Play.Publisher.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Universal.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{9B564C5E-5054-AA78-C263-E5BBF988DABB}</Project>
-      <Name>Assembly-CSharp-firstpass</Name>
-    </ProjectReference>
-    <ProjectReference Include="Angry_Girls.csproj">
-      <Project>{376284A3-CADE-6057-2FF4-2C81F6C5F7F2}</Project>
-      <Name>Angry_Girls</Name>
-    </ProjectReference>
-    <ProjectReference Include="AssemblyDefinition_Tests_Editor.csproj">
-      <Project>{9D698A94-3F6C-BDB7-9A0E-D8C383A9DAF2}</Project>
-      <Name>AssemblyDefinition_Tests_Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="AYellowpaper.SerializedCollections.csproj">
       <Project>{326D005D-08DD-57B5-A616-7748B3425F80}</Project>
       <Name>AYellowpaper.SerializedCollections</Name>
-    </ProjectReference>
-    <ProjectReference Include="AYellowpaper.SerializedCollections.Editor.csproj">
-      <Project>{C2974D2C-048C-E4C4-22C6-6DC7CF2EE920}</Project>
-      <Name>AYellowpaper.SerializedCollections.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
