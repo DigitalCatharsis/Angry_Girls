@@ -48,9 +48,20 @@ namespace Angry_Girls
             };
 
             _stateMachine = new AnimationStateMachine(states);
-            _stateMachine.ChangeState<State_Idle>(control.gameObject);
+            InitFirstState();
         }
 
+        public void InitFirstState()
+        {
+            if(control.isGrounded)
+            {
+                _stateMachine.ChangeState<State_Idle>(control.gameObject);
+            }
+            else
+            {
+                _stateMachine.ChangeState<State_Airborned>(control.gameObject);
+            }
+        }
 
         public override void OnFixedUpdate()
         {

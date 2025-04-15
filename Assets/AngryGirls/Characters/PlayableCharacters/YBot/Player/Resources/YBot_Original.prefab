@@ -1016,7 +1016,7 @@ MonoBehaviour:
   _isDisposed: 0
   healthSlider: {fileID: 0}
   isLanding: 0
-  isGrounded: 0
+  isGrounded: 1
   isAttacking: 0
   isDead: 0
   unitGotHit: 0
@@ -1034,7 +1034,7 @@ MonoBehaviour:
   characterSettings: {fileID: 11400000, guid: 28afea81c95372d4fb753c0287980f6c, type: 2}
   projectileSpawnTransform: {fileID: 7260981478403319719}
   wingsTransform: {fileID: 6278993456341362783}
-  VFX_Color: {r: 0, g: 0, b: 0, a: 0}
+  vfxColor: {r: 0, g: 0, b: 0, a: 0}
   weaponHolder: {fileID: 0}
 --- !u!95 &3541158604538972460
 Animator:
@@ -1083,9 +1083,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f1372afe4f6e5b4f842db1a5338aeb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _repelForce: 0.25
-  _repelForceDelta: 0.75
-  _maxRepelForce: 3
+  _repelValue: 0.25
 --- !u!1 &2688569752745844030
 GameObject:
   m_ObjectHideFlags: 0
@@ -2043,6 +2041,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   control: {fileID: 0}
+  _probablyCurrentState: 
 --- !u!1 &5503316897883994643
 GameObject:
   m_ObjectHideFlags: 0

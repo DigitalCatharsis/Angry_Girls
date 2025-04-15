@@ -6,15 +6,16 @@ namespace Angry_Girls
 {
     public class State_Idle : AnimationStateBase
     {
-        public State_Idle(CControl control, AnimationController animationController)
-            : base(control, animationController) { }
+        public State_Idle(CControl control, AnimationController animationController): base(control, animationController) { }
 
         public override void OnEnter()
         {
             var idleState = _settings.GetRandomState(_settings.idle_States);
-            _animationController.ChangeAnimationStateCrossFade(
-                GameLoader.Instance.statesContainer.idle_Dictionary[idleState.animation],
-                idleState.transitionDuration);
+            _animationController.ChangeAnimationStateCrossFade
+                (
+                   GameLoader.Instance.statesContainer.idle_Dictionary[idleState.animation],
+                   idleState.transitionDuration
+                );
         }
 
         public override void OnUpdate()
