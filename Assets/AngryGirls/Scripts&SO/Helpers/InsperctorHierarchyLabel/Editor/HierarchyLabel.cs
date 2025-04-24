@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
-
+#if UNITY_EDITOR
 /// <summary>
 /// Check out http://diegogiacomelli.com.br/unitytips-hierarchy-window-group-header/
 /// </summary>
@@ -67,3 +67,4 @@ namespace Angry_Girls
         }
     }
 }
+#endif

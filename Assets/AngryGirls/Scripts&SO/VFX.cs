@@ -33,10 +33,9 @@ namespace Angry_Girls
             }
         }
 
-        protected override void Dispose(bool disposing)
+        protected override void OnDispose()
         {
             StopVisualEffects();
-            base.Dispose(disposing);
         }
         protected override void ReturnToPool()
         {

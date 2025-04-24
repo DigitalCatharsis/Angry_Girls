@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -157,6 +158,7 @@ namespace Angry_Girls
 
         public void FinishTurn(float finishAttackTimer = _finishTurnTimerValue)
         {
+            Debug.Log(this.name + " starting finishing turn");
             canUseAbility = false;
             StopCoroutine(ExecuteFinishTurnTimer(finishAttackTimer));
             isAttacking = false;
@@ -165,6 +167,7 @@ namespace Angry_Girls
 
         private IEnumerator ExecuteFinishTurnTimer(float timeToCheck)
         {
+            Debug.Log(this.name + " starting finishing corutine");
             var time = Time.deltaTime;
             while (time >= timeToCheck)
             {
@@ -174,6 +177,7 @@ namespace Angry_Girls
 
             hasFinishedLaunchingTurn = true;
             hasFinishedAlternateAttackTurn = true;
+            Debug.Log(this.name + " has fininshed AttackFinishing corutine");
             yield break;
         }
 
@@ -192,6 +196,13 @@ namespace Angry_Girls
             {
                 return LayerMask.NameToLayer("Projectile_Bot");
             }
+        }
+
+        //for debug 
+        public string GetCurrentAnimationName()
+        {
+            var currentHash = animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
+            return GameLoader.Instance.statesContainer.GetStateNameByHash(currentHash);
         }
 
         private void Update()
@@ -226,11 +237,10 @@ namespace Angry_Girls
             }
         }
 
-        protected override void Dispose(bool disposing)
+        protected override void OnDispose()
         {
             GameLoader.Instance.interactionManager.CleanUpForOwner(gameObject);
             GameLoader.Instance.gameLogic_UIManager.RemoveHealthBar(this);
-            base.Dispose(disposing);
         }
 
         protected override void ReturnToPool()
@@ -239,6 +249,13 @@ namespace Angry_Girls
             {
                 GameLoader.Instance.poolManager.AddObject(characterSettings.characterType, GameLoader.Instance.poolManager.characterPoolDictionary, this);
             }
+        }
+
+        //TODO: implement ragdoll
+        public void TempOnDeathZone()
+        {
+            CharacterMovement.Rigidbody.isKinematic = true;
+            CharacterMovement.Rigidbody.velocity = Vector3.zero;
         }
 
         public bool IsAlly(CControl anotherControl)

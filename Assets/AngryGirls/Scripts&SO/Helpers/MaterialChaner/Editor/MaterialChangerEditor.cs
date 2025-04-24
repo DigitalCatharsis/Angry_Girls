@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEditor;
-
+#if UNITY_EDITOR
 namespace Angry_Girls
 {
     [CustomEditor(typeof(MaterialChanger))]
@@ -104,3 +104,4 @@ namespace Angry_Girls
         }
     }
 }
+#endif

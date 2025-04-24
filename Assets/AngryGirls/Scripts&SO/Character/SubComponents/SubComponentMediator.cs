@@ -36,7 +36,7 @@ namespace Angry_Girls
             GameLoader.Instance.VFXManager.ShowDamageNumbers(interactionData.targetCollider, projectileConfig.VFXConfig.originator, projectileConfig.damage);
             GameLoader.Instance.audioManager.PlayRandomSound(AudioSourceType.CharacterHit);
         }
-        public void NotifyDeathZoneContact(object sender)
+        public void NotifyDeathZoneContact()
         {
             _control.Health.ApplyDamage(_control.Health.CurrentHealth);
             Notify_Dead();

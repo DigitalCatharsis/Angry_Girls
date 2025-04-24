@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -54,6 +55,8 @@ namespace Angry_Girls
             AddHandler(new Projectile_CollisionHandler());
             AddHandler(new CharacterPickable_TriggerHandler());
             AddHandler(new CharacterCharacter_CollisionHandler());
+            AddHandler(new ProjectileDeathzone_TriggerHandler());
+            AddHandler(new CharacterDeathzone_TriggerHandler());
         }
 
         public void AddHandler(IInteractionHandler handler)
@@ -283,6 +286,32 @@ namespace Angry_Girls
             {
                 sourceControl.CharacterMovement.HandleRepel(targetControl.CharacterMovement);
             }
+        }
+    }
+
+    public class ProjectileDeathzone_TriggerHandler : IInteractionHandler
+    {
+        public bool CanHandle(InteractionData data, InteractionConfig sourceConfig)
+        {
+            return data.source.GetComponent<Projectile>() != null && data.target.layer == LayerMask.NameToLayer("DeathZone");
+        }
+
+        public void Handle(InteractionData data, InteractionConfig config)
+        {
+            GameLoader.Instance.VFXManager.CallVFXDispose(data.source);
+        }
+    }
+
+    public class CharacterDeathzone_TriggerHandler : IInteractionHandler
+    {
+        public bool CanHandle(InteractionData data, InteractionConfig sourceConfig)
+        {
+            return data.source.GetComponent<CControl>() != null && data.target.layer == LayerMask.NameToLayer("DeathZone");
+        }
+
+        public void Handle(InteractionData data, InteractionConfig config)
+        {
+            data.source.GetComponent<CControl>().subComponentMediator.NotifyDeathZoneContact();
         }
     }
 

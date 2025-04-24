@@ -7,9 +7,6 @@ namespace Angry_Girls
     [Serializable]
     public class HashManager : MonoBehaviour
     {
-        //Only for Visual sruff!!!
-        public SerializedDictionary<string, GameObject> dictionaryOwners = new();
-
         public SerializedDictionary<T, int> CreateAndInitDictionary<T>(GameObject sender) where T : Enum
         {
             //Create
@@ -20,9 +17,6 @@ namespace Angry_Girls
             {
                 newDic.Add((T)item, Animator.StringToHash(item.ToString()));
             }
-
-            //Remember
-            dictionaryOwners.TryAdd(typeof(T).ToString(), sender);
 
             return newDic;
         }

@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;  //Для срани ниже
-using log4net.Util;
-using UnityEngine.UIElements;
-
+#if UNITY_EDITOR
 namespace Angry_Girls
 {
     [CustomEditor(typeof(LookAtPoint))] //The CustomEditor attribute informs Unity which component it should act as an editor for.
@@ -98,3 +94,4 @@ namespace Angry_Girls
         }
     }
 }
+#endif

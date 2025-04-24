@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 namespace Angry_Girls
 {
     [CustomPropertyDrawer(typeof(ShowOnlyAttribute))]
@@ -38,3 +39,4 @@ namespace Angry_Girls
     }
 }
 
+#endif

@@ -59,14 +59,12 @@ namespace Angry_Girls
                 obj.transform.rotation = rotation;
                 list.RemoveAt(0);
 
-                obj.Init_PoolObject();
                 obj.gameObject.SetActive(true);
                 return obj;
             }
             else
             {
                 var obj = GameLoader.Instance.poolObjectLoader.InstantiatePrefab(objType, position, rotation);
-                obj.Init_PoolObject();
 
                 // Добавляем нумерацию только для новых объектов
                 obj.gameObject.name = $"{obj.gameObject.name}_{GetNextInstanceNumber(objType)}";

@@ -1,6 +1,6 @@
 using UnityEditor;
 using UnityEngine;
-
+#if UNITY_EDITOR
 namespace Angry_Girls
 {
     [CustomEditor(typeof(DynamicFactoryExtention))]
@@ -22,3 +22,4 @@ namespace Angry_Girls
         }
     }
 }
+#endif

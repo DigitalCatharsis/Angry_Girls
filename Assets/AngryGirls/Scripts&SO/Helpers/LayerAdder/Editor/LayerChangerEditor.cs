@@ -1,8 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+#if UNITY_EDITOR
 namespace Angry_Girls
 {
     [CustomEditor(typeof(LayerChanger))]
@@ -24,3 +24,4 @@ namespace Angry_Girls
     }
 }
 
+#endif

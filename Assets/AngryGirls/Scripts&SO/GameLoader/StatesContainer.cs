@@ -127,7 +127,6 @@ namespace Angry_Girls
     #endregion
     public class StatesContainer : MonoBehaviour
     {
-
         [Header("State Dictionaries")]
         public SerializedDictionary<Attack_States, int> attack_Dictionary;
         public SerializedDictionary<AttackFinish_States, int> attackFinish_Dictionary;
@@ -151,5 +150,12 @@ namespace Angry_Girls
             hitReaction_Dictionary = GameLoader.Instance.hashManager.CreateAndInitDictionary<HitReaction_States>(this.gameObject);
             death_States_Dictionary = GameLoader.Instance.hashManager.CreateAndInitDictionary<Death_States>(this.gameObject);
         }
+
+        //for debug only
+        public string GetStateNameByHash(int hash)
+        {
+            var manager = GameLoader.Instance.hashManager;
+            return manager.GetName(GameLoader.Instance.statesContainer.stateNames_Dictionary, hash).ToString();
+        }    
     }
 }

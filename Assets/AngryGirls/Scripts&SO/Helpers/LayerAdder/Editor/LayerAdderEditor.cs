@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-
+#if UNITY_EDITOR
 namespace Angry_Girls
 {
     [CustomEditor(typeof(LayerAdder))]
@@ -145,3 +144,4 @@ namespace Angry_Girls
         }
     }
 }
+#endif

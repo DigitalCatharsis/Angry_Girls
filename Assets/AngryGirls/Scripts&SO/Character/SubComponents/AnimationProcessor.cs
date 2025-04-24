@@ -25,10 +25,13 @@ namespace Angry_Girls
                 control.checkGlobalBehavior = true;
             }
 
-            _animationController = new AnimationController(
+            _animationController = new AnimationController
+                (
+                control.gameObject,
                 control.animator,
                 GameLoader.Instance.hashManager,
-                GameLoader.Instance.statesContainer);
+                GameLoader.Instance.statesContainer
+                );
 
             InitializeStateMachine();
         }
@@ -47,13 +50,13 @@ namespace Angry_Girls
                 new State_Airborned(control, _animationController),
             };
 
-            _stateMachine = new AnimationStateMachine(states);
+            _stateMachine = new AnimationStateMachine(control.gameObject, states);
             InitFirstState();
         }
 
         public void InitFirstState()
         {
-            if(control.isGrounded)
+            if (control.isGrounded)
             {
                 _stateMachine.ChangeState<State_Idle>(control.gameObject);
             }
@@ -209,7 +212,8 @@ namespace Angry_Girls
 
             if (control.characterSettings.unitType == UnitType.Air) return false;
 
-            if (!control.isGrounded) { return false; };
+            if (!control.isGrounded) { return false; }
+            ;
 
             if (control.unitGotHit) { return false; }
 

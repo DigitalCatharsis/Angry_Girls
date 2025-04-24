@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 namespace Angry_Girls
 {
@@ -12,6 +13,8 @@ namespace Angry_Girls
 
         public virtual void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
+            Debug.Log(control.name + " entered attack animation " + GameLoader.Instance.statesContainer.GetStateNameByHash(stateInfo.shortNameHash));
+
             if (control == null)
             {
                 control = animator.transform.root.GetComponent<CControl>();
