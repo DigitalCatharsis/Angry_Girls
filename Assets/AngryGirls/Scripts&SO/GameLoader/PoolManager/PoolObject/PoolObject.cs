@@ -16,6 +16,7 @@ namespace Angry_Girls
             ResetRigidbody();
             ResetTransform();
             ReturnToPool();
+            Debug.Log(this.name + "has been returned to pool");
         }
 
         protected virtual void OnDispose() { }

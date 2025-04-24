@@ -33,15 +33,15 @@ namespace Angry_Girls
         {
             _projectileConfig = config;
 
-            SetupColliders(config.enableCollider, config.enableTrigger);
-            PlaySound(config.spawnSound);
-
             GameLoader.Instance.interactionManager.Register(this.gameObject, new InteractionConfig
             {
                 type = InteractionMemberType.Projectile,
                 ownerGO = this.gameObject,
                 projectileConfig = config
             });
+
+            SetupColliders(config.enableCollider, config.enableTrigger);
+            PlaySound(config.spawnSound);
         }
 
         private void OnTriggerEnter(Collider other)

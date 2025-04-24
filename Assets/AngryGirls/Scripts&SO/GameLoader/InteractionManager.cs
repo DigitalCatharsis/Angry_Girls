@@ -47,6 +47,9 @@ namespace Angry_Girls
         private IInteractionHandler _defaultHandler = new DefaultInteractionHandler();
         private HashSet<(GameObject, GameObject)> _processedPairs = new HashSet<(GameObject, GameObject)>();
 
+
+        private int _currentFrame;
+
         private void Awake()
         {
             // Регистрируем обработчики в порядке приоритета
@@ -67,11 +70,13 @@ namespace Angry_Girls
         public void Register(GameObject obj, InteractionConfig config)
         {
             _registeredObjects[obj] = config;
+            Debug.Log(this.name + " has registered " + obj.name);
         }
 
         public void Unregister(GameObject obj)
         {
             _registeredObjects.Remove(obj);
+            Debug.Log(this.name + " has deregistered " + obj.name);
         }
 
         public void CleanUpForOwner(GameObject owner)
@@ -88,6 +93,7 @@ namespace Angry_Girls
             foreach (var obj in toRemove)
             {
                 _registeredObjects.Remove(obj);
+                Debug.Log(this.name + " has deregistered " + obj.name + " (CleanUpForOwner)");
             }
         }
 
@@ -119,10 +125,17 @@ namespace Angry_Girls
 
         private void ProcessInteraction(InteractionData data)
         {
+            if (Time.frameCount != _currentFrame)
+            {
+                _currentFrame = Time.frameCount;
+                _processedPairs.Clear();
+            }
+
             var pair = (data.source, data.target);
 
             if (_processedPairs.Contains(pair))
             {
+                Debug.Log(this.name + " dont process interaction between " + data.source + " " + data.target);
                 return;
             }
 
@@ -130,6 +143,7 @@ namespace Angry_Girls
 
             if (!_registeredObjects.TryGetValue(data.source, out var sourceConfig))
             {
+                Debug.Log(this.name + " cant find " + data.source + " in registered objects. Decline processing interaction");
                 return;
             }
 
@@ -152,8 +166,10 @@ namespace Angry_Girls
 
         private IEnumerator ClearProcessedPair((GameObject, GameObject) pair)
         {
+            Debug.Log(this.name + " is cleaning " + pair.Item1, pair.Item2);
             yield return new WaitForEndOfFrame();
             _processedPairs.Remove(pair);
+            Debug.Log(this.name + " finished cleaning for " + pair.Item1, pair.Item2);
         }
     }
 
