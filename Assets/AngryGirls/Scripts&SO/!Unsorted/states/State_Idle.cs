@@ -20,13 +20,13 @@ namespace Angry_Girls
 
         public override void OnUpdate()
         {
-            if (_control.playerOrAi == PlayerOrAi.Player && _control.hasFinishedLaunchingTurn)
+            if (_control.playerOrAi == PlayerOrAi.Character && _control.hasFinishedLaunchingTurn)
             {
-                TurnToTheClosestEnemy(PlayerOrAi.Ai);
+                TurnToTheClosestEnemy(PlayerOrAi.Bot);
             }
-            else if (_control.playerOrAi == PlayerOrAi.Ai)
+            else if (_control.playerOrAi == PlayerOrAi.Bot)
             {
-                TurnToTheClosestEnemy(PlayerOrAi.Player);
+                TurnToTheClosestEnemy(PlayerOrAi.Character);
             }
         }
 
@@ -35,7 +35,7 @@ namespace Angry_Girls
             float closestDistance = 9999f;
             var collection = new List<CControl>();
 
-            if (playerOrAi == PlayerOrAi.Player)
+            if (playerOrAi == PlayerOrAi.Character)
             {
                 collection = GameLoader.Instance.characterManager.playableCharacters;
             }

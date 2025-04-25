@@ -185,7 +185,7 @@ namespace Angry_Girls
 
         public void Handle(InteractionData data, InteractionConfig sourceConfig)
         {
-            if (sourceConfig.projectileConfig.VFXConfig.originator.GetComponent<CControl>().playerOrAi != PlayerOrAi.Player) { return; }
+            if (sourceConfig.projectileConfig.VFXConfig.originator.GetComponent<CControl>().playerOrAi != PlayerOrAi.Character) { return; }
 
             var tar = data.target.GetComponent<IPickable>();
             if (tar != null) { tar.OnPickUp(); };
@@ -274,7 +274,7 @@ namespace Angry_Girls
             var pickable = data.target.GetComponent<IPickable>();
             var control = data.source.GetComponent<CControl>();
 
-            if (control != null && control.playerOrAi == PlayerOrAi.Player)
+            if (control != null && control.playerOrAi == PlayerOrAi.Character)
             {
                 pickable.OnPickUp();
             }

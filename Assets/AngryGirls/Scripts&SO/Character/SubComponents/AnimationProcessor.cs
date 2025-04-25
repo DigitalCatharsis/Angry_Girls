@@ -20,7 +20,7 @@ namespace Angry_Girls
         {
             control.characterSettings.CheckForNoneValues(control);
 
-            if (control.playerOrAi == PlayerOrAi.Ai)
+            if (control.playerOrAi == PlayerOrAi.Bot)
             {
                 control.checkGlobalBehavior = true;
             }
@@ -185,7 +185,7 @@ namespace Angry_Girls
             {
                 if (GameLoader.Instance.turnManager.CurrentPhase != CurrentPhase.LaunchingPhase) { return false; }
 
-                if (control.playerOrAi != PlayerOrAi.Player) { return false; }
+                if (control.playerOrAi != PlayerOrAi.Character) { return false; }
 
                 if (control.hasUsedAbility) { return false; }
 

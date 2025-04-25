@@ -54,7 +54,7 @@ namespace Angry_Girls
             var enemyHits = Physics.BoxCastAll(boxCenter, boxSize / 2, Vector3.down, Quaternion.identity, rayLength, _enemyLayerMask);
 
             // Если второй BoxCast пересекает больше одного коллайдера
-            if (enemyHits.Length >= 1 && control.playerOrAi != PlayerOrAi.Ai)
+            if (enemyHits.Length >= 1 && control.playerOrAi != PlayerOrAi.Bot)
             {
                 // Увеличиваем таймер
                 _multiCollisionTimer += Time.fixedDeltaTime;

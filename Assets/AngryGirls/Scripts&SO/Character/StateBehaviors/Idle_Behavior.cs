@@ -23,12 +23,12 @@ namespace Angry_Girls
             if (GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.LaunchingPhase)
             {
                 //Ai does not attack in launch phase
-                if (_control.playerOrAi == PlayerOrAi.Ai)
+                if (_control.playerOrAi == PlayerOrAi.Bot)
                 {
                     return;
                 }
                 //already launched unit does not attack in launch phase
-                if (_control.playerOrAi == PlayerOrAi.Player && _control.hasFinishedLaunchingTurn)
+                if (_control.playerOrAi == PlayerOrAi.Character && _control.hasFinishedLaunchingTurn)
                 {
                     return;
                 }

@@ -7,8 +7,8 @@ namespace Angry_Girls
 {
     public enum PlayerOrAi
     {
-        Player,
-        Ai,
+        Character,
+        Bot,
     }
 
     public class CControl : PoolObject
@@ -58,11 +58,11 @@ namespace Angry_Girls
 
         private void OnEnable()
         {
-            if (playerOrAi == PlayerOrAi.Player)
+            if (playerOrAi == PlayerOrAi.Character)
             {
                 GameLoader.Instance.characterManager.playableCharacters.Add(this);
             }
-            else if (playerOrAi == PlayerOrAi.Ai)
+            else if (playerOrAi == PlayerOrAi.Bot)
             {
                 GameLoader.Instance.characterManager.enemyCharacters.Add(this);
             }
@@ -188,7 +188,7 @@ namespace Angry_Girls
 
         public int GetVfxLayermask()
         {
-            if (playerOrAi == PlayerOrAi.Player)
+            if (playerOrAi == PlayerOrAi.Character)
             {
                 return LayerMask.NameToLayer("Projectile_Character");
             }
