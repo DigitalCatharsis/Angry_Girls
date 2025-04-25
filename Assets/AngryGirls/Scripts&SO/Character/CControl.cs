@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Text;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +15,7 @@ namespace Angry_Girls
     {
         public CharacterHealth Health { get; private set; }
         public CharacterMovement CharacterMovement { get; private set; }
+        public Ragdoll Ragdoll { get; private set; }
 
         [Header("Health")]
         public Slider healthSlider;
@@ -51,10 +52,32 @@ namespace Angry_Girls
         [Header("VFX")]
         public Transform projectileSpawnTransform;
         public Transform wingsTransform;
-        public Color vfxColor;
+        public UnityEngine.Color vfxColor;
 
         [Header("Weapon")]
         public Transform weaponHolder;
+
+        public void SetDeathParams()
+        {
+            ColorDebugLog.Log($"{this.name} called death", KnownColor.Yellow);
+            isDead = true;
+            FinishTurn(0);
+            CharacterMovement.Rigidbody.constraints = RigidbodyConstraints.None;
+            CharacterMovement.Rigidbody.useGravity = true;
+            CharacterMovement.Rigidbody.isKinematic = false;
+            CharacterMovement.Rigidbody.interpolation = RigidbodyInterpolation.None;
+            CharacterMovement.Rigidbody.detectCollisions = false;
+            boxCollider.enabled = false;
+            
+
+            var animator = wingsTransform.GetComponentInChildren<Animator>();
+            if (animator != null)
+            {
+                animator.enabled = false;
+            }
+
+            gameObject.layer = LayerMask.NameToLayer("DeadBody");
+        }
 
         private void OnEnable()
         {
@@ -74,11 +97,12 @@ namespace Angry_Girls
 
         private void Awake()
         {
+            Ragdoll = GetComponent<Ragdoll>();
+
             Health = GetComponent<CharacterHealth>();
             Health.Initialize();
 
             CharacterMovement = GetComponent<CharacterMovement>();
-            CharacterMovement.Initialize(this);
 
             animator = GetComponent<Animator>();
             boxCollider = GetComponent<BoxCollider>();
@@ -127,6 +151,7 @@ namespace Angry_Girls
 
             if (unitGotHit)
             {
+                Debug.Log($"Returning True in CheckAttackFinishCondition cause of unitGotHit for {this.name} in animation {GetCurrentAnimationName()}");
                 return true;
             }
 

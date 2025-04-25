@@ -30,7 +30,9 @@ namespace Angry_Girls
                 enableCollider: false,
                 enableTrigger: true,
                 spawnSound: new Tuple<AudioSourceType, int>(AudioSourceType.SFX_Impact, 2),
-                destroySound: null
+                destroySound: null,
+                deadbodyForceMultiplier: 0,
+                deadbodyForceMode: ForceMode.Force
                 );
 
 

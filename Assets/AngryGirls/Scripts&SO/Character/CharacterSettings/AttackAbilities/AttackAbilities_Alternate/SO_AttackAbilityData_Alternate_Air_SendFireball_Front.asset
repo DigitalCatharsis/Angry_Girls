@@ -25,11 +25,13 @@ MonoBehaviour:
   vfxType: 2
   vfxColor: {r: 0.10924828, g: 1, b: 0, a: 1}
   connectToOwner: 0
+  teamfire: 0
   timeToLive: 7
-  isTimeToLiveIsNormilizedTime: 0
   projectileMovementSpeed: {x: 0, y: 0, z: 10}
   destroyOnCollision: 1
   destroyOnCharacterCollision: 0
+  deadbodyForceMode: 2
+  deadbodyForceMultiplier: 5
   enableCollider: 1
   enableTrigger: 1
   spawnSourceType: 4

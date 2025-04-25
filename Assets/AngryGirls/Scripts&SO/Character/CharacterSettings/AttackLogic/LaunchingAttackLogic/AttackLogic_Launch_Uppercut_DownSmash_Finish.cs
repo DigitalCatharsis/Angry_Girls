@@ -34,7 +34,9 @@ namespace Angry_Girls
                 vfxColor: Color.white,
                 timeToLive: 1f,
                 connectToOriginator: false,
-                teamfire: false
+                teamfire: false,
+                deadbodyForceMultiplier: 0,
+                deadbodyForceMode: ForceMode.Force
                 );
 
             _vfx.transform.position = control.CharacterMovement.Rigidbody.position;

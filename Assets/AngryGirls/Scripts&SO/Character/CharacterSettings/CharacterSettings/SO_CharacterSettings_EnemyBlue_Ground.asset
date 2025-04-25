@@ -34,7 +34,7 @@ MonoBehaviour:
   death_States:
   - animation: 1
     transitionDuration: 0.1
-  deathByAnimation: 1
+  deathByAnimation: 0
   AttackAbility_Launch: {fileID: 0}
   AttackAbility_Alternate: {fileID: 11400000, guid: 545cd1a24618d664dacdb2ed9f6a62fd,
     type: 2}

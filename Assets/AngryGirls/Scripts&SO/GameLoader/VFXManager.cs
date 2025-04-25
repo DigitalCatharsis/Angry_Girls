@@ -3,6 +3,7 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using TMPro;
+using UnityEditor.Playables;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -88,7 +89,9 @@ namespace Angry_Girls
                 enableTrigger = ability.enableTrigger,
                 teamfire = ability.teamfire,
                 spawnSound = new Tuple<AudioSourceType, int>(ability.spawnSourceType, ability.spawnIndex),
-                destroySound = new Tuple<AudioSourceType, int>(ability.destroySourceType, ability.destoyIndex)
+                destroySound = new Tuple<AudioSourceType, int>(ability.destroySourceType, ability.destoyIndex),
+                deadbodyForceMultiplier = ability.deadbodyForceMultiplier,
+                deadbodyForceMode = ability.deadbodyForceMode
             };
             var vfxGameobject = SpawnVFX(projectileConfig.VFXConfig);
             vfxGameobject.GetComponent<Projectile>().InitProjectile(projectileConfig);
@@ -112,7 +115,9 @@ namespace Angry_Girls
                 bool enableTrigger,
                 bool teamfire,
                 Tuple<AudioSourceType, int> spawnSound,
-                Tuple<AudioSourceType, int> destroySound
+                Tuple<AudioSourceType, int> destroySound,
+                float deadbodyForceMultiplier,
+                ForceMode deadbodyForceMode
             )
         {
             var projectileConfig = new ProjectileConfig
@@ -135,7 +140,9 @@ namespace Angry_Girls
                 enableTrigger = enableTrigger,
                 teamfire = teamfire,
                 spawnSound = spawnSound,
-                destroySound = destroySound
+                destroySound = destroySound,
+                deadbodyForceMultiplier = deadbodyForceMultiplier,
+                deadbodyForceMode = deadbodyForceMode
             };
             var vfxGameobject = SpawnVFX(projectileConfig.VFXConfig);
             vfxGameobject.GetComponent<Projectile>().InitProjectile(projectileConfig);

@@ -134,13 +134,9 @@ namespace Angry_Girls
                    control.canUseAbility;
         }
 
-        public void SetDeath()
+        public void PlayDeathStateForNonRagdoll()
         {
-            if (control.characterSettings.deathByAnimation)
-            {
-                _stateMachine.ChangeState<State_Death>(control.gameObject);
-                control.FinishTurn(0);
-            }
+            _stateMachine.ChangeState<State_Death>(control.gameObject);
         }
 
         private void ProcessGlobalBehavior()

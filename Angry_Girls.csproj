@@ -94,6 +94,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\InteractionManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\DistanceBetweenTwoObjects\DistanceBetweenTwoObjects.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AttackAbilityLogic.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\Ragdoll.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\SpawnFactory\Factories\IFactory.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\states\State_Death.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\AlternateAttack_Behavior_OnGround.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AttackLogicContainer.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\TurnManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\SpawnFactory\Factories\VFXFactory.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\HelperComponent\RigidbodyInfo.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\DynamicFactotyExtention\Editor\DynamicFactoryExtentionEditor.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\InsperctorHierarchyLabel\Editor\HierarchyLabel.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LayerAdder\Editor\LayerAdderEditor.cs" />
@@ -130,7 +132,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\states\State_Landing.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponentMediator.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\PauseControl.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\HelperComponent\HelperComponent.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\BoxColliderUpdater.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AudioManager\AudioManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\DynamicFactotyExtention\DynamicFactoryExtention.cs" />

@@ -24,7 +24,7 @@ namespace Angry_Girls
 
         [Space(5)]
         [Header("Character Phyciscs")]
-        public Vector3 attackMovementForce = new Vector3(0, 0, 0);
+        public Vector3 attackMovementForce = Vector3.zero;
 
         [Space(15)]
         [Header("Projectile")]
@@ -39,9 +39,11 @@ namespace Angry_Girls
 
         [Space(5)]
         [Header("Projectile Phyciscs")]
-        public Vector3 projectileMovementSpeed = new Vector3(0, 0, 0);  //?
+        public Vector3 projectileMovementSpeed = Vector3.zero;
         public bool destroyOnCollision = false;
         public bool destroyOnCharacterCollision = false;
+        public ForceMode deadbodyForceMode;
+        public float deadbodyForceMultiplier;
 
         [Space(5)]
         [Header("Projectile Colliders")]

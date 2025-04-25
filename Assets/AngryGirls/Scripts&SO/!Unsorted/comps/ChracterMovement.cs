@@ -5,30 +5,15 @@ namespace Angry_Girls
     [RequireComponent(typeof(Rigidbody))]
     public class CharacterMovement : MonoBehaviour
     {
-        //repel
         [SerializeField] private float _repelValue = 0.4f;
 
-        private float _currentRepelForce;
-        private CharacterMovement _repelTarget;
-        private bool _isRepelling;
-        //
-
-
         private Rigidbody _rigidbody;
-        private CControl _control;
-
         public Rigidbody Rigidbody => _rigidbody;
 
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
         }
-
-        public void Initialize(CControl control)
-        {
-            _control = control;
-        }
-
         public void ResetVelocity()
         {
             _rigidbody.velocity = Vector3.zero;

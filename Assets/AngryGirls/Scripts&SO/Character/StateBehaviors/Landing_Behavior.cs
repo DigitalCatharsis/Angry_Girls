@@ -28,6 +28,7 @@ namespace Angry_Girls
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            Debug.Log($"{_control.name} is executing FinishTurn in animation {_control.GetCurrentAnimationName()}");
             _control.FinishTurn();
         }
 

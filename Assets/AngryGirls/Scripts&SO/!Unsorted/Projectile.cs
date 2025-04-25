@@ -17,6 +17,8 @@ namespace Angry_Girls
         public float enemyKnockBackValue;
         public Tuple<AudioSourceType, int> spawnSound;
         public Tuple<AudioSourceType, int> destroySound;
+        public float deadbodyForceMultiplier = 1f;
+        public ForceMode deadbodyForceMode;
     }
 
     public class Projectile : MonoBehaviour
