@@ -297,7 +297,7 @@ namespace Angry_Girls
                 sourceControl.isDead || targetControl.isDead)
                 return;
 
-            if (!sourceControl.isGrounded && !targetControl.IsAlly(sourceControl))
+            if (!sourceControl.CharacterMovement.IsGrounded && !targetControl.IsAlly(sourceControl))
             {
                 sourceControl.CharacterMovement.HandleRepel(targetControl.CharacterMovement);
             }

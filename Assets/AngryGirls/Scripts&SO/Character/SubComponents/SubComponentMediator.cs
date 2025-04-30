@@ -7,7 +7,6 @@ namespace Angry_Girls
     {
         private CControl _control;
         private AnimationProcessor _animationProcessor;
-        private DamageHandler _damageHandler;
 
         public void OnAwake()
         {
@@ -18,7 +17,6 @@ namespace Angry_Girls
         {
             _control = GetComponentInParent<CControl>();
             _animationProcessor = GetComponentInChildren<AnimationProcessor>();
-            _damageHandler = GetComponentInChildren<DamageHandler>();
         }
         public void Notyfy_CheckForDamage(ProjectileConfig projectileConfig, InteractionData interactionData)
         {

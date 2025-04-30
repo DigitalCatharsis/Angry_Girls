@@ -115,7 +115,6 @@ namespace Angry_Girls
             _currentPhase = CurrentPhase.LaunchingPhase;
             _isLaunchingPhaseOver = false;
             GameLoader.Instance.launchManager.Allow_CharacterPress();
-            //Singleton.Instance.launchManager.canPressAtCharacters = true;
         }
 
         private void SortCharactersTurnList()

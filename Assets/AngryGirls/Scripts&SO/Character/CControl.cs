@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,7 +24,6 @@ namespace Angry_Girls
         private const float _finishTurnTimerValue = 3f;
 
         public bool isLanding = false;
-        public bool isGrounded = false;
         public bool isAttacking = false;
         public bool isDead = false;
         public bool unitGotHit = false;
@@ -57,6 +57,9 @@ namespace Angry_Girls
         [Header("Weapon")]
         public Transform weaponHolder;
 
+
+        //TODO: FOX
+        public List<GameObject> detectedGroundObject = new();
         public void SetDeathParams()
         {
             ColorDebugLog.Log($"{this.name} called death", KnownColor.Yellow);
@@ -173,7 +176,7 @@ namespace Angry_Girls
                 }
             }
 
-            if (isGrounded)
+            if (CharacterMovement.IsGrounded)
             {
                 return true;
             }

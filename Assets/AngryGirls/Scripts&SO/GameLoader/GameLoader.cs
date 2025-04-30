@@ -6,7 +6,6 @@ namespace Angry_Girls
     {
         public static GameLoader Instance { get; private set; }
         public MyExtentions myExtentions;
-        //public SpawnManager spawnManager;
         public PoolManager poolManager;
         public PoolObjectLoader poolObjectLoader;
 

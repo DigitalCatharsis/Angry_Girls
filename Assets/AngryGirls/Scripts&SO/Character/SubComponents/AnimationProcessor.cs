@@ -56,7 +56,7 @@ namespace Angry_Girls
 
         public void InitFirstState()
         {
-            if (control.isGrounded)
+            if (control.CharacterMovement.IsGrounded)
             {
                 _stateMachine.ChangeState<State_Idle>(control.gameObject);
             }
@@ -121,7 +121,7 @@ namespace Angry_Girls
 
             if (!control.isAttacking) { return false; }
 
-            if (!control.isGrounded) { return false; }
+            if (!control.CharacterMovement.IsGrounded) { return false; }
 
             return IsAnimationEnding(currentStateHash, GameLoader.Instance.statesContainer.attack_Dictionary);
         }
@@ -190,7 +190,7 @@ namespace Angry_Girls
                 return true;
             }
 
-            if (control.isGrounded) { return false; }
+            if (control.CharacterMovement.IsGrounded) { return false; }
 
             if (control.isAttacking) { return false; }
 
@@ -206,17 +206,26 @@ namespace Angry_Girls
         {
             if (_stateMachine.CurrentState is State_Landing) { return false; }
 
-            if (control.characterSettings.unitType == UnitType.Air) return false;
-
-            if (!control.isGrounded) { return false; }
-            ;
-
             if (control.unitGotHit) { return false; }
 
-            if (control.characterSettings.unitType == UnitType.AirToGround && _stateMachine.CurrentState is State_Attack)
+            if (!control.CharacterMovement.IsGrounded) { return false; }
+
+            if (control.characterSettings.unitType == UnitType.Air) return false;
+
+            if (control.characterSettings.unitType == UnitType.AirToGround)
             {
-                if (IsAnimationEnding(currentStateHash, GameLoader.Instance.statesContainer.attack_Dictionary))
+                if (_stateMachine.CurrentState is State_Attack 
+                    && IsAnimationEnding(currentStateHash, GameLoader.Instance.statesContainer.attack_Dictionary)
+                    )
                 {
+                    ColorDebugLog.Log(
+                        $"{control.name} shouldEnterLanding return true. Fields: " +
+                        $"\nisgrounded = {control.CharacterMovement.IsGrounded}" +
+                        $"\ncurrentAnimation: {control.GetCurrentAnimationName()}" +
+                        $"\nisAnimationEnding:{IsAnimationEnding(currentStateHash, GameLoader.Instance.statesContainer.attack_Dictionary)}" +
+                        $"\n CurrentState: {_stateMachine.CurrentState}" +
+                        $"\ncolliding with {control.detectedGroundObject[0].name}"
+                        , System.Drawing.KnownColor.Yellow);
                     return true;
                 }
             }
@@ -248,7 +257,7 @@ namespace Angry_Girls
                     return IsAnimationEnding(currentStateHash, GameLoader.Instance.statesContainer.hitReaction_Dictionary);
                 }
 
-                if (control.isGrounded || !control.canUseAbility)
+                if (control.CharacterMovement.IsGrounded || !control.canUseAbility)
                 {
                     return true;
                 }
@@ -259,7 +268,7 @@ namespace Angry_Girls
             //Ground and Air2Ground
             if (control.isLanding) { return false; }
 
-            if (!control.isGrounded) { return false; }
+            if (!control.CharacterMovement.IsGrounded) { return false; }
 
             bool shouldTransitionFromAttackFinish = _stateMachine.CurrentState is State_AttackFinish && IsAnimationEnding(currentStateHash, GameLoader.Instance.statesContainer.attackFinish_Dictionary);
 

@@ -28,10 +28,10 @@ MonoBehaviour:
   teamfire: 0
   timeToLive: 99
   projectileMovementSpeed: {x: 0, y: 0, z: 0}
-  deadbodyForceApply: {x: 0, y: 0, z: 0}
   destroyOnCollision: 0
   destroyOnCharacterCollision: 0
-  deadbodyForceMode: 0
+  deadbodyForceMode: 2
+  deadbodyForceMultiplier: 10
   enableCollider: 0
   enableTrigger: 1
   spawnSourceType: 4

@@ -1,13 +1,22 @@
-using Angry_Girls;
+using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-//gameloader comp
-public class LevelSettings : MonoBehaviour
+namespace Angry_Girls
 {
-    [SerializeField] private LevelSettings_Data _data;
-
-    private void Start()
+    //gameloader comp
+    public class LevelSettings : MonoBehaviour
     {
-        GameLoader.Instance.audioManager.PlayCustomSound(_data.audioSourceType, _data.audioClipEllementIndex);
+        [SerializeField] private LevelSettings_Data _data;
+
+        private void Start()
+        {
+            GameLoader.Instance.audioManager.PlayCustomSound(_data.audioSourceType, _data.audioClipEllementIndex);
+        }
+
+        private void SetInitialStage()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

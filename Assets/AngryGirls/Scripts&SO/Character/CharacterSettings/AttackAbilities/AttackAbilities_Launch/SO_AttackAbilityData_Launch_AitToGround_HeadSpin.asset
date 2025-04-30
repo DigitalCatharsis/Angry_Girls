@@ -27,10 +27,11 @@ MonoBehaviour:
   connectToOwner: 0
   teamfire: 0
   timeToLive: 99
-  isTimeToLiveIsNormilizedTime: 0
   projectileMovementSpeed: {x: 0, y: 0, z: 0}
   destroyOnCollision: 1
   destroyOnCharacterCollision: 1
+  deadbodyForceMode: 2
+  deadbodyForceMultiplier: 10
   enableCollider: 1
   enableTrigger: 1
   spawnSourceType: 4

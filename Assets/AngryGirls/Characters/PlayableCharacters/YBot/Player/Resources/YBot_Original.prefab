@@ -1567,51 +1567,6 @@ Transform:
   - {fileID: 4889661708531570064}
   m_Father: {fileID: 6501874876983150966}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1691256545866807068
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2132987628377580220}
-  - component: {fileID: 450637529574753016}
-  m_Layer: 14
-  m_Name: DamageDetector
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2132987628377580220
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1691256545866807068}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2636539063242073703}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &450637529574753016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1691256545866807068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8ff0677c17dd8e429666eda9afbd33b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  control: {fileID: 0}
 --- !u!1 &1731378293374795060
 GameObject:
   m_ObjectHideFlags: 0
@@ -2160,7 +2115,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthSlider: {fileID: 0}
   isLanding: 0
-  isGrounded: 1
   isAttacking: 0
   isDead: 0
   unitGotHit: 0
@@ -2180,6 +2134,7 @@ MonoBehaviour:
   wingsTransform: {fileID: 6278993456341362783}
   vfxColor: {r: 0, g: 0, b: 0, a: 0}
   weaponHolder: {fileID: 0}
+  detectedGroundObject: []
 --- !u!95 &3541158604538972460
 Animator:
   serializedVersion: 5
@@ -2228,6 +2183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _repelValue: 0.25
+  _multiCollisionTimeThreshold: 4
 --- !u!114 &6745256575568936625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3689,52 +3645,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3190839930693420652}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4674259014324178179
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8065222757374003969}
-  - component: {fileID: 4217465233895893241}
-  m_Layer: 14
-  m_Name: GroundDetection
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8065222757374003969
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4674259014324178179}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2636539063242073703}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4217465233895893241
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4674259014324178179}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 398a9031c5b8dff4e921fa7629630b83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  control: {fileID: 0}
-  _multiCollisionTimeThreshold: 2
 --- !u!1 &4770912022852876395
 GameObject:
   m_ObjectHideFlags: 0
@@ -4334,10 +4244,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8065222757374003969}
   - {fileID: 7187606731496033446}
   - {fileID: 4889219240122694951}
-  - {fileID: 2132987628377580220}
   m_Father: {fileID: 253452075603770101}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5560322760933331221

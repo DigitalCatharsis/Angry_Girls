@@ -41,14 +41,14 @@ namespace Angry_Girls
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            if (stateInfo.normalizedTime >= 0.14 && control.isGrounded && _cameraShaked == false)
+            if (stateInfo.normalizedTime >= 0.14 && control.CharacterMovement.IsGrounded && _cameraShaked == false)
             {
                 GameLoader.Instance.cameraManager.ShakeCamera();
 
                 _cameraShaked = true;
             }
 
-            if (stateInfo.normalizedTime >= 1 && control.isGrounded)
+            if (stateInfo.normalizedTime >= 1 && control.CharacterMovement.IsGrounded)
             {
                 control.isAttacking = false;
             }

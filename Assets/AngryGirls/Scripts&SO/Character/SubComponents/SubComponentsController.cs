@@ -9,9 +9,7 @@ namespace Angry_Girls
         AnimationProcessor,
         BlockingManager,
         BoxColliderUpdater,
-        LgroundDetector,
         LaunchLogic,
-        DamageProcessor,
     }
     public class SubComponentsController : MonoBehaviour
     {

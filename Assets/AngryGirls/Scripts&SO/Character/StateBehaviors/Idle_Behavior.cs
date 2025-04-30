@@ -36,7 +36,7 @@ namespace Angry_Girls
                         
             if (_control.CheckAttackFinishCondition())
             {
-                _control.FinishTurn();
+                _control.FinishTurn(2);
             }
         }
 

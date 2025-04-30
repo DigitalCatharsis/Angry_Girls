@@ -98,7 +98,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\SpawnFactory\Factories\IFactory.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\states\State_Death.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\AlternateAttack_Behavior_OnGround.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\DamageHandler.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AttackLogicContainer.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\TurnManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\SpawnFactory\Factories\VFXFactory.cs" />
@@ -173,7 +172,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\SpawnFactory\Factories\CharacterFactory.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CControl.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AudioManager\SoundClipsCollection.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\GroundDetector.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\ListOfLists\SerializableList.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\AlternateAttack_Behavior_Landing.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\ShowOnlyAttribute\Editor\ShowOnlyDrawer.cs" />
