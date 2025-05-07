@@ -290,5 +290,6 @@ namespace Angry_Girls
         {
             return playerOrAi == anotherControl.playerOrAi;
         }
+
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using AYellowpaper.SerializedCollections;
 
 namespace Angry_Girls
 {
@@ -19,9 +20,7 @@ namespace Angry_Girls
     public struct StageData
     {
         public int stageIndex;
-        public Transform chratacterLauncherTransform;
-        public Transform[] enemyToSpawnTransform;
-        public List<GameObject> charactersToSpawn;
-        public List<GameObject> enemyToSpawn;
+        public Transform characterLauncherTransform;
+        public SerializedDictionary<CharacterType, Transform> enemiesToSpawn;
     }
 }

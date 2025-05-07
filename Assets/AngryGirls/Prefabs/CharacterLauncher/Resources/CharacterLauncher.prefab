@@ -218,7 +218,7 @@ GameObject:
   - component: {fileID: 7019165972804521200}
   - component: {fileID: 7888137024896021523}
   m_Layer: 2
-  m_Name: CharacterLauncher_Level_0
+  m_Name: CharacterLauncher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

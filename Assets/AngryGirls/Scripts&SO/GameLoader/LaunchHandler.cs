@@ -1,242 +1,141 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Angry_Girls
 {
     public class LaunchHandler : MonoBehaviour
     {
-        [Header("Setup")]
-        [SerializeField] private PlayerData characterSelectSO;
+        [Header("Dependencies")]
         [SerializeField] private CharacterLauncher _characterLauncher;
+        [SerializeField] private InputManager _inputManager;
+        [SerializeField] private CameraManager _cameraManager;
 
-        [Space(10)]
-        [Header("Conditions")]
-        [SerializeField] private bool _isLaunchAllowed = false;
-        [SerializeField] private bool _canPressAtCharacters = false;
-        [Space(10)]
-        [Header("Debug)")]
-        [SerializeField] private List<CControl> _charactersToLaunchLeft;
-        [SerializeField] private List<CControl> _launchedCharacters;
+        [Header("Settings")]
+        [SerializeField] private LayerMask _characterLaunchLayer;
 
-        private CControl CharacterToLaunch { get => _charactersToLaunchLeft[0]; }
+        public event Action OnCharacterLaunched;
 
-        private void Start()
+        private List<CControl> _charactersToLaunch = new();
+        private CControl _currentCharacter;
+        private bool _isLaunchAllowed;
+        private bool _canPressCharacters = true;
+
+        //public void Initialize(List<CControl> characters)
+        //{
+        //    _charactersToLaunch = characters;
+        //    PositionCharacters();
+        //    EnableControls();
+        //}
+
+        public void BeginLaunchPhase()
         {
-            _characterLauncher.InitLauncher();
-            _charactersToLaunchLeft = SpawnAndGetCharacters(characterSelectSO.selectedCharacters);
-            UpdateCharacterPositions(_charactersToLaunchLeft);
-            SetLaunchableCharactersBehavior(_charactersToLaunchLeft);
-            _canPressAtCharacters = true;
-            GameLoader.Instance.cameraManager.ReturnCameraToStartPosition(1f);
-        }
-
-        private List<CControl> SpawnAndGetCharacters(CharacterSettings[] selectedCharactersList)
-        {
-            var charList = new List<CControl>();
-
-            foreach (var character in selectedCharactersList)
+            if (_charactersToLaunch.Count == 0)
             {
-                if (character == null) 
-                {
-                    continue;
-                }
-                charList.Add(GameLoader.Instance.poolManager.GetObject<CharacterType>
-                    (character.characterType, GameLoader.Instance.poolManager.characterPoolDictionary, Vector3.zero, Quaternion.identity).GetComponent<CControl>());
+                Debug.LogWarning("No characters to launch!");
+                return;
             }
-            return charList;
-        }
-        private void UpdateCharacterPositions(List<CControl> charactersToLaunch)
-        {
-            var transforms = _characterLauncher.GetPositionTransforms();
 
-            for (var i = 0; i < charactersToLaunch.Count(); i++)
-            {
-                charactersToLaunch[i].CharacterMovement.Teleport(transforms[i].position);
-            }
-        }
-        private void SetLaunchableCharactersBehavior(List<CControl> charactersToLaunchLeft)
-        {
-            foreach (var character in charactersToLaunchLeft)
-            {
-                character.GetComponent<CControl>().unitBehaviorIsAlternate = false;
-            }
+            EnableControls();
+            _currentCharacter = _charactersToLaunch[0];
         }
 
         private void Update()
         {
-            if (GameLoader.Instance.gameLogic.GameOver)
+            if (!_canPressCharacters) return;
+
+            HandleLaunchInput();
+        }
+
+        private void HandleLaunchInput()
+        {
+            if (_inputManager.IsPressed)
             {
-                return;
+                TrySelectCharacter();
             }
-
-            #region ButtonReaction (Except applyAttack)
-            //Нажали
-            if (GameLoader.Instance.inputManager.IsPressed && _canPressAtCharacters)
+            else if (_inputManager.IsHeld && _isLaunchAllowed)
             {
-                Ray ray = Camera.main.ScreenPointToRay(GameLoader.Instance.inputManager.Position);
+                _characterLauncher.AimingTheLaunch(_currentCharacter.gameObject);
+            }
+            else if (_inputManager.IsReleased && _isLaunchAllowed)
+            {
+                LaunchCurrentCharacter();
+            }
+        }
 
-                //CharacterToLaunch layer
-                int layerMask = 1 << 14;
+        private void TrySelectCharacter()
+        {
+            var ray = Camera.main.ScreenPointToRay(_inputManager.Position);
 
-                if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
+            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, _characterLaunchLayer))
+            {
+                var character = hit.collider.GetComponent<CControl>();
+
+                if (_charactersToLaunch.Contains(character))
                 {
-                    var characterCcontrol = hit.collider.gameObject.GetComponent<CControl>();
-
-                    if (_charactersToLaunchLeft.Contains(characterCcontrol))
+                    if (hit.collider == _currentCharacter.boxCollider)
                     {
-                        if (hit.collider == CharacterToLaunch.boxCollider)
-                        {
-                            // Center camera on character collider center
-                            GameLoader.Instance.cameraManager.CameraFollowForRigidBody(CharacterToLaunch.CharacterMovement.Rigidbody);
-                            //Launch
-                            _isLaunchAllowed = true;
-                        }
-                        else
-                        {
-                            //Swap
-                            SwapCharacters(_charactersToLaunchLeft.IndexOf(characterCcontrol), 0);
-                            UpdateCharacterPositions(_charactersToLaunchLeft);
-                            _isLaunchAllowed = false;
-                        }
+                        _cameraManager.CameraFollowForRigidBody(_currentCharacter.CharacterMovement.Rigidbody);
+                        _isLaunchAllowed = true;
                     }
                     else
                     {
-                        _isLaunchAllowed = false;
+                        SwapCharacters(character);
                     }
                 }
             }
-
-            //Держим
-            if (GameLoader.Instance.inputManager.IsHeld && _isLaunchAllowed)
-            {
-                _characterLauncher.AimingTheLaunch(CharacterToLaunch.gameObject);
-            }
-
-            //Отпустили
-            if (GameLoader.Instance.inputManager.IsReleased && _isLaunchAllowed)
-            {
-                Camera.main.orthographicSize /= 1.5f;
-                _canPressAtCharacters = false;
-
-                //ColorDebugLog.Log(CharacterToLaunch.name + this.name + " proceed ProcessLaunch", System.Drawing.KnownColor.ControlLightLight);
-                _characterLauncher.LaunchUnit(CharacterToLaunch.GetComponent<CControl>());
-                _isLaunchAllowed = false;
-
-                GameLoader.Instance.cameraManager.CameraFollowForRigidBody(CharacterToLaunch.GetComponent<Rigidbody>());
-                StartCoroutine(ControlUnitLaunch(CharacterToLaunch.GetComponent<CControl>()));
-            }
-
-            #endregion ButtonReaction (Except applyAttack)
-
-            //TODO: replace to proper class. gameover
-            if (_charactersToLaunchLeft.Count == 0 && _canPressAtCharacters)
-            {
-                GameLoader.Instance.gameLogic.ExecuteGameOver();
-            }
         }
 
-        private void SwapCharacters(int indexA, int indexB)
+        private void SwapCharacters(CControl newCharacter)
         {
-            var tmp = _charactersToLaunchLeft[indexA];
-            _charactersToLaunchLeft[indexA] = _charactersToLaunchLeft[indexB];
-            _charactersToLaunchLeft[indexB] = tmp;
+            int index = _charactersToLaunch.IndexOf(newCharacter);
+            (_charactersToLaunch[0], _charactersToLaunch[index]) = (_charactersToLaunch[index], _charactersToLaunch[0]);
+
+            PositionCharacters();
+            _isLaunchAllowed = false;
+            _currentCharacter = _charactersToLaunch[0];
         }
 
-        #region unitLaunchControl
-
-        private IEnumerator ControlUnitLaunch(CControl control)
+        private void LaunchCurrentCharacter()
         {
-            control.hasBeenLaunched = true;
+            _canPressCharacters = false;
+            _isLaunchAllowed = false;
 
-            //Changing layer from CharacterToLaunch to Character
-            int characterLayer = LayerMask.NameToLayer("Character");
-            control.transform.root.gameObject.layer = characterLayer;
+            _characterLauncher.LaunchUnit(_currentCharacter);
+            _cameraManager.CameraFollowForRigidBody(_currentCharacter.CharacterMovement.Rigidbody);
 
-            control.checkGlobalBehavior = true;
-            control.hasFinishedLaunchingTurn = false;
-            control.canUseAbility = true;
-
-            GameLoader.Instance.cameraManager.ZoomOutCameraAfterLaunch();
-
-            //Camera follow
-            //GameLoader.Instance.cameraManager.FollowCamera(control.gameObject);
-
-            while (!control.hasUsedAbility)
-            {
-                if (control.hasFinishedLaunchingTurn)
-                {
-                    break;
-                }
-
-                CheckForAbilityUse(control);
-                yield return null;
-            }
-
-            ////Camera follow
-            //GameLoader.Instance.cameraManager.FollowCamera(control.gameObject);
-
-            while (!control.hasFinishedLaunchingTurn)
-            {
-
-                yield return null;
-            }
-
-            GameLoader.Instance.launchManager.OnLaunchIsOver();
+            StartCoroutine(ProcessLaunch(_currentCharacter));
         }
 
-        private void CheckForAbilityUse(CControl control)
+        private IEnumerator ProcessLaunch(CControl character)
         {
-            if (control.hasUsedAbility)
-            {
-                return;
-            }
+            // Настройка персонажа после запуска
+            character.OnLaunchComplete += HandleLaunchComplete;
+            yield return character.ExecuteLaunchTurn();
 
-            if (Input.GetMouseButtonDown(0))
+            // Обновляем списки
+            _charactersToLaunch.Remove(character);
+            OnCharacterLaunched?.Invoke();
+        }
+
+        private void HandleLaunchComplete()
+        {
+            _cameraManager.ReturnCameraToStartPosition(1f);
+        }
+
+        private void PositionCharacters()
+        {
+            var positions = _characterLauncher.GetPositionTransforms();
+            for (int i = 0; i < _charactersToLaunch.Count; i++)
             {
-                //process ability
-                control.hasUsedAbility = true;
-                //ColorDebugLog.Log("Ability has been used", System.Drawing.KnownColor.Magenta);
+                _charactersToLaunch[i].CharacterMovement.Teleport(positions[i].position);
             }
         }
 
-        public void OnLaunchIsOver()
-        {
-            StartCoroutine(OnLaunchIsOver_Routine(GameLoader.Instance.cameraManager.SecondsCameraWaitsAfterAttack));
-        }
+        private void EnableControls() => _canPressCharacters = true;
+        private void DisableControls() => _canPressCharacters = false;
 
-        private IEnumerator OnLaunchIsOver_Routine(float secondsToWaitAfterAttack)
-        {
-            GameLoader.Instance.turnManager.AddCharacterToTurnList(CharacterToLaunch);
-
-            yield return new WaitForSeconds(CharacterToLaunch.GetComponent<CControl>().animator.GetCurrentAnimatorStateInfo(0).length);
-            UpdateCharactersLists(CharacterToLaunch);
-            yield return new WaitForSeconds(secondsToWaitAfterAttack);
-            UpdateCharacterPositions(_charactersToLaunchLeft);
-
-            if (GameLoader.Instance.turnManager.CurrentTurn < 1)
-            {
-                GameLoader.Instance.cameraManager.ReturnCameraToStartPosition(1f);
-                _canPressAtCharacters = true;
-                GameLoader.Instance.turnManager.IncrementCurentTurn();
-            }
-            else
-            {
-                GameLoader.Instance.turnManager.IsLaunchingPhaseOver = true;
-            }
-        }
-
-        private void UpdateCharactersLists(CControl launchedCharacter)
-        {
-            _charactersToLaunchLeft.Remove(launchedCharacter);
-            _launchedCharacters.Add(launchedCharacter);
-        }
-        #endregion UnitLaunchControl
-
-        public void Allow_CharacterPress()
-        {
-            _canPressAtCharacters = true;
-        }
+        public bool HasCharactersToLaunch() => _charactersToLaunch.Count > 0;
     }
 }
