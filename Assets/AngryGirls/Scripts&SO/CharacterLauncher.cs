@@ -14,9 +14,6 @@ namespace Angry_Girls
         //Traectory
         private GameObject[] _trajectoryDots;
 
-        //Positions
-        [SerializeField] private Transform[] _positionTransforms;
-
         [Header("Launching Setup")]
         [SerializeField] private GameObject _positionsContainer;
         [Space(10)]
@@ -36,24 +33,21 @@ namespace Angry_Girls
         [Header("Zoom")]
         [SerializeField] private float _minDistanceForZoom;
 
+        public Transform[] UnitsTransforms { get; private set; }
+
         public void InitLauncher()
         {
             //Init spawnPoints
             var transforms = new HashSet<Transform>(_positionsContainer.GetComponentsInChildren<Transform>());
             transforms.Remove(_positionsContainer.transform); //remove position of _positionsContainer itself
-            _positionTransforms = transforms.ToArray();
+            UnitsTransforms = transforms.ToArray();
 
             //Start position for launch
-            _offsetStartPoint = _positionTransforms[0].position;
+            _offsetStartPoint = UnitsTransforms[0].position;
 
             //Traectory
             _trajectoryDots = new GameObject[_dotsNumber];
-            SpawnProjectoryDots(_positionTransforms[0]);
-        }
-
-        public Transform[] GetPositionTransforms()
-        {
-            return _positionTransforms;
+            SpawnProjectoryDots(UnitsTransforms[0]);
         }
 
         public void LaunchUnit(CControl characterToLaunch)

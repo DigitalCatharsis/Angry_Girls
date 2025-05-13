@@ -7,16 +7,12 @@ namespace Angry_Girls
     //gameloader comp
     public class LevelSettings : MonoBehaviour
     {
-        [SerializeField] private LevelSettings_Data _data;
+        [SerializeField] private LevelSettings_Data _levelData;
+        public PlayerData playerData;
 
         private void Start()
         {
-            GameLoader.Instance.audioManager.PlayCustomSound(_data.audioSourceType, _data.audioClipEllementIndex);
-        }
-
-        private void SetInitialStage()
-        {
-            throw new NotImplementedException();
+            GameLoader.Instance.audioManager.PlayCustomSound(_levelData.audioSourceType, _levelData.audioClipEllementIndex);
         }
     }
 }

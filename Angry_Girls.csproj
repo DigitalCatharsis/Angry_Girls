@@ -79,6 +79,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\PoolManager\PoolManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\DebugInfo.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\comps\CharacterHealth.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\StageManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\CharacterSettings\CharacterSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\StateBehaviors\AlternateAttack_Behavior_Prep.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\Settings\FrameSettings.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\DynamicFactotyExtention\Editor\DynamicFactoryExtentionEditor.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\InsperctorHierarchyLabel\Editor\HierarchyLabel.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LayerAdder\Editor\LayerAdderEditor.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\BattleResultChecker.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\MyExtentions.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\AppController.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLogic.cs" />

@@ -10,18 +10,5 @@ namespace Angry_Girls
         [Header("BackgroundMusic")]
         public AudioSourceType audioSourceType = AudioSourceType.LevelMusic;
         public int audioClipEllementIndex;
-
-        [Header("Gamelogic")]
-        public StageData[] stages;
-    }
-
-    [Serializable]
-    public struct StageData
-    {
-        public int stageIndex;
-        public Transform chratacterLauncherTransform;
-        public Transform[] enemyToSpawnTransform;
-        public List<GameObject> charactersToSpawn;
-        public List<GameObject> enemyToSpawn;
     }
 }

@@ -5,29 +5,28 @@ namespace Angry_Girls
     public class GameLoader : MonoBehaviour
     {
         public static GameLoader Instance { get; private set; }
-        public MyExtentions myExtentions;
+
         public PoolManager poolManager;
         public PoolObjectLoader poolObjectLoader;
-
         public CharacterManager characterManager;
-        public HashManager hashManager; 
-        public StatesContainer statesContainer;
-        public VFXManager VFXManager;
-        public AudioManager audioManager;
-        public GameLogic_UIManager gameLogic_UIManager;
-        public AttackLogicContainer attackLogicContainer;
-
-        public CameraManager cameraManager;
         public LaunchHandler launchManager;
         public TurnManager turnManager;
         public GameLogic gameLogic;
-        public CameraSizer cameraSizer;
-        public GameLoader_Settings_Container gameLoaderSettingsContainer;
-        public PauseControl pauseControl;
-        public LevelSettings levelSettings;
-
+        public GameLogic_UIManager gameLogic_UIManager;
+        public CameraManager cameraManager;
         public InputManager inputManager;
         public InteractionManager interactionManager;
+        public AttackLogicContainer attackLogicContainer;
+        public StatesContainer statesContainer;
+        public LevelSettings levelSettings;
+        public HashManager hashManager;
+        public AudioManager audioManager;
+        public VFXManager VFXManager;
+        public StageManager stageManager;
+        public GameFlowController gameFlowController;
+        public GameLoader_Settings_Container gameLoaderSettingsContainer;
+        public PauseControl pauseControl;
+        public MyExtentions myExtentions;
 
         private void OnEnable()
         {
@@ -39,26 +38,43 @@ namespace Angry_Girls
 
             Instance = this;
 
-            characterManager = GetComponentInChildren<CharacterManager>();
-            myExtentions = GetComponentInChildren<MyExtentions>();
-            cameraManager = GetComponentInChildren<CameraManager>();
-            launchManager = GetComponentInChildren<LaunchHandler>();
-            hashManager = GetComponentInChildren<HashManager>();
-            turnManager = GetComponentInChildren<TurnManager>();
             poolManager = GetComponentInChildren<PoolManager>();
             poolObjectLoader = GetComponentInChildren<PoolObjectLoader>();
-            VFXManager = GetComponentInChildren<VFXManager>();
-            statesContainer = GetComponentInChildren<StatesContainer>();
-            gameLogic_UIManager = GetComponentInChildren<GameLogic_UIManager>();
-            attackLogicContainer = GetComponentInChildren<AttackLogicContainer>();
+            characterManager = GetComponentInChildren<CharacterManager>();
+            launchManager = GetComponentInChildren<LaunchHandler>();
+            turnManager = GetComponentInChildren<TurnManager>();
             gameLogic = GetComponentInChildren<GameLogic>();
-            cameraSizer = GetComponentInChildren<CameraSizer>();
+            gameLogic_UIManager = GetComponentInChildren<GameLogic_UIManager>();
+            cameraManager = GetComponentInChildren<CameraManager>();
             inputManager = GetComponentInChildren<InputManager>();
+            interactionManager = GetComponentInChildren<InteractionManager>();
+            attackLogicContainer = GetComponentInChildren<AttackLogicContainer>();
+            statesContainer = GetComponentInChildren<StatesContainer>();
+            levelSettings = GetComponentInChildren<LevelSettings>();
+            hashManager = GetComponentInChildren<HashManager>();
+            audioManager = GetComponentInChildren<AudioManager>();
+            VFXManager = GetComponentInChildren<VFXManager>();
+            stageManager = GetComponentInChildren<StageManager>();
+            gameFlowController = GetComponentInChildren<GameFlowController>();
             gameLoaderSettingsContainer = GetComponentInChildren<GameLoader_Settings_Container>();
             pauseControl = GetComponentInChildren<PauseControl>();
-            levelSettings = GetComponentInChildren<LevelSettings>();
-            audioManager = GetComponentInChildren<AudioManager>();
-            interactionManager = GetComponentInChildren<InteractionManager>();
+            myExtentions = GetComponentInChildren<MyExtentions>();
+        }
+    }
+
+    public static class LaunchHandlerExtensions
+    {
+        public static void BeginLaunchPhase(this LaunchHandler handler, System.Action onComplete)
+        {
+            handler.StartCoroutine(handler.BeginLaunchPhaseRoutine(onComplete));
+        }
+    }
+
+    public static class TurnManagerExtensions
+    {
+        public static void ExecuteAlternatePhase(this TurnManager manager, System.Action onComplete)
+        {
+            manager.StartCoroutine(manager.AlternatePhaseRoutine(onComplete));
         }
     }
 }

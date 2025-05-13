@@ -9,7 +9,7 @@ namespace Angry_Girls
         public override void OnEnter()
         {
             // attack init
-            _attackAbility = GameLoader.Instance.turnManager.CurrentPhase == CurrentPhase.LaunchingPhase
+            _attackAbility = GameLoader.Instance.gameFlowController.CurrentState == GameState.LaunchPhase
                 ? _control.characterSettings.AttackAbility_Launch
                 : _control.characterSettings.AttackAbility_Alternate;
 

@@ -344,7 +344,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0cb6600333c00a449a85cc732ffe5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _data: {fileID: 11400000, guid: 34b05af77d2318a45bea45b740d9e9a4, type: 2}
+  _levelData: {fileID: 11400000, guid: 34b05af77d2318a45bea45b740d9e9a4, type: 2}
+  playerData: {fileID: 11400000, guid: d186721f519e1c44b85b1601ef8bd298, type: 2}
 --- !u!1 &3585542458758690770
 GameObject:
   m_ObjectHideFlags: 0
@@ -389,10 +390,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c65eeb9f627e3384eb33ca8139a7feaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentTurn: 0
-  _currentPhase: 1
-  _isLaunchingPhaseOver: 0
-  _isAlternatePhaseOver: 1
+  _timeToWentAfterUnitFinishedAttack: 2
   _charactersTurn_List: []
 --- !u!1 &4898376234727210327
 GameObject:
@@ -910,9 +908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b05c57ce36a931547810f7e011acb01f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterSelectSO: {fileID: 11400000, guid: d186721f519e1c44b85b1601ef8bd298, type: 2}
   _characterLauncher: {fileID: 0}
-  _isLaunchAllowed: 0
   _canPressAtCharacters: 0
   _charactersToLaunchLeft: []
   _launchedCharacters: []
@@ -1025,6 +1021,8 @@ Transform:
   - {fileID: 1184690214050550015}
   - {fileID: 2414927106752071533}
   - {fileID: 4225443847803770816}
+  - {fileID: 8266439253741962376}
+  - {fileID: 5438656162325748540}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8142097811665119726
@@ -1039,26 +1037,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef65ce95e67edcd49a327ce5a8c8950b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myExtentions: {fileID: 0}
   poolManager: {fileID: 0}
   poolObjectLoader: {fileID: 0}
   characterManager: {fileID: 0}
-  hashManager: {fileID: 0}
-  statesContainer: {fileID: 0}
-  VFXManager: {fileID: 0}
-  audioManager: {fileID: 0}
-  gameLogic_UIManager: {fileID: 0}
-  attackLogicContainer: {fileID: 0}
-  cameraManager: {fileID: 0}
   launchManager: {fileID: 0}
   turnManager: {fileID: 0}
   gameLogic: {fileID: 0}
-  cameraSizer: {fileID: 0}
-  gameLoaderSettingsContainer: {fileID: 0}
-  pauseControl: {fileID: 0}
-  levelSettings: {fileID: 0}
+  gameLogic_UIManager: {fileID: 0}
+  cameraManager: {fileID: 0}
   inputManager: {fileID: 0}
   interactionManager: {fileID: 0}
+  attackLogicContainer: {fileID: 0}
+  statesContainer: {fileID: 0}
+  levelSettings: {fileID: 0}
+  hashManager: {fileID: 0}
+  audioManager: {fileID: 0}
+  VFXManager: {fileID: 0}
+  stageManager: {fileID: 0}
+  gameFlowController: {fileID: 0}
+  gameLoaderSettingsContainer: {fileID: 0}
+  pauseControl: {fileID: 0}
+  myExtentions: {fileID: 0}
 --- !u!1 &6897169416862076484
 GameObject:
   m_ObjectHideFlags: 0
@@ -1240,6 +1239,65 @@ MonoBehaviour:
   _characterToFollow: {fileID: 0}
   _allowCameraFollow: 0
   _mainCamera: {fileID: 0}
+--- !u!1 &6990169108796690344
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5438656162325748540}
+  - component: {fileID: 1411872522444289601}
+  m_Layer: 0
+  m_Name: StageManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5438656162325748540
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6990169108796690344}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2958300703721250050}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1411872522444289601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6990169108796690344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 788a2850e289bd4459fb34660a3f0959, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stages:
+  - enemies:
+    - CharacterSettings: {fileID: 11400000, guid: 02680e40217c43e44a594ac4cad06f99,
+        type: 2}
+      spawnTransform: {fileID: 0}
+    - CharacterSettings: {fileID: 11400000, guid: 10acb0b79af7bc9439b19db60caa0049,
+        type: 2}
+      spawnTransform: {fileID: 0}
+    - CharacterSettings: {fileID: 11400000, guid: 39a72c91194052d46a1d91ce975fbad1,
+        type: 2}
+      spawnTransform: {fileID: 0}
+    characterLauncherData:
+      characterLauncher: {fileID: 3351779788069274298, guid: 5be7e6c12fc686a49825819f66576c31,
+        type: 3}
+      spawnTransform: {fileID: 0}
 --- !u!1 &7104865820978003445
 GameObject:
   m_ObjectHideFlags: 0
@@ -1420,6 +1478,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playableCharacters: []
   enemyCharacters: []
+--- !u!1 &7644098445054315297
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8266439253741962376}
+  - component: {fileID: 7831705973937867937}
+  m_Layer: 0
+  m_Name: GameFlowControoler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8266439253741962376
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7644098445054315297}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2958300703721250050}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7831705973937867937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7644098445054315297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c9d80a7d8c15c246b5bbdaf8ac7dd9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7974777364615194039
 GameObject:
   m_ObjectHideFlags: 0

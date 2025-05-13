@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class LaunchHandler : MonoBehaviour
 {
-    [SerializeField] private PlayerData characterSelectSO;
     [SerializeField] private CharacterLauncher _characterLauncher;
     [SerializeField] private bool _canPressAtCharacters = false;
 
@@ -16,13 +15,12 @@ public class LaunchHandler : MonoBehaviour
 
     private void Start()
     {
-        _characterLauncher.InitLauncher();
+        //_characterLauncher.InitLauncher();
         GameLoader.Instance.cameraManager.ReturnCameraToStartPosition(1f);
     }
 
     public IEnumerator BeginLaunchPhaseRoutine(System.Action onLaunchComplete)
     {
-        _charactersToLaunchLeft = SpawnAndGetCharacters(characterSelectSO.selectedCharacters);
         UpdateCharacterPositions(_charactersToLaunchLeft);
         SetLaunchableCharactersBehavior(_charactersToLaunchLeft);
         _canPressAtCharacters = true;
@@ -35,25 +33,9 @@ public class LaunchHandler : MonoBehaviour
         onLaunchComplete?.Invoke();
     }
 
-    private List<CControl> SpawnAndGetCharacters(CharacterSettings[] selectedCharactersList)
-    {
-        var charList = new List<CControl>();
-
-        foreach (var character in selectedCharactersList)
-        {
-            if (character == null) continue;
-            charList.Add(GameLoader.Instance.poolManager
-                .GetObject<CharacterType>(character.characterType,
-                                          GameLoader.Instance.poolManager.characterPoolDictionary,
-                                          Vector3.zero, Quaternion.identity).GetComponent<CControl>());
-        }
-
-        return charList;
-    }
-
     private void UpdateCharacterPositions(List<CControl> charactersToLaunch)
     {
-        var transforms = _characterLauncher.GetPositionTransforms();
+        var transforms = _characterLauncher.UnitsTransforms;
 
         for (int i = 0; i < charactersToLaunch.Count; i++)
         {
@@ -155,5 +137,4 @@ public class LaunchHandler : MonoBehaviour
             _canPressAtCharacters = true;
         }
     }
-}
 }

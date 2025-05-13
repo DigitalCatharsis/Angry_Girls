@@ -13,15 +13,16 @@ namespace Angry_Girls
         [SerializeField] private GameObject avaibleCharactersGridTabPanel;
         [SerializeField] private Button readyButton;
         [Space(10)]
-        [SerializeField] private PlayerData _playerData;
         [Space(10)]
         [SerializeField] private UICharModel[] _selectedCharactersHandlers;
 
         [Header("Debug")]
         [SerializeField] private List<UICharModel> _avaiblecharacterPoolHandlers;
+        private PlayerData _playerData;
 
         private void Start()
         {
+            _playerData = GameLoader.Instance.levelSettings.playerData;
             InitSelectedAndAvaible();
         }
 

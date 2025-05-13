@@ -84,6 +84,10 @@ namespace Angry_Girls
                     );
             }
         }
+        public void ShowVictoryUI()
+        {
+
+        }
 
         public void ShowGameoverUI()
         {

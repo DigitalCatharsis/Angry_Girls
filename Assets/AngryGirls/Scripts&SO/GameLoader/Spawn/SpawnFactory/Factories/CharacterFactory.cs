@@ -12,6 +12,10 @@ namespace Angry_Girls
         YBot_Green,
         YBot_Yellow,
         YBot_Blue,
+        Enemy_Air_Green_Variant,
+        Enemy_AirToGround_Red_Variant,
+        Enemy_Ground_Blue_Variant,
+        Enemyt_AirToGround_Yellow_Variant
     }
 
     public class CharacterFactory : BaseFactory<CharacterType>
@@ -23,6 +27,10 @@ namespace Angry_Girls
             { CharacterType.YBot_Green, () => Resources.Load(CharacterType.YBot_Green.ToString()) as GameObject },
             { CharacterType.YBot_Red, () => Resources.Load(CharacterType.YBot_Red.ToString()) as GameObject },
             { CharacterType.YBot_Blue, () => Resources.Load(CharacterType.YBot_Blue.ToString()) as GameObject },
+            { CharacterType.Enemy_Air_Green_Variant, () => Resources.Load(CharacterType.Enemy_Air_Green_Variant.ToString()) as GameObject },
+            { CharacterType.Enemy_AirToGround_Red_Variant, () => Resources.Load(CharacterType.Enemy_AirToGround_Red_Variant.ToString()) as GameObject },
+            { CharacterType.Enemy_Ground_Blue_Variant, () => Resources.Load(CharacterType.Enemy_Ground_Blue_Variant.ToString()) as GameObject },
+            { CharacterType.Enemyt_AirToGround_Yellow_Variant, () => Resources.Load(CharacterType.Enemyt_AirToGround_Yellow_Variant.ToString()) as GameObject },
         };
     }
 }

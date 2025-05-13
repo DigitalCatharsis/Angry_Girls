@@ -44,11 +44,7 @@ namespace Angry_Girls
 
         public GameObject SpawnVFX(VFXConfig config)
         {
-            var vfxObject = _poolManager.GetObject(
-                config.Vfxtype,
-                _poolManager.vfxPoolDictionary,
-                config.spawnPosition,
-                Quaternion.identity);
+            var vfxObject = _poolManager.GetObject(config.Vfxtype,config.spawnPosition,Quaternion.identity);
 
             var vfx = vfxObject.GetComponent<VFX>();
             vfx.InitVfx(config);
@@ -152,7 +148,7 @@ namespace Angry_Girls
 
         private AttackAbilityData GetCurrentAbility(CControl control)
         {
-            return _turnManager.CurrentPhase == CurrentPhase.AlternatePhase
+            return GameLoader.Instance.gameFlowController.CurrentState == GameState.AlternatePhase
                 ? control.characterSettings.AttackAbility_Alternate
                 : control.characterSettings.AttackAbility_Launch;
         }

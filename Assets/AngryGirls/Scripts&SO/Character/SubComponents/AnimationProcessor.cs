@@ -74,13 +74,13 @@ namespace Angry_Girls
 
         private void ProcessPhaseBehavior()
         {
-            var currentPhase = GameLoader.Instance.turnManager.CurrentPhase;
+            var currentPhase = GameLoader.Instance.gameFlowController.CurrentState;
 
-            if (currentPhase == CurrentPhase.LaunchingPhase && control.hasBeenLaunched && !control.hasFinishedLaunchingTurn)
+            if (currentPhase == GameState.LaunchPhase && control.hasBeenLaunched && !control.hasFinishedLaunchingTurn)
             {
                 ProcessLaunchingPhase();
             }
-            else if (currentPhase == CurrentPhase.AlternatePhase && !control.hasFinishedAlternateAttackTurn && control.isAttacking)
+            else if (currentPhase == GameState.AlternatePhase && !control.hasFinishedAlternateAttackTurn && control.isAttacking)
             {
                 ProcessAlternatePhase();
             }
@@ -179,7 +179,7 @@ namespace Angry_Girls
             // AIR
             if (control.characterSettings.unitType == UnitType.Air)
             {
-                if (GameLoader.Instance.turnManager.CurrentPhase != CurrentPhase.LaunchingPhase) { return false; }
+                if (GameLoader.Instance.gameFlowController.CurrentState != GameState.LaunchPhase) { return false; }
 
                 if (control.playerOrAi != PlayerOrAi.Character) { return false; }
 

@@ -1,4 +1,5 @@
 using AYellowpaper.SerializedCollections;
+using Codice.CM.Common;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace Angry_Girls
         private Dictionary<Enum, int> _instanceCounters = new Dictionary<Enum, int>();
 
         #region SetupDictionary
-        private void SetUpDictionary<T>(Dictionary<T, List<PoolObject>> poolDictionary) where T: Enum
+        private void SetUpDictionary<T>(Dictionary<T, List<PoolObject>> poolDictionary) where T : Enum
         {
             T[] arr = Enum.GetValues(typeof(T)) as T[];
 
@@ -38,9 +39,24 @@ namespace Angry_Girls
         #endregion
 
         #region GetObjectFromPool
-        public PoolObject GetObject<T>(T objType, Dictionary<T, List<PoolObject>> poolDictionary, Vector3 position, Quaternion rotation) where T : Enum
+        public PoolObject GetObject<T>(T objType, Vector3 position, Quaternion rotation) where T : Enum
         {
+            var poolDictionary = GetDictionaryByType<T>();
             return ObjectGetter(poolDictionary, objType, position, rotation);
+        }
+
+        public SerializedDictionary<T, List<PoolObject>> GetDictionaryByType<T>() where T : Enum
+        {
+            if (typeof(T) == typeof(CharacterType))
+            {
+                return characterPoolDictionary as SerializedDictionary<T, List<PoolObject>>;
+            }
+            else if (typeof(T) == typeof(VFX_Type))
+            {
+                return vfxPoolDictionary as SerializedDictionary<T, List<PoolObject>>;
+            }
+
+            throw new ArgumentException($"Unsupported enum type: {typeof(T)}");
         }
 
         private PoolObject ObjectGetter<T>(Dictionary<T, List<PoolObject>> poolDictionary, T objType, Vector3 position, Quaternion rotation) where T : Enum
