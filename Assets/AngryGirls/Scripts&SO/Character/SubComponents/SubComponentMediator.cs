@@ -1,4 +1,3 @@
-using UnityEditorInternal;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -30,6 +29,11 @@ namespace Angry_Girls
             GameLoader.Instance.VFXManager.ShowDamageNumbers(interactionData.targetCollider, projectileConfig.VFXConfig.originator, projectileConfig.damage);
             GameLoader.Instance.audioManager.PlayRandomSound(AudioSourceType.CharacterHit);
 
+            CheckDeathByProjectile(projectileConfig, interactionData);
+        }
+
+        private void CheckDeathByProjectile(ProjectileConfig projectileConfig, InteractionData interactionData)
+        {
             if (_control.Health.CurrentHealth <= 0)
             {
                 GameLoader.Instance.gameLogic_UIManager.DisableHealthBar(_control);
@@ -57,6 +61,31 @@ namespace Angry_Girls
                 }
             }
         }
+
+        private void CheckDeath()
+        {
+            if (_control.Health.CurrentHealth <= 0)
+            {
+                GameLoader.Instance.gameLogic_UIManager.DisableHealthBar(_control);
+                _control.SetDeathParams();
+
+                if (_control.characterSettings.deathByAnimation)
+                {
+                    _animationProcessor.PlayDeathStateForNonRagdoll();
+                }
+                else
+                {
+                    _control.Ragdoll.ProcessRagdoll(
+                        rigidbody: _control.CharacterMovement.Rigidbody,
+                        forceValue: Vector3.one * 10,
+                        forceApplyPosition: _control.transform.forward,
+                        forceMode: ForceMode.VelocityChange);
+                }
+
+                GameLoader.Instance.cameraManager.StopCameraFollowForRigidBody();
+            }
+        }
+
         private Vector3 GetProjectileForceDirection(InteractionData interactionData)
         {
             // 1. ѕробуем получить направление скорости из Rigidbody
@@ -104,6 +133,8 @@ namespace Angry_Girls
         public void NotifyDeathZoneContact()
         {
             _control.Health.ApplyDamage(_control.Health.CurrentHealth);
+            CheckDeath();
+            GameLoader.Instance.cameraManager.StopCameraFollowForRigidBody();
         }
     }
 }

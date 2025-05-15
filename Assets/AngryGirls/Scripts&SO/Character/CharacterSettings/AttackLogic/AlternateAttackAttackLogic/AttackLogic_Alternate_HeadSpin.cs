@@ -32,7 +32,7 @@ namespace Angry_Girls
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            control.CheckAttackFinishCondition();
+            //control.CheckAttackFinishCondition();
 
             if (control.CharacterMovement.Rigidbody.velocity.y <= - 0.2f && !_haveShootedFirstTime)            
             {

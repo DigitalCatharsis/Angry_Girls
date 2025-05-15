@@ -9,7 +9,7 @@ namespace Angry_Girls
         public PoolManager poolManager;
         public PoolObjectLoader poolObjectLoader;
         public CharacterManager characterManager;
-        public LaunchHandler launchManager;
+        public LaunchManager launchManager;
         public TurnManager turnManager;
         public GameLogic gameLogic;
         public GameLogic_UIManager gameLogic_UIManager;
@@ -41,7 +41,7 @@ namespace Angry_Girls
             poolManager = GetComponentInChildren<PoolManager>();
             poolObjectLoader = GetComponentInChildren<PoolObjectLoader>();
             characterManager = GetComponentInChildren<CharacterManager>();
-            launchManager = GetComponentInChildren<LaunchHandler>();
+            launchManager = GetComponentInChildren<LaunchManager>();
             turnManager = GetComponentInChildren<TurnManager>();
             gameLogic = GetComponentInChildren<GameLogic>();
             gameLogic_UIManager = GetComponentInChildren<GameLogic_UIManager>();
@@ -64,7 +64,7 @@ namespace Angry_Girls
 
     public static class LaunchHandlerExtensions
     {
-        public static void BeginLaunchPhase(this LaunchHandler handler, System.Action onComplete)
+        public static void BeginLaunchPhase(this LaunchManager handler, System.Action onComplete)
         {
             handler.StartCoroutine(handler.BeginLaunchPhaseRoutine(onComplete));
         }

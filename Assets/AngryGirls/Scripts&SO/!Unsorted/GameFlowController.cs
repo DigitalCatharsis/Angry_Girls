@@ -83,14 +83,54 @@ namespace Angry_Girls
     public class LaunchPhase : PhaseBase
     {
         public LaunchPhase(GameFlowController controller) : base(controller) { }
+
         public override void StartPhase()
         {
+            // Проверка победы ДО запуска
+            var checker = new BattleResultChecker();
+
+            if (checker.AllEnemiesDefeated())
+            {
+                _gameFlow.SwitchState(GameState.StageComplete);
+                return;
+            }
+
+            // Проверка проигрыша ДО запуска
+            if (!checker.AnyPlayersAlive())
+            {
+                _gameFlow.SwitchState(GameState.Defeat);
+                return;
+            }
+
+            // Проверка на одного персонажа
+            var alivePlayers = GameLoader.Instance.characterManager.playableCharacters
+                .FindAll(c => !c.isDead);
+
+            int aliveCount = alivePlayers.Count;
+
+            // Передаём в LaunchManager
             GameLoader.Instance.launchManager.BeginLaunchPhase(() =>
             {
-                _gameFlow.SwitchState(GameState.AlternatePhase);
+                // После запуска проверяем победу
+                if (checker.AllEnemiesDefeated())
+                {
+                    _gameFlow.SwitchState(GameState.StageComplete);
+                    return;
+                }
+
+                // Если только один юнит — сразу в Alternate
+                if (aliveCount <= 1 || !GameLoader.Instance.launchManager.CharacterToLaunch != null)
+                {
+                    _gameFlow.SwitchState(GameState.AlternatePhase);
+                    return;
+                }
+
+                // Иначе — повторный запуск (в случае двойного запуска)
+                _gameFlow.SwitchState(GameState.LaunchPhase);
             });
         }
     }
+
 
     public class AlternatePhase : PhaseBase
     {
@@ -160,7 +200,7 @@ namespace Angry_Girls
 
         public bool AnyPlayersAlive()
         {
-            return GameLoader.Instance.characterManager.playableCharacters.Exists(c => !c.isDead);
+            return GameLoader.Instance.characterManager.playableCharacters.Exists(c => !c.isDead && !c.hasBeenLaunched);
         }
     }
 }

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -72,11 +71,6 @@ namespace Angry_Girls
 
         private void OnEnable()
         {
-            if (playerOrAi == PlayerOrAi.Character)
-                GameLoader.Instance.characterManager.playableCharacters.Add(this);
-            else
-                GameLoader.Instance.characterManager.enemyCharacters.Add(this);
-
             subComponentsController.OnComponentEnable();
             GameLoader.Instance.attackLogicContainer.SetCharacterAttackLogic(this);
             GameLoader.Instance.gameLogic_UIManager.CreateHealthBar(this);
@@ -107,7 +101,7 @@ namespace Angry_Girls
         public void SetDeathParams()
         {
             isDead = true;
-            FinishTurn(0);
+            FinishTurn();
 
             CharacterMovement.Rigidbody.constraints = RigidbodyConstraints.None;
             CharacterMovement.Rigidbody.useGravity = true;
@@ -122,15 +116,14 @@ namespace Angry_Girls
             gameObject.layer = LayerMask.NameToLayer("DeadBody");
         }
 
-        public void FinishTurn(float delay = 3f)
+        public void FinishTurn()
         {
             canUseAbility = false;
             isAttacking = false;
-            StopCoroutine("ExecuteFinishTurnTimer");
-            StartCoroutine(ExecuteFinishTurnTimer(delay));
+            StartCoroutine(ExecuteFinishTurnTimer());
         }
 
-        private IEnumerator ExecuteFinishTurnTimer(float timeToCheck)
+        private IEnumerator ExecuteFinishTurnTimer(float timeToCheck = 0)
         {
             float timer = 0;
             while (timer < timeToCheck)
@@ -145,17 +138,9 @@ namespace Angry_Girls
         public bool CheckAttackFinishCondition()
         {
             if (isDead) return false;
-            if (unitGotHit) return true;
-            if (characterSettings.unitType == UnitType.Air && hasUsedAbility) return true;
-            if (GameLoader.Instance.turnManager == null) return false;
 
-            if (GameLoader.Instance.gameFlowController.CurrentState == GameState.LaunchPhase)
-            {
-                if (hasFinishedAlternateAttackTurn) return false;
-                if (canUseAbility) return false;
-            }
+            if (CharacterMovement.IsGrounded && GameLoader.Instance.turnManager.currentAttackingUnit == this) return true;
 
-            if (CharacterMovement.IsGrounded) return true;
             return false;
         }
 

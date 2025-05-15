@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
-using static Codice.Client.BaseCommands.Import.Commit;
 
 namespace Angry_Girls
 {
@@ -12,8 +9,9 @@ namespace Angry_Girls
         [SerializeField] private List<StageData> _stages;
         private int _currentStageIndex = 0;
         private CharacterLauncher _currentCharacterLauncher;
+        public int CurrentStageIndex => _currentStageIndex;
 
-        private List<CControl> _survivingCharacters = new();
+        public CharacterLauncher CurrentCharacterLauncher => _currentCharacterLauncher;
 
         public void SetupCurrentStage()
         {
@@ -30,12 +28,6 @@ namespace Angry_Girls
             {
                 SpawnInitialCharacters();
             }
-            else
-            {
-                RespawnSurvivingCharacters();
-            }
-
-            GameLoader.Instance.cameraManager.ReturnCameraToStartPosition(1f);
         }
 
         public GameObject SpawnCharacterLauncher(StageData stage)
@@ -45,12 +37,29 @@ namespace Angry_Girls
 
         public void ProceedToNextStage()
         {
-            _survivingCharacters = GameLoader.Instance.characterManager.playableCharacters
-                .FindAll(c => !c.isDead);
+            var survived = GameLoader.Instance.characterManager.playableCharacters.FindAll(c => !c.isDead);
 
+            ReinitSurvivingCharacters(survived);
             _currentStageIndex++;
         }
 
+        private void ReinitSurvivingCharacters(List<CControl> characters)
+        {
+            var index = 0;
+            foreach (var character in characters)
+            {
+                if (character.characterSettings.unitType == UnitType.Air) { character.CharacterMovement.Rigidbody.isKinematic = false; }
+                character.CharacterMovement.Rigidbody.rotation = Quaternion.identity;
+                character.gameObject.layer = LayerMask.NameToLayer("CharacterToLaunch");
+                character.unitBehaviorIsAlternate = false;
+                character.hasBeenLaunched = false;
+                character.hasUsedAbility = false;
+                character.hasFinishedLaunchingTurn = false;
+                character.hasFinishedAlternateAttackTurn = true;
+                character.checkGlobalBehavior = false;
+                index++;
+            }
+        }
         public bool HasNextStage()
         {
             return _currentStageIndex + 1 < _stages.Count;
@@ -79,16 +88,6 @@ namespace Angry_Girls
         {
                 return GameLoader.Instance.poolManager.GetObject(characterSettings.characterType, spawnPosition, rotation);
         }
-
-        private void RespawnSurvivingCharacters()
-        {
-            GameLoader.Instance.characterManager.playableCharacters.Clear();
-            foreach (var c in _survivingCharacters)
-            {
-                GameLoader.Instance.characterManager.playableCharacters.Add(c);
-            }
-        }
-
         private void SpawnEnemies(StageData stage)
         {
             var characterSettings = new List<CharacterSettings>();
@@ -97,13 +96,15 @@ namespace Angry_Girls
             {
                 var unit = SpawnUnit(stage.enemies[i].CharacterSettings, stage.enemies[i].spawnTransform.position, Quaternion.identity);
                 GameLoader.Instance.characterManager.enemyCharacters.Add(unit.GetComponent<CControl>());
+                GameLoader.Instance.turnManager.AddCharacterToTurnList(unit.GetComponent<CControl>());
             }
         }
 
         private void ClearCurrentScene()
         {
             GameLoader.Instance.characterManager.enemyCharacters.Clear();
-            GameLoader.Instance.characterManager.playableCharacters.RemoveAll(c => c.isDead);
+            GameLoader.Instance.turnManager.ClearTurnList();
+            CurrentCharacterLauncher?.gameObject.SetActive(false);
         }
     }
 

@@ -1,8 +1,6 @@
 // Convert the 2D position of the mouse into a
 // 3D position.  Display these on the game window.
 
-using UnityEngine;
-
 namespace Angry_Girls
 {
     //public class DebugInfo : MonoBehaviour

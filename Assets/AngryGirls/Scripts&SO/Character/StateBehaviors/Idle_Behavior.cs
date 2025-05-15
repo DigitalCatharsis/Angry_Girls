@@ -27,16 +27,17 @@ namespace Angry_Girls
                 {
                     return;
                 }
+
                 //already launched unit does not attack in launch phase
-                if (_control.playerOrAi == PlayerOrAi.Character && _control.hasFinishedLaunchingTurn)
+                if (_control.playerOrAi == PlayerOrAi.Character && !_control.hasBeenLaunched)
                 {
                     return;
                 }
             }
-                        
+
             if (_control.CheckAttackFinishCondition())
             {
-                _control.FinishTurn(2);
+                _control.FinishTurn();
             }
         }
 

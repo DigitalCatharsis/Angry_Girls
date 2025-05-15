@@ -9,6 +9,7 @@ namespace Angry_Girls
     {
         [Header("Setup)")]
         [SerializeField] private GameObject gameOverUi;
+        [SerializeField] private GameObject victoryUi;
         [SerializeField] private GameObject scoreUi;
 
         [Header("Deubg")]
@@ -86,7 +87,7 @@ namespace Angry_Girls
         }
         public void ShowVictoryUI()
         {
-
+            victoryUi.SetActive(true);
         }
 
         public void ShowGameoverUI()

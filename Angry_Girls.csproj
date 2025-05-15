@@ -104,6 +104,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\SpawnFactory\Factories\VFXFactory.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\HelperComponent\RigidbodyInfo.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\DynamicFactotyExtention\Editor\DynamicFactoryExtentionEditor.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\BattleHUDUI.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\InsperctorHierarchyLabel\Editor\HierarchyLabel.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LayerAdder\Editor\LayerAdderEditor.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\BattleResultChecker.cs" />

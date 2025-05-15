@@ -528,7 +528,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 31.05
+  m_fontSize: 35.9
   m_fontSizeBase: 123.7
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2400,7 +2400,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -37.66992}
+  m_AnchoredPosition: {x: 0, y: -37.669914}
   m_SizeDelta: {x: 0, y: -75.34}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &975924530
@@ -4617,16 +4617,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1693822159062773717, guid: b5fa01b99468f1448a898c17a73d8ff6,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2435437739859565809, guid: b5fa01b99468f1448a898c17a73d8ff6,
-        type: 3}
-      propertyPath: _soundDataDict._serializedList.Array.data[0].Key
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 3038353574094987602, guid: b5fa01b99468f1448a898c17a73d8ff6,
         type: 3}
       propertyPath: m_Name
@@ -4915,7 +4905,6 @@ MonoBehaviour:
   selectedCharactersGridTabPanel: {fileID: 207209294}
   avaibleCharactersGridTabPanel: {fileID: 7329620755091028377}
   readyButton: {fileID: 1798051680}
-  _playerData: {fileID: 11400000, guid: d186721f519e1c44b85b1601ef8bd298, type: 2}
   _selectedCharactersHandlers:
   - {fileID: 8775128305485643615}
   - {fileID: 401043879}

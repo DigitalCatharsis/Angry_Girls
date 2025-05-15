@@ -254,6 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _positionsContainer: {fileID: 4823108703855323970}
+  _maxZoomFactorValue: 12
   _zoomRange: {x: 1.65, y: 13}
   _forceFactorUp: 2
   _forceFactorForward: 1

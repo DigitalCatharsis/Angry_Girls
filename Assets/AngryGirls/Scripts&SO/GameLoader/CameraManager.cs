@@ -142,11 +142,6 @@ namespace Angry_Girls
             }
         }
 
-        public void ReturnCameraToStartPosition(float speed)
-        {
-            MoveCameraTo(_cameraStartPosition, speed, true);
-        }
-
         public Vector3 GetPointerWorldPosition()
         {
             Vector3 screenPosition = GameLoader.Instance.inputManager.Position;

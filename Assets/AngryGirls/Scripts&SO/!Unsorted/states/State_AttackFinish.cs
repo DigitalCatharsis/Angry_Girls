@@ -27,7 +27,7 @@ namespace Angry_Girls
 
         public override void OnExit()
         {
-            _control.FinishTurn(2);
+            //_control.FinishTurn();
         }
 
         public override bool CanTransitionTo(IAnimationState nextState)

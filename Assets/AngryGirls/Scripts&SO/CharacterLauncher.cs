@@ -19,7 +19,7 @@ namespace Angry_Girls
         [Space(10)]
         private const float _minZoom = 5.0f;
         private const float _maxZoom = 10.0f;
-        private const float _maxZoomFactorValue = 6.1f;
+        [SerializeField] private float _maxZoomFactorValue = 6.1f;
         [SerializeField] private Vector2 _zoomRange = new Vector2(_minZoom, _maxZoom); // Диапазон зума
         [Space(10)]
         [SerializeField] private float _forceFactorUp;

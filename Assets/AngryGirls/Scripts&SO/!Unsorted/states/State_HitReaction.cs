@@ -8,6 +8,11 @@ namespace Angry_Girls
         public override void OnEnter()
         {
             _control.unitGotHit = true;
+            _control.isAttacking = false;
+            _control.isLanding = false;
+            _control.unitGotHit = false;
+
+
             var randomHitAnimation = _settings.GetRandomState(_settings.hitReaction_States).animation;
             _animationController.ChangeAnimationState(
                 GameLoader.Instance.statesContainer.hitReaction_Dictionary[randomHitAnimation],

@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameOverUi: {fileID: 0}
+  victoryUi: {fileID: 0}
   scoreUi: {fileID: 0}
   _healtBar_Dict:
     _serializedList: []
@@ -392,6 +393,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _timeToWentAfterUnitFinishedAttack: 2
   _charactersTurn_List: []
+  currentAttackingUnit: {fileID: 0}
 --- !u!1 &4898376234727210327
 GameObject:
   m_ObjectHideFlags: 0
@@ -908,10 +910,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b05c57ce36a931547810f7e011acb01f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterLauncher: {fileID: 0}
-  _canPressAtCharacters: 0
-  _charactersToLaunchLeft: []
-  _launchedCharacters: []
 --- !u!1 &6336137737890181484
 GameObject:
   m_ObjectHideFlags: 0
@@ -1286,12 +1284,6 @@ MonoBehaviour:
   _stages:
   - enemies:
     - CharacterSettings: {fileID: 11400000, guid: 02680e40217c43e44a594ac4cad06f99,
-        type: 2}
-      spawnTransform: {fileID: 0}
-    - CharacterSettings: {fileID: 11400000, guid: 10acb0b79af7bc9439b19db60caa0049,
-        type: 2}
-      spawnTransform: {fileID: 0}
-    - CharacterSettings: {fileID: 11400000, guid: 39a72c91194052d46a1d91ce975fbad1,
         type: 2}
       spawnTransform: {fileID: 0}
     characterLauncherData:
