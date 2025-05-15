@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 661f9e28eef89584a97bd90f752ee242, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  volumeMusic: 0.492
+  volumeMusic: 0.069
   volumeSounds: 0.22685604

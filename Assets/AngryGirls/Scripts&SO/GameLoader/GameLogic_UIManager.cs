@@ -2,6 +2,9 @@ using AYellowpaper.SerializedCollections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Linq;
+using System;
 
 namespace Angry_Girls
 {
@@ -38,7 +41,7 @@ namespace Angry_Girls
         public void RemoveHealthBar(CControl control)
         {
             _healtBar_Dict.Remove(control);
-        }       
+        }
 
         public void DisableHealthBar(CControl control)
         {
@@ -93,6 +96,21 @@ namespace Angry_Girls
         public void ShowGameoverUI()
         {
             gameOverUi.SetActive(true);
+        }
+
+
+        public void ActivateTraectoryCheat()
+        {
+            // Используем правильный вызов метода FindObjectsByType
+            CharacterLauncher[] activeComponents = FindObjectsByType<CharacterLauncher>(FindObjectsSortMode.None);
+
+            // Отфильтруем только активные элементы
+            CharacterLauncher activeComponent = Array.Find(activeComponents, c => c && c.gameObject.activeInHierarchy);
+
+            if (activeComponent != null)
+            {
+                activeComponent.SetCheatTrajectoryMode(true);
+            }
         }
     }
 }

@@ -98,7 +98,7 @@ namespace Angry_Girls
             // Проверка проигрыша ДО запуска
             if (!checker.AnyPlayersAlive())
             {
-                _gameFlow.SwitchState(GameState.Defeat);
+                _gameFlow.SwitchState(GameState.AlternatePhase);
                 return;
             }
 

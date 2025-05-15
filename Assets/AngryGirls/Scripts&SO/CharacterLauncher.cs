@@ -35,20 +35,56 @@ namespace Angry_Girls
 
         public Transform[] UnitsTransforms { get; private set; }
 
+
+        private bool _cheatModeActive = false;
+        private int _originalDotsNumber;
+
+
+
         public void InitLauncher()
         {
-            //Init spawnPoints
             var transforms = new HashSet<Transform>(_positionsContainer.GetComponentsInChildren<Transform>());
-            transforms.Remove(_positionsContainer.transform); //remove position of _positionsContainer itself
+            transforms.Remove(_positionsContainer.transform);
             UnitsTransforms = transforms.ToArray();
 
-            //Start position for launch
             _offsetStartPoint = UnitsTransforms[0].position;
 
-            //Traectory
+            _originalDotsNumber = _dotsNumber; // <-- сохраняем оригинальное
             _trajectoryDots = new GameObject[_dotsNumber];
             SpawnProjectoryDots(UnitsTransforms[0]);
         }
+
+        public void SetCheatTrajectoryMode(bool enable)
+        {
+            if (_cheatModeActive == enable)
+                return;
+
+            _cheatModeActive = enable;
+
+            // Сохраняем текущую позицию, чтобы переинициализировать
+            Transform currentTransform = UnitsTransforms.Length > 0 ? UnitsTransforms[0] : null;
+
+            // Удаляем старые точки
+            if (_trajectoryDots != null)
+            {
+                foreach (var dot in _trajectoryDots)
+                {
+                    if (dot != null)
+                        Destroy(dot);
+                }
+            }
+
+            // Меняем число точек
+            _dotsNumber = enable ? 100 : _originalDotsNumber;
+
+            // Создаём новые
+            _trajectoryDots = new GameObject[_dotsNumber];
+            if (currentTransform != null)
+            {
+                SpawnProjectoryDots(currentTransform);
+            }
+        }
+
 
         public void LaunchUnit(CControl characterToLaunch)
         {

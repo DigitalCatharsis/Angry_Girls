@@ -32,7 +32,7 @@ namespace Angry_Girls
         public IEnumerator BeginLaunchPhaseRoutine(System.Action onLaunchComplete)
         {
             InitHandler();
-            GameLoader.Instance.cameraManager.MoveCameraTo(new Vector3(Camera.main.transform.position.x, _characterLauncher.transform.position.y, _characterLauncher.transform.position.z), 0.5f, true);
+            GameLoader.Instance.cameraManager.MoveCameraTo(new Vector3(Camera.main.transform.position.x, _characterLauncher.transform.position.y, _characterLauncher.transform.position.z), 1f, false);
 
             UpdateCharacterPositions(_charactersToLaunchLeft);
             _canPressAtCharacters = true;

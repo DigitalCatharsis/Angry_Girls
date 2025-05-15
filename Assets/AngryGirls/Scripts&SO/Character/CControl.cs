@@ -48,6 +48,10 @@ namespace Angry_Girls
 
         public List<GameObject> detectedGroundObject = new();
 
+        [SerializeField] private PhysicMaterial noBounceMaterial;
+        private PhysicMaterial originalMaterial;
+
+
         private void Awake()
         {
             Ragdoll = GetComponent<Ragdoll>();
@@ -61,6 +65,7 @@ namespace Angry_Girls
             subComponentsController = GetComponentInChildren<SubComponentsController>();
             subComponentMediator.OnAwake();
             subComponentsController.OnAwake();
+            originalMaterial = boxCollider.material;
 
             GameLoader.Instance.interactionManager.Register(gameObject, new InteractionConfig
             {

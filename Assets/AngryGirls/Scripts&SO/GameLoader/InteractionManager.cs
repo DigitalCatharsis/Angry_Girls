@@ -299,8 +299,23 @@ namespace Angry_Girls
 
             if (!sourceControl.CharacterMovement.IsGrounded && !targetControl.IsAlly(sourceControl))
             {
+                // 1. ќтталкивание как было
                 sourceControl.CharacterMovement.HandleRepel(targetControl.CharacterMovement);
+
+                // 2. —м€гчение импульса у цели (враг или игрок)
+                if (data.collision == null) { return; }
+
+                var targetRb = targetControl.CharacterMovement.Rigidbody;
+                if (targetRb != null)
+                {
+                    // ќпционально Ч только если сила импульса велика
+                    if (data.collision.impulse.magnitude > 3f)
+                    {
+                        targetRb.velocity *= 0.2f; // загасим импульс
+                    }
+                }
             }
+
         }
     }
 

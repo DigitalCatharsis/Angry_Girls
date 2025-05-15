@@ -2060,7 +2060,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2640689163874789523}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: bd33a1f559952e447886926ffde1cae9, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2135,6 +2135,7 @@ MonoBehaviour:
   vfxColor: {r: 0, g: 0, b: 0, a: 0}
   weaponHolder: {fileID: 0}
   detectedGroundObject: []
+  noBounceMaterial: {fileID: 13400000, guid: bd33a1f559952e447886926ffde1cae9, type: 2}
 --- !u!95 &3541158604538972460
 Animator:
   serializedVersion: 5
