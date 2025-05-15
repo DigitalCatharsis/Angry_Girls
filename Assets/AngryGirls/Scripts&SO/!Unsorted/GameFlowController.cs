@@ -119,7 +119,7 @@ namespace Angry_Girls
                 }
 
                 // Если только один юнит — сразу в Alternate
-                if (aliveCount <= 1 || !GameLoader.Instance.launchManager.CharacterToLaunch != null)
+                if (aliveCount <= 1 || GameLoader.Instance.launchManager.CharacterToLaunch != null)
                 {
                     _gameFlow.SwitchState(GameState.AlternatePhase);
                     return;

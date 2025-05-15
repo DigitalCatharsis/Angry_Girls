@@ -2,8 +2,6 @@ using AYellowpaper.SerializedCollections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using System.Linq;
 using System;
 
 namespace Angry_Girls
@@ -19,6 +17,7 @@ namespace Angry_Girls
         [SerializeField] private SerializedDictionary<CControl, Slider> _healtBar_Dict;
         [SerializeField] private int _score = 0;
         [SerializeField] private GameObject _healthBarsContainer;
+        public LaunchPortraitUI launchPortraitUI;
 
 
         public void CreateHealthBar(CControl control)

@@ -253,6 +253,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1b16c8fef0a68d429885da66fd5193e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _aimingHighlightPrefab: {fileID: 7859062686526815040, guid: 0815a88e43001dd4cb429c77cb327cdf,
+    type: 3}
+  _minLaunchDistance: 1.5
   _positionsContainer: {fileID: 4823108703855323970}
   _maxZoomFactorValue: 12
   _zoomRange: {x: 1.65, y: 13}

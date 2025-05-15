@@ -306,7 +306,7 @@ namespace Angry_Girls
                 if (data.collision == null) { return; }
 
                 var targetRb = targetControl.CharacterMovement.Rigidbody;
-                if (targetRb != null)
+                if (targetRb != null && targetRb.isKinematic == false)
                 {
                     // ќпционально Ч только если сила импульса велика
                     if (data.collision.impulse.magnitude > 3f)

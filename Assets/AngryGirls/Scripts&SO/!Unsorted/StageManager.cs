@@ -28,6 +28,9 @@ namespace Angry_Girls
             {
                 SpawnInitialCharacters();
             }
+
+            var survived = GameLoader.Instance.characterManager.playableCharacters.FindAll(c => !c.isDead);
+            GameLoader.Instance.gameLogic_UIManager.launchPortraitUI.RefreshOnStageChange(survived);
         }
 
         public GameObject SpawnCharacterLauncher(StageData stage)

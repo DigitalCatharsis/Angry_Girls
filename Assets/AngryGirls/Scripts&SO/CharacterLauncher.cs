@@ -6,6 +6,18 @@ namespace Angry_Girls
 {
     public class CharacterLauncher : MonoBehaviour
     {
+
+        [Header("Aiming FX")]
+        [SerializeField] private GameObject _aimingHighlightPrefab;
+        private GameObject _currentAimingHighlight;
+
+        [Header("Launch Constraints")]
+        [SerializeField] private float _minLaunchDistance = 1f;
+
+        public bool IsAiming => _isAiming; // Для менеджера
+        private bool _isAiming = false;
+
+
         //Direction
         private Vector3 _offsetEndPostion;
         private Vector3 _offsetStartPoint;
@@ -47,9 +59,21 @@ namespace Angry_Girls
             transforms.Remove(_positionsContainer.transform);
             UnitsTransforms = transforms.ToArray();
 
-            _offsetStartPoint = UnitsTransforms[0].position;
-
             _originalDotsNumber = _dotsNumber; // <-- сохраняем оригинальное
+            _trajectoryDots = new GameObject[_dotsNumber];
+            SpawnProjectoryDots(UnitsTransforms[0]);
+
+
+            _offsetStartPoint = new Vector3(UnitsTransforms[0].transform.position.x, UnitsTransforms[0].transform.position.y + 0.4f, UnitsTransforms[0].transform.position.z);
+
+            // Highlight (создаем заранее, скрываем)
+            if (_aimingHighlightPrefab)
+            {
+                _currentAimingHighlight = Instantiate(_aimingHighlightPrefab);
+                _currentAimingHighlight.SetActive(false);
+            }
+
+            _originalDotsNumber = _dotsNumber;
             _trajectoryDots = new GameObject[_dotsNumber];
             SpawnProjectoryDots(UnitsTransforms[0]);
         }
@@ -88,7 +112,7 @@ namespace Angry_Girls
 
         public void LaunchUnit(CControl characterToLaunch)
         {
-            DisableTrajectoryDots();
+            CancelAiming();
 
             if (_directionVector.z > 0)
             {
@@ -110,10 +134,47 @@ namespace Angry_Girls
 
         public void AimingTheLaunch(GameObject characterToLaunch)
         {
+            _isAiming = true;
+
+
             CalculateDirection();
             DrawTraectory();
             AdjustCameraZoom();
+
+
+            ShowAimingHighlight();
         }
+        private void ShowAimingHighlight()
+        {
+            if (_currentAimingHighlight != null)
+            {
+                _currentAimingHighlight.transform.position = _offsetStartPoint;
+                _currentAimingHighlight.SetActive(true);
+            }
+        }
+
+        private void HideAimingHighlight()
+        {
+            if (_currentAimingHighlight != null)
+            {
+                _currentAimingHighlight.SetActive(false);
+            }
+        }
+
+        public void CancelAiming()
+        {
+            GameLoader.Instance.cameraManager.StopCameraFollowForRigidBody();
+            _isAiming = false;
+            DisableTrajectoryDots();
+            HideAimingHighlight();
+        }
+
+        public bool IsLaunchDistanceSufficient()
+        {
+            return _directionVector.magnitude >= _minLaunchDistance;
+        }
+
+
         private void SpawnProjectoryDots(Transform spawnTransform)
         {
             for (int i = 0; i < _dotsNumber; i++)

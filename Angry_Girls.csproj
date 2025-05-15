@@ -111,6 +111,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\MyExtentions.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\AppController.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLogic.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\UICharacterSwap.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_SwordAttack.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponent.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\UICharModel.cs" />
@@ -171,8 +172,8 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\IPickable.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\Settings\PhysicsSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparationsUI.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\LaunchManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\VFX.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\LaunchHandler.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\Spawn\SpawnFactory\Factories\CharacterFactory.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CControl.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\AudioManager\SoundClipsCollection.cs" />
