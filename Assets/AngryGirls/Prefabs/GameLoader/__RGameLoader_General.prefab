@@ -99,6 +99,7 @@ MonoBehaviour:
     _serializedList: []
   _score: 0
   _healthBarsContainer: {fileID: 0}
+  launchPortraitUI: {fileID: 0}
 --- !u!1 &1425773094351709038
 GameObject:
   m_ObjectHideFlags: 0
@@ -1000,27 +1001,27 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3089717051297557090}
-  - {fileID: 8244663816219488243}
-  - {fileID: 5549784803487953839}
-  - {fileID: 4102703812895406620}
-  - {fileID: 7646565081692154788}
-  - {fileID: 3102065234587430302}
-  - {fileID: 2476758283933869772}
-  - {fileID: 1948757394530791269}
-  - {fileID: 6194781299668122069}
-  - {fileID: 688400422820678465}
-  - {fileID: 4334342904675032143}
   - {fileID: 2446423314911251858}
-  - {fileID: 2525660665349820317}
-  - {fileID: 2507494046916107421}
-  - {fileID: 5858850451879653574}
+  - {fileID: 688400422820678465}
+  - {fileID: 8244663816219488243}
   - {fileID: 4981819973336482454}
-  - {fileID: 1184690214050550015}
-  - {fileID: 2414927106752071533}
-  - {fileID: 4225443847803770816}
+  - {fileID: 7646565081692154788}
   - {fileID: 8266439253741962376}
+  - {fileID: 5858850451879653574}
+  - {fileID: 2507494046916107421}
+  - {fileID: 4225443847803770816}
+  - {fileID: 5549784803487953839}
+  - {fileID: 2525660665349820317}
+  - {fileID: 3089717051297557090}
+  - {fileID: 2476758283933869772}
+  - {fileID: 2414927106752071533}
+  - {fileID: 6194781299668122069}
+  - {fileID: 1184690214050550015}
   - {fileID: 5438656162325748540}
+  - {fileID: 3102065234587430302}
+  - {fileID: 4102703812895406620}
+  - {fileID: 1948757394530791269}
+  - {fileID: 4334342904675032143}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8142097811665119726
@@ -1230,10 +1231,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _zoomSensitivity: 1.5
   _minZoom: 1
-  _maxZoom: 10
-  _movementSpeed: 0.5
+  _maxZoom: 15
+  _movementSpeed: 6.5
   _minCameraZ: -10
-  _maxCameraZ: 30
+  _maxCameraZ: 45
   _characterToFollow: {fileID: 0}
   _allowCameraFollow: 0
   _mainCamera: {fileID: 0}
@@ -1283,7 +1284,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _stages:
   - enemies:
+    - CharacterSettings: {fileID: 11400000, guid: 4687a20025c005443b6d94bd2c6e7325,
+        type: 2}
+      spawnTransform: {fileID: 0}
     - CharacterSettings: {fileID: 11400000, guid: 02680e40217c43e44a594ac4cad06f99,
+        type: 2}
+      spawnTransform: {fileID: 0}
+    characterLauncherData:
+      characterLauncher: {fileID: 3351779788069274298, guid: 5be7e6c12fc686a49825819f66576c31,
+        type: 3}
+      spawnTransform: {fileID: 0}
+  - enemies:
+    - CharacterSettings: {fileID: 11400000, guid: 02680e40217c43e44a594ac4cad06f99,
+        type: 2}
+      spawnTransform: {fileID: 0}
+    - CharacterSettings: {fileID: 11400000, guid: 10acb0b79af7bc9439b19db60caa0049,
+        type: 2}
+      spawnTransform: {fileID: 0}
+    - CharacterSettings: {fileID: 11400000, guid: 4687a20025c005443b6d94bd2c6e7325,
+        type: 2}
+      spawnTransform: {fileID: 0}
+    - CharacterSettings: {fileID: 11400000, guid: 39a72c91194052d46a1d91ce975fbad1,
         type: 2}
       spawnTransform: {fileID: 0}
     characterLauncherData:
