@@ -23,6 +23,7 @@ namespace Angry_Girls
         public UnitType unitType;
         public CharacterType characterType;
         public Sprite portrait;
+        public CharacterStats characterStats;
 
         [Space(5)]
         [Header("Speed and Force")]
@@ -99,4 +100,17 @@ namespace Angry_Girls
         public T animation;
         public float transitionDuration;
     }
+
+    public class CharacterStats
+    {
+        public float BaseHealth;
+        public float BaseDamage;
+
+        public float BonusHealth;
+        public float BonusDamage;
+
+        public float TotalHealth => BaseHealth + BonusHealth;
+        public float TotalDamage => BaseDamage + BonusDamage;
+    }
+
 }

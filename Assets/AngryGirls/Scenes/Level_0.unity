@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: fdab60035eec2e7478ba16b781522d61,
+    type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -6091,7 +6092,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -23.449936}
+  m_AnchoredPosition: {x: 0, y: -23.449951}
   m_SizeDelta: {x: 0, y: -46.900017}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &728406552
@@ -9578,7 +9579,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -117.57999, y: 252.98}
+  m_AnchoredPosition: {x: -117.579956, y: 252.98}
   m_SizeDelta: {x: 183.56, y: 30.03}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1265070490
@@ -11497,7 +11498,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -378.87997, y: -228.78996}
+  m_AnchoredPosition: {x: -378.88, y: -228.78998}
   m_SizeDelta: {x: -757.76, y: -457.59}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!4 &1450610370 stripped

@@ -109,6 +109,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\VFX.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\GameFlowController.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\MyExtentions.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\SaveSystem\SaveSystem.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\State_HitReaction.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\State_AttackFinish.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_SwordAttack.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\GameLoader.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\MaterialChaner\Editor\MaterialChangerEditor.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterStateBehaviors\Idle_Behavior.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\SaveSystem\SaveData.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackAbilities\AttackAbilityData.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LayerAdder\LayerChanger.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameLoader\StatesContainer.cs" />

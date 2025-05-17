@@ -20,6 +20,7 @@ namespace Angry_Girls
         [SerializeField] private List<UICharModel> _avaiblecharacterPoolHandlers;
         private PlayerData _playerData;
 
+        private int _credits;
         private void Start()
         {
             _playerData = GameLoader.Instance.levelSettings.playerData;
@@ -155,5 +156,26 @@ namespace Angry_Girls
             currentTab.SetActive(false);
             selectedTab.SetActive(true);
         }
+
+
+        public void AddCredits(int amount)
+        {
+            _credits += amount;
+            UpdateCreditsUI();
+        }
+
+        public bool SpendCredits(int amount)
+        {
+            if (_credits < amount) return false;
+            _credits -= amount;
+            UpdateCreditsUI();
+            return true;
+        }
+
+        private void UpdateCreditsUI()
+        {
+            // TextMeshPro обновление
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 namespace Angry_Girls
 {
@@ -51,6 +52,7 @@ namespace Angry_Girls
             GameLoader.Instance.cameraManager.MoveCameraTo(new Vector3(Camera.main.transform.position.x, _characterLauncher.transform.position.y, _characterLauncher.transform.position.z), 1f, false);
 
             UpdateCharacterPositions(_charactersToLaunchLeft);
+            GameLoader.Instance.gameLogic_UIManager.launchPortraitUI.UpdatePortraitOrder(_charactersToLaunchLeft);
             _canPressAtCharacters = true;
 
             // Ждём запуска

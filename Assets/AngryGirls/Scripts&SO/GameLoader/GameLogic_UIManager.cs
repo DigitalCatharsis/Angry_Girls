@@ -87,6 +87,7 @@ namespace Angry_Girls
                     );
             }
         }
+
         public void ShowVictoryUI()
         {
             victoryUi.SetActive(true);
@@ -96,7 +97,6 @@ namespace Angry_Girls
         {
             gameOverUi.SetActive(true);
         }
-
 
         public void ActivateTraectoryCheat()
         {

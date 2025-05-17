@@ -101,8 +101,8 @@ MonoBehaviour:
         changeSpeed: 50
     - Key: 16
       Value:
-        boxColliderCenter: {x: 0, y: 0, z: 0}
-        boxColliderSize: {x: 0.2, y: 0.6076189, z: 0.4560484}
+        boxColliderCenter: {x: 0, y: 0.27140298, z: -0.021754295}
+        boxColliderSize: {x: 0.2, y: 0.3145029, z: 0.4035086}
         changeSpeed: 50
     - Key: 39
       Value:
