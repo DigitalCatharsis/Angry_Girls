@@ -6,48 +6,46 @@ namespace Angry_Girls
 {
     public class State_Idle : AnimationStateBase
     {
-        public State_Idle(CControl control, AnimationController animationController): base(control, animationController) { }
+        public State_Idle(CControl control, AnimationController animationController) : base(control, animationController) { }
+
+        private GameplayCharactersManager _charactersManager;
 
         public override void OnEnter()
         {
+            if (_charactersManager == null)
+            {
+                _charactersManager = GameplayCoreManager.Instance.GameplayCharactersManager;
+            }
+
             var idleState = _settings.GetRandomState(_settings.idle_States);
             _animationController.ChangeAnimationStateCrossFade
                 (
-                   GameLoader.Instance.statesContainer.idle_Dictionary[idleState.animation],
+                   GameplayCoreManager.Instance.StatesContainer.idle_Dictionary[idleState.animation],
                    idleState.transitionDuration
                 );
         }
 
         public override void OnUpdate()
         {
-            if (_control.playerOrAi == PlayerOrAi.Character && _control.hasFinishedLaunchingTurn)
+            if (_control.playerOrAi == PlayerOrAi.Player && _control.hasFinishedLaunchingTurn)
             {
                 TurnToTheClosestEnemy(PlayerOrAi.Bot);
             }
             else if (_control.playerOrAi == PlayerOrAi.Bot)
             {
-                TurnToTheClosestEnemy(PlayerOrAi.Character);
+                TurnToTheClosestEnemy(PlayerOrAi.Player);
             }
         }
 
-        private void TurnToTheClosestEnemy(PlayerOrAi playerOrAi)
+        private void TurnToTheClosestEnemy(PlayerOrAi typeOfUnitToTurn)
         {
             float closestDistance = 9999f;
             var collection = new List<CControl>();
 
-            if (playerOrAi == PlayerOrAi.Character)
-            {
-                collection = GameLoader.Instance.characterManager.playableCharacters;
-            }
-            else
-            {
-                collection = GameLoader.Instance.characterManager.enemyCharacters;
-            }
+            collection = _charactersManager.GetAliveCharacters(typeOfUnitToTurn);
 
-                foreach (var character in collection)
+            foreach (var character in collection)
             {
-                if (character.GetComponent<CControl>().isDead) continue;
-
                 var distance = _control.CharacterMovement.Rigidbody.position.z -
                                character.CharacterMovement.Rigidbody.position.z;
 

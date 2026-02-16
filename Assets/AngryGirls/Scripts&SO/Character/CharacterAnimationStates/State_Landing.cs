@@ -8,7 +8,7 @@ public class State_Landing : AnimationStateBase
     public override void OnEnter()
     {
         _animationController.ChangeAnimationStateCrossFade(
-            GameLoader.Instance.statesContainer.landingNames_Dictionary[_settings.landing_State.animation],
+            GameplayCoreManager.Instance.StatesContainer.landingNames_Dictionary[_settings.landing_State.animation],
             _settings.landing_State.transitionDuration);
     }
 }

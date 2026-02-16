@@ -15,49 +15,47 @@ namespace Angry_Girls
         {
             base.OnStateEnter(control, animator, stateInfo);
 
-            _vfx = GameLoader.Instance.VFXManager.SpawnByProjectileAbility(control);
+            _vfx = GameplayCoreManager.Instance.ProjectileManager.SpawnByProjectileAbility(control);
             _layersModified = false;
 
-            // Определяем целевой слой в зависимости от типа объекта
-            _targetLayer = control.playerOrAi == PlayerOrAi.Character ?
-                LayerMask.GetMask("Bot") :
-                LayerMask.GetMask("Character");
+            // Determine the target layer depending on the object type
+            _targetLayer = control.playerOrAi == PlayerOrAi.Player ? LayerMask.GetMask("Bot") : LayerMask.GetMask("Character");
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            // Получаем нижнюю точку коллайдера
+            // Get the bottom point of the collider
             var bounds = control.boxCollider.bounds;
             var bottomPoint = new Vector3(bounds.center.x, bounds.min.y, bounds.center.z);
-            // Параметры BoxCast
+            // BoxCast parameters 
             var boxCenter = bottomPoint + Vector3.up * 0.13f;
             var boxHalfExtents = new Vector3(bounds.size.x * 0.5f, 0.05f, bounds.size.z * 0.5f);
             float rayLength = 0.13f;
 
             var hits = Physics.BoxCastAll(
-                boxCenter,
-                boxHalfExtents,
-                Vector3.down,
-                control.transform.rotation,
-                rayLength,
-                _targetLayer);
+            boxCenter,
+            boxHalfExtents,
+            Vector3.down,
+            control.transform.rotation,
+            rayLength,
+            _targetLayer);
 
-            // Если обнаружено 2+ объекта нужного слоя
+            // If 2+ objects of the desired layer are detected
             if (hits.Length >= 1)
             {
                 if (!_layersModified)
                 {
-                    // Сохраняем оригинальные исключенные слои
+                    // Preserve the original excluded layers
                     _originalExcludeLayers = control.boxCollider.excludeLayers;
 
-                    // Добавляем целевой слой в исключенные
+                    // Add the target layer to the excluded layers
                     control.boxCollider.excludeLayers |= _targetLayer;
                     _layersModified = true;
                 }
             }
             else if (_layersModified)
             {
-                // Восстанавливаем оригинальные исключенные слои
+                // Restore the original excluded layers
                 control.boxCollider.excludeLayers = _originalExcludeLayers;
                 _layersModified = false;
             }
@@ -66,14 +64,14 @@ namespace Angry_Girls
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             control.CharacterMovement.ResetVelocity();
-            // Гарантированно восстанавливаем оригинальные excludeLayers
+            // Guaranteed to restore original excludeLayers 
             if (_layersModified && control.boxCollider != null)
             {
                 control.boxCollider.excludeLayers = _originalExcludeLayers;
                 _layersModified = false;
             }
 
-            GameLoader.Instance.VFXManager.FadeOutAndDisposeVFX(_vfx, 2f, 3.5f);
+            CoreManager.Instance.VFXManager.FadeOutAndDisposeVFX(_vfx, 2f, 3.5f);
         }
     }
 }

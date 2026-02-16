@@ -12,7 +12,7 @@ namespace Angry_Girls
                 _control = animator.transform.root.GetComponent<CControl>();
             }
 
-            _control.CharacterMovement.SetVelocity(_control.characterSettings.landingMovementSpeed);
+            _control.CharacterMovement.SetVelocity(_control.CharacterSettings.landingMovementSpeed);
             _control.canUseAbility = false;
             _control.isLanding = true;
         }
@@ -28,7 +28,7 @@ namespace Angry_Girls
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            Debug.Log($"{_control.name} is executing FinishTurn in animation {_control.GetCurrentAnimationName()}");
+            //Debug.Log($"{_control.name} is executing FinishTurn in animation {_control.GetCurrentAnimationName()}");
             //_control.FinishTurn();
         }
 

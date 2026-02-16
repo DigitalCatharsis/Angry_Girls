@@ -2,6 +2,7 @@
 using UnityEditor;
 #if UNITY_EDITOR
 /// <summary>
+/// Provides custom hierarchy window labels for game objects
 /// Check out http://diegogiacomelli.com.br/unitytips-hierarchy-window-group-header/
 /// </summary>
 namespace Angry_Girls
@@ -18,7 +19,7 @@ namespace Angry_Girls
         {
             GameObject obj = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
 
-            if (obj != null && obj.name.StartsWith("___", System.StringComparison.Ordinal))    //Every gameobject which starts with __- gonna be painted and have a shadow label
+            if (obj != null && obj.name.StartsWith("___", System.StringComparison.Ordinal))
             {
                 EditorGUI.DrawRect(selectionRect, Color.grey);
                 EditorGUI.DropShadowLabel(selectionRect, obj.name.Replace("_", "").ToString());
@@ -29,41 +30,41 @@ namespace Angry_Girls
 
         static void HighLightObj(GameObject obj, Rect selectionRect)
         {
-            if (obj != null && obj.name.StartsWith("__R", System.StringComparison.Ordinal))    //Every gameobject which starts with __- gonna be painted and have a shadow label
+            if (obj != null && obj.name.StartsWith("__R", System.StringComparison.Ordinal))
             {
                 EditorGUI.DrawRect(selectionRect, Color.red);
                 EditorGUI.DropShadowLabel(selectionRect, obj.name.Replace("__R", "").ToString());
             }
-            else if (obj != null && obj.name.StartsWith("__G", System.StringComparison.Ordinal))    //Every gameobject which starts with __- gonna be painted and have a shadow label
+            else if (obj != null && obj.name.StartsWith("__G", System.StringComparison.Ordinal))
             {
                 EditorGUI.DrawRect(selectionRect, Color.green);
                 EditorGUI.DropShadowLabel(selectionRect, obj.name.Replace("__G", "").ToString());
             }
-            else if (obj != null && obj.name.StartsWith("__B", System.StringComparison.Ordinal))    //Every gameobject which starts with __- gonna be painted and have a shadow label
+            else if (obj != null && obj.name.StartsWith("__B", System.StringComparison.Ordinal))
             {
                 EditorGUI.DrawRect(selectionRect, Color.blue);
                 EditorGUI.DropShadowLabel(selectionRect, obj.name.Replace("__B", "").ToString());
             }
-            else if (obj != null && obj.name.StartsWith("__Y", System.StringComparison.Ordinal))    //Every gameobject which starts with __- gonna be painted and have a shadow label
+            else if (obj != null && obj.name.StartsWith("__Y", System.StringComparison.Ordinal))
             {
                 EditorGUI.DrawRect(selectionRect, Color.yellow);
                 EditorGUI.DropShadowLabel(selectionRect, obj.name.Replace("__Y", "").ToString());
             }
-            else if (obj != null && obj.name.StartsWith("__M", System.StringComparison.Ordinal))    //Every gameobject which starts with __- gonna be painted and have a shadow label
+            else if (obj != null && obj.name.StartsWith("__M", System.StringComparison.Ordinal))
             {
                 EditorGUI.DrawRect(selectionRect, Color.magenta);
                 EditorGUI.DropShadowLabel(selectionRect, obj.name.Replace("__M", "").ToString());
             }
-            else if (obj != null && obj.name.StartsWith("__C", System.StringComparison.Ordinal))    //Every gameobject which starts with __- gonna be painted and have a shadow label
+            else if (obj != null && obj.name.StartsWith("__C", System.StringComparison.Ordinal))
             {
                 EditorGUI.DrawRect(selectionRect, Color.cyan);
                 EditorGUI.DropShadowLabel(selectionRect, obj.name.Replace("__C", "").ToString());
             }
-            else if (obj != null && obj.name.StartsWith($"{typeof(HierarchyLabel).Namespace}.", System.StringComparison.Ordinal))    //Every gameobject which starts with __- gonna be painted and have a shadow label
+            else if (obj != null && obj.name.StartsWith($"{typeof(HierarchyLabel).Namespace}.", System.StringComparison.Ordinal))
             {
                 EditorGUI.DrawRect(selectionRect, Color.black);
                 EditorGUI.DropShadowLabel(selectionRect, obj.name.ToString());
-            }          
+            }
         }
     }
 }

@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
+    /// <summary>
+    /// Interface for animation states in the state machine
+    /// </summary>
     public interface IAnimationState
     {
         public void OnEnter();
@@ -10,6 +13,9 @@ namespace Angry_Girls
         public bool CanTransitionTo(IAnimationState nextState);
     }
 
+    /// <summary>
+    /// Base class for all animation states
+    /// </summary>
     public abstract class AnimationStateBase : IAnimationState
     {
         protected readonly CControl _control;
@@ -22,15 +28,32 @@ namespace Angry_Girls
             _control = control;
             _animator = control.animator;
             _animationController = animationController;
-            _settings = control.characterSettings;
+            _settings = control.CharacterSettings;
         }
+
+        /// <summary>
+        /// Called when entering the state
+        /// </summary>
         public virtual void OnEnter() { }
+
+        /// <summary>
+        /// Called every frame while in the state
+        /// </summary>
         public virtual void OnUpdate() { }
+
+        /// <summary>
+        /// Called when exiting the state
+        /// </summary>
         public virtual void OnExit() { }
 
+        /// <summary>
+        /// Determines if transition to next state is allowed
+        /// </summary>
+        /// <param name="nextState">State to transition to</param>
+        /// <returns>True if transition is allowed</returns>
         public virtual bool CanTransitionTo(IAnimationState nextState)
         {
-            return true; // ѕо умолчанию разрешаем все переходы
+            return true;
         }
     }
 }

@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
+    /// <summary>
+    /// Applies frame and physics settings at runtime
+    /// </summary>
     public class Settings : MonoBehaviour
     {
         [SerializeField] private bool debug;

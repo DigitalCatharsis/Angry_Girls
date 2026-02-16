@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: CharacterPortraits
+  m_EditorClassIdentifier: 
+  m_GroupName: CharacterPortraits
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 4435038854bc273479867548107fef93
+  m_SerializeEntries:
+  - m_GUID: 1de781d3f5e4c9248a8486217b854727
+    m_Address: T_Portrait_YBot_Blue
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites_Portraits
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9c65eea8e84dbe24fba68945af3d0e45
+    m_Address: T_Portrait_YBot_Green
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites_Portraits
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6ced006bb16f0bd48880a97482788c43
+    m_Address: T_Portrait_YBot_Red
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites_Portraits
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4b26d043d0f9cdd4c9a628ca190a96e7
+    m_Address: T_Portrait_YBot_Yellow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites_Portraits
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: ecf8e8ff81db5d7448711fa97ee309d2, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 0f96373b7c162cf44a3f7d2a49a76445, type: 2}
+    - {fileID: 11400000, guid: c31bbe6b9815cfa45be26a0fc429cd77, type: 2}

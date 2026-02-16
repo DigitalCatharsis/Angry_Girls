@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
+    /// <summary>
+    /// Makes a GameObject look at a specified point and draws a debug line
+    /// </summary>
     public class LookAtPoint : MonoBehaviour
     {
         public GameObject objectToLook;
@@ -12,7 +15,7 @@ namespace Angry_Girls
 
         public void Update()
         {
-            if (traceColor == null) 
+            if (traceColor == null)
             {
                 traceColor = Color.magenta;
                 traceColor.a = 1;

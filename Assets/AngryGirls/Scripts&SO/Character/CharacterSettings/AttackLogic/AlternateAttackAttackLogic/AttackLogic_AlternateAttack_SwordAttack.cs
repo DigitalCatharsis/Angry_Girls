@@ -11,50 +11,50 @@ namespace Angry_Girls
         private GameObject _vfx;
         private bool _hasEnteredAttackState = false;
 
-        // Настройки звуков: моменты normalizedTime, когда они должны играть (например, 0.0 - начало, 0.5 - середина)
-        private readonly float[] _soundTriggers = { 0.0f, 0.5f }; // Можно изменить на {0.0f, 0.3f, 0.7f} и т.д.
-        private bool[] _hasPlayedSoundInThisCycle; // Отслеживает, какие звуки уже сыграли
+        // Sound settings: normalizedTime moments when they should play (e.g., 0.0 - start, 0.5 - middle)
+        private readonly float[] _soundTriggers = { 0.0f, 0.5f }; // Can be changed to {0.0f, 0.3f, 0.7f}, etc.
+        private bool[] _hasPlayedSoundInThisCycle; // Tracks which sounds have already played
 
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             base.OnStateEnter(control, animator, stateInfo);
-            _vfx = GameLoader.Instance.VFXManager.SpawnByProjectileAbility(control);
+            _vfx = GameplayCoreManager.Instance.ProjectileManager.SpawnByProjectileAbility(control);
 
             if (!_hasEnteredAttackState)
             {
-                GameLoader.Instance.audioManager.PlayCustomSound(AudioSourceType.SFX_Impact, 4);
+                CoreManager.Instance.AudioManager.PlayCustomSound(AudioSourceType.SFX_Impact, 4);
                 _hasEnteredAttackState = true;
             }
 
-            // Инициализируем массив для отслеживания звуков в этом цикле
+            // Initialize the array for tracking sounds in this cycle
             _hasPlayedSoundInThisCycle = new bool[_soundTriggers.Length];
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            float normalizedTime = stateInfo.normalizedTime % 1; // Текущая позиция в цикле [0, 1)
+            float normalizedTime = stateInfo.normalizedTime % 1; // Current position in the cycle [0, 1)
 
-            // Проверяем все триггеры звуков
+            // Check all sound triggers
             for (int i = 0; i < _soundTriggers.Length; i++)
             {
-                // Если прошли триггер и ещё не играли звук
+                // If the trigger has passed and the sound has not yet played
                 if (normalizedTime >= _soundTriggers[i] && !_hasPlayedSoundInThisCycle[i])
                 {
-                    GameLoader.Instance.audioManager.PlayCustomSound(AudioSourceType.SFX_Impact, 4);
+                    CoreManager.Instance.AudioManager.PlayCustomSound(AudioSourceType.SFX_Impact, 4);
                     _hasPlayedSoundInThisCycle[i] = true;
                 }
             }
 
-            // Если цикл завершился (normalizedTime перескочил с ~1.0 на 0.0)
+            // If the loop has completed (normalizedTime jumped from ~1.0 to 0.0)
             if (normalizedTime < _timeInCurrentLoop)
             {
-                // Сбрасываем флаги для нового цикла
+                // Reset flags for the new loop
                 _hasPlayedSoundInThisCycle = new bool[_soundTriggers.Length];
             }
 
             _timeInCurrentLoop = normalizedTime;
 
-            // Проверка на завершение всей анимации
+            // Check if the entire animation has completed
             if (stateInfo.normalizedTime >= _timesToRepeat_Attack_State)
             {
                 _timeInCurrentLoop = 0f;
@@ -69,7 +69,7 @@ namespace Angry_Girls
             _hasEnteredAttackState = false;
 
             if (_vfx != null)
-                GameLoader.Instance.VFXManager.CallVFXDispose(_vfx);
+                GameplayCoreManager.Instance.ProjectileManager.DisposeProjectile(_vfx);
         }
     }
 }

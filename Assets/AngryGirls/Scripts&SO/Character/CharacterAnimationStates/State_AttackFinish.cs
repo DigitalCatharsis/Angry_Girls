@@ -9,7 +9,7 @@ namespace Angry_Girls
         {
             var attackFinishState = _control.Get_AttackAbility().attackFininsh_State;
             _animationController.ChangeAnimationStateFixedTime(
-                GameLoader.Instance.statesContainer.attackFinish_Dictionary[attackFinishState.animation],
+                GameplayCoreManager.Instance.StatesContainer.attackFinish_Dictionary[attackFinishState.animation],
                 attackFinishState.transitionDuration);
 
             _control.isAttacking = false;

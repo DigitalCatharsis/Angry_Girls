@@ -20,7 +20,7 @@ namespace Angry_Girls
                 return;
             }
 
-            if (GameLoader.Instance.gameFlowController.CurrentState == GameState.LaunchPhase)
+            if (GameplayCoreManager.Instance.GameFlowController.CurrentState == GameState.LaunchPhase)
             {
                 //Ai does not attack in launch phase
                 if (_control.playerOrAi == PlayerOrAi.Bot)
@@ -29,7 +29,7 @@ namespace Angry_Girls
                 }
 
                 //already launched unit does not attack in launch phase
-                if (_control.playerOrAi == PlayerOrAi.Character && !_control.hasBeenLaunched)
+                if (_control.playerOrAi == PlayerOrAi.Player && !_control.hasBeenLaunched)
                 {
                     return;
                 }

@@ -3,13 +3,18 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-
+    /// <summary>
+    /// Changes game object layers dynamically
+    /// </summary>
     public class LayerChanger : MonoBehaviour
     {
         public MMP_Layers layerType;
         public bool changeAllChildren;
 
-        public void ChangeLayer(Dictionary<string,int> layerDic)
+        /// <summary>
+        /// Changes layer of game object based on layer dictionary
+        /// </summary>
+        public void ChangeLayer(Dictionary<string, int> layerDic)
         {
             if (!changeAllChildren)
             {
@@ -18,7 +23,7 @@ namespace Angry_Girls
             }
             else
             {
-                Transform[] arr =this.gameObject.GetComponentsInChildren<Transform>();
+                Transform[] arr = this.gameObject.GetComponentsInChildren<Transform>();
 
                 foreach (Transform t in arr)
                 {

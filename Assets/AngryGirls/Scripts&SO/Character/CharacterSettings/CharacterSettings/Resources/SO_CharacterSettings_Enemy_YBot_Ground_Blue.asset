@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5712a747d1a17fc42b72503a7509d404, type: 3}
+  m_Name: SO_CharacterSettings_Enemy_YBot_Ground_Blue
+  m_EditorClassIdentifier: 
+  _notifyAboutNONEStates: 0
+  unitType: 0
+  characterType: 8
+  portrait:
+    m_AssetGUID: 1de781d3f5e4c9248a8486217b854727
+    m_SubObjectName: T_Portrait_YBot_Blue
+    m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    m_EditorAssetChanged: 1
+  characterStats:
+    health: 110
+    damage: 50
+  landingMovementSpeed: {x: 0, y: 0, z: 0}
+  boxcolliderContainer: {fileID: 11400000, guid: 31d3e3ccbf8befe47bc1a131bc653cce,
+    type: 2}
+  idle_States:
+  - animation: 4
+    transitionDuration: 0.4
+  airbonedFlying_States:
+    animation: 1
+    transitionDuration: 0.15
+  landing_State:
+    animation: 1
+    transitionDuration: 0.1
+  hitReaction_States:
+  - animation: 4
+    transitionDuration: 0.1
+  death_States:
+  - animation: 1
+    transitionDuration: 0.1
+  deathByAnimation: 0
+  AttackAbility_Launch: {fileID: 0}
+  AttackAbility_Alternate: {fileID: 11400000, guid: 545cd1a24618d664dacdb2ed9f6a62fd,
+    type: 2}

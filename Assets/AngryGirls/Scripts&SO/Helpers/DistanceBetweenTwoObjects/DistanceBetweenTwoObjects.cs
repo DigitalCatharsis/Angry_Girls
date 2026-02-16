@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
+    /// <summary>
+    /// Calculates and visualizes distance between two objects (Editor only)
+    /// </summary>
     [ExecuteInEditMode]
     public class DistanceBetweenTwoObjects : MonoBehaviour
     {
@@ -34,15 +37,5 @@ namespace Angry_Girls
                 farObject_WorldPosition = transform.position;
             }
         }
-
-        //private void OnDrawGizmos()
-        //{
-        //    if (farObject != null)
-        //    {
-        //        GUI.color = Color.black;
-        //        Handles.Label(transform.position - (transform.position -
-        //        farObject.transform.position) / 2, distanceBetweenObjects.ToString());
-        //    }
-        //}
     }
 }

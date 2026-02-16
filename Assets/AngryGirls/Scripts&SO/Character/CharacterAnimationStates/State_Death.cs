@@ -9,7 +9,7 @@ public class State_Death : AnimationStateBase
     {
         var randomDeathAnimation = _settings.GetRandomState(_settings.death_States).animation;
         _animationController.ChangeAnimationState(
-            GameLoader.Instance.statesContainer.death_States_Dictionary[randomDeathAnimation],
+            GameplayCoreManager.Instance.StatesContainer.death_States_Dictionary[randomDeathAnimation],
             transitionDuration: 0.1f);
     }
 

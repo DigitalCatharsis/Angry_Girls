@@ -1,16 +1,20 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Angry_Girls
 {
     public enum UnitType
     {
-        Ground, //Damage till grounded.
-        AirToGround, //Damage in air and then fall down
+        Ground,
+        AirToGround,
         Air,
     }
 
+    /// <summary>
+    /// Template/prototype for specific character type configuration
+    /// </summary>
     [CreateAssetMenu(fileName = "Settings", menuName = "Angry_Girls/CharacterSettings/CharacterSettings")]
     public class CharacterSettings : ScriptableObject
     {
@@ -22,8 +26,8 @@ namespace Angry_Girls
         [Header("Unit type")]
         public UnitType unitType;
         public CharacterType characterType;
-        public Sprite portrait;
-        public CharacterStats characterStats;
+        public AssetReferenceT<Sprite> portrait;
+        public CharactersStatsBase characterStats;
 
         [Space(5)]
         [Header("Speed and Force")]
@@ -40,23 +44,46 @@ namespace Angry_Girls
         public List<CharAnimationData<HitReaction_States>> hitReaction_States;
         public List<CharAnimationData<Death_States>> death_States;
 
-        public bool deathByAnimation = true; //TODO: implement ragdoll
+        public bool deathByAnimation = true;
 
         [Header("Launched Attack Ability")]
-        //[SerializeReference]
         public AttackAbilityData AttackAbility_Launch;
 
         [Header("Alternate Attack Ability")]
         public AttackAbilityData AttackAbility_Alternate;
 
-        private void  NotifyForNONE_Value<T>(CharAnimationData<T> charAnimationData, CControl control) where T : Enum
+        /// <summary>
+        /// Validates character settings for NONE values
+        /// </summary>
+        public void CheckForNoneValues(CControl control)
+        {
+            if (!_notifyAboutNONEStates) return;
+
+            NotifyForNONE_Value(idle_States, control);
+            NotifyForNONE_Value(airbonedFlying_States, control);
+            NotifyForNONE_Value(landing_State, control);
+            NotifyForNONE_Value(hitReaction_States, control);
+            NotifyForNONE_Value(death_States, control);
+        }
+
+        /// <summary>
+        /// Returns random animation state from collection
+        /// </summary>
+        public CharAnimationData<T> GetRandomState<T>(List<CharAnimationData<T>> collection) where T : Enum
+        {
+            var index = UnityEngine.Random.Range(0, collection.Count);
+            return collection[index];
+        }
+
+        private void NotifyForNONE_Value<T>(CharAnimationData<T> charAnimationData, CControl control) where T : Enum
         {
             if (charAnimationData.animation.ToString() == "NONE")
             {
                 ColorDebugLog.Log(control.name + "'s " + charAnimationData + " is NONE", System.Drawing.KnownColor.Yellow);
             }
         }
-        private void  NotifyForNONE_Value<T>(List<CharAnimationData<T>> charAnimationData, CControl control) where T : Enum
+
+        private void NotifyForNONE_Value<T>(List<CharAnimationData<T>> charAnimationData, CControl control) where T : Enum
         {
             if (charAnimationData.Count == 0)
             {
@@ -71,27 +98,6 @@ namespace Angry_Girls
                 }
             }
         }
-
-        public CharAnimationData<T> GetRandomState<T>(List<CharAnimationData<T>> collection) where T : Enum
-        {
-            var index = UnityEngine.Random.Range(0, collection.Count);
-            return collection[index];
-        }
-
-        public void CheckForNoneValues(CControl control)
-        {
-            if (_notifyAboutNONEStates == false)
-            {
-                return;
-            }
-
-            //debug
-            NotifyForNONE_Value(idle_States, control);
-            NotifyForNONE_Value(airbonedFlying_States, control);
-            NotifyForNONE_Value(landing_State, control);
-            NotifyForNONE_Value(hitReaction_States, control);
-            NotifyForNONE_Value(death_States, control);
-        }
     }
 
     [System.Serializable]
@@ -100,17 +106,4 @@ namespace Angry_Girls
         public T animation;
         public float transitionDuration;
     }
-
-    public class CharacterStats
-    {
-        public float BaseHealth;
-        public float BaseDamage;
-
-        public float BonusHealth;
-        public float BonusDamage;
-
-        public float TotalHealth => BaseHealth + BonusHealth;
-        public float TotalDamage => BaseDamage + BonusDamage;
-    }
-
 }

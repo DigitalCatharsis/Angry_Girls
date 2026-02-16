@@ -22,7 +22,7 @@ namespace Angry_Girls
                   new Vector3(230f,-180f,0)
             };
 
-            GameLoader.Instance.VFXManager.ProcessFireballs_HeadSpin(control, angles);
+            GameplayCoreManager.Instance.ProjectileManager.ProcessFireballs_HeadSpin(control, angles);
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
@@ -38,8 +38,8 @@ namespace Angry_Girls
             };
 
                 //Second cast, second character move
-                control.CharacterMovement.ApplyRigidForce(control.characterSettings.AttackAbility_Launch.attackMovementForce, ForceMode.VelocityChange);
-                GameLoader.Instance.VFXManager.ProcessFireballs_HeadSpin(control, angles);
+                control.CharacterMovement.ApplyRigidForce(control.profile.CharacterSettings.AttackAbility_Launch.attackMovementForce, ForceMode.VelocityChange);
+                GameplayCoreManager.Instance.ProjectileManager.ProcessFireballs_HeadSpin(control, angles);
                 _haveShootedSecondTime = true;
                 control.isAttacking = false;
             }

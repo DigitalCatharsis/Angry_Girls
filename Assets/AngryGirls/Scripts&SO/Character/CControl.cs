@@ -5,19 +5,20 @@ using UnityEngine.UI;
 
 namespace Angry_Girls
 {
+    /// <summary>
+    /// Represents whether a character is controlled by player or AI
+    /// </summary>
     public enum PlayerOrAi
     {
-        Character,
+        Player,
         Bot,
     }
+
+    /// <summary>
+    /// Main controller class for character units, handling animation, movement, attacks, and state management
+    /// </summary>
     public class CControl : PoolObject
     {
-        public CharacterHealth Health { get; private set; }
-        public CharacterMovement CharacterMovement { get; private set; }
-        public Ragdoll Ragdoll { get; private set; }
-
-        public Slider healthSlider;
-
         public bool isLanding = false;
         public bool isAttacking = false;
         public bool isDead = false;
@@ -31,6 +32,17 @@ namespace Angry_Girls
         public bool unitBehaviorIsAlternate = true;
         public bool checkGlobalBehavior = false;
 
+        public CharacterHealth Health { get; private set; }
+        public CharacterMovement CharacterMovement { get; private set; }
+        public Ragdoll Ragdoll { get; private set; }
+
+        public Slider healthSlider;
+
+        public CharacterProfile profile;
+        [SerializeField] private CharacteProfileInfo _characterProfileInfo;
+        public CharacterSettings CharacterSettings => profile.CharacterSettings;
+
+
         public SubComponentMediator subComponentMediator;
         private SubComponentsController subComponentsController;
 
@@ -39,24 +51,20 @@ namespace Angry_Girls
         public AttackSystem_Data attackSystem_Data;
 
         public PlayerOrAi playerOrAi;
-        public CharacterSettings characterSettings;
 
         public Transform projectileSpawnTransform;
         public Transform wingsTransform;
-        public UnityEngine.Color vfxColor;
+        public Color vfxColor;
         public Transform weaponHolder;
 
         public List<GameObject> detectedGroundObject = new();
 
         [SerializeField] private PhysicMaterial noBounceMaterial;
-        private PhysicMaterial originalMaterial;
-
 
         private void Awake()
         {
             Ragdoll = GetComponent<Ragdoll>();
             Health = GetComponent<CharacterHealth>();
-            Health.Initialize();
             CharacterMovement = GetComponent<CharacterMovement>();
 
             animator = GetComponent<Animator>();
@@ -65,9 +73,8 @@ namespace Angry_Girls
             subComponentsController = GetComponentInChildren<SubComponentsController>();
             subComponentMediator.OnAwake();
             subComponentsController.OnAwake();
-            originalMaterial = boxCollider.material;
 
-            GameLoader.Instance.interactionManager.Register(gameObject, new InteractionConfig
+            GameplayCoreManager.Instance.InteractionManager.Register(gameObject, new InteractionConfig
             {
                 type = InteractionMemberType.Character,
                 ownerGO = gameObject
@@ -77,14 +84,17 @@ namespace Angry_Girls
         private void OnEnable()
         {
             subComponentsController.OnComponentEnable();
-            GameLoader.Instance.attackLogicContainer.SetCharacterAttackLogic(this);
-            GameLoader.Instance.gameLogic_UIManager.CreateHealthBar(this);
         }
 
         private void Start()
         {
+            Health.Initialize(profile.GetCurrentStats.health);
+            _characterProfileInfo = GetComponent<CharacteProfileInfo>();
+            _characterProfileInfo.InitAndRun(profile);
+
             subComponentsController.OnStart();
 
+            //TODO: TEMP
             if (weaponHolder != null)
             {
                 var weaponPrefab = Resources.Load("DefinetlyNotAWeapon") as GameObject;
@@ -101,8 +111,12 @@ namespace Angry_Girls
                 weapon.transform.position = weaponHolder.position;
                 weapon.transform.rotation = weaponHolder.rotation;
             }
+            GameplayCoreManager.Instance.AttackLogicContainer.SetCharacterAttackLogic(this);
         }
 
+        /// <summary>
+        /// Configures character for death state, enabling ragdoll physics
+        /// </summary>
         public void SetDeathParams()
         {
             isDead = true;
@@ -121,6 +135,9 @@ namespace Angry_Girls
             gameObject.layer = LayerMask.NameToLayer("DeadBody");
         }
 
+        /// <summary>
+        /// Completes the character's current turn and resets attack state
+        /// </summary>
         public void FinishTurn()
         {
             canUseAbility = false;
@@ -140,62 +157,90 @@ namespace Angry_Girls
             hasFinishedAlternateAttackTurn = true;
         }
 
+        /// <summary>
+        /// Checks if character can finish attack based on ground state and turn
+        /// </summary>
+        /// <returns>True if attack can be finished</returns>
         public bool CheckAttackFinishCondition()
         {
             if (isDead) return false;
 
-            if (CharacterMovement.IsGrounded && GameLoader.Instance.turnManager.currentAttackingUnit == this) return true;
-
-            return false;
+            var currentAttacker = GameplayCoreManager.Instance.GameplayCharactersManager.CurrentlyAttackingUnit;
+            return CharacterMovement.IsGrounded && currentAttacker == this;
         }
 
+        /// <summary>
+        /// Gets the appropriate attack logic based on current game state
+        /// </summary>
+        /// <returns>Attack ability logic for current phase</returns>
         public AttackAbilityLogic Get_AttackFinish_AttackAbilityLogic()
         {
-            return GameLoader.Instance.gameFlowController.CurrentState == GameState.LaunchPhase
+            return GameplayCoreManager.Instance.GameFlowController.CurrentState == GameState.LaunchPhase
                 ? attackSystem_Data.launch_AttackFinishLogic
                 : attackSystem_Data.alternate_AttackFinishLogic;
         }
 
+        /// <summary>
+        /// Gets the attack ability data based on current game state
+        /// </summary>
+        /// <returns>Attack ability data for current phase</returns>
         public AttackAbilityData Get_AttackAbility()
         {
-            return GameLoader.Instance.gameFlowController.CurrentState == GameState.LaunchPhase
-                ? characterSettings.AttackAbility_Launch
-                : characterSettings.AttackAbility_Alternate;
+            return GameplayCoreManager.Instance.GameFlowController.CurrentState == GameState.LaunchPhase
+                ? CharacterSettings.AttackAbility_Launch
+                : CharacterSettings.AttackAbility_Alternate;
         }
 
         private void FixedUpdate() => subComponentsController.OnFixedUpdate();
         private void Update() => subComponentsController.OnUpdate();
         private void LateUpdate() => subComponentsController.OnLateUpdate();
 
+        /// <summary>
+        /// Cleanup when character is disposed
+        /// </summary>
         protected override void OnDispose()
         {
-            GameLoader.Instance.interactionManager.CleanUpForOwner(gameObject);
-            GameLoader.Instance.gameLogic_UIManager.RemoveHealthBar(this);
+            GameplayCoreManager.Instance.InteractionManager.CleanUpForOwner(gameObject);
         }
 
+        /// <summary>
+        /// Returns character to object pool for reuse
+        /// </summary>
         protected override void ReturnToPool()
         {
-            if (!GameLoader.Instance.poolManager.characterPoolDictionary[characterSettings.characterType].Contains(this))
+            if (!CoreManager.Instance.PoolManager.characterPoolDictionary[CharacterSettings.characterType].Contains(this))
             {
-                GameLoader.Instance.poolManager.AddObject(characterSettings.characterType,
-                    GameLoader.Instance.poolManager.characterPoolDictionary, this);
+                CoreManager.Instance.PoolManager.AddObject(CharacterSettings.characterType,
+                    CoreManager.Instance.PoolManager.characterPoolDictionary, this);
             }
         }
 
+        /// <summary>
+        /// Checks if another character is an ally
+        /// </summary>
+        /// <param name="anotherControl">Character to check</param>
+        /// <returns>True if characters are on same team</returns>
         public bool IsAlly(CControl anotherControl) => playerOrAi == anotherControl.playerOrAi;
 
+        /// <summary>
+        /// Gets the layer mask for character's visual effects based on team
+        /// </summary>
+        /// <returns>Layer mask for VFX</returns>
         public int GetVfxLayermask()
         {
-            return playerOrAi == PlayerOrAi.Character
+            return playerOrAi == PlayerOrAi.Player
                 ? LayerMask.NameToLayer("Projectile_Character")
                 : LayerMask.NameToLayer("Projectile_Bot");
         }
 
+        /// <summary>
+        /// Gets the name of currently playing animation
+        /// </summary>
+        /// <returns>Current animation state name</returns>
         public string GetCurrentAnimationName()
         {
             var currentHash = animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
-            return GameLoader.Instance.statesContainer.GetStateNameByHash(currentHash);
+            return GameplayCoreManager.Instance.StatesContainer.GetStateNameByHash(currentHash);
         }
-
     }
 }

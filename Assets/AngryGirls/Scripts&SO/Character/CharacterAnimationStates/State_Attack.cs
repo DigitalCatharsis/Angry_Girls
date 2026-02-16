@@ -9,15 +9,15 @@ namespace Angry_Girls
         public override void OnEnter()
         {
             // attack init
-            _attackAbility = GameLoader.Instance.gameFlowController.CurrentState == GameState.LaunchPhase
-                ? _control.characterSettings.AttackAbility_Launch
-                : _control.characterSettings.AttackAbility_Alternate;
+            _attackAbility = GameplayCoreManager.Instance.GameFlowController.CurrentState == GameState.LaunchPhase
+                ? _control.profile.CharacterSettings.AttackAbility_Launch
+                : _control.profile.CharacterSettings.AttackAbility_Alternate;
 
 
             _control.isAttacking = true;
             _control.canUseAbility = false;
             _animationController.ChangeAnimationStateCrossFade(
-                GameLoader.Instance.statesContainer.attack_Dictionary[_attackAbility.attack_State.animation],
+                GameplayCoreManager.Instance.StatesContainer.attack_Dictionary[_attackAbility.attack_State.animation],
                 _attackAbility.attack_State.transitionDuration);
         }
 

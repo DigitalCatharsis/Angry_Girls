@@ -5,6 +5,9 @@ using UnityEditor;
 #if UNITY_EDITOR
 namespace Angry_Girls
 {
+    /// <summary>
+    /// Editor for LayerChanger component
+    /// </summary>
     [CustomEditor(typeof(LayerChanger))]
     public class LayerChangerEditor : Editor
     {
@@ -16,12 +19,11 @@ namespace Angry_Girls
             {
                 LayerChanger layerChanger = (LayerChanger)target;
 
-                Dictionary<string,int> dic = LayerAdderEditor.GetAllLayers();
+                Dictionary<string, int> dic = LayerAdderEditor.GetAllLayers();
 
                 layerChanger.ChangeLayer(dic);
             }
         }
     }
 }
-
 #endif

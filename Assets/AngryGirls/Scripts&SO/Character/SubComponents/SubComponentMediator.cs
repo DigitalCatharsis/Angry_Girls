@@ -25,9 +25,9 @@ namespace Angry_Girls
             _control.CharacterMovement.ApplyKnockbackFromEnemy(interactionData.target, projectileConfig.enemyKnockBackValue);
             _control.Health.ApplyDamage(projectileConfig.damage);
 
-            GameLoader.Instance.gameLogic_UIManager.UpdateHealthBarValueAndVision(_control);
-            GameLoader.Instance.VFXManager.ShowDamageNumbers(interactionData.targetCollider, projectileConfig.VFXConfig.originator, projectileConfig.damage);
-            GameLoader.Instance.audioManager.PlayRandomSound(AudioSourceType.CharacterHit);
+            //GameplayManager.Instance.GameLogic_UIManager.UpdateHealthBarValueAndVision(_control);
+            CoreManager.Instance.VFXManager.ShowDamageNumbers(interactionData.targetCollider, projectileConfig.VFXConfig.originator, projectileConfig.damage);
+            CoreManager.Instance.AudioManager.PlayRandomSound(AudioSourceType.CharacterHit);
 
             CheckDeathByProjectile(projectileConfig, interactionData);
         }
@@ -36,10 +36,10 @@ namespace Angry_Girls
         {
             if (_control.Health.CurrentHealth <= 0)
             {
-                GameLoader.Instance.gameLogic_UIManager.DisableHealthBar(_control);
+                //GameplayManager.Instance.GameLogic_UIManager.DisableHealthBar(_control);
                 _control.SetDeathParams();
 
-                if (_control.characterSettings.deathByAnimation)
+                if (_control.CharacterSettings.deathByAnimation)
                 {
                     _animationProcessor.PlayDeathStateForNonRagdoll();
                 }
@@ -49,7 +49,6 @@ namespace Angry_Girls
                     Vector3 forceDirection = GetProjectileForceDirection(interactionData);
                     Vector3 force = forceDirection * Mathf.Abs(projectileConfig.deadbodyForceMultiplier);
 
-                    // Учитываем знак множителя
                     if (projectileConfig.deadbodyForceMultiplier < 0)
                         force = -force;
 
@@ -66,10 +65,10 @@ namespace Angry_Girls
         {
             if (_control.Health.CurrentHealth <= 0)
             {
-                GameLoader.Instance.gameLogic_UIManager.DisableHealthBar(_control);
+                //GameplayManager.Instance.GameLogic_UIManager.DisableHealthBar(_control);
                 _control.SetDeathParams();
 
-                if (_control.characterSettings.deathByAnimation)
+                if (_control.CharacterSettings.deathByAnimation)
                 {
                     _animationProcessor.PlayDeathStateForNonRagdoll();
                 }
@@ -82,7 +81,7 @@ namespace Angry_Girls
                         forceMode: ForceMode.VelocityChange);
                 }
 
-                GameLoader.Instance.cameraManager.StopCameraFollowForRigidBody();
+                GameplayCoreManager.Instance.CameraManager.StopCameraFollowForRigidBody();
             }
         }
 
@@ -134,7 +133,7 @@ namespace Angry_Girls
         {
             _control.Health.ApplyDamage(_control.Health.CurrentHealth);
             CheckDeath();
-            GameLoader.Instance.cameraManager.StopCameraFollowForRigidBody();
+            GameplayCoreManager.Instance.CameraManager.StopCameraFollowForRigidBody();
         }
     }
 }

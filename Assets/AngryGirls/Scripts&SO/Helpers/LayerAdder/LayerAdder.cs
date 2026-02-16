@@ -2,6 +2,9 @@
 
 namespace Angry_Girls
 {
+    /// <summary>
+    /// Enum defining custom layer names
+    /// </summary>
     public enum MMP_Layers
     {
         PostProcessing,
@@ -12,6 +15,9 @@ namespace Angry_Girls
         Visual_NoRayCast,
     }
 
+    /// <summary>
+    /// Component for managing custom layers
+    /// </summary>
     public class LayerAdder : MonoBehaviour
     {
 

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -9,44 +8,44 @@ namespace Angry_Girls
 
         private bool _cameraShaked = false;
 
-        private GameObject _vfx;
-
-        private AudioSource _auidioSource;
+        private GameObject _projectile;
 
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            var ability = control.characterSettings.AttackAbility_Launch;
+            var ability = control.CharacterSettings.AttackAbility_Launch;
 
-            _vfx = GameLoader.Instance.VFXManager.SpawnByProjectileAbility
-                (
-                destroyOnCollision: false,
-                spawnTramsform: control.transform,
-                originator: control.gameObject,
-                destroyOnCharacterTrigger: false,
-                attackDamageValue: ability.attackDamage,
-                enemyKnockBackValue: ability.enemyKnockbackValue,
-                enableCollider: false,
-                enableTrigger: true,
-                spawnSound: new Tuple<AudioSourceType, int>(AudioSourceType.SFX_Impact, 2),
-                destroySound: null,
-                layerMask: control.GetVfxLayermask(),
-                vfxType: VFX_Type.VFX_Downsmash,
-                vfxColor: Color.white,
-                timeToLive: 1f,
-                connectToOriginator: false,
-                teamfire: false,
-                deadbodyForceMultiplier: 0,
-                deadbodyForceMode: ForceMode.Force
-                );
+            _projectile = GameplayCoreManager.Instance.ProjectileManager.SpawnDownSmash(control, ability);
 
-            _vfx.transform.position = control.CharacterMovement.Rigidbody.position;
+            //    _vfx = GameplayCoreManager.Instance.ProjectileManager.SpawnProjectile
+            //        (
+            //        destroyOnCollision: false,
+            //        spawnTransform: control.transform,
+            //        originator: control.gameObject,
+            //        destroyOnCharacterTrigger: false,
+            //        attackDamageValue: ability.attackDamage,
+            //        enemyKnockBackValue: ability.enemyKnockbackValue,
+            //        enableCollider: false,
+            //        enableTrigger: true,
+            //        spawnSound: new Tuple<AudioSourceType, int>(AudioSourceType.SFX_Impact, 2),
+            //        destroySound: null,
+            //        layerMask: control.GetVfxLayermask(),
+            //        vfxType: VFX_Type.VFX_Downsmash,
+            //        vfxColor: Color.white,
+            //        timeToLive: 1f,
+            //        connectToOriginator: false,
+            //        teamfire: false,
+            //        deadbodyForceMultiplier: 0,
+            //        deadbodyForceMode: ForceMode.Force
+            //        );
+
+            //    _vfx.transform.position = control.CharacterMovement.Rigidbody.position;
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             if (stateInfo.normalizedTime >= 0.09 && control.CharacterMovement.IsGrounded && _cameraShaked == false)
             {
-                GameLoader.Instance.cameraManager.ShakeCamera();
+                GameplayCoreManager.Instance.CameraManager.ShakeCamera();
 
                 _cameraShaked = true;
             }
@@ -59,7 +58,7 @@ namespace Angry_Girls
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            GameLoader.Instance.VFXManager.CallVFXDispose(_vfx);
+            GameplayCoreManager.Instance.ProjectileManager.DisposeProjectile(_projectile);
             control.isAttacking = false;
             _cameraShaked = false;
         }

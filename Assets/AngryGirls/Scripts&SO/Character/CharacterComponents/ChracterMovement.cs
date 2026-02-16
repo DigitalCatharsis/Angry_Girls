@@ -13,13 +13,12 @@ namespace Angry_Girls
         private BoxCollider _boxCollider;
         public Rigidbody Rigidbody => _rigidbody;
 
-        //GroundDetection
-        private LayerMask _ignoreLayerMask; // Маска для первого BoxCast (игнорируемые слои)
-        private LayerMask _enemyLayerMask; // Маска для второго BoxCast (только противники)
-        [Header("Multi-Collision Grounded Settings")]
-        [SerializeField] private float _multiCollisionTimeThreshold = 4f; // Время для установки grounded
-        private float _multiCollisionTimer; // Таймер для multi-collision
+        private LayerMask _ignoreLayerMask; // Layers ignored for ground detection
+        private LayerMask _enemyLayerMask; // Layers for enemy detection
 
+        [Header("Multi-Collision Grounded Settings")]
+        [SerializeField] private float _multiCollisionTimeThreshold = 4f; // Time threshold for multi-collision grounded
+        private float _multiCollisionTimer; // Timer for multi-collision detection
 
         private void Awake()
         {
@@ -27,9 +26,10 @@ namespace Angry_Girls
             _boxCollider = GetComponent<BoxCollider>();
             _rigidbody = GetComponent<Rigidbody>();
         }
+
         private void Start()
         {
-            // Инициализация масок слоев
+            // Initialize layer masks
             _ignoreLayerMask = LayerMask.GetMask("Projectile", "Pickable", "CharacterToLaunch", "Character", "Bot", "DeadBody");
             _enemyLayerMask = LayerMask.GetMask("Bot");
         }
@@ -44,6 +44,9 @@ namespace Angry_Girls
             _rigidbody.AddForce(force, forceMode);
         }
 
+        /// <summary>
+        /// Applies knockback force from enemy collision
+        /// </summary>
         public void ApplyKnockbackFromEnemy(GameObject opponent, float knockbackForce)
         {
             if (_rigidbody.velocity.z != 0) return;
@@ -55,16 +58,17 @@ namespace Angry_Girls
 
         private void OnCollisionEnter(Collision collision)
         {
-            GameLoader.Instance.interactionManager.HandleCollision(gameObject, collision);
+            GameplayCoreManager.Instance.InteractionManager.HandleCollision(gameObject, collision);
         }
+
         private void OnTriggerEnter(Collider other)
         {
-            GameLoader.Instance.interactionManager.HandleTrigger(gameObject, other);
+            GameplayCoreManager.Instance.InteractionManager.HandleTrigger(gameObject, other);
         }
 
         private void OnCollisionStay(Collision collision)
         {
-            GameLoader.Instance.interactionManager.HandleCollision(gameObject, collision);
+            GameplayCoreManager.Instance.InteractionManager.HandleCollision(gameObject, collision);
         }
 
         public void SetPosition(Vector3 position)
@@ -87,6 +91,9 @@ namespace Angry_Girls
             _rigidbody.MovePosition(position);
         }
 
+        /// <summary>
+        /// Handles repulsion between characters when they overlap
+        /// </summary>
         public void HandleRepel(CharacterMovement target)
         {
             float zDiff = Rigidbody.position.z - target.Rigidbody.position.z;
@@ -100,31 +107,32 @@ namespace Angry_Girls
             Teleport(Rigidbody.position + repelDirection * (_repelValue * Time.fixedDeltaTime));
         }
 
+        /// <summary>
+        /// Checks if character is grounded using BoxCast with special multi-collision logic for enemies
+        /// </summary>
+        /// <returns>True if grounded</returns>
         private bool CheckIfGrounded()
         {
             if (_boxCollider == null || !_boxCollider.enabled) return false;
 
-            // Нижняя точка коллайдера
+            // Calculate bottom point of collider
             var bottomPoint = new Vector3(_boxCollider.bounds.center.x, _boxCollider.bounds.min.y, _boxCollider.bounds.center.z);
-            // Центр BoxCast области (0.13 выше нижней точки)
+
+            // BoxCast center (0.13 units above bottom)
             var boxCenter = bottomPoint + Vector3.up * 0.13f;
-            // Размер BoxCast области (ширина и глубина как у коллайдера, высота небольшая)
+
+            // BoxCast size (slightly larger than collider)
             var boxSize = new Vector3(_boxCollider.size.x, 0.1f, _boxCollider.size.z);
-            // Длина луча (0.13 вниз от центра BoxCast)
             float rayLength = 0.13f;
 
-            // Проверяем BoxCast (только противники)
+            // Special logic: If player is standing on multiple enemies, consider grounded
             var enemyHits = Physics.BoxCastAll(boxCenter, boxSize / 2, Vector3.down, Quaternion.identity, rayLength, _enemyLayerMask);
 
-            // Если второй BoxCast пересекает больше одного коллайдера
             if (enemyHits.Length >= 1 && _control.playerOrAi != PlayerOrAi.Bot)
             {
-                // Увеличиваем таймер
                 _multiCollisionTimer += Time.fixedDeltaTime;
 
-                //ColorDebugLog.Log(control.name + "  " + _multiCollisionTimer.ToString(), System.Drawing.KnownColor.Red);
-
-                // Если таймер превышает порог, устанавливаем isGrounded = true
+                // If timer exceeds threshold, consider grounded on enemies
                 if (_multiCollisionTimer >= _multiCollisionTimeThreshold)
                 {
                     foreach (var enemy in enemyHits)
@@ -132,21 +140,19 @@ namespace Angry_Girls
                         _control.detectedGroundObject.Clear();
                         _control.detectedGroundObject.Add(enemy.collider.gameObject);
                     }
-                    return true;// Не проверяем первый BoxCast
+                    return true;
                 }
             }
             else
             {
-                // Сбрасываем таймер, если коллайдеров меньше двух
+                // Reset timer if not colliding with enemies
                 _multiCollisionTimer = 0f;
             }
 
-            // Проверяем первый BoxCast (обычная проверка приземления)
+            // Normal ground detection
             RaycastHit hit;
-
-
-
             var isGrounded = Physics.BoxCast(boxCenter, boxSize / 2, Vector3.down, out hit, Quaternion.identity, rayLength, ~_ignoreLayerMask);
+
             if (hit.collider != null && hit.collider.transform.root != gameObject.transform.root)
             {
                 _control.detectedGroundObject.Clear();
@@ -156,33 +162,24 @@ namespace Angry_Girls
             return isGrounded;
         }
 
-        // Отрисовка Gizmos
+        // Debug visualization for ground detection
         private void OnDrawGizmos()
         {
             if (_boxCollider == null || !_boxCollider.enabled) return;
 
-            // Нижняя точка коллайдера
             var bottomPoint = new Vector3(_boxCollider.bounds.center.x, _boxCollider.bounds.min.y, _boxCollider.bounds.center.z);
-
-            // Центр BoxCast области (0.13 выше нижней точки)
             var boxCenter = bottomPoint + Vector3.up * 0.13f;
-
-            // Размер BoxCast области
             var boxSize = new Vector3(_boxCollider.size.x, 0.1f, _boxCollider.size.z);
 
-            // Цвет в зависимости от состояния
             Gizmos.color = CheckIfGrounded() ? Color.green : Color.red;
-
-            // Рисуем BoxCast область
             Gizmos.DrawWireCube(boxCenter, boxSize);
 
-            // Если есть пересечение, рисуем нормаль и точку пересечения
             RaycastHit hit;
             if (Physics.BoxCast(boxCenter, boxSize / 2, Vector3.down, out hit, Quaternion.identity, 0.13f, ~_ignoreLayerMask))
             {
                 Gizmos.color = Color.blue;
-                Gizmos.DrawLine(hit.point, hit.point + hit.normal); // Нормаль поверхности
-                Gizmos.DrawSphere(hit.point, 0.1f); // Точка пересечения
+                Gizmos.DrawLine(hit.point, hit.point + hit.normal);
+                Gizmos.DrawSphere(hit.point, 0.1f);
             }
         }
     }

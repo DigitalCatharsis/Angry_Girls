@@ -15,7 +15,7 @@ namespace Angry_Girls
 
             var randomHitAnimation = _settings.GetRandomState(_settings.hitReaction_States).animation;
             _animationController.ChangeAnimationState(
-                GameLoader.Instance.statesContainer.hitReaction_Dictionary[randomHitAnimation],
+                GameplayCoreManager.Instance.StatesContainer.hitReaction_Dictionary[randomHitAnimation],
                 transitionDuration: 0.1f);
         }
 

@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
+    /// <summary>
+    /// Serializable sublist with a name field for identification
+    /// </summary>
     [Serializable]
     public class Serializable_SubList<T> : List<T>
     {
@@ -11,11 +14,19 @@ namespace Angry_Girls
         public List<T> subList = new();
     }
 
+    /// <summary>
+    /// Serializable list containing multiple named sublists
+    /// </summary>
     [Serializable]
     public class Serializable_List<T>
     {
         public List<Serializable_SubList<T>> instance = new();
 
+        /// <summary>
+        /// Retrieves a sublist by its name
+        /// </summary>
+        /// <param name="sublistName">Name of the sublist to find</param>
+        /// <returns>The found sublist or null</returns>
         public Serializable_SubList<T> GetSublistByName(string sublistName)
         {
             foreach (var sublist in instance)
@@ -31,4 +42,3 @@ namespace Angry_Girls
         }
     }
 }
-

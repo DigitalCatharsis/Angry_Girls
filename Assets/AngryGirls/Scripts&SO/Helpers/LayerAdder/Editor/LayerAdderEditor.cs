@@ -4,8 +4,11 @@ using UnityEditor;
 #if UNITY_EDITOR
 namespace Angry_Girls
 {
+    /// <summary>
+    /// Editor for LayerAdder component
+    /// </summary>
     [CustomEditor(typeof(LayerAdder))]
-    public class LayerAdderEditor: Editor
+    public class LayerAdderEditor : Editor
     {
         public override void OnInspectorGUI()
         {
@@ -16,7 +19,7 @@ namespace Angry_Girls
             {
                 MMP_Layers[] arr = System.Enum.GetValues(typeof(MMP_Layers)) as MMP_Layers[];
 
-                foreach(MMP_Layers r in arr)
+                foreach (MMP_Layers r in arr)
                 {
                     CreateLayer(r.ToString());
                 }
@@ -54,7 +57,7 @@ namespace Angry_Girls
             {
                 Dictionary<string, int> dic = GetAllLayers();
 
-                foreach(KeyValuePair<string, int> d1 in dic)
+                foreach (KeyValuePair<string, int> d1 in dic)
                 {
                     foreach (KeyValuePair<string, int> d2 in dic)
                     {
@@ -66,7 +69,6 @@ namespace Angry_Girls
             }
             EditorGUILayout.LabelField("Disable all collisions");
             EditorGUILayout.Space();
-
 
             if (GUILayout.Button("Check All Layer Collisions"))
             {
@@ -86,6 +88,9 @@ namespace Angry_Girls
             EditorGUILayout.Space();
         }
 
+        /// <summary>
+        /// Gets all layers from project settings
+        /// </summary>
         public static Dictionary<string, int> GetAllLayers()
         {
             SerializedObject tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
@@ -125,7 +130,7 @@ namespace Angry_Girls
                     {
                         element.stringValue = name;
 
-                        tagManager.ApplyModifiedProperties(); //save changes
+                        tagManager.ApplyModifiedProperties();
                         Success = true;
                         Debug.Log(i.ToString() + " layer created: " + name);
                         break;

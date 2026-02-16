@@ -18,7 +18,7 @@ namespace Angry_Girls
 
         public override void OnStart()
         {
-            control.characterSettings.CheckForNoneValues(control);
+            control.CharacterSettings.CheckForNoneValues(control);
 
             if (control.playerOrAi == PlayerOrAi.Bot)
             {
@@ -29,8 +29,8 @@ namespace Angry_Girls
                 (
                 control.gameObject,
                 control.animator,
-                GameLoader.Instance.hashManager,
-                GameLoader.Instance.statesContainer
+                CoreManager.Instance.HashManager,
+                GameplayCoreManager.Instance.StatesContainer
                 );
 
             InitializeStateMachine();
@@ -47,7 +47,7 @@ namespace Angry_Girls
                 new State_HitReaction(control, _animationController),
                 new State_Death(control, _animationController),
                 new State_Landing(control, _animationController),
-                new State_Airborned(control, _animationController),
+                new State_Airboned(control, _animationController),
             };
 
             _stateMachine = new AnimationStateMachine(control.gameObject, states);
@@ -62,7 +62,7 @@ namespace Angry_Girls
             }
             else
             {
-                _stateMachine.ChangeState<State_Airborned>(control.gameObject);
+                _stateMachine.ChangeState<State_Airboned>(control.gameObject);
             }
         }
 
@@ -72,9 +72,12 @@ namespace Angry_Girls
             _stateMachine.Update();
         }
 
+        /// <summary>
+        /// Processes behavior based on current game phase
+        /// </summary>
         private void ProcessPhaseBehavior()
         {
-            var currentPhase = GameLoader.Instance.gameFlowController.CurrentState;
+            var currentPhase = GameplayCoreManager.Instance.GameFlowController.CurrentState;
 
             if (currentPhase == GameState.LaunchPhase && control.hasBeenLaunched && !control.hasFinishedLaunchingTurn)
             {
@@ -99,23 +102,27 @@ namespace Angry_Girls
                 _stateMachine.ChangeState<State_Attack>(control.gameObject);
             }
         }
+
         private void ProcessAlternatePhase()
         {
             if (ShouldFinishGroundAttack())
             {
                 _stateMachine.ChangeState<State_AttackFinish>(control.gameObject);
             }
-            // Обработка основной атаки
             else if (control.canUseAbility)
             {
                 _stateMachine.ChangeState<State_Attack>(control.gameObject);
             }
         }
+
+        /// <summary>
+        /// Checks if ground unit attack should finish (attack animation ending and grounded)
+        /// </summary>
         private bool ShouldFinishGroundAttack()
         {
             var currentStateHash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
 
-            if (control.characterSettings.unitType != UnitType.Ground) { return false; }
+            if (control.CharacterSettings.unitType != UnitType.Ground) { return false; }
 
             if (_stateMachine.CurrentState is State_AttackFinish) { return false; }
 
@@ -123,7 +130,7 @@ namespace Angry_Girls
 
             if (!control.CharacterMovement.IsGrounded) { return false; }
 
-            return IsAnimationEnding(currentStateHash, GameLoader.Instance.statesContainer.attack_Dictionary);
+            return IsAnimationEnding(currentStateHash, GameplayCoreManager.Instance.StatesContainer.attack_Dictionary);
         }
 
         private bool ShouldStartAttackPrep()
@@ -139,6 +146,9 @@ namespace Angry_Girls
             _stateMachine.ChangeState<State_Death>(control.gameObject);
         }
 
+        /// <summary>
+        /// Processes global animation behavior independent of game phase
+        /// </summary>
         private void ProcessGlobalBehavior()
         {
             if (!control.checkGlobalBehavior || control.isDead) return;
@@ -158,10 +168,9 @@ namespace Angry_Girls
             }
             if (ShouldEnterAirborne(currentStateHash))
             {
-                _stateMachine.ChangeState<State_Airborned>(control.gameObject);
+                _stateMachine.ChangeState<State_Airboned>(control.gameObject);
                 return;
             }
-
 
             if (ShouldReturnToIdle(currentStateHash))
             {
@@ -169,19 +178,22 @@ namespace Angry_Girls
             }
         }
 
+        /// <summary>
+        /// Determines if character should enter airborne state
+        /// </summary>
         private bool ShouldEnterAirborne(int currentStateHash)
         {
-            if (_stateMachine.CurrentState is State_Airborned)
+            if (_stateMachine.CurrentState is State_Airboned)
             {
                 return false;
             }
 
-            // AIR
-            if (control.characterSettings.unitType == UnitType.Air)
+            // AIR units: always airborne except when grounded and can attack
+            if (control.CharacterSettings.unitType == UnitType.Air)
             {
-                if (GameLoader.Instance.gameFlowController.CurrentState != GameState.LaunchPhase) { return false; }
+                if (GameplayCoreManager.Instance.GameFlowController.CurrentState != GameState.LaunchPhase) { return false; }
 
-                if (control.playerOrAi != PlayerOrAi.Character) { return false; }
+                if (control.playerOrAi != PlayerOrAi.Player) { return false; }
 
                 if (control.hasUsedAbility) { return false; }
 
@@ -196,12 +208,13 @@ namespace Angry_Girls
 
             if (control.isLanding) { return false; }
 
-            //if (_stateMachine.CurrentState is State_Attack) { return false; }
-
-            //AirToGround and ground
+            // AirToGround and ground units: airborne when not grounded
             return true;
         }
 
+        /// <summary>
+        /// Determines if character should enter landing state
+        /// </summary>
         private bool ShouldEnterLanding(int currentStateHash)
         {
             if (_stateMachine.CurrentState is State_Landing) { return false; }
@@ -210,27 +223,20 @@ namespace Angry_Girls
 
             if (!control.CharacterMovement.IsGrounded) { return false; }
 
-            if (control.characterSettings.unitType == UnitType.Air) return false;
+            if (control.CharacterSettings.unitType == UnitType.Air) return false;
 
-            if (control.characterSettings.unitType == UnitType.AirToGround)
+            // AirToGround units: enter landing when attack ends and grounded
+            if (control.CharacterSettings.unitType == UnitType.AirToGround)
             {
-                if (_stateMachine.CurrentState is State_Attack 
-                    && IsAnimationEnding(currentStateHash, GameLoader.Instance.statesContainer.attack_Dictionary)
+                if (_stateMachine.CurrentState is State_Attack
+                    && IsAnimationEnding(currentStateHash, GameplayCoreManager.Instance.StatesContainer.attack_Dictionary)
                     )
                 {
-                    ColorDebugLog.Log(
-                        $"{control.name} shouldEnterLanding return true. Fields: " +
-                        $"\nisgrounded = {control.CharacterMovement.IsGrounded}" +
-                        $"\ncurrentAnimation: {control.GetCurrentAnimationName()}" +
-                        $"\nisAnimationEnding:{IsAnimationEnding(currentStateHash, GameLoader.Instance.statesContainer.attack_Dictionary)}" +
-                        $"\n CurrentState: {_stateMachine.CurrentState}" +
-                        $"\ncolliding with {control.detectedGroundObject[0].name}"
-                        , System.Drawing.KnownColor.Yellow);
                     return true;
                 }
             }
 
-            if (_stateMachine.CurrentState is State_Airborned)
+            if (_stateMachine.CurrentState is State_Airboned)
             {
                 return true;
             }
@@ -240,21 +246,19 @@ namespace Angry_Girls
 
         private bool ShouldReturnToIdle(int currentStateHash)
         {
-            // If already in idle
             if (_stateMachine.CurrentState is State_Idle)
             {
                 return false;
             }
 
-            //everyone
             if (control.isAttacking) { return false; }
 
-            // Air
-            if (control.characterSettings.unitType == UnitType.Air)
+            // AIR units: return to idle when grounded or can't use ability
+            if (control.CharacterSettings.unitType == UnitType.Air)
             {
                 if (_stateMachine.CurrentState is State_HitReaction)
                 {
-                    return IsAnimationEnding(currentStateHash, GameLoader.Instance.statesContainer.hitReaction_Dictionary);
+                    return IsAnimationEnding(currentStateHash, GameplayCoreManager.Instance.StatesContainer.hitReaction_Dictionary);
                 }
 
                 if (control.CharacterMovement.IsGrounded || !control.canUseAbility)
@@ -265,18 +269,21 @@ namespace Angry_Girls
                 return false;
             }
 
-            //Ground and Air2Ground
+            // Ground and AirToGround: return to idle when not landing, grounded
             if (control.isLanding) { return false; }
 
             if (!control.CharacterMovement.IsGrounded) { return false; }
 
-            bool shouldTransitionFromAttackFinish = _stateMachine.CurrentState is State_AttackFinish && IsAnimationEnding(currentStateHash, GameLoader.Instance.statesContainer.attackFinish_Dictionary);
+            bool shouldTransitionFromAttackFinish = _stateMachine.CurrentState is State_AttackFinish && IsAnimationEnding(currentStateHash, GameplayCoreManager.Instance.StatesContainer.attackFinish_Dictionary);
 
             bool shouldTransitionFromOtherStates = _stateMachine.CurrentState is State_HitReaction || _stateMachine.CurrentState is State_Landing;
 
             return shouldTransitionFromAttackFinish || shouldTransitionFromOtherStates;
         }
 
+        /// <summary>
+        /// Checks if animation is ending based on normalized time
+        /// </summary>
         private bool IsAnimationEnding<T>(int stateHash, SerializedDictionary<T, int> dict) where T : Enum
         {
             if (dict.ContainsValue(stateHash))
@@ -286,7 +293,6 @@ namespace Angry_Girls
             else
             {
                 return false;
-                //throw new Exception(dict.ToString() +" does not contain such value as " + stateHash +". Supposed to be " + GameLoader.Instance.hashManager.GetName(GameLoader.Instance.statesContainer.stateNames_Dictionary, stateHash));
             }
         }
 

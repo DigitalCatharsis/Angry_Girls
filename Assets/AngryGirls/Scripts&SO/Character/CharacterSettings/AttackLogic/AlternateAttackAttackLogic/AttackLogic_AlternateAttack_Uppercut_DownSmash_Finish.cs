@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -12,38 +11,19 @@ namespace Angry_Girls
         private GameObject _projectile;
         public override void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            var ability = control.characterSettings.AttackAbility_Alternate;
-            _projectile = GameLoader.Instance.VFXManager.SpawnByProjectileAbility
-                (
-                teamfire: false,
-                spawnTramsform: control.transform,
-                originator: control.gameObject,
-                layerMask: control.GetVfxLayermask(),
-                vfxType: VFX_Type.VFX_Downsmash,
-                vfxColor: Color.white,
-                timeToLive: 1f,
-                connectToOriginator: false,
-                destroyOnCollision: false,
-                destroyOnCharacterTrigger: false,
-                attackDamageValue: control.characterSettings.AttackAbility_Alternate.attackDamage,
-                enemyKnockBackValue: ability.enemyKnockbackValue,
-                enableCollider: false,
-                enableTrigger: true,
-                spawnSound: new Tuple<AudioSourceType, int>(AudioSourceType.SFX_Impact, 2),
-                destroySound: null,
-                deadbodyForceMultiplier: 0,
-                deadbodyForceMode: ForceMode.Force
-                );
-
+            var ability = control.profile.CharacterSettings.AttackAbility_Alternate;
+            _projectile = GameplayCoreManager.Instance.ProjectileManager.SpawnDownSmash(control, ability);
 
             _projectile.transform.position = control.CharacterMovement.Rigidbody.position;
         }
+
+
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             if (stateInfo.normalizedTime >= 0.14 && control.CharacterMovement.IsGrounded && _cameraShaked == false)
             {
-                GameLoader.Instance.cameraManager.ShakeCamera();
+                GameplayCoreManager.Instance.CameraManager.ShakeCamera();
 
                 _cameraShaked = true;
             }
@@ -56,7 +36,7 @@ namespace Angry_Girls
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            GameLoader.Instance.VFXManager.CallVFXDispose(_projectile);
+            GameplayCoreManager.Instance.ProjectileManager.DisposeProjectile(_projectile);
             control.isAttacking = false;
             _cameraShaked = false;
         }

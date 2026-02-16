@@ -1,4 +1,3 @@
-using DG.Tweening;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -26,26 +25,25 @@ namespace Angry_Girls
             control.CharacterMovement.Rigidbody.useGravity = false;
             _attackAngleChangeValue = 0f;
         }
-
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             _timeInCurrentLoop += Time.deltaTime;
 
-            // Определяем целевое вращение по осям X и Y
+            // Determine the target rotation along the X and Y axes
             var targetEuler = control.CharacterMovement.Rigidbody.transform.forward.z > 0
-                ? new Vector3(45, 0, 0) // Поворот вниз
-                : new Vector3(45, 180, 0); // Поворот вверх
+            ? new Vector3(45, 0, 0) // Rotate downwards
+            : new Vector3(45, 180, 0); // Rotate upward
 
-            // Проверка на 40% в ТЕКУЩЕМ цикле анимации
+            // Check for 40% in the CURRENT animation loop
             if (!_fireballSentThisLoop && _timeInCurrentLoop / stateInfo.length >= _spawnProjectile_TransitionOffset)
             {
 
-                SendFireball(control, control.projectileSpawnTransform.position, targetEuler, _attackAngleChangeValue);
+                GameplayCoreManager.Instance.ProjectileManager.SendFireballFrontLaunch(control, control.projectileSpawnTransform.position, targetEuler, _attackAngleChangeValue);
                 _fireballSentThisLoop = true;
                 _attackAngleChangeValue += 4;
             }
 
-            // Проверка на окончание ВСЕХ циклов анимации
+            // Check for the end of ALL animation loops
             if (stateInfo.normalizedTime >= _timesToRepeat_Attack_State * stateInfo.length + 0.8f)
             {
                 _loopsCount = 0;
@@ -54,7 +52,7 @@ namespace Angry_Girls
                 control.FinishTurn();
             }
 
-            //Сброс флага в конце цикла
+            //Reset the flag at the end of the loop
             if (_timeInCurrentLoop >= stateInfo.length)
             {
                 _timeInCurrentLoop -= stateInfo.length;
@@ -68,46 +66,6 @@ namespace Angry_Girls
             _attackAngleChangeValue = 0f;
             control.CharacterMovement.Rigidbody.velocity = Vector3.zero;
             control.CharacterMovement.Rigidbody.isKinematic = true;
-        }
-        private void SendFireball(CControl control, Vector3 startPoint, Vector3 targetEuler, float attackAngleChangeValue, float rotationDuration = 1.5f)
-        {
-            var vfx = GameLoader.Instance.VFXManager.SpawnByProjectileAbility(control);
-
-            // Устанавливаем начальное положение
-            vfx.transform.position = startPoint;
-
-            // Определяем начальное вращение в зависимости от направления control
-            float initialYRotation = control.CharacterMovement.Rigidbody.transform.forward.z > 0 ? 0f : 180f;
-            var initialRotation = Quaternion.Euler(
-                attackAngleChangeValue * 4, // Наклон по оси X
-                initialYRotation, // Направление по оси Y (0 или 180)
-                0 // Наклон по оси Z (не используется)
-            );
-
-            // Устанавливаем начальное направление с учетом коррекции
-            vfx.transform.rotation = initialRotation;
-
-            // Определяем целевой угол поворота только по оси X
-            var targetEulerAngles = new Vector3(
-                targetEuler.x, // Конечный угол по оси X
-                initialYRotation, // Оставляем Y неизменным
-                0 // Оставляем Z неизменным
-            );
-
-            // Применяем поворот с помощью DOTween (только по оси X)
-            vfx.transform.DORotate(targetEulerAngles, rotationDuration, RotateMode.Fast);
-
-            // Устанавливаем импульс
-            var impulse = new Vector3(
-                0,
-                control.characterSettings.AttackAbility_Launch.projectileMovementSpeed.y * vfx.transform.forward.y - attackAngleChangeValue,
-                control.characterSettings.AttackAbility_Launch.projectileMovementSpeed.z * vfx.transform.forward.z
-            );
-
-            vfx.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);
-
-            // Применяем силу к control.rigidBody
-            control.CharacterMovement.ApplyRigidForce(control.characterSettings.AttackAbility_Launch.attackMovementForce * control.CharacterMovement.Rigidbody.transform.forward.z, ForceMode.VelocityChange);
         }
     }
 }

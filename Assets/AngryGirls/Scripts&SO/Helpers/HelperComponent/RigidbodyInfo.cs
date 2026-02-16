@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
+    /// <summary>
+    /// Displays Rigidbody information in the Inspector
+    /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     public class RigidbodyInfo : MonoBehaviour
     {

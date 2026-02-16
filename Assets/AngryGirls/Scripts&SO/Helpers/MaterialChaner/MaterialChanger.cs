@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
+    /// <summary>
+    /// Changes materials on child objects
+    /// </summary>
     public class MaterialChanger : MonoBehaviour
     {
         public Material material;
@@ -10,6 +13,9 @@ namespace Angry_Girls
         public List<Material> CurrentMaterials = new List<Material>();
         public List<Material> NewMaterials = new List<Material>();
 
+        /// <summary>
+        /// Changes all child materials to a single material
+        /// </summary>
         public void ChangeMaterial()
         {
             if (material == null)
@@ -29,6 +35,9 @@ namespace Angry_Girls
             }
         }
 
+        /// <summary>
+        /// Changes materials based on a mapping of current to new materials
+        /// </summary>
         public void ChangeComplexMaterial()
         {
             Debug.Log("Changing multiple materials");
@@ -65,6 +74,9 @@ namespace Angry_Girls
             }
         }
 
+        /// <summary>
+        /// Identifies unique materials used in child objects
+        /// </summary>
         public void IdentifyMaterials()
         {
             Renderer[] arrRenderers = this.gameObject.GetComponentsInChildren<Renderer>();

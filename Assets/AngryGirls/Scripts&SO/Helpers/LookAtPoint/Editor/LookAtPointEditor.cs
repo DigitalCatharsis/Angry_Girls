@@ -1,47 +1,44 @@
 using UnityEngine;
-using UnityEditor;  //Для срани ниже
+using UnityEditor;
+
 #if UNITY_EDITOR
 namespace Angry_Girls
 {
-    [CustomEditor(typeof(LookAtPoint))] //The CustomEditor attribute informs Unity which component it should act as an editor for.
-    [CanEditMultipleObjects]  //The CanEditMultipleObjects attribute tells Unity that you can select multiple objects with this editor and change them all at the same time.
-
-    public class LookAtPointEditor : Editor  //Наследуемся от Editor
+    [CustomEditor(typeof(LookAtPoint))]
+    [CanEditMultipleObjects]
+    public class LookAtPointEditor : Editor
     {
-        SerializedProperty lookAtPoint; //Дженерик свойства для ловли полей
-        SerializedProperty objectToLook; //Дженерик свойства для ловли полей
-        SerializedProperty rotateToPoint; //Дженерик свойства для ловли полей
-        SerializedProperty traceColor; //Дженерик свойства для ловли полей
-        SerializedProperty traceExistDuration; //Дженерик свойства для ловли полей
+        SerializedProperty lookAtPoint;
+        SerializedProperty objectToLook;
+        SerializedProperty rotateToPoint;
+        SerializedProperty traceColor;
+        SerializedProperty traceExistDuration;
 
         void OnEnable()
         {
-            
-            lookAtPoint = serializedObject.FindProperty("lookAtPoint"); //Какое поле хватаем
-            objectToLook = serializedObject.FindProperty("objectToLook"); //Какое поле хватаем
-            rotateToPoint = serializedObject.FindProperty("rotateToPoint"); //Какое поле хватаем
-            traceColor = serializedObject.FindProperty("traceColor"); //Какое поле хватаем
-            traceExistDuration = serializedObject.FindProperty("traceExistDuration"); //Какое поле хватаем
+            lookAtPoint = serializedObject.FindProperty("lookAtPoint");
+            objectToLook = serializedObject.FindProperty("objectToLook");
+            rotateToPoint = serializedObject.FindProperty("rotateToPoint");
+            traceColor = serializedObject.FindProperty("traceColor");
+            traceExistDuration = serializedObject.FindProperty("traceExistDuration");
         }
 
-        public override void OnInspectorGUI()  //GUI инспектора
+        public override void OnInspectorGUI()
         {
             var tar = (target as LookAtPoint);
-            tar.Update(); //Используем Update, описанный в классе tar
+            tar.Update();
 
-            serializedObject.Update(); //Тыкнуть поле, чтобы оно считало
+            serializedObject.Update();
 
-
-
-            EditorGUILayout.PropertyField(lookAtPoint); //Отобразить обрабатываемое поле
-            EditorGUILayout.PropertyField(objectToLook); //Отобразить обрабатываемое поле
-            EditorGUILayout.PropertyField(rotateToPoint); //Отобразить обрабатываемое поле
-            EditorGUILayout.PropertyField(traceColor); //Отобразить обрабатываемое поле
-            EditorGUILayout.PropertyField(traceExistDuration); //Отобразить обрабатываемое поле
+            EditorGUILayout.PropertyField(lookAtPoint);
+            EditorGUILayout.PropertyField(objectToLook);
+            EditorGUILayout.PropertyField(rotateToPoint);
+            EditorGUILayout.PropertyField(traceColor);
+            EditorGUILayout.PropertyField(traceExistDuration);
 
             if (lookAtPoint.vector3Value.y > (target as LookAtPoint).transform.position.y)
             {
-                EditorGUILayout.LabelField("(Selected object is below lookAtPoint)"); //Создай TIP
+                EditorGUILayout.LabelField("(Selected object is below lookAtPoint)");
             }
 
             if (lookAtPoint.vector3Value.y < (target as LookAtPoint).transform.position.y)
@@ -55,8 +52,8 @@ namespace Angry_Girls
             }
 
             EditorGUILayout.LabelField($"Vector range to point: {(lookAtPoint.vector3Value - (target as LookAtPoint).transform.position)}");
-            EditorGUILayout.LabelField("This is working even if script is disabled!"); //Создай TIP
-            serializedObject.ApplyModifiedProperties(); //Без этой строки не выйдет изменить значения
+            EditorGUILayout.LabelField("This is working even if script is disabled!");
+            serializedObject.ApplyModifiedProperties();
 
             if (GUILayout.Button("Rotate to point once (3D)"))
             {
@@ -78,7 +75,7 @@ namespace Angry_Girls
             {
                 Undo.RecordObject(target, "Move point");
                 tar.lookAtPoint = pos;
-                tar.Update(); //Используем Update, описанный в классе tar
+                tar.Update();
             }
         }
 
@@ -87,7 +84,7 @@ namespace Angry_Girls
             var tar = (target as LookAtPoint);
             tar.transform.root.LookAt(lookAtPoint.vector3Value);
             Debug.Log($"{tar.transform.root.name} has been rotated to {lookAtPoint.vector3Value}");
-        }        
+        }
         private void RotateToPointOnce2D()
         {
             Debug.Log("<color=red>RotateToPointOnce2D is Not implemented yet</color>");

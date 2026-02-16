@@ -37,8 +37,8 @@ namespace Angry_Girls
             if (control.CharacterMovement.Rigidbody.velocity.y <= - 0.2f && !_haveShootedFirstTime)            
             {
                 //Second cast, second character move
-                control.CharacterMovement.ApplyRigidForce(control.characterSettings.AttackAbility_Alternate.attackMovementForce, ForceMode.VelocityChange);
-                GameLoader.Instance.VFXManager.ProcessFireballs_HeadSpin(control, _firstShoot_ProjectileAngles);
+                control.CharacterMovement.ApplyRigidForce(control.CharacterSettings.AttackAbility_Alternate.attackMovementForce, ForceMode.VelocityChange);
+                GameplayCoreManager.Instance.ProjectileManager.ProcessFireballs_HeadSpin(control, _firstShoot_ProjectileAngles);
                 _haveShootedFirstTime = true;
                 control.isAttacking = false;
             }
@@ -46,8 +46,8 @@ namespace Angry_Girls
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            control.CharacterMovement.ApplyRigidForce(control.characterSettings.AttackAbility_Alternate.attackMovementForce, ForceMode.VelocityChange);
-            GameLoader.Instance.VFXManager.ProcessFireballs_HeadSpin(control, _secondShoot_ProjectileAngles);
+            control.CharacterMovement.ApplyRigidForce(control.CharacterSettings.AttackAbility_Alternate.attackMovementForce, ForceMode.VelocityChange);
+            GameplayCoreManager.Instance.ProjectileManager.ProcessFireballs_HeadSpin(control, _firstShoot_ProjectileAngles);
             _haveShootedFirstTime = false;
             control.isAttacking = false;
         }

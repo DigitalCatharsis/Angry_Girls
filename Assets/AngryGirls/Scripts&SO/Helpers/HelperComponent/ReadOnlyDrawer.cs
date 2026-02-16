@@ -4,20 +4,23 @@ using UnityEngine;
 namespace Angry_Girls
 {
 #if UNITY_EDITOR
+    /// <summary>
+    /// Property drawer for read-only fields in Unity Inspector
+    /// </summary>
     public class ReadOnlyDrawer : PropertyDrawer
     {
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            // Сохраняем исходный цвет GUI
+            // Save the original GUI color
             var previousGUIState = GUI.enabled;
 
-            // Отключаем редактирование поля
+            // Disable field editing
             GUI.enabled = false;
-
-            // Отрисовываем поле
+            // Render the field
             EditorGUI.PropertyField(position, property, label);
 
-            // Восстанавливаем исходное состояние GUI
+            // Restore the original state of the GUI
             GUI.enabled = previousGUIState;
         }
     }

@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Item_Slot_UI
+  m_EditorClassIdentifier: 
+  m_GroupName: Item_Slot_UI
+  m_Data:
+    m_SerializedData: []
+  m_GUID: bf197ce45b97b724ca46a1b6c23d9d6f
+  m_SerializeEntries:
+  - m_GUID: 9c20f5af70bb910469663e680ffa7d81
+    m_Address: T_Accessory_Bird_1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 177b966a5f8f455459fdc542ecaf785a
+    m_Address: T_ItemSlotUI_Armor_Helmet_1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8bce913255416ff40ac2058c4c4dcc87
+    m_Address: T_ItemSlotUI_Weapon_Sword_1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1d93e341492358c4a8e62afe25762d3c
+    m_Address: T_ItemSlotUI_Weapon_Sword_2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 469e62f239d3dc749aa5f4fdd22dc4ce
+    m_Address: T_ItemSlotUI_Armor_Helmet_2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd75b139758df8540a0db5d110b8e341
+    m_Address: T_ItemSlotUI_Accessory_Flower_1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 21da69b5c8fbf5542b5ee3bf7c52035d
+    m_Address: T_ItemSlotUI_Armor_Plate_1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12bf73fcb98fff3468860be450372d78
+    m_Address: T_ItemSlotUI_Weapon_Sword_3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bef961df60eac3749a9c31a935a6640c
+    m_Address: T_ItemSlotUI_Armor_Plate_2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: ecf8e8ff81db5d7448711fa97ee309d2, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: ae3cb87802735a5499c161c3737f7c04, type: 2}
+    - {fileID: 11400000, guid: b6c8bfb70cd1c04428915fb3feaad2f8, type: 2}

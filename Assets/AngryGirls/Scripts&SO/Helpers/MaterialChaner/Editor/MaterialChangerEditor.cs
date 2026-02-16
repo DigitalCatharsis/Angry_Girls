@@ -21,7 +21,6 @@ namespace Angry_Girls
 
         public override void OnInspectorGUI()
         {
-            //DrawDefaultInspector();
             serializedObject.Update();
 
             MaterialChanger changer = (MaterialChanger)target;
@@ -31,8 +30,6 @@ namespace Angry_Girls
             GUILayout.BeginVertical("box");
 
             EditorGUILayout.Space();
-
-
 
             if (GUILayout.Button("Identify Current Materials"))
             {
@@ -72,7 +69,6 @@ namespace Angry_Girls
                 EditorGUILayout.PropertyField(s, new GUIContent(""));
             }
             GUILayout.EndVertical();
-
 
             GUILayout.EndHorizontal();
 
