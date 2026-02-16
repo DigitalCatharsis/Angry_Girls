@@ -15,4 +15,5 @@ public class TODO : MonoBehaviour
     //6) mission 1 template
     //7) reward system
     //8) mission difficulty logic
+    //9) healthbar spawn and activate cheatcode at stage 2
 }

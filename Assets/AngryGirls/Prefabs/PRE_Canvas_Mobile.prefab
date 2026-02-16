@@ -3292,13 +3292,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 8412800822147367373}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 635d0eea2071a6b4f893b7a3697a52f1, type: 3}
+  m_Script: {fileID: 11500000, guid: 5e6432d52d9918249b871bdad1f6dafc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mainmenu: {fileID: 8412800822147367373}
-  _options: {fileID: 8670308385780572951}
-  _pauseMenu: {fileID: 0}
-  _gameUi: {fileID: 0}
+  _mainMenuPanel: {fileID: 0}
+  _newGameButton: {fileID: 4407480881762408060}
+  _continueButton: {fileID: 7709743875913181485}
+  _settingsButton: {fileID: 6268028574910606491}
+  _exitButton: {fileID: 1057811436023779638}
+  _settingsPanel: {fileID: 8670308385780572951}
+  _musicVolumeSlider: {fileID: 7654085448754453534}
+  _soundsVolumeSlider: {fileID: 4923196727862119967}
+  _closeSettingsButton: {fileID: 1057811436023779638}
+  _confirmationDialog: {fileID: 0}
+  _confirmNewGameButton: {fileID: 0}
+  _cancelNewGameButton: {fileID: 0}
 --- !u!1 &8670308385780572951
 GameObject:
   m_ObjectHideFlags: 0

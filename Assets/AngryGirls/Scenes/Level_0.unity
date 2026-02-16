@@ -15061,14 +15061,14 @@ MonoBehaviour:
   _stages:
   - enemies:
     - BonusStats:
-        health: 999
-        damage: 999
+        health: 0
+        damage: 0
       CharacterSettings: {fileID: 11400000, guid: 4687a20025c005443b6d94bd2c6e7325,
         type: 2}
       spawnTransform: {fileID: 122970544}
     - BonusStats:
-        health: 888
-        damage: 888
+        health: 0
+        damage: 0
       CharacterSettings: {fileID: 11400000, guid: 02680e40217c43e44a594ac4cad06f99,
         type: 2}
       spawnTransform: {fileID: 2141246501}

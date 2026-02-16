@@ -4689,6 +4689,7 @@ MonoBehaviour:
   _selectedItemPriceText: {fileID: 930421484}
   _purchaseButton: {fileID: 987730365}
   _refreshButton: {fileID: 1916283383}
+  _refreshPrice: 500
 --- !u!1 &914215594
 GameObject:
   m_ObjectHideFlags: 0

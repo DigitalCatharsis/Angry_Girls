@@ -200,7 +200,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 5872624068328545335}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af88050d86ac4e44596b19d723f2e028, type: 3}
+  m_Script: {fileID: 11500000, guid: dfbdfabc24f0a5648b3cf09624fd75b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerData_Index: -1
+  _characterPortrait: {fileID: 324665144783617080}
+  _button: {fileID: 8433355764220642122}
