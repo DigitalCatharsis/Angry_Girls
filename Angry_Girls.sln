@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angry_Girls", "Angry_Girls.csproj", "{376284A3-CADE-6057-2FF4-2C81F6C5F7F2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Timeline", "Unity.Timeline.csproj", "{D24800AF-EAAA-CF14-26DC-4F2D009A34CA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.VisualEffectGraph.Editor", "Unity.VisualEffectGraph.Editor.csproj", "{AFF63179-282D-C85F-000C-E8A126C1114F}"
@@ -105,10 +103,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{376284A3-CADE-6057-2FF4-2C81F6C5F7F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{376284A3-CADE-6057-2FF4-2C81F6C5F7F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{376284A3-CADE-6057-2FF4-2C81F6C5F7F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{376284A3-CADE-6057-2FF4-2C81F6C5F7F2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D24800AF-EAAA-CF14-26DC-4F2D009A34CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D24800AF-EAAA-CF14-26DC-4F2D009A34CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D24800AF-EAAA-CF14-26DC-4F2D009A34CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
