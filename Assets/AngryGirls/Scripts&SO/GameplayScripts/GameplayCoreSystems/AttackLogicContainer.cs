@@ -1,11 +1,10 @@
 using System;
-using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class AttackLogicContainer : MonoBehaviour
+    public static class AttackLogicContainer
     {
-        public void SetCharacterAttackLogic(CControl control)
+        public static void SetCharacterAttackLogic(CControl control)
         {
             if (control.CharacterSettings.AttackAbility_Launch != null)
             {

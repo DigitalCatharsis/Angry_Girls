@@ -23,23 +23,27 @@ namespace Angry_Girls
         public bool isAttacking = false;
         public bool isDead = false;
         public bool canUseAbility = false;
-        public bool isUnitBehaviorIsAlternate = true;
+        public bool isBehaviorAlternate = true;
         public bool canCheckGlobalBehavior = false;
         public bool isLanding = false;
 
         //public bool unitGotHit = false;
-        //public bool hasUsedAbility = false;
-        //public bool hasBeenLaunched = false;
-        //public bool hasFinishedLaunchingTurn = false;
-        //public bool hasFinishedAlternateAttackTurn = true;
+        public bool hasBeenLaunched = false;
+        public bool hasUsedAbility = false;
+        public bool hasFinishedLaunchingTurn = false;
+        public bool hasFinishedAlternateAttackTurn = true;
 
         public Action<ProjectileConfig, InteractionData> UnitGotHit;
         public Action<ProjectileConfig, InteractionData> UnitGotKilled;
+        public Action UnitHasTouchedDeathZone;
         public Action UnitHasBeenLaunched;
         public Action UnitHasFinishedLaunchingTurn;
         public Action UnitHasFinishedAlternateAttackTurn;
-        public Action UnitHasUsedAbility;
-        //public Action UnitIsLanding;
+        public Action UnitPerformedAttack;
+        public Action UnitPerformedAttackFinish;
+        public Action UnitCallsForStopAttack;
+        public Action UnitCallsForStopAttackfiniss;
+        public Action UnitHasPerformedLanding;
 
         public CharacterHealth Health { get; private set; }
         public CharacterMovement CharacterMovement { get; private set; }
@@ -72,6 +76,7 @@ namespace Angry_Girls
 
         private VFXManager _vFXManager;
         private AudioManager _audioManager;
+        private CameraManager _cameraManager;
 
         #region init
         private void Awake()
@@ -79,10 +84,12 @@ namespace Angry_Girls
             //coreRefs
             _vFXManager = CoreManager.Instance.VFXManager;
             _audioManager = CoreManager.Instance.AudioManager;
+            _cameraManager = GameplayCoreManager.Instance.CameraManager;
 
             //subscribe
             UnitGotHit += CheckAndApplyIncomingDamage;
             UnitGotKilled += ApplyDeath;
+            UnitHasTouchedDeathZone += ApplyDeathByDeadZone;
 
             //components
             Ragdoll = GetComponent<Ragdoll>();
@@ -107,6 +114,7 @@ namespace Angry_Girls
             //unsubscribe bleat!!!
             UnitGotHit -= CheckAndApplyIncomingDamage;
             UnitGotKilled -= ApplyDeath;
+            UnitHasTouchedDeathZone -= ApplyDeathByDeadZone;
         }
 
         private void OnEnable()
@@ -138,10 +146,13 @@ namespace Angry_Girls
                 weapon.transform.position = weaponHolder.position;
                 weapon.transform.rotation = weaponHolder.rotation;
             }
-            GameplayCoreManager.Instance.AttackLogicContainer.SetCharacterAttackLogic(this);
+            AttackLogicContainer.SetCharacterAttackLogic(this);
         }
 
-        private void FixedUpdate() => subComponentsController.OnFixedUpdate();
+        private void FixedUpdate()
+        {
+            subComponentsController.OnFixedUpdate();
+        }
         private void Update() => subComponentsController.OnUpdate();
         private void LateUpdate() => subComponentsController.OnLateUpdate();
         #endregion
@@ -150,7 +161,8 @@ namespace Angry_Girls
 
         private void CheckAndApplyIncomingDamage(ProjectileConfig projectileConfig, InteractionData interactionData)
         {
-            if (projectileConfig.damage == 0) { return; };
+            if (projectileConfig.damage == 0) { return; }
+            ;
 
             Health.ApplyDamage(projectileConfig.damage);
 
@@ -165,9 +177,10 @@ namespace Angry_Girls
         }
         private void ApplyKnockback(ProjectileConfig projectileConfig, InteractionData interactionData)
         {
-            Vector3 hitPoint = GetHitPoint(interactionData);
-            Vector3 forceDirection = GetProjectileForceDirection(interactionData);
-            Vector3 force = forceDirection * Mathf.Abs(projectileConfig.deadbodyForceMultiplier);
+
+            var hitPoint = GetHitPoint(interactionData);
+            var forceDirection = GetProjectileForceDirection(interactionData);
+            var force = forceDirection * Mathf.Abs(projectileConfig.deadbodyForceMultiplier);
 
             if (projectileConfig.deadbodyForceMultiplier < 0)
                 force = -force;
@@ -181,17 +194,25 @@ namespace Angry_Girls
 
         private void ApplyDeath(ProjectileConfig projectileConfig, InteractionData interactionData)
         {
+            SetDeathParams();
 
-                SetDeathParams();
+            _cameraManager.StopCameraFollowForRigidBody();
 
-                if (CharacterSettings.deathByAnimation)
-                {
-                    PlayDeathStateForNonRagdoll();
-                }
-                else
-            {
-                ApplyKnockback(projectileConfig, interactionData);
-            }
+            ApplyKnockback(projectileConfig, interactionData);
+        }
+
+        private void ApplyDeathByDeadZone()
+        {
+            Health.ApplyDamage(Health.CurrentHealth);
+            _cameraManager.StopCameraFollowForRigidBody();
+
+            SetDeathParams();
+
+            Ragdoll.ProcessRagdoll(
+                rigidbody: CharacterMovement.Rigidbody,
+                forceValue: Vector3.one * 10,
+                forceApplyPosition: transform.forward,
+                forceMode: ForceMode.VelocityChange);
         }
 
         /// <summary>
@@ -209,6 +230,7 @@ namespace Angry_Girls
             CharacterMovement.Rigidbody.detectCollisions = false;
             boxCollider.enabled = false;
 
+            //TODO: temp
             var animator = wingsTransform.GetComponentInChildren<Animator>();
             if (animator != null) animator.enabled = false;
 
@@ -223,80 +245,56 @@ namespace Angry_Girls
                 timer += Time.deltaTime;
                 yield return null;
             }
-            UnitHasFinishedLaunchingTurn.Invoke();
-            UnitHasFinishedAlternateAttackTurn.Invoke();         
+            UnitHasFinishedLaunchingTurn?.Invoke();
+            UnitHasFinishedAlternateAttackTurn?.Invoke();
         }
-
-
-
 
         private Vector3 GetProjectileForceDirection(InteractionData interactionData)
         {
-            // 1. Пробуем получить направление скорости из Rigidbody
+            // 1. Try to get the velocity direction from the Rigidbody
             Rigidbody projectileRb = interactionData.source.GetComponent<Rigidbody>();
             if (projectileRb != null && projectileRb.velocity.sqrMagnitude > 0.1f)
             {
                 return projectileRb.velocity.normalized;
             }
 
-            // 2. Если нет Rigidbody, пробуем определить направление по вращению
+            // 2. If there is no Rigidbody, try to determine the direction from rotation
             if (interactionData.source.transform.up.sqrMagnitude > 0.1f)
             {
                 return interactionData.source.transform.up;
             }
 
-            // 3. Fallback: направление от projectile к цели
+            // 3. Fallback: direction from the projectile to the target
             Vector3 projectileToTarget = interactionData.target.transform.position - interactionData.source.transform.position;
             if (projectileToTarget.sqrMagnitude > 0.1f)
             {
                 return projectileToTarget.normalized;
             }
 
-            // 4. Ultimate fallback: вверх с небольшим рандомом
-            return (Vector3.up + Random.insideUnitSphere * 0.3f).normalized;
+            // 4. Ultimate fallback: up with a small random 
+            return (Vector3.up + UnityEngine.Random.insideUnitSphere * 0.3f).normalized;
         }
 
         private Vector3 GetHitPoint(InteractionData interactionData)
         {
-            // Если было столкновение (Collision), берём точку из contacts[0]
+            // If there was a collision, take the point from contacts[0]
             if (interactionData.physicType == InteractionPhysicType.Collision && interactionData.collision != null)
             {
                 return interactionData.collision.contacts[0].point;
             }
-            // Если был триггер (Trigger), используем ближайшую точку на коллайдере цели
+            // If there was a trigger, use the closest point on the target collider
             else if (interactionData.targetCollider != null)
             {
                 return interactionData.targetCollider.ClosestPoint(interactionData.source.transform.position);
             }
-            // Fallback: если данных нет, используем центр объекта
+            // Fallback: if there is no data, use the object's center
             else
             {
                 return interactionData.target.transform.position;
             }
         }
 
-        private void CheckDeath()
-        {
-            if (Health.CurrentHealth <= 0)
-            {
-                SetDeathParams();
 
-                if (CharacterSettings.deathByAnimation)
-                {
-                    _animationProcessor.PlayDeathStateForNonRagdoll();
-                }
-                else
-                {
-                    Ragdoll.ProcessRagdoll(
-                        rigidbody: CharacterMovement.Rigidbody,
-                        forceValue: Vector3.one * 10,
-                        forceApplyPosition: transform.forward,
-                        forceMode: ForceMode.VelocityChange);
-                }
-
-                GameplayCoreManager.Instance.CameraManager.StopCameraFollowForRigidBody();
-            }
-        }
 
         /// <summary>
         /// Cleanup when character is disposed
@@ -389,12 +387,12 @@ namespace Angry_Girls
         public string GetCurrentAnimationName()
         {
             var currentHash = animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
-            return GameplayCoreManager.Instance.StatesContainer.GetStateNameByHash(currentHash);
+            return StatesContainer.GetStateNameByHash(currentHash);
         }
 
         public bool IsInIdleState()
         {
-            if (GameplayCoreManager.Instance.StatesContainer.idle_Dictionary.ContainsValue(animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
+            if (StatesContainer.IdleDictionary.ContainsValue(animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
             {
                 return true;
             }

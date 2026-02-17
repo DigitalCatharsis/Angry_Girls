@@ -104,7 +104,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\Ragdoll.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\DeathZone.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\HelperComponent\RigidbodyInfo.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\State_Landing.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\Core\CoreManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterStateBehaviors\AlternateAttack_Behavior_Landing.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterStateBehaviors\Attack_Fininsh_Behavior.cs" />
@@ -119,10 +118,8 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LayerAdder\Editor\LayerAdderEditor.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\LocalRotation.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Shop and Inventory\ItemSettings\ItemSettings.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\State_HitReaction.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\Panels\UI_MissionSelectionPanel.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\ProjectileManager.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\State_AttackFinish.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\Core\GameStateManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_SwordAttack.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\UI_Slots\UI_EquipmentSlot.cs" />
@@ -135,6 +132,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\NotificationManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\CameraSizer.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\ScoreDisplay.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\AnimationPhaseMachine.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\GameObjectExtensions.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\Spawn\DynamicFactotyExtention\Editor\DynamicFactoryExtentionEditor.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_Uppercut_DownSmash_Finish.cs" />
@@ -158,7 +156,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\SaveLoad\SaveLoadManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\Spawn\SpawnFactory\Factories\BaseFactory.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\InteractionManager.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\State_Airboned.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\IUIPanel.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\UI_SettingsMenu.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponentMediator.cs" />
@@ -183,11 +180,9 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\HashManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\UI_EquipmentPopup.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LayerAdder\LayerAdder.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\AnimationStateMachine.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\CatalogsRepositoriesDataTemplates\CharacterSettingsCatalog.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LookAtPoint\Editor\LookAtPointEditor.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\LaunchingAttackLogic\AttackLogic_Launch_HeadSpinAttack.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\State_Attack.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\Input\InputManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\UI_DebugPanel.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\MoveBackgroundParallax.cs" />
@@ -207,7 +202,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\LaunchExecutionService.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\Projectile.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\UIManager.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\State_Idle.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\PauseControl.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\Spawn\SpawnFactory\Factories\UIObjectsFactory.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\AudioManager\SoundClipsCollection.cs" />
@@ -225,7 +219,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\Core\PhaseFlowController.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CControl.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\CatalogsRepositoriesDataTemplates\DefaultSaveTemplate.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\State_Death.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\ISaveReinitManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\Screens\UI_LoadingScreen.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\ListOfLists\SerializableList.cs" />

@@ -97,8 +97,6 @@ namespace Angry_Girls
             character.playerOrAi = PlayerOrAi.Bot;
             character.profile = profile;
 
-            character.hasBeenLaunched = false;
-
             RegisterCharacter(character, PlayerOrAi.Bot);
             return character;
         }
@@ -153,7 +151,7 @@ namespace Angry_Girls
 
                 character.CharacterMovement.Rigidbody.rotation = Quaternion.identity;
                 character.gameObject.layer = LayerMask.NameToLayer("CharacterToLaunch");
-                character.isUnitBehaviorIsAlternate = false;
+                character.isBehaviorAlternate = false;
                 character.hasBeenLaunched = false;
                 character.hasUsedAbility = false;
                 character.hasFinishedLaunchingTurn = false;

@@ -127,6 +127,7 @@ namespace Angry_Girls
 
             characterToLaunch.CharacterMovement.Rigidbody.useGravity = true;
             characterToLaunch.CharacterMovement.SetVelocity(new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward));
+            characterToLaunch.UnitHasBeenLaunched?.Invoke();
         }
 
         /// <summary>

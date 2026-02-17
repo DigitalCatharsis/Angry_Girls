@@ -25,7 +25,7 @@ namespace Angry_Girls
         public void UpdateCollider()
         {
             var stateHash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
-            var stateName = CoreManager.Instance.HashManager.GetName(GameplayCoreManager.Instance.StatesContainer.stateNames_Dictionary, stateHash);
+            var stateName = CoreManager.Instance.HashManager.GetName(StatesContainer.StateNamesDictionary, stateHash);
 
             if (!control.CharacterSettings.boxcolliderContainer.boxColliderAnimationData.ContainsKey(stateName))
             {
@@ -46,7 +46,7 @@ namespace Angry_Girls
             }
 
             var stateHash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
-            var stateName = CoreManager.Instance.HashManager.GetName(GameplayCoreManager.Instance.StatesContainer.stateNames_Dictionary, stateHash);
+            var stateName = CoreManager.Instance.HashManager.GetName(StatesContainer.StateNamesDictionary, stateHash);
 
             var data = control.profile.CharacterSettings.boxcolliderContainer.boxColliderAnimationData[stateName];
             if (Vector3.SqrMagnitude(control.boxCollider.size - data.boxColliderSize) > 0.00001f || Vector3.SqrMagnitude(control.boxCollider.size - data.boxColliderSize) < 0.00001f)
@@ -66,7 +66,7 @@ namespace Angry_Girls
             }
 
             var stateHash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
-            var stateName = CoreManager.Instance.HashManager.GetName(GameplayCoreManager.Instance.StatesContainer.stateNames_Dictionary, stateHash);
+            var stateName = CoreManager.Instance.HashManager.GetName(StatesContainer.StateNamesDictionary, stateHash);
 
             var data = control.CharacterSettings.boxcolliderContainer.boxColliderAnimationData[stateName];
             if (Vector3.SqrMagnitude(control.boxCollider.center - data.boxColliderCenter) > 0.00001f || Vector3.SqrMagnitude(control.boxCollider.center - data.boxColliderCenter) < 0.00001f)

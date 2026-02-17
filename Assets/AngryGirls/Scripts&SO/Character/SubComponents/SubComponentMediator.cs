@@ -9,21 +9,6 @@ namespace Angry_Girls
 
         public void OnAwake()
         {
-            InitComponents();
-        }
-
-        private void InitComponents()
-        {
-            _control = GetComponentInParent<CControl>();
-            _animationProcessor = GetComponentInChildren<AnimationProcessor>();
-        }
-
-
-        public void NotifyDeathZoneContact()
-        {
-            _control.Health.ApplyDamage(_control.Health.CurrentHealth);
-            CheckDeath();
-            GameplayCoreManager.Instance.CameraManager.StopCameraFollowForRigidBody();
         }
     }
 }

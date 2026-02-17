@@ -13,7 +13,7 @@ namespace Angry_Girls
 
         private CameraManager _cameraManager;
         private InputManager _inputManager;
-        private PhaseFlowController _gameFlowController;
+        private PhaseFlowController _phaseFlowController;
         private StageManager _stageManager;
         private GameLogic _gameLogic;
         private LaunchExecutionService _executionService;
@@ -51,7 +51,7 @@ namespace Angry_Girls
         {
             _cameraManager = GameplayCoreManager.Instance.CameraManager;
             _inputManager = GameplayCoreManager.Instance.InputManager;
-            _gameFlowController = GameplayCoreManager.Instance.PhaseFlowController;
+            _phaseFlowController = GameplayCoreManager.Instance.PhaseFlowController;
             _stageManager = GameplayCoreManager.Instance.StageManager;
             _gameLogic = GameplayCoreManager.Instance.GameLogic;
             _executionService = GameplayCoreManager.Instance.LaunchExecutionService;
@@ -132,7 +132,7 @@ namespace Angry_Girls
             // First turn special case: allow 2 launches before alternate phase
             if (_firstTurn && _launchCountThisStage < _launchesBeforeFirstAlternate)
             {
-                _gameFlowController.SwitchState(GameState.LaunchPhase);
+                _phaseFlowController.SwitchState(GameState.LaunchPhase);
                 yield break;
             }
 
@@ -140,7 +140,7 @@ namespace Angry_Girls
             if (_currentStageIndex != _stageManager.CurrentStageIndex)
             {
                 _currentStageIndex = _stageManager.CurrentStageIndex;
-                _gameFlowController.SwitchState(GameState.LaunchPhase);
+                _phaseFlowController.SwitchState(GameState.LaunchPhase);
                 yield break;
             }
 
@@ -198,7 +198,7 @@ namespace Angry_Girls
 
             if (_inputManager.IsHeld)
             {
-                _executionService.TryStartAiming(GetCandidateToLaunch()/*, _selectionService.SelectedIndex == 0*/);
+                _executionService.TryStartAiming(GetCandidateToLaunch());
             }
 
             if (_inputManager.IsReleased)
@@ -243,6 +243,7 @@ namespace Angry_Girls
                 if (_inputManager.IsPressed)
                 {
                     control.hasUsedAbility = true;
+                    control.UnitPerformedAttack?.Invoke();
                 }
                 yield return null;
             }

@@ -12,7 +12,7 @@ namespace Angry_Girls
 
         public virtual void OnStateEnter(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
-            Debug.Log(control.name + " entered attack animation " + GameplayCoreManager.Instance.StatesContainer.GetStateNameByHash(stateInfo.shortNameHash));
+            Debug.Log(control.name + " entered attack animation " + StatesContainer.GetStateNameByHash(stateInfo.shortNameHash));
 
             if (control == null)
             {

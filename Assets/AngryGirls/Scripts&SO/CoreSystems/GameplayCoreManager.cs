@@ -6,8 +6,6 @@ namespace Angry_Girls
     public class GameplayCoreManager : MonoBehaviour
     {
         public static GameplayCoreManager Instance { get; private set; }
-
-        public StatesContainer StatesContainer { get; private set; }
         public CameraManager CameraManager { get; private set; }
         public InteractionManager InteractionManager { get; private set; }
         public StageManager StageManager { get; private set; }
@@ -16,7 +14,6 @@ namespace Angry_Girls
         public GameLogic GameLogic { get; private set; }
         public PhaseFlowController PhaseFlowController { get; private set; }
         public InputManager InputManager { get; private set; }
-        public AttackLogicContainer AttackLogicContainer { get; private set; }
         public GameplayCharactersManager GameplayCharactersManager { get; private set; }
         public LaunchExecutionService LaunchExecutionService { get; private set; }
         public TurnOrderService TurnOrderService { get; private set; }
@@ -40,9 +37,6 @@ namespace Angry_Girls
 
         public void InitializeCoreSystems()
         {
-            StatesContainer = InitializeSystem<StatesContainer>();
-            AttackLogicContainer = GetComponentInChildren<AttackLogicContainer>();
-
             InputManager = InitializeSystem<InputManager>();
             CameraManager = InitializeSystem<CameraManager>();
             GameLogic = InitializeSystem<GameLogic>();

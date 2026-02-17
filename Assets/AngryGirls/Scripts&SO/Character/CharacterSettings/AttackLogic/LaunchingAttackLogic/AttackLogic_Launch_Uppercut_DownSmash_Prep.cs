@@ -61,6 +61,11 @@ namespace Angry_Girls
                 control.boxCollider.excludeLayers = _originalExcludeLayers;
                 _layersModified = false;
             }
+
+            if (control.CharacterMovement.IsGrounded)
+            {
+                control.UnitCallsForStopAttack?.Invoke();
+            }
         }
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)

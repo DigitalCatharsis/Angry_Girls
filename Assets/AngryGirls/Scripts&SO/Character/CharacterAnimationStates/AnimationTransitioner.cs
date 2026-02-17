@@ -9,7 +9,6 @@ namespace Angry_Girls
     {
         static AnimationTransitioner() => _hashManager = CoreManager.Instance.HashManager;
         private static HashManager _hashManager;
-        private static StatesContainer _statesContainer = new StatesContainer();
 
         /// <summary>
         /// Changes animation state with Play method
@@ -37,7 +36,7 @@ namespace Angry_Girls
             var currentHash = animator.GetCurrentAnimatorStateInfo(layer).shortNameHash;
 
             // Don't transition to NONE states
-            if (_hashManager.GetName(_statesContainer.stateNames_Dictionary, newStateHash) == StateNames.NONE) return;
+            if (_hashManager.GetName(StatesContainer.StateNamesDictionary, newStateHash) == StateNames.NONE) return;
 
             animator.CrossFadeInFixedTime(
                 newStateHash,

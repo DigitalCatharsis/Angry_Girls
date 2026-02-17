@@ -1,5 +1,4 @@
 using AYellowpaper.SerializedCollections;
-using UnityEngine;
 
 namespace Angry_Girls
 {
@@ -131,37 +130,148 @@ namespace Angry_Girls
     /// <summary>
     /// Container for animation state dictionaries and hash management
     /// </summary>
-    public class StatesContainer
+    public static class StatesContainer
     {
-        [Header("State Dictionaries")]
-        public SerializedDictionary<Attack_States, int> attack_Dictionary;
-        public SerializedDictionary<AttackFinish_States, int> attackFinish_Dictionary;
-        public SerializedDictionary<StateNames, int> stateNames_Dictionary;
-        public SerializedDictionary<Idle_States, int> idle_Dictionary;
-        public SerializedDictionary<Falling_States, int> airbonedFlying_Dictionary;
-        public SerializedDictionary<Landing_States, int> landingNames_Dictionary;
-        public SerializedDictionary<HitReaction_States, int> hitReaction_Dictionary;
-        public SerializedDictionary<Death_States, int> death_States_Dictionary;
+        private static SerializedDictionary<Attack_States, int> _attackDictionary;
+        private static SerializedDictionary<AttackFinish_States, int> _attackFinishDictionary;
+        private static SerializedDictionary<StateNames, int> _stateNamesDictionary;
+        private static SerializedDictionary<Idle_States, int> _idleDictionary;
+        private static SerializedDictionary<Falling_States, int> _fallingDictionary;
+        private static SerializedDictionary<Landing_States, int> _landingDictionary;
+        private static SerializedDictionary<HitReaction_States, int> _hitReactionDictionary;
+        private static SerializedDictionary<Death_States, int> _deathDictionary;
 
-        public StatesContainer()
+        public static SerializedDictionary<Attack_States, int> AttackDictionary
         {
-            stateNames_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<StateNames>();
-            idle_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<Idle_States>();
-            airbonedFlying_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<Falling_States>();
-            attack_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<Attack_States>();
-            attackFinish_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<AttackFinish_States>();
-            landingNames_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<Landing_States>();
-            hitReaction_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<HitReaction_States>();
-            death_States_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<Death_States>();
+            get
+            {
+                EnsureInitialized();
+                return _attackDictionary;
+            }
+        }
+
+        public static SerializedDictionary<AttackFinish_States, int> AttackFinishDictionary
+        {
+            get
+            {
+                EnsureInitialized();
+                return _attackFinishDictionary;
+            }
+        }
+
+        public static SerializedDictionary<StateNames, int> StateNamesDictionary
+        {
+            get
+            {
+                EnsureInitialized();
+                return _stateNamesDictionary;
+            }
+        }
+
+        public static SerializedDictionary<Idle_States, int> IdleDictionary
+        {
+            get
+            {
+                EnsureInitialized();
+                return _idleDictionary;
+            }
+        }
+
+        public static SerializedDictionary<Falling_States, int> FallingDictionary
+        {
+            get
+            {
+                EnsureInitialized();
+                return _fallingDictionary;
+            }
+        }
+
+        public static SerializedDictionary<Landing_States, int> LandingDictionary
+        {
+            get
+            {
+                EnsureInitialized();
+                return _landingDictionary;
+            }
+        }
+
+        public static SerializedDictionary<HitReaction_States, int> HitReactionDictionary
+        {
+            get
+            {
+                EnsureInitialized();
+                return _hitReactionDictionary;
+            }
+        }
+
+        public static SerializedDictionary<Death_States, int> DeathDictionary
+        {
+            get
+            {
+                EnsureInitialized();
+                return _deathDictionary;
+            }
+        }
+
+        // Flag for checking initialization
+        private static bool _isInitialized = false;
+
+        /// <summary>
+        /// Static constructor
+        /// </summary>
+        static StatesContainer()
+        {
+            InitializeDictionaries();
+        }
+
+        /// <summary>
+        /// Initialize all dictionaries
+        /// </summary>
+        private static void InitializeDictionaries()
+        {
+            if (_isInitialized) return;
+
+            var hashManager = CoreManager.Instance.HashManager;
+
+            _stateNamesDictionary = hashManager.CreateAndInitDictionary<StateNames>();
+            _idleDictionary = hashManager.CreateAndInitDictionary<Idle_States>();
+            _fallingDictionary = hashManager.CreateAndInitDictionary<Falling_States>();
+            _attackDictionary = hashManager.CreateAndInitDictionary<Attack_States>();
+            _attackFinishDictionary = hashManager.CreateAndInitDictionary<AttackFinish_States>();
+            _landingDictionary = hashManager.CreateAndInitDictionary<Landing_States>();
+            _hitReactionDictionary = hashManager.CreateAndInitDictionary<HitReaction_States>();
+            _deathDictionary = hashManager.CreateAndInitDictionary<Death_States>();
+
+            _isInitialized = true;
+        }
+        /// <summary>
+        /// Checks initialization and initializes if necessary
+        /// </summary>
+        private static void EnsureInitialized()
+        {
+            if (!_isInitialized)
+            {
+                InitializeDictionaries();
+            }
         }
 
         /// <summary>
         /// Gets state name by hash value (for debugging)
         /// </summary>
-        public string GetStateNameByHash(int hash)
+        public static string GetStateNameByHash(int hash)
         {
+            EnsureInitialized();
             var manager = CoreManager.Instance.HashManager;
-            return manager.GetName(GameplayCoreManager.Instance.StatesContainer.stateNames_Dictionary, hash).ToString();
+            return manager.GetName(StateNamesDictionary, hash).ToString();
+        }
+
+        /// <summary>
+        /// Reinitialize dictionaries (if necessary)
+        /// </summary>
+        public static void Reinitialize()
+        {
+            _isInitialized = false;
+            InitializeDictionaries();
         }
     }
 }

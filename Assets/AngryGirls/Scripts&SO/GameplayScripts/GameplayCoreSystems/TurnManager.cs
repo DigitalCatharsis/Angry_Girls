@@ -78,7 +78,7 @@ namespace Angry_Girls
         {
             foreach (var character in _currentTurnOrder)
             {
-                character.isUnitBehaviorIsAlternate = true;
+                character.isBehaviorAlternate = true;
                 character.hasFinishedLaunchingTurn = true;
                 character.hasFinishedAlternateAttackTurn = false; 
                 character.canUseAbility = true;

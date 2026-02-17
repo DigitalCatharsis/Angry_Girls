@@ -17,7 +17,7 @@ public class MissingScriptsFinder
             Component[] components = go.GetComponentsInChildren<Component>(true);
             foreach (Component c in components)
             {
-                if (c == null) Debug.LogError($"❌ Missing Script in PREFAB: {path}", go);
+                if (c == null) Debug.LogError($"Missing Script in PREFAB: {path}", go);
             }
         }
 

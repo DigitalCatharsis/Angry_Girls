@@ -391,7 +391,9 @@ namespace Angry_Girls
 
         public void Handle(InteractionData data, InteractionConfig config)
         {
-            data.source.GetComponent<CControl>().subComponentMediator.NotifyDeathZoneContact();
+            var control = data.source.GetComponent<CControl>();
+            control.UnitHasTouchedDeathZone.Invoke();
+
         }
     }
 

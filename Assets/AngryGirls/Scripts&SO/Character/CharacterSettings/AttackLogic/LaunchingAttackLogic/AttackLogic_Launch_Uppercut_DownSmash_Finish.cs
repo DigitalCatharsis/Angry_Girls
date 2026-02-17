@@ -15,30 +15,6 @@ namespace Angry_Girls
             var ability = control.CharacterSettings.AttackAbility_Launch;
 
             _projectile = GameplayCoreManager.Instance.ProjectileManager.SpawnDownSmash(control, ability);
-
-            //    _vfx = GameplayCoreManager.Instance.ProjectileManager.SpawnProjectile
-            //        (
-            //        destroyOnCollision: false,
-            //        spawnTransform: control.transform,
-            //        originator: control.gameObject,
-            //        destroyOnCharacterTrigger: false,
-            //        attackDamageValue: ability.attackDamage,
-            //        enemyKnockBackValue: ability.enemyKnockbackValue,
-            //        enableCollider: false,
-            //        enableTrigger: true,
-            //        spawnSound: new Tuple<AudioSourceType, int>(AudioSourceType.SFX_Impact, 2),
-            //        destroySound: null,
-            //        layerMask: control.GetVfxLayermask(),
-            //        vfxType: VFX_Type.VFX_Downsmash,
-            //        vfxColor: Color.white,
-            //        timeToLive: 1f,
-            //        connectToOriginator: false,
-            //        teamfire: false,
-            //        deadbodyForceMultiplier: 0,
-            //        deadbodyForceMode: ForceMode.Force
-            //        );
-
-            //    _vfx.transform.position = control.CharacterMovement.Rigidbody.position;
         }
 
         public override void OnStateUpdate(CControl control, Animator animator, AnimatorStateInfo stateInfo)
@@ -52,14 +28,15 @@ namespace Angry_Girls
 
             if (stateInfo.normalizedTime >= 1 && control.CharacterMovement.IsGrounded)
             {
-                control.isAttacking = false;
+                control.UnitCallsForStopAttackfiniss?.Invoke();
+                //control.isAttacking = false;
             }
         }
 
         public override void OnStateExit(CControl control, Animator animator, AnimatorStateInfo stateInfo)
         {
             GameplayCoreManager.Instance.ProjectileManager.DisposeProjectile(_projectile);
-            control.isAttacking = false;
+            //control.isAttacking = false;
             _cameraShaked = false;
         }
     }
