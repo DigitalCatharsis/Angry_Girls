@@ -13,7 +13,7 @@ namespace Angry_Girls
 
         private CameraManager _cameraManager;
         private InputManager _inputManager;
-        private GameFlowController _gameFlowController;
+        private PhaseFlowController _gameFlowController;
         private StageManager _stageManager;
         private GameLogic _gameLogic;
         private LaunchExecutionService _executionService;
@@ -51,7 +51,7 @@ namespace Angry_Girls
         {
             _cameraManager = GameplayCoreManager.Instance.CameraManager;
             _inputManager = GameplayCoreManager.Instance.InputManager;
-            _gameFlowController = GameplayCoreManager.Instance.GameFlowController;
+            _gameFlowController = GameplayCoreManager.Instance.PhaseFlowController;
             _stageManager = GameplayCoreManager.Instance.StageManager;
             _gameLogic = GameplayCoreManager.Instance.GameLogic;
             _executionService = GameplayCoreManager.Instance.LaunchExecutionService;
@@ -222,7 +222,7 @@ namespace Angry_Girls
             _canPressAtCharacters = false;
 
             character.hasBeenLaunched = true;
-            character.checkGlobalBehavior = true;
+            character.canCheckGlobalBehavior = true;
             character.canUseAbility = true;
             character.gameObject.layer = LayerMask.NameToLayer("Character");
 

@@ -13,7 +13,7 @@ namespace Angry_Girls
         /// <summary>
         /// Creates and initializes dictionary for enum animation states
         /// </summary>
-        public SerializedDictionary<T, int> CreateAndInitDictionary<T>(GameObject sender) where T : Enum
+        public SerializedDictionary<T, int> CreateAndInitDictionary<T>() where T : Enum
         {
             var newDic = new SerializedDictionary<T, int>();
 

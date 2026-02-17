@@ -53,20 +53,6 @@ namespace Angry_Girls
         public AttackAbilityData AttackAbility_Alternate;
 
         /// <summary>
-        /// Validates character settings for NONE values
-        /// </summary>
-        public void CheckForNoneValues(CControl control)
-        {
-            if (!_notifyAboutNONEStates) return;
-
-            NotifyForNONE_Value(idle_States, control);
-            NotifyForNONE_Value(airbonedFlying_States, control);
-            NotifyForNONE_Value(landing_State, control);
-            NotifyForNONE_Value(hitReaction_States, control);
-            NotifyForNONE_Value(death_States, control);
-        }
-
-        /// <summary>
         /// Returns random animation state from collection
         /// </summary>
         public CharAnimationData<T> GetRandomState<T>(List<CharAnimationData<T>> collection) where T : Enum

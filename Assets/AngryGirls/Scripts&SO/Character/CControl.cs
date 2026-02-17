@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,18 +20,26 @@ namespace Angry_Girls
     /// </summary>
     public class CControl : PoolObject
     {
-        public bool isLanding = false;
         public bool isAttacking = false;
         public bool isDead = false;
-        public bool unitGotHit = false;
-        public bool hasUsedAbility = false;
         public bool canUseAbility = false;
-        public bool hasBeenLaunched = false;
-        public bool hasFinishedLaunchingTurn = false;
-        public bool hasFinishedAlternateAttackTurn = true;
+        public bool isUnitBehaviorIsAlternate = true;
+        public bool canCheckGlobalBehavior = false;
+        public bool isLanding = false;
 
-        public bool unitBehaviorIsAlternate = true;
-        public bool checkGlobalBehavior = false;
+        //public bool unitGotHit = false;
+        //public bool hasUsedAbility = false;
+        //public bool hasBeenLaunched = false;
+        //public bool hasFinishedLaunchingTurn = false;
+        //public bool hasFinishedAlternateAttackTurn = true;
+
+        public Action<ProjectileConfig, InteractionData> UnitGotHit;
+        public Action<ProjectileConfig, InteractionData> UnitGotKilled;
+        public Action UnitHasBeenLaunched;
+        public Action UnitHasFinishedLaunchingTurn;
+        public Action UnitHasFinishedAlternateAttackTurn;
+        public Action UnitHasUsedAbility;
+        //public Action UnitIsLanding;
 
         public CharacterHealth Health { get; private set; }
         public CharacterMovement CharacterMovement { get; private set; }
@@ -61,12 +70,24 @@ namespace Angry_Girls
 
         [SerializeField] private PhysicMaterial noBounceMaterial;
 
+        private VFXManager _vFXManager;
+        private AudioManager _audioManager;
+
+        #region init
         private void Awake()
         {
+            //coreRefs
+            _vFXManager = CoreManager.Instance.VFXManager;
+            _audioManager = CoreManager.Instance.AudioManager;
+
+            //subscribe
+            UnitGotHit += CheckAndApplyIncomingDamage;
+            UnitGotKilled += ApplyDeath;
+
+            //components
             Ragdoll = GetComponent<Ragdoll>();
             Health = GetComponent<CharacterHealth>();
             CharacterMovement = GetComponent<CharacterMovement>();
-
             animator = GetComponent<Animator>();
             boxCollider = GetComponent<BoxCollider>();
             subComponentMediator = GetComponentInChildren<SubComponentMediator>();
@@ -81,11 +102,17 @@ namespace Angry_Girls
             });
         }
 
+        private void OnDestroy()
+        {
+            //unsubscribe bleat!!!
+            UnitGotHit -= CheckAndApplyIncomingDamage;
+            UnitGotKilled -= ApplyDeath;
+        }
+
         private void OnEnable()
         {
             subComponentsController.OnComponentEnable();
         }
-
         private void Start()
         {
             Health.Initialize(profile.GetCurrentStats.health);
@@ -114,10 +141,63 @@ namespace Angry_Girls
             GameplayCoreManager.Instance.AttackLogicContainer.SetCharacterAttackLogic(this);
         }
 
+        private void FixedUpdate() => subComponentsController.OnFixedUpdate();
+        private void Update() => subComponentsController.OnUpdate();
+        private void LateUpdate() => subComponentsController.OnLateUpdate();
+        #endregion
+
+        #region private
+
+        private void CheckAndApplyIncomingDamage(ProjectileConfig projectileConfig, InteractionData interactionData)
+        {
+            if (projectileConfig.damage == 0) { return; };
+
+            Health.ApplyDamage(projectileConfig.damage);
+
+            _vFXManager.ShowDamageNumbers(interactionData.targetCollider, projectileConfig.VFXConfig.originator, projectileConfig.damage);
+            _audioManager.PlayRandomSound(AudioSourceType.CharacterHit);
+
+
+            if (Health.CurrentHealth <= 0)
+            {
+                ApplyDeath(projectileConfig, interactionData);
+            }
+        }
+        private void ApplyKnockback(ProjectileConfig projectileConfig, InteractionData interactionData)
+        {
+            Vector3 hitPoint = GetHitPoint(interactionData);
+            Vector3 forceDirection = GetProjectileForceDirection(interactionData);
+            Vector3 force = forceDirection * Mathf.Abs(projectileConfig.deadbodyForceMultiplier);
+
+            if (projectileConfig.deadbodyForceMultiplier < 0)
+                force = -force;
+
+            Ragdoll.ProcessRagdoll(
+                rigidbody: CharacterMovement.Rigidbody,
+                forceValue: force,
+                forceApplyPosition: hitPoint,
+                forceMode: projectileConfig.deadbodyForceMode);
+        }
+
+        private void ApplyDeath(ProjectileConfig projectileConfig, InteractionData interactionData)
+        {
+
+                SetDeathParams();
+
+                if (CharacterSettings.deathByAnimation)
+                {
+                    PlayDeathStateForNonRagdoll();
+                }
+                else
+            {
+                ApplyKnockback(projectileConfig, interactionData);
+            }
+        }
+
         /// <summary>
         /// Configures character for death state, enabling ragdoll physics
         /// </summary>
-        public void SetDeathParams()
+        private void SetDeathParams()
         {
             isDead = true;
             FinishTurn();
@@ -135,16 +215,6 @@ namespace Angry_Girls
             gameObject.layer = LayerMask.NameToLayer("DeadBody");
         }
 
-        /// <summary>
-        /// Completes the character's current turn and resets attack state
-        /// </summary>
-        public void FinishTurn()
-        {
-            canUseAbility = false;
-            isAttacking = false;
-            StartCoroutine(ExecuteFinishTurnTimer());
-        }
-
         private IEnumerator ExecuteFinishTurnTimer(float timeToCheck = 0)
         {
             float timer = 0;
@@ -153,8 +223,111 @@ namespace Angry_Girls
                 timer += Time.deltaTime;
                 yield return null;
             }
-            hasFinishedLaunchingTurn = true;
-            hasFinishedAlternateAttackTurn = true;
+            UnitHasFinishedLaunchingTurn.Invoke();
+            UnitHasFinishedAlternateAttackTurn.Invoke();         
+        }
+
+
+
+
+        private Vector3 GetProjectileForceDirection(InteractionData interactionData)
+        {
+            // 1. Пробуем получить направление скорости из Rigidbody
+            Rigidbody projectileRb = interactionData.source.GetComponent<Rigidbody>();
+            if (projectileRb != null && projectileRb.velocity.sqrMagnitude > 0.1f)
+            {
+                return projectileRb.velocity.normalized;
+            }
+
+            // 2. Если нет Rigidbody, пробуем определить направление по вращению
+            if (interactionData.source.transform.up.sqrMagnitude > 0.1f)
+            {
+                return interactionData.source.transform.up;
+            }
+
+            // 3. Fallback: направление от projectile к цели
+            Vector3 projectileToTarget = interactionData.target.transform.position - interactionData.source.transform.position;
+            if (projectileToTarget.sqrMagnitude > 0.1f)
+            {
+                return projectileToTarget.normalized;
+            }
+
+            // 4. Ultimate fallback: вверх с небольшим рандомом
+            return (Vector3.up + Random.insideUnitSphere * 0.3f).normalized;
+        }
+
+        private Vector3 GetHitPoint(InteractionData interactionData)
+        {
+            // Если было столкновение (Collision), берём точку из contacts[0]
+            if (interactionData.physicType == InteractionPhysicType.Collision && interactionData.collision != null)
+            {
+                return interactionData.collision.contacts[0].point;
+            }
+            // Если был триггер (Trigger), используем ближайшую точку на коллайдере цели
+            else if (interactionData.targetCollider != null)
+            {
+                return interactionData.targetCollider.ClosestPoint(interactionData.source.transform.position);
+            }
+            // Fallback: если данных нет, используем центр объекта
+            else
+            {
+                return interactionData.target.transform.position;
+            }
+        }
+
+        private void CheckDeath()
+        {
+            if (Health.CurrentHealth <= 0)
+            {
+                SetDeathParams();
+
+                if (CharacterSettings.deathByAnimation)
+                {
+                    _animationProcessor.PlayDeathStateForNonRagdoll();
+                }
+                else
+                {
+                    Ragdoll.ProcessRagdoll(
+                        rigidbody: CharacterMovement.Rigidbody,
+                        forceValue: Vector3.one * 10,
+                        forceApplyPosition: transform.forward,
+                        forceMode: ForceMode.VelocityChange);
+                }
+
+                GameplayCoreManager.Instance.CameraManager.StopCameraFollowForRigidBody();
+            }
+        }
+
+        /// <summary>
+        /// Cleanup when character is disposed
+        /// </summary>
+        protected override void OnDispose()
+        {
+            GameplayCoreManager.Instance.InteractionManager.CleanUpForOwner(gameObject);
+        }
+
+        /// <summary>
+        /// Returns character to object pool for reuse
+        /// </summary>
+        protected override void ReturnToPool()
+        {
+            if (!CoreManager.Instance.PoolManager.characterPoolDictionary[CharacterSettings.characterType].Contains(this))
+            {
+                CoreManager.Instance.PoolManager.AddObject(CharacterSettings.characterType,
+                    CoreManager.Instance.PoolManager.characterPoolDictionary, this);
+            }
+        }
+
+        #endregion
+        #region public  
+        /// <summary>
+        /// Completes the character's current turn and resets attack state
+        /// </summary>
+        public void FinishTurn()
+        {
+            canUseAbility = false;
+            isAttacking = false;
+            StartCoroutine(ExecuteFinishTurnTimer());
         }
 
         /// <summary>
@@ -175,7 +348,7 @@ namespace Angry_Girls
         /// <returns>Attack ability logic for current phase</returns>
         public AttackAbilityLogic Get_AttackFinish_AttackAbilityLogic()
         {
-            return GameplayCoreManager.Instance.GameFlowController.CurrentState == GameState.LaunchPhase
+            return GameplayCoreManager.Instance.PhaseFlowController.CurrentState == GameState.LaunchPhase
                 ? attackSystem_Data.launch_AttackFinishLogic
                 : attackSystem_Data.alternate_AttackFinishLogic;
         }
@@ -186,33 +359,9 @@ namespace Angry_Girls
         /// <returns>Attack ability data for current phase</returns>
         public AttackAbilityData Get_AttackAbility()
         {
-            return GameplayCoreManager.Instance.GameFlowController.CurrentState == GameState.LaunchPhase
+            return GameplayCoreManager.Instance.PhaseFlowController.CurrentState == GameState.LaunchPhase
                 ? CharacterSettings.AttackAbility_Launch
                 : CharacterSettings.AttackAbility_Alternate;
-        }
-
-        private void FixedUpdate() => subComponentsController.OnFixedUpdate();
-        private void Update() => subComponentsController.OnUpdate();
-        private void LateUpdate() => subComponentsController.OnLateUpdate();
-
-        /// <summary>
-        /// Cleanup when character is disposed
-        /// </summary>
-        protected override void OnDispose()
-        {
-            GameplayCoreManager.Instance.InteractionManager.CleanUpForOwner(gameObject);
-        }
-
-        /// <summary>
-        /// Returns character to object pool for reuse
-        /// </summary>
-        protected override void ReturnToPool()
-        {
-            if (!CoreManager.Instance.PoolManager.characterPoolDictionary[CharacterSettings.characterType].Contains(this))
-            {
-                CoreManager.Instance.PoolManager.AddObject(CharacterSettings.characterType,
-                    CoreManager.Instance.PoolManager.characterPoolDictionary, this);
-            }
         }
 
         /// <summary>
@@ -242,5 +391,17 @@ namespace Angry_Girls
             var currentHash = animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
             return GameplayCoreManager.Instance.StatesContainer.GetStateNameByHash(currentHash);
         }
+
+        public bool IsInIdleState()
+        {
+            if (GameplayCoreManager.Instance.StatesContainer.idle_Dictionary.ContainsValue(animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        #endregion
     }
 }

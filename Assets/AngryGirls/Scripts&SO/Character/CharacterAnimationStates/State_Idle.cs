@@ -6,7 +6,7 @@ namespace Angry_Girls
 {
     public class State_Idle : AnimationStateBase
     {
-        public State_Idle(CControl control, AnimationController animationController) : base(control, animationController) { }
+        public State_Idle(CControl control) : base(control) { }
 
         private GameplayCharactersManager _charactersManager;
 
@@ -18,8 +18,9 @@ namespace Angry_Girls
             }
 
             var idleState = _settings.GetRandomState(_settings.idle_States);
-            _animationController.ChangeAnimationStateCrossFade
+            AnimationTransitioner.ChangeAnimationStateCrossFade
                 (
+                _control.animator,
                    GameplayCoreManager.Instance.StatesContainer.idle_Dictionary[idleState.animation],
                    idleState.transitionDuration
                 );
@@ -27,7 +28,7 @@ namespace Angry_Girls
 
         public override void OnUpdate()
         {
-            if (_control.playerOrAi == PlayerOrAi.Player && _control.hasFinishedLaunchingTurn)
+            if (_control.playerOrAi == PlayerOrAi.Player && _control.IsInIdleState())
             {
                 TurnToTheClosestEnemy(PlayerOrAi.Bot);
             }

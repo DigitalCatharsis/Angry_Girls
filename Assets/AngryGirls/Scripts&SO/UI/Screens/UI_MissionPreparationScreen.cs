@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks.Triggers;
 
 namespace Angry_Girls
 {

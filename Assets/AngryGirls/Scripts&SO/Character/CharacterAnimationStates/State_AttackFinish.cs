@@ -2,13 +2,14 @@ namespace Angry_Girls
 {
     public class State_AttackFinish : AnimationStateBase
     {
-        public State_AttackFinish(CControl control, AnimationController animationController)
-            : base(control, animationController) { }
+        public State_AttackFinish(CControl control)
+            : base(control) { }
 
         public override void OnEnter()
         {
             var attackFinishState = _control.Get_AttackAbility().attackFininsh_State;
-            _animationController.ChangeAnimationStateFixedTime(
+            AnimationTransitioner.ChangeAnimationStateFixedTime(
+                _control.animator,
                 GameplayCoreManager.Instance.StatesContainer.attackFinish_Dictionary[attackFinishState.animation],
                 attackFinishState.transitionDuration);
 

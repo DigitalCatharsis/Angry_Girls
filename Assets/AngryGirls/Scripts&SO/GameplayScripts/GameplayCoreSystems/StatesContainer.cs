@@ -131,7 +131,7 @@ namespace Angry_Girls
     /// <summary>
     /// Container for animation state dictionaries and hash management
     /// </summary>
-    public class StatesContainer : GameplayManagerClass
+    public class StatesContainer
     {
         [Header("State Dictionaries")]
         public SerializedDictionary<Attack_States, int> attack_Dictionary;
@@ -143,18 +143,16 @@ namespace Angry_Girls
         public SerializedDictionary<HitReaction_States, int> hitReaction_Dictionary;
         public SerializedDictionary<Death_States, int> death_States_Dictionary;
 
-
-        public override void Initialize()
+        public StatesContainer()
         {
-            stateNames_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<StateNames>(this.gameObject);
-            idle_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<Idle_States>(this.gameObject);
-            airbonedFlying_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<Falling_States>(this.gameObject);
-            attack_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<Attack_States>(this.gameObject);
-            attackFinish_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<AttackFinish_States>(this.gameObject);
-            landingNames_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<Landing_States>(this.gameObject);
-            hitReaction_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<HitReaction_States>(this.gameObject);
-            death_States_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<Death_States>(this.gameObject);
-            isInitialized = true;
+            stateNames_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<StateNames>();
+            idle_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<Idle_States>();
+            airbonedFlying_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<Falling_States>();
+            attack_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<Attack_States>();
+            attackFinish_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<AttackFinish_States>();
+            landingNames_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<Landing_States>();
+            hitReaction_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<HitReaction_States>();
+            death_States_Dictionary = CoreManager.Instance.HashManager.CreateAndInitDictionary<Death_States>();
         }
 
         /// <summary>

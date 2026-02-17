@@ -20,14 +20,12 @@ namespace Angry_Girls
     {
         protected readonly CControl _control;
         protected readonly Animator _animator;
-        protected readonly AnimationController _animationController;
         protected readonly CharacterSettings _settings;
 
-        protected AnimationStateBase(CControl control, AnimationController animationController)
+        protected AnimationStateBase(CControl control)
         {
             _control = control;
             _animator = control.animator;
-            _animationController = animationController;
             _settings = control.CharacterSettings;
         }
 

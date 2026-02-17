@@ -20,7 +20,7 @@ namespace Angry_Girls
                 return;
             }
 
-            if (GameplayCoreManager.Instance.GameFlowController.CurrentState == GameState.LaunchPhase)
+            if (GameplayCoreManager.Instance.PhaseFlowController.CurrentState == GameState.LaunchPhase)
             {
                 //Ai does not attack in launch phase
                 if (_control.playerOrAi == PlayerOrAi.Bot)

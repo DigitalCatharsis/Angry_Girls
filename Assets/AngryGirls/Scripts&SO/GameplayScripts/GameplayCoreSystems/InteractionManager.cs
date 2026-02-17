@@ -250,10 +250,10 @@ namespace Angry_Girls
             }
 
             // Apply damage to character
-            var mediator = targetControl.GetComponentInChildren<SubComponentMediator>();
-            if (mediator != null)
+            var control = targetControl.GetComponentInChildren<CControl>();
+            if (control != null)
             {
-                mediator.Notyfy_CheckForDamage(config.projectileConfig, data);
+                control.UnitGotHit?.Invoke(config.projectileConfig, data);
             }
         }
     }
@@ -408,6 +408,6 @@ namespace Angry_Girls
         public void Handle(InteractionData data, InteractionConfig config)
         {
             // Do nothing for unhandled interactions
-        }
+        }        
     }
 }

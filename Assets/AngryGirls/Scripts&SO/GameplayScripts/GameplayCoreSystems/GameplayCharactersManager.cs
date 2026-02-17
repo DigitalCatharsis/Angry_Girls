@@ -153,12 +153,12 @@ namespace Angry_Girls
 
                 character.CharacterMovement.Rigidbody.rotation = Quaternion.identity;
                 character.gameObject.layer = LayerMask.NameToLayer("CharacterToLaunch");
-                character.unitBehaviorIsAlternate = false;
+                character.isUnitBehaviorIsAlternate = false;
                 character.hasBeenLaunched = false;
                 character.hasUsedAbility = false;
                 character.hasFinishedLaunchingTurn = false;
                 character.hasFinishedAlternateAttackTurn = true;
-                character.checkGlobalBehavior = false;
+                character.canCheckGlobalBehavior = false;
             }
 
             NotifyLaunchableCharactersChanged();

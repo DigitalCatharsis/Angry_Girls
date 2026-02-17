@@ -16,7 +16,7 @@ namespace Angry_Girls
     /// <summary>
     /// Controls game state flow and transitions between phases
     /// </summary>
-    public class GameFlowController : GameplayManagerClass
+    public class PhaseFlowController : GameplayManagerClass
     {
         private Dictionary<GameState, IPhase> _phases;
         private IPhase _currentPhase;
@@ -75,8 +75,8 @@ namespace Angry_Girls
     /// </summary>
     public abstract class PhaseBase : IPhase
     {
-        protected GameFlowController _gameFlow;
-        public PhaseBase(GameFlowController controller) => _gameFlow = controller;
+        protected PhaseFlowController _gameFlow;
+        public PhaseBase(PhaseFlowController controller) => _gameFlow = controller;
         public abstract void StartPhase();
         public virtual void EndPhase() { }
     }
@@ -86,7 +86,7 @@ namespace Angry_Girls
     /// </summary>
     public class GameStartPhase : PhaseBase
     {
-        public GameStartPhase(GameFlowController controller) : base(controller) { }
+        public GameStartPhase(PhaseFlowController controller) : base(controller) { }
         public override void StartPhase()
         {
             Debug.Log("Game Start");
@@ -99,7 +99,7 @@ namespace Angry_Girls
     /// </summary>
     public class StageSetupPhase : PhaseBase
     {
-        public StageSetupPhase(GameFlowController controller) : base(controller) { }
+        public StageSetupPhase(PhaseFlowController controller) : base(controller) { }
         private StageManager _stageManager;
 
         public override void StartPhase()
@@ -119,7 +119,7 @@ namespace Angry_Girls
     /// </summary>
     public class LaunchPhase : PhaseBase
     {
-        public LaunchPhase(GameFlowController controller) : base(controller) { }
+        public LaunchPhase(PhaseFlowController controller) : base(controller) { }
 
         private GameplayCharactersManager _charactersManager;
 
@@ -168,7 +168,7 @@ namespace Angry_Girls
     /// </summary>
     public class AlternatePhase : PhaseBase
     {
-        public AlternatePhase(GameFlowController controller) : base(controller) { }
+        public AlternatePhase(PhaseFlowController controller) : base(controller) { }
 
         private TurnManager _turnManager;
         private GameplayCharactersManager _gameplayCharactersManager;
@@ -210,30 +210,10 @@ namespace Angry_Girls
             });
         }
     }
-    //private void ExecuteAlternatePhase()
-    //{
-    //    var checker = new BattleResultChecker(_gameplayCharactersManager);
-    //    if (checker.AllEnemiesDefeated())
-    //    {
-    //        _gameFlow.SwitchState(GameState.StageComplete);
-    //    }
-    //    else if (!checker.AnyPlayersAlive())
-    //    {
-    //        _gameFlow.SwitchState(GameState.Defeat);
-    //    }
-    //    else
-    //    {
-    //        _gameFlow.SwitchState(GameState.LaunchPhase);
-    //    }
-    //}
-
-    /// <summary>
-    /// Stage completion phase
-    /// </summary>
     public class StageCompletePhase : PhaseBase
     {
         private StageManager _stageManager;
-        public StageCompletePhase(GameFlowController controller) : base(controller) { }
+        public StageCompletePhase(PhaseFlowController controller) : base(controller) { }
         public override void StartPhase()
         {
             if (_stageManager == null)
@@ -258,7 +238,7 @@ namespace Angry_Girls
     /// </summary>
     public class VictoryPhase : PhaseBase
     {
-        public VictoryPhase(GameFlowController controller) : base(controller) { }
+        public VictoryPhase(PhaseFlowController controller) : base(controller) { }
         public override void StartPhase()
         {
             GameplayCoreManager.Instance.GameLogic.ExecuteVictory();
@@ -270,7 +250,7 @@ namespace Angry_Girls
     /// </summary>
     public class DefeatPhase : PhaseBase
     {
-        public DefeatPhase(GameFlowController controller) : base(controller) { }
+        public DefeatPhase(PhaseFlowController controller) : base(controller) { }
         public override void StartPhase()
         {
             GameplayCoreManager.Instance.GameLogic.ExecuteGameOver();

@@ -128,7 +128,7 @@ namespace Angry_Girls
 
         private AttackAbilityData GetCurrentAbility(CControl control)
         {
-            return GameplayCoreManager.Instance.GameFlowController.CurrentState == GameState.AlternatePhase
+            return GameplayCoreManager.Instance.PhaseFlowController.CurrentState == GameState.AlternatePhase
                 ? control.CharacterSettings.AttackAbility_Alternate
                 : control.CharacterSettings.AttackAbility_Launch;
         }

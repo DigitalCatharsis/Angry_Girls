@@ -70,11 +70,11 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\Spawn\SpawnFactory\Factories\IFactory.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\BoxColliderUpdaters\BoxColliderUpdater_Data.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\AudioManager\AudioManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\AnimationProcessor.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\MaterialChaner\MaterialChanger.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\TODO.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\UI_Slots\UI_CharacterSlot.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\UI_GameplayManagersComponent.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\AnimationProcessor.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\TurnOrderService.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Shop and Inventory\ItemSettings\Editor\ItemSettingsEditor.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\GameLogic.cs" />
@@ -109,6 +109,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterStateBehaviors\AlternateAttack_Behavior_Landing.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterStateBehaviors\Attack_Fininsh_Behavior.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\ShopManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\AnimationTransitioner.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\SaveLoad\ISaveData.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterStateBehaviors\LaunchAttack_Behavior_Prep.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\InsperctorHierarchyLabel\Editor\HierarchyLabel.cs" />
@@ -166,7 +167,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\BoxColliderUpdater.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\PoolManager\PoolObject\PoolObject.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Shop and Inventory\ShopSettings.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\Core\GameFlowController.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterProfileInfo.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackLogic\AlternateAttackAttackLogic\AttackLogic_Alternate_HeadSpin.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\CharacterLauncher.cs" />
@@ -222,6 +222,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\VFXManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterComponents\ChracterMovement.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\VFX.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\Core\PhaseFlowController.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CControl.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\CatalogsRepositoriesDataTemplates\DefaultSaveTemplate.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\State_Death.cs" />

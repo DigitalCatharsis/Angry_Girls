@@ -6,12 +6,13 @@ namespace Angry_Girls
     /// </summary>
     public class State_Airboned : AnimationStateBase
     {
-        public State_Airboned(CControl control, AnimationController animationController)
-            : base(control, animationController) { }
+        public State_Airboned(CControl control)
+            : base(control) { }
 
         public override void OnEnter()
         {
-            _animationController.ChangeAnimationStateCrossFade(
+            AnimationTransitioner.ChangeAnimationStateCrossFade(
+                _control.animator,
                 GameplayCoreManager.Instance.StatesContainer.airbonedFlying_Dictionary[_settings.airbonedFlying_States.animation],
                 _settings.airbonedFlying_States.transitionDuration);
         }

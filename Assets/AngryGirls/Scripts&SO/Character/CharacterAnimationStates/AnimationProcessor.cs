@@ -7,7 +7,6 @@ namespace Angry_Girls
     public class AnimationProcessor : SubComponent
     {
         private AnimationStateMachine _stateMachine;
-        private AnimationController _animationController;
 
         [ShowOnly][SerializeField] private string _probablyCurrentState;
 
@@ -18,20 +17,16 @@ namespace Angry_Girls
 
         public override void OnStart()
         {
-            control.CharacterSettings.CheckForNoneValues(control);
-
             if (control.playerOrAi == PlayerOrAi.Bot)
             {
-                control.checkGlobalBehavior = true;
+                control.canCheckGlobalBehavior = true;
             }
 
-            _animationController = new AnimationController
-                (
-                control.gameObject,
-                control.animator,
-                CoreManager.Instance.HashManager,
-                GameplayCoreManager.Instance.StatesContainer
-                );
+            control.UnitGotHit +=
+            control.UnitHasFinishedAlternateAttackTurn +=
+            control.UnitHasFinishedLaunchingTurn +=
+            control.UnitHasBeenLaunched +=
+            control.UnitGotKilled +=
 
             InitializeStateMachine();
         }
@@ -40,17 +35,16 @@ namespace Angry_Girls
         {
             var states = new IAnimationState[]
             {
-                new State_Idle(control, _animationController),
-                new State_Attack(control, _animationController),
-                new State_Attack(control, _animationController),
-                new State_AttackFinish(control, _animationController),
-                new State_HitReaction(control, _animationController),
-                new State_Death(control, _animationController),
-                new State_Landing(control, _animationController),
-                new State_Airboned(control, _animationController),
+                new State_Idle(control),
+                new State_Attack(control),
+                new State_AttackFinish(control),
+                new State_HitReaction(control),
+                new State_Death(control),
+                new State_Landing(control),
+                new State_Airboned(control),
             };
 
-            _stateMachine = new AnimationStateMachine(control.gameObject, states);
+            _stateMachine = new AnimationStateMachine(states);
             InitFirstState();
         }
 
@@ -77,7 +71,7 @@ namespace Angry_Girls
         /// </summary>
         private void ProcessPhaseBehavior()
         {
-            var currentPhase = GameplayCoreManager.Instance.GameFlowController.CurrentState;
+            var currentPhase = GameplayCoreManager.Instance.PhaseFlowController.CurrentState;
 
             if (currentPhase == GameState.LaunchPhase && control.hasBeenLaunched && !control.hasFinishedLaunchingTurn)
             {
@@ -151,7 +145,7 @@ namespace Angry_Girls
         /// </summary>
         private void ProcessGlobalBehavior()
         {
-            if (!control.checkGlobalBehavior || control.isDead) return;
+            if (!control.canCheckGlobalBehavior || control.isDead) return;
 
             var currentStateHash = control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
 
@@ -191,7 +185,7 @@ namespace Angry_Girls
             // AIR units: always airborne except when grounded and can attack
             if (control.CharacterSettings.unitType == UnitType.Air)
             {
-                if (GameplayCoreManager.Instance.GameFlowController.CurrentState != GameState.LaunchPhase) { return false; }
+                if (GameplayCoreManager.Instance.PhaseFlowController.CurrentState != GameState.LaunchPhase) { return false; }
 
                 if (control.playerOrAi != PlayerOrAi.Player) { return false; }
 

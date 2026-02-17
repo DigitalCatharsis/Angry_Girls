@@ -1,72 +1,16 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Angry_Girls
 {
     /// <summary>
-    /// Controller for managing animation playback and transitions
-    /// </summary>
-    public class AnimationController
-    {
-        public AnimationController(GameObject owner, Animator animator, HashManager hashManager, StatesContainer statesContainer)
-        {
-            _owner = owner;
-            _animator = animator;
-            _hashManager = hashManager;
-            _statesContainer = statesContainer;
-        }
-
-        private GameObject _owner;
-        private readonly Animator _animator;
-        private readonly HashManager _hashManager;
-        private readonly StatesContainer _statesContainer;
-
-        /// <summary>
-        /// Changes animation state with Play method
-        /// </summary>
-        public void ChangeAnimationState(int newStateHash, float transitionDuration = 0.1f, int layer = 0)
-        {
-            if (_animator.GetCurrentAnimatorStateInfo(layer).shortNameHash == newStateHash) return;
-            _animator.Play(newStateHash, layer, transitionDuration);
-        }
-
-        /// <summary>
-        /// Changes animation state with PlayInFixedTime method
-        /// </summary>
-        public void ChangeAnimationStateFixedTime(int newStateHash, float transitionDuration = 0f, int layer = 0)
-        {
-            if (_animator.GetCurrentAnimatorStateInfo(layer).shortNameHash == newStateHash) return;
-            _animator.PlayInFixedTime(newStateHash, layer, transitionDuration);
-        }
-
-        /// <summary>
-        /// Changes animation state with cross-fade
-        /// </summary>
-        public void ChangeAnimationStateCrossFade(int newStateHash, float transitionDuration = 0.1f, int layer = 0)
-        {
-            var currentHash = _animator.GetCurrentAnimatorStateInfo(layer).shortNameHash;
-
-            // Don't transition to NONE states
-            if (_hashManager.GetName(_statesContainer.stateNames_Dictionary, newStateHash) == StateNames.NONE) return;
-
-            _animator.CrossFadeInFixedTime(
-                newStateHash,
-                fixedTransitionDuration: transitionDuration,
-                layer: layer,
-                fixedTimeOffset: 0f,
-                normalizedTransitionTime: 0.0f);
-        }
-    }
-
-    /// <summary>
     /// Finite State Machine for animation states
     /// </summary>
     public class AnimationStateMachine
     {
-        public AnimationStateMachine(GameObject owner, params IAnimationState[] states)
+        public AnimationStateMachine(IAnimationState[] states)
         {
-            _owner = owner;
 
             foreach (var state in states)
             {
@@ -76,7 +20,6 @@ namespace Angry_Girls
 
         private readonly Dictionary<Type, IAnimationState> _states = new();
         private IAnimationState _currentState;
-        private GameObject _owner;
 
         public IAnimationState CurrentState => _currentState;
 
