@@ -17,22 +17,17 @@ namespace Angry_Girls
 
         public override void OnUpdate()
         {
-            //TODO:!
-            // ћожно добавить проверку завершени€ анимации
             if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
-                //_stateMachine.ChangeState<State_Idle>();
             }
         }
 
         public override void OnExit()
         {
-            //_control.FinishTurn();
         }
 
         public override bool CanTransitionTo(IAnimationState nextState)
         {
-            // –азрешаем переход только в idle или при получении удара
             return nextState is State_Idle || nextState is State_HitReaction;
         }
     }

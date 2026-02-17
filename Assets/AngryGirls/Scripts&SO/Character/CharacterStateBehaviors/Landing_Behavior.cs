@@ -13,6 +13,7 @@ namespace Angry_Girls
             }
 
             _control.CharacterMovement.SetVelocity(_control.CharacterSettings.landingMovementSpeed);
+            ColorDebugLog.Log($"{_control.name} has entered {_control.GetCurrentAnimationName()}. Settings isLanding to true and canUseAbility to false. ", System.Drawing.KnownColor.Aqua);
             _control.canUseAbility = false;
             _control.isLanding = true;
         }
