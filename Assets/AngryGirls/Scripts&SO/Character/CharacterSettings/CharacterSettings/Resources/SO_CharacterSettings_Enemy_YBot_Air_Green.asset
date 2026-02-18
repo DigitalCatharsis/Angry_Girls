@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5712a747d1a17fc42b72503a7509d404, type: 3}
   m_Name: SO_CharacterSettings_Enemy_YBot_Air_Green
   m_EditorClassIdentifier: 
-  _notifyAboutNONEStates: 0
   unitType: 2
   characterType: 6
   portrait:
@@ -37,8 +36,16 @@ MonoBehaviour:
     animation: 0
     transitionDuration: 0.1
   hitReaction_States:
+  - animation: 1
+    transitionDuration: 0.1
+  - animation: 2
+    transitionDuration: 0.1
   - animation: 3
-    transitionDuration: 0
+    transitionDuration: 0.1
+  - animation: 4
+    transitionDuration: 0.1
+  - animation: 5
+    transitionDuration: 0.1
   death_States:
   - animation: 1
     transitionDuration: 0.1

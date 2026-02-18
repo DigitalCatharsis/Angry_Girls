@@ -20,7 +20,8 @@ namespace Angry_Girls
     {
         private Dictionary<GameState, IPhase> _phases;
         private IPhase _currentPhase;
-        public GameState CurrentState { get; private set; }
+        public IPhase CurrentPhase => _currentPhase;
+        public GameState CurrentGameState { get; private set; }
 
         public override void Initialize()
         {
@@ -53,7 +54,7 @@ namespace Angry_Girls
         public void SwitchState(GameState newState)
         {
             _currentPhase?.EndPhase();
-            CurrentState = newState;
+            CurrentGameState = newState;
             Debug.Log($"Switched to state: {newState}");
             _currentPhase = _phases[newState];
             _currentPhase.StartPhase();

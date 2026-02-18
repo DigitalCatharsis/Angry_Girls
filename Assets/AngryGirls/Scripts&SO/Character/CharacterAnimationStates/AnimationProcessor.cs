@@ -18,10 +18,14 @@ namespace Angry_Girls
 
             control.UnitHasBeenLaunched += ProcessLaunch;
             control.UnitHasPerformedLanding += PerformLanding;
+            control.UnitIsAirboned += PerformAirboned;
             control.UnitPerformedAttack += ProcessAttack;
             control.UnitPerformedAttackFinish += ProcessAttackFinish;
             control.UnitCallsForStopAttack += CalculatePhaseAfterAttack;
             control.UnitCallsForStopAttackfiniss += ProcessIdle;
+            control.UnitHasFinishedLanding += ProcessIdle;
+            control.UnitGotHit += ProcessHitReacton;
+            control.UnitHasFinishedHitReaction += ProcessIdleOrAirboned;
 
             InitializeStateMachine();
         }
@@ -30,10 +34,14 @@ namespace Angry_Girls
         {
             control.UnitHasBeenLaunched -= ProcessLaunch;
             control.UnitHasPerformedLanding -= PerformLanding;
+            control.UnitIsAirboned -= PerformAirboned;
             control.UnitPerformedAttack -= ProcessAttack;
             control.UnitPerformedAttackFinish -= ProcessAttackFinish;
             control.UnitCallsForStopAttack -= CalculatePhaseAfterAttack;
             control.UnitCallsForStopAttackfiniss -= ProcessIdle;
+            control.UnitHasFinishedLanding -= ProcessIdle;
+            control.UnitGotHit -= ProcessHitReacton;
+            control.UnitHasFinishedHitReaction -= ProcessIdleOrAirboned;
         }
 
         private void InitializeStateMachine()
@@ -50,7 +58,7 @@ namespace Angry_Girls
             };
 
             _phaseMachine = new AnimationPhaseMachine(phases);
-            InitFirstState();
+            ProcessIdleOrAirboned();
         }
 
         public override void OnFixedUpdate()
@@ -59,9 +67,28 @@ namespace Angry_Girls
             _phaseMachine.Update();
         }
 
+        private void ProcessHitReacton(ProjectileConfig pro, InteractionData intdata)
+        {
+            _phaseMachine.ChangePhase<AnimationPhase_HitReaction>(control.gameObject);
+        }
+
+        private void PerformAirboned()
+        {
+            if (control.GetCurrentLayerName() == "CharacterToLaunch")
+            {
+                return;
+            }
+
+            _phaseMachine.ChangePhase<AnimationPhase_Airboned>(control.gameObject);
+        }
 
         private void PerformLanding()
         {
+            if (control.GetCurrentLayerName() == "CharacterToLaunch")
+            {
+                return;
+            }
+
             if (control.CharacterSettings.characterType == CharacterType.Player_YBot_Air_Green || control.CharacterSettings.characterType == CharacterType.Enemy_YBot_Air_Green)
             {
                 _phaseMachine.ChangePhase<AnimationPhase_Idle>(control.gameObject);
@@ -70,7 +97,7 @@ namespace Angry_Girls
             _phaseMachine.ChangePhase<AnimationPhase_Landing>(control.gameObject);
         }
 
-        private void InitFirstState()
+        private void ProcessIdleOrAirboned()
         {
             if (control.CharacterMovement.IsGrounded)
             {

@@ -2,6 +2,29 @@ using System;
 
 namespace Angry_Girls
 {
+    public enum AttackTypes
+    {
+        None = 0,
+        Uppercut,
+        Headspin,
+        FireballFront,
+        SwordAttack
+    }
+
+    [Serializable]
+    public class AttackSystem_Data
+    {
+        public AttackAbility Launch_AttackLogic;
+
+        public AttackAbility AlternateAttackLogic_Prep;
+        public AttackAbility AlternateAttackLogic_Airboned;
+        public AttackAbility AlternateAttackLogic_Landing;
+        public AttackAbility AlternateAttackLogic_OnGround;
+
+        public AttackAbility launch_AttackFinishLogic;
+        public AttackAbility alternate_AttackFinishLogic;
+    }
+
     public static class AttackLogicContainer
     {
         public static void SetCharacterAttackLogic(CControl control)
@@ -37,8 +60,8 @@ namespace Angry_Girls
                     case AttackFinish_States.Launch_Uppercut_Finish:
                         control.attackSystem_Data.launch_AttackFinishLogic = new AttackLogic_Launch_UppercutDownSmash_Finish(control.CharacterSettings.AttackAbility_Launch);
                         break;
-                    //default:
-                    //    throw new Exception("No attackFinish logic for " + control.characterSettings.AttackAbility_Launch.attackFininsh_State);
+                        //default:
+                        //    throw new Exception("No attackFinish logic for " + control.characterSettings.AttackAbility_Launch.attackFininsh_State);
                 }
             }
 
@@ -48,8 +71,8 @@ namespace Angry_Girls
                 case AttackFinish_States.Alternate_Uppercut_Finish:
                     control.attackSystem_Data.alternate_AttackFinishLogic = new AttackLogic_Alternate_UppercutDownSmash_Finish(control.CharacterSettings.AttackAbility_Alternate);
                     break;
-                //default:
-                //    throw new Exception("No logic for state like " + control.characterSettings.AttackAbility_Alternate.attackFininsh_State);
+                    //default:
+                    //    throw new Exception("No logic for state like " + control.characterSettings.AttackAbility_Alternate.attackFininsh_State);
             }
             /////////////////////////////////////////////////
             ///
@@ -73,19 +96,5 @@ namespace Angry_Girls
                     throw new Exception("No Alternate_Attack logic for " + control.name);
             }
         }
-    }
-
-    [Serializable]
-    public class AttackSystem_Data
-    {
-        public AttackAbilityLogic Launch_AttackLogic;
-
-        public AttackAbilityLogic AlternateAttackLogic_Prep;
-        public AttackAbilityLogic AlternateAttackLogic_Airboned;
-        public AttackAbilityLogic AlternateAttackLogic_Landing;
-        public AttackAbilityLogic AlternateAttackLogic_OnGround;
-
-        public AttackAbilityLogic launch_AttackFinishLogic;
-        public AttackAbilityLogic alternate_AttackFinishLogic;
     }
 }

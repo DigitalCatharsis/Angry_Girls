@@ -1,3 +1,4 @@
+using AYellowpaper.SerializedCollections;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,23 +45,22 @@ namespace Angry_Girls
         public Action UnitCallsForStopAttack;
         public Action UnitCallsForStopAttackfiniss;
         public Action UnitHasPerformedLanding;
+        public Action UnitIsAirboned;
+        public Action UnitHasFinishedLanding;
+        public Action UnitHasFinishedHitReaction;
 
         public CharacterHealth Health { get; private set; }
         public CharacterMovement CharacterMovement { get; private set; }
         public Ragdoll Ragdoll { get; private set; }
 
-        public Slider healthSlider;
-
         public CharacterProfile profile;
-        [SerializeField] private CharacteProfileInfo _characterProfileInfo;
+        private CharacteProfileInfo _characterProfileInfo;
         public CharacterSettings CharacterSettings => profile.CharacterSettings;
-
-
-        public SubComponentMediator subComponentMediator;
-        private SubComponentsController subComponentsController;
+        private SubComponentsController _subComponentsController;
 
         public BoxCollider boxCollider;
         public Animator animator;
+
         public AttackSystem_Data attackSystem_Data;
 
         public PlayerOrAi playerOrAi;
@@ -70,9 +70,9 @@ namespace Angry_Girls
         public Color vfxColor;
         public Transform weaponHolder;
 
-        public List<GameObject> detectedGroundObject = new();
+        [SerializeField] public List<GameObject> detectedGroundObject = new();
 
-        [SerializeField] private PhysicMaterial noBounceMaterial;
+        [SerializeField] private PhysicMaterial _noBounceMaterial;
 
         private VFXManager _vFXManager;
         private AudioManager _audioManager;
@@ -97,10 +97,8 @@ namespace Angry_Girls
             CharacterMovement = GetComponent<CharacterMovement>();
             animator = GetComponent<Animator>();
             boxCollider = GetComponent<BoxCollider>();
-            subComponentMediator = GetComponentInChildren<SubComponentMediator>();
-            subComponentsController = GetComponentInChildren<SubComponentsController>();
-            subComponentMediator.OnAwake();
-            subComponentsController.OnAwake();
+            _subComponentsController = GetComponentInChildren<SubComponentsController>();
+            _subComponentsController.OnAwake();
 
             GameplayCoreManager.Instance.InteractionManager.Register(gameObject, new InteractionConfig
             {
@@ -119,7 +117,7 @@ namespace Angry_Girls
 
         private void OnEnable()
         {
-            subComponentsController.OnComponentEnable();
+            _subComponentsController.OnComponentEnable();
         }
         private void Start()
         {
@@ -127,7 +125,7 @@ namespace Angry_Girls
             _characterProfileInfo = GetComponent<CharacteProfileInfo>();
             _characterProfileInfo.InitAndRun(profile);
 
-            subComponentsController.OnStart();
+            _subComponentsController.OnStart();
 
             //TODO: TEMP
             if (weaponHolder != null)
@@ -151,10 +149,10 @@ namespace Angry_Girls
 
         private void FixedUpdate()
         {
-            subComponentsController.OnFixedUpdate();
+            _subComponentsController.OnFixedUpdate();
         }
-        private void Update() => subComponentsController.OnUpdate();
-        private void LateUpdate() => subComponentsController.OnLateUpdate();
+        private void Update() => _subComponentsController.OnUpdate();
+        private void LateUpdate() => _subComponentsController.OnLateUpdate();
         #endregion
 
         #region private
@@ -344,9 +342,9 @@ namespace Angry_Girls
         /// Gets the appropriate attack logic based on current game state
         /// </summary>
         /// <returns>Attack ability logic for current phase</returns>
-        public AttackAbilityLogic Get_AttackFinish_AttackAbilityLogic()
+        public AttackAbility Get_AttackFinish_AttackAbilityLogic()
         {
-            return GameplayCoreManager.Instance.PhaseFlowController.CurrentState == GameState.LaunchPhase
+            return GameplayCoreManager.Instance.PhaseFlowController.CurrentGameState == GameState.LaunchPhase
                 ? attackSystem_Data.launch_AttackFinishLogic
                 : attackSystem_Data.alternate_AttackFinishLogic;
         }
@@ -355,9 +353,9 @@ namespace Angry_Girls
         /// Gets the attack ability data based on current game state
         /// </summary>
         /// <returns>Attack ability data for current phase</returns>
-        public AttackAbilityData Get_AttackAbility()
+        public AttackAbilityData Get_AttackAbilityData()
         {
-            return GameplayCoreManager.Instance.PhaseFlowController.CurrentState == GameState.LaunchPhase
+            return GameplayCoreManager.Instance.PhaseFlowController.CurrentGameState == GameState.LaunchPhase
                 ? CharacterSettings.AttackAbility_Launch
                 : CharacterSettings.AttackAbility_Alternate;
         }
@@ -390,6 +388,15 @@ namespace Angry_Girls
             return StatesContainer.GetStateNameByHash(currentHash);
         }
 
+        /// <summary>
+        /// Gets the hash of currently playing animation
+        /// </summary>
+        /// <returns>Current animation state name</returns>
+        public int GetCurrentAnimationHash()
+        {
+            return animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
+        }
+
         public bool IsInIdleState()
         {
             if (StatesContainer.IdleDictionary.ContainsValue(animator.GetCurrentAnimatorStateInfo(0).shortNameHash))
@@ -398,6 +405,62 @@ namespace Angry_Girls
             }
 
             return false;
+        }
+
+        ///// <summary>
+        ///// Checks if animation is ending based on normalized time
+        ///// </summary>
+        //public bool IsAnimationEnding<T>(int stateHash, SerializedDictionary<T, int> dict) where T : Enum
+        //{
+        //    if (dict.ContainsValue(stateHash))
+        //    {
+        //        return animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
+
+        /// <summary>
+        /// Checks if animation is near its end, properly handling looped animations
+        /// </summary>
+        /// <param name="stateHash">Hash of animation to check</param>
+        /// <param name="dict">Dictionary containing animation hashes</param>
+        /// <param name="threshold">Normalized time threshold (0-1)</param>
+        /// <returns>True if animation is near its end</returns>
+        public bool IsAnimationNearEnd<T>(int stateHash, SerializedDictionary<T, int> dict, float threshold = 0.9f) where T : Enum
+        {
+            // Check if this animation is in our dictionary
+            if (!dict.ContainsValue(stateHash))
+                return false;
+
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+            // Get normalized time within current loop (0-1)
+            float normalizedTime = stateInfo.normalizedTime % 1f;
+
+            // For looped animations, check if we're near the end of current loop
+            return normalizedTime >= threshold;
+        }
+
+        /// <summary>
+        /// Checks if current animation (regardless of type) is near its end
+        /// </summary>
+        public bool IsCurrentAnimationNearEnd(float threshold = 0.9f)
+        {
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            float normalizedTime = stateInfo.normalizedTime % 1f;
+            return normalizedTime >= threshold;
+        }
+
+        /// <summary>
+        /// Gets the current layer of the character's gameObject
+        /// </summary>
+        /// <returns>Layer name as string</returns>
+        public string GetCurrentLayerName()
+        {
+            return LayerMask.LayerToName(gameObject.layer);
         }
 
         #endregion

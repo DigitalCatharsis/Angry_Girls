@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 699254688615688622}
   - component: {fileID: 2663568831235345616}
   m_Layer: 0
-  m_Name: ProjectSettings
+  m_Name: PRE_ProjectSettings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

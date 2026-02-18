@@ -149,7 +149,7 @@ namespace Angry_Girls
             {
                 spawnPosition = contactPoint,
                 originator = projectileOriginator,
-                Vfxtype = VFX_Type.VFX_DamageNumbers,
+                Vfxtype = VFX_Type.PRE_VFX_DamageNumbers,
                 timeToLive = 1f,
                 color = Color.white,
                 connectToOriginator = false,
@@ -168,7 +168,7 @@ namespace Angry_Girls
             {
                 spawnPosition = position,
                 originator = null,
-                Vfxtype = VFX_Type.VFX_CoinValue,
+                Vfxtype = VFX_Type.PRE_VFX_CoinValue,
                 color = Color.white,
                 timeToLive = 1,
                 connectToOriginator = false,

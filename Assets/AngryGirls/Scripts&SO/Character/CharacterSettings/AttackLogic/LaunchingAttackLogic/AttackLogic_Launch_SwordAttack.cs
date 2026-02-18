@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class AttackLogic_Launch_SwordAttack : AttackAbilityLogic
+    public class AttackLogic_Launch_SwordAttack : AttackAbility
     {
         public AttackLogic_Launch_SwordAttack(AttackAbilityData attackAbilityData) : base(attackAbilityData) { }
 

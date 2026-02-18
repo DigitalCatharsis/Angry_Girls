@@ -18,9 +18,6 @@ namespace Angry_Girls
     [CreateAssetMenu(fileName = "Settings", menuName = "Angry_Girls/CharacterSettings/CharacterSettings")]
     public class CharacterSettings : ScriptableObject
     {
-        [Header("Debug")]
-        [SerializeField] private bool _notifyAboutNONEStates = true;
-
         [Header("Setup")]
         [Space(10)]
         [Header("Unit type")]

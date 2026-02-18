@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class AttackLogic_Alternate_HeadSpin : AttackAbilityLogic
+    public class AttackLogic_Alternate_HeadSpin : AttackAbility
     {
         public AttackLogic_Alternate_HeadSpin(AttackAbilityData attackAbilityData): base(attackAbilityData) { }
         private bool _haveShootedFirstTime = false;

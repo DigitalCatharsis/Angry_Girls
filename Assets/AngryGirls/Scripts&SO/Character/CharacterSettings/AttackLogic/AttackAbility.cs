@@ -2,10 +2,10 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public abstract class AttackAbilityLogic
+    public abstract class AttackAbility
     {
         protected AttackAbilityData _attackAbility;
-        public AttackAbilityLogic(AttackAbilityData ability) 
+        public AttackAbility(AttackAbilityData ability) 
         {
             _attackAbility = ability;
         }

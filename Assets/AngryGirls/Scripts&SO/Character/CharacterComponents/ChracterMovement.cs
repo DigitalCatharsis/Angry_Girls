@@ -20,6 +20,50 @@ namespace Angry_Girls
         [SerializeField] private float _multiCollisionTimeThreshold = 4f; // Time threshold for multi-collision grounded
         private float _multiCollisionTimer; // Timer for multi-collision detection
 
+        [Header("Coyote Time")]
+        [Tooltip("The time the character is considered grounded after leaving the ground")]
+        [SerializeField] private float _coyoteTime = 0.1f;
+        private float _coyoteTimer;
+        private bool _coyoteGroundedState;
+
+        private void FixedUpdate()
+        {
+            UpdateGroundedStateWithCoyoteTime();
+        }
+
+        private void UpdateGroundedStateWithCoyoteTime()
+        {
+            bool physicalGrounded = CheckIfGrounded();
+            bool wasCoyoteGrounded = _coyoteGroundedState;
+
+            if (physicalGrounded)
+            {
+                _coyoteTimer = _coyoteTime;
+                _coyoteGroundedState = true;
+            }
+            else
+            {
+                _coyoteTimer -= Time.fixedDeltaTime;
+                if (_coyoteTimer <= 0)
+                {
+                    _coyoteGroundedState = false;
+                }
+            }
+
+            if (wasCoyoteGrounded != _coyoteGroundedState)
+            {
+                NotifyGroundedStateChanged();
+            }
+        }
+
+        private void NotifyGroundedStateChanged()
+        {
+            if (_coyoteGroundedState)
+                _control.UnitHasPerformedLanding?.Invoke();
+            else
+                _control.UnitIsAirboned?.Invoke();
+        }
+
         private void Awake()
         {
             _control = GetComponent<CControl>();
@@ -30,7 +74,7 @@ namespace Angry_Girls
         private void Start()
         {
             // Initialize layer masks
-            _ignoreLayerMask = LayerMask.GetMask("Projectile", "Pickable", "CharacterToLaunch", "Character", "Bot", "DeadBody");
+            _ignoreLayerMask = LayerMask.GetMask("NoninitializedProjectile", "Pickable", "CharacterToLaunch", "Character", "Bot", "DeadBody", "Projectile_Bot", "Projectile_Character");
             _enemyLayerMask = LayerMask.GetMask("Bot");
         }
 
@@ -125,29 +169,34 @@ namespace Angry_Girls
             var boxSize = new Vector3(_boxCollider.size.x, 0.1f, _boxCollider.size.z);
             float rayLength = 0.13f;
 
+
             // Special logic: If player is standing on multiple enemies, consider grounded
-            var enemyHits = Physics.BoxCastAll(boxCenter, boxSize / 2, Vector3.down, Quaternion.identity, rayLength, _enemyLayerMask);
-
-            if (enemyHits.Length >= 1 && _control.playerOrAi != PlayerOrAi.Bot)
+            if (_control.playerOrAi == PlayerOrAi.Player)
             {
-                _multiCollisionTimer += Time.fixedDeltaTime;
+                var enemyHits = Physics.BoxCastAll(boxCenter, boxSize / 2, Vector3.down, Quaternion.identity, rayLength, _enemyLayerMask);
 
-                // If timer exceeds threshold, consider grounded on enemies
-                if (_multiCollisionTimer >= _multiCollisionTimeThreshold)
+                if (enemyHits.Length >= 1 && _control.playerOrAi != PlayerOrAi.Bot)
                 {
-                    foreach (var enemy in enemyHits)
+                    _multiCollisionTimer += Time.fixedDeltaTime;
+
+                    // If timer exceeds threshold, consider grounded on enemies
+                    if (_multiCollisionTimer >= _multiCollisionTimeThreshold)
                     {
                         _control.detectedGroundObject.Clear();
-                        _control.detectedGroundObject.Add(enemy.collider.gameObject);
+                        foreach (var enemy in enemyHits)
+                        {
+                            _control.detectedGroundObject.Add(enemy.collider.gameObject);
+                        }
+                        return true;
                     }
-                    return true;
+                }
+                else
+                {
+                    // Reset timer if not colliding with enemies
+                    _multiCollisionTimer = 0f;
                 }
             }
-            else
-            {
-                // Reset timer if not colliding with enemies
-                _multiCollisionTimer = 0f;
-            }
+            
 
             // Normal ground detection
             RaycastHit hit;

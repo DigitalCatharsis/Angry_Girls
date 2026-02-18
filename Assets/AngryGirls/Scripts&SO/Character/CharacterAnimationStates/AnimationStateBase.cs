@@ -59,9 +59,10 @@ namespace Angry_Girls
 
     public class AnimationPhase_Idle : AnimationStateBase
     {
-        public AnimationPhase_Idle(CControl control) : base(control) { }
-
+        private bool _hasTriggeredTransition = false;
         private GameplayCharactersManager _charactersManager;
+
+        public AnimationPhase_Idle(CControl control) : base(control) { }
 
         public override void OnEnter()
         {
@@ -77,6 +78,8 @@ namespace Angry_Girls
                    StatesContainer.IdleDictionary[idleState.animation],
                    idleState.transitionDuration
                 );
+
+            _hasTriggeredTransition = false; // Сбрасываем флаг при входе в состояние
         }
 
         public override void OnUpdate()
@@ -93,6 +96,19 @@ namespace Angry_Girls
             else if (_control.playerOrAi == PlayerOrAi.Bot)
             {
                 TurnToTheClosestEnemy(PlayerOrAi.Player);
+            }
+
+            if (_control.IsInIdleState() && _control.IsCurrentAnimationNearEnd(0.95f) && !_hasTriggeredTransition)
+            {
+                _hasTriggeredTransition = true;
+
+                var idleState = _settings.GetRandomState(_settings.idle_States);
+                AnimationTransitioner.ChangeAnimationStateCrossFade
+                    (
+                    _control.animator,
+                       StatesContainer.IdleDictionary[idleState.animation],
+                       idleState.transitionDuration
+                    );
             }
         }
 
@@ -168,10 +184,10 @@ namespace Angry_Girls
 
         public override void OnUpdate()
         {
-            if (_control.CharacterMovement.IsGrounded)
-            {
-                _control.UnitHasPerformedLanding?.Invoke();
-            }
+            //if (_control.CharacterMovement.IsGrounded)
+            //{
+            //    _control.UnitHasPerformedLanding?.Invoke();
+            //}
         }
 
         public override bool CanTransitionTo(IAnimationPhase nextState)
@@ -187,27 +203,45 @@ namespace Angry_Girls
 
     public class AnimationPhase_Attack : AnimationStateBase
     {
-        private AttackAbilityData _attackAbility;
+        private AttackAbilityData _attackAbilityData;
+        private AttackAbility _attackAbilityLogic;
 
         public AnimationPhase_Attack(CControl control) : base(control) { }
 
+        private PhaseFlowController _phaseFlowController;
+
         public override void OnEnter()
         {
-            _attackAbility = GameplayCoreManager.Instance.PhaseFlowController.CurrentState == GameState.LaunchPhase
-                ? _control.profile.CharacterSettings.AttackAbility_Launch
-                : _control.profile.CharacterSettings.AttackAbility_Alternate;
 
+            //TODO:
             _control.isAttacking = true;
             _control.canUseAbility = false;
 
             AnimationTransitioner.ChangeAnimationStateCrossFade(
                 _control.animator,
-                StatesContainer.AttackDictionary[_attackAbility.attack_State.animation],
-                _attackAbility.attack_State.transitionDuration);
+                StatesContainer.AttackDictionary[_attackAbilityData.attack_State.animation],
+                _attackAbilityData.attack_State.transitionDuration);
+
+            var abilityData = _control.abilityData; //какой-то типа обращения к Ccontrol, который уже где-то в инцилизации обратился к менеджеру и получил нужный AttackAbility
+            var currentPhase = _phaseFlowController.CurrentPhase;
+            var stateInfo = _control.animator.GetCurrentAnimatorStateInfo(0);
+            abilityData.AttackPrep(currentPhase).OnStateEnter(_control, _control.animator, _control.animator.GetCurrentAnimatorStateInfo(0));
         }
+
+        public override void OnUpdate()
+        {
+            var abilityData = _control.abilityData; //какой-то типа обращения к Ccontrol, который уже где-то в инцилизации обратился к менеджеру и получил нужный AttackAbility
+            var currentPhase = _phaseFlowController.CurrentPhase;
+            var stateInfo = _control.animator.GetCurrentAnimatorStateInfo(0);
+            abilityData.AttackPrep(currentPhase).OnStateEnter(_control, _control.animator, _control.animator.GetCurrentAnimatorStateInfo(0));
+        }
+
         public override void OnExit()
         {
-            _control.isAttacking = false;
+            var abilityData = _control.abilityData; //какой-то типа обращения к Ccontrol, который уже где-то в инцилизации обратился к менеджеру и получил нужный AttackAbility
+            var currentPhase = _phaseFlowController.CurrentPhase;
+            var stateInfo = _control.animator.GetCurrentAnimatorStateInfo(0);
+            abilityData.AttackPrep(currentPhase).OnStateEnter(_control, _control.animator, _control.animator.GetCurrentAnimatorStateInfo(0));
         }
 
         public override bool CanTransitionTo(IAnimationPhase nextState)
@@ -237,7 +271,7 @@ namespace Angry_Girls
 
         public override void OnEnter()
         {
-            var attackFinishState = _control.Get_AttackAbility().attackFininsh_State;
+            var attackFinishState = _control.Get_AttackAbilityData().attackFininsh_State;
             AnimationTransitioner.ChangeAnimationStateFixedTime(
                 _control.animator,
                 StatesContainer.AttackFinishDictionary[attackFinishState.animation],
@@ -260,33 +294,31 @@ namespace Angry_Girls
 
         public override void OnEnter()
         {
-            ColorDebugLog.Log($"{_control.name} has entered {_control.GetCurrentAnimationName()}. Settings isAttacking to false. And unitGotHit to true (on enter hit animation)", System.Drawing.KnownColor.Aqua);
-            //_control.isAttacking = false;
-            _control.isLanding = false;
-
-
             var randomHitAnimation = _settings.GetRandomState(_settings.hitReaction_States).animation;
             AnimationTransitioner.ChangeAnimationState(
                 _control.animator,
                 StatesContainer.HitReactionDictionary[randomHitAnimation],
-                transitionDuration: 0.1f);
+                transitionDuration: 0.1f,
+                dontChangeOnSameAnimation: false);
+
+            Debug.Log($"{_control.name} entered HitReaction");
+        }
+
+        public override void OnUpdate()
+        {
+            if (_control.IsCurrentAnimationNearEnd(0.95f))
+            {
+                _control.UnitHasFinishedHitReaction?.Invoke();
+            }
         }
 
         public override void OnExit()
         {
-            ColorDebugLog.Log($"{_control.name} has entered OnExit from" +
-                $" {_control.GetCurrentAnimationName()}. Settings unitGotHit to false (on exit hit animation)", System.Drawing.KnownColor.Aqua);
-            //_control.unitGotHit = false;
+            Debug.Log($"{_control.name} exited HitReaction");
         }
 
         public override bool CanTransitionTo(IAnimationPhase nextState)
         {
-
-            if (_control.CharacterSettings.characterType == CharacterType.Player_YBot_Air_Green || _control.CharacterSettings.characterType == CharacterType.Enemy_YBot_Air_Green)
-            {
-                return nextState is not AnimationPhase_Landing && nextState is not AnimationPhase_Airboned;
-            }
-
             return nextState is not AnimationPhase_Landing;
         }
     }
@@ -302,6 +334,14 @@ namespace Angry_Girls
                 _control.animator,
                StatesContainer.LandingDictionary[_settings.landing_State.animation],
                _settings.landing_State.transitionDuration);
+        }
+
+        public override void OnUpdate()
+        {
+            if (_control.IsAnimationNearEnd(_control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash, StatesContainer.LandingDictionary))
+            {
+                _control.UnitHasFinishedLanding?.Invoke();
+            }
         }
 
         public override bool CanTransitionTo(IAnimationPhase nextState)

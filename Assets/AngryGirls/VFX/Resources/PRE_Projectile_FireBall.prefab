@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4676298772504002067}
   - component: {fileID: 5921108591417898}
   - component: {fileID: 7686004313317430739}
-  m_Layer: 13
+  m_Layer: 20
   m_Name: Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4843,7 +4843,7 @@ GameObject:
   - component: {fileID: 8495335654963604551}
   - component: {fileID: 1060335449476779568}
   - component: {fileID: 7934222901030452960}
-  m_Layer: 13
+  m_Layer: 20
   m_Name: tail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9677,8 +9677,8 @@ GameObject:
   - component: {fileID: -5860992727677275382}
   - component: {fileID: 8380759687567671478}
   - component: {fileID: -614882188602679520}
-  m_Layer: 13
-  m_Name: VFX_FireBall
+  m_Layer: 20
+  m_Name: PRE_Projectile_FireBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9712,7 +9712,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49d18267dcc029e4fac167ae161938d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isDisposed: 0
 --- !u!65 &2069930466965192653
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9794,7 +9793,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00f7b65d2805181478e06186179873d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _audioSource: {fileID: 0}
 --- !u!1 &5553841013541593787
 GameObject:
   m_ObjectHideFlags: 0
@@ -9806,7 +9804,7 @@ GameObject:
   - component: {fileID: 6076482725207248588}
   - component: {fileID: 6604184917244598084}
   - component: {fileID: 7205134571287250410}
-  m_Layer: 13
+  m_Layer: 20
   m_Name: beams
   m_TagString: Untagged
   m_Icon: {fileID: 0}

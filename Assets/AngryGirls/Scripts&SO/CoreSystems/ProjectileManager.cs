@@ -128,7 +128,7 @@ namespace Angry_Girls
 
         private AttackAbilityData GetCurrentAbility(CControl control)
         {
-            return GameplayCoreManager.Instance.PhaseFlowController.CurrentState == GameState.AlternatePhase
+            return GameplayCoreManager.Instance.PhaseFlowController.CurrentGameState == GameState.AlternatePhase
                 ? control.CharacterSettings.AttackAbility_Alternate
                 : control.CharacterSettings.AttackAbility_Launch;
         }
@@ -277,7 +277,7 @@ namespace Angry_Girls
                 spawnTransform: control.projectileSpawnTransform,
                 originator: control.gameObject,
                 layerMask: control.GetVfxLayermask(),
-                vfxType: VFX_Type.VFX_Downsmash,
+                vfxType: VFX_Type.PRE_Projectile_Downsmash,
                 vfxColor: Color.white,
                 timeToLive: 1f,
                 connectToOriginator: false,

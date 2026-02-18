@@ -13,9 +13,9 @@ namespace Angry_Girls
         /// <summary>
         /// Changes animation state with Play method
         /// </summary>
-        public static void ChangeAnimationState(Animator animator ,int newStateHash, float transitionDuration = 0.1f, int layer = 0)
+        public static void ChangeAnimationState(Animator animator ,int newStateHash, float transitionDuration = 0.1f, int layer = 0, bool dontChangeOnSameAnimation = true)
         {
-            if (animator.GetCurrentAnimatorStateInfo(layer).shortNameHash == newStateHash) return;
+            if (animator.GetCurrentAnimatorStateInfo(layer).shortNameHash == newStateHash && dontChangeOnSameAnimation) return;
             animator.Play(newStateHash, layer, transitionDuration);
         }
 

@@ -10,12 +10,12 @@ namespace Angry_Girls
     public enum VFX_Type
     {
         None = 0,
-        VFX_Downsmash,
-        VFX_FireBall,
-        VFX_Uppercut,
-        VFX_DamageNumbers,
-        VFX_Eclipse,
-        VFX_CoinValue,
+        PRE_Projectile_Downsmash,
+        PRE_Projectile_FireBall,
+        PRE_Projectile_Uppercut,
+        PRE_Projectile_Eclipse,
+        PRE_VFX_DamageNumbers,
+        PRE_VFX_CoinValue,
     }
 
     /// <summary>
@@ -26,12 +26,12 @@ namespace Angry_Girls
         /// <inheritdoc/>
         protected override Dictionary<VFX_Type, Func<GameObject>> Prefabs => new Dictionary<VFX_Type, Func<GameObject>>
         {
-            { VFX_Type.VFX_Downsmash, () => Resources.Load(VFX_Type.VFX_Downsmash.ToString()) as GameObject },
-            { VFX_Type.VFX_FireBall, () => Resources.Load(VFX_Type.VFX_FireBall.ToString()) as GameObject },
-            { VFX_Type.VFX_Uppercut, () => Resources.Load(VFX_Type.VFX_Uppercut.ToString()) as GameObject },
-            { VFX_Type.VFX_DamageNumbers, () => Resources.Load(VFX_Type.VFX_DamageNumbers.ToString()) as GameObject },
-            { VFX_Type.VFX_Eclipse, () => Resources.Load(VFX_Type.VFX_Eclipse.ToString()) as GameObject },
-            { VFX_Type.VFX_CoinValue, () => Resources.Load(VFX_Type.VFX_CoinValue.ToString()) as GameObject }
+            { VFX_Type.PRE_Projectile_Downsmash, () => Resources.Load(VFX_Type.PRE_Projectile_Downsmash.ToString()) as GameObject },
+            { VFX_Type.PRE_Projectile_FireBall, () => Resources.Load(VFX_Type.PRE_Projectile_FireBall.ToString()) as GameObject },
+            { VFX_Type.PRE_Projectile_Uppercut, () => Resources.Load(VFX_Type.PRE_Projectile_Uppercut.ToString()) as GameObject },
+            { VFX_Type.PRE_VFX_DamageNumbers, () => Resources.Load(VFX_Type.PRE_VFX_DamageNumbers.ToString()) as GameObject },
+            { VFX_Type.PRE_Projectile_Eclipse, () => Resources.Load(VFX_Type.PRE_Projectile_Eclipse.ToString()) as GameObject },
+            { VFX_Type.PRE_VFX_CoinValue, () => Resources.Load(VFX_Type.PRE_VFX_CoinValue.ToString()) as GameObject }
         };
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class AttackLogic_Alternate_UppercutDownSmash_Finish : AttackAbilityLogic
+    public class AttackLogic_Alternate_UppercutDownSmash_Finish : AttackAbility
     {
         public AttackLogic_Alternate_UppercutDownSmash_Finish(AttackAbilityData attackAbilityData) : base(attackAbilityData) { }
 

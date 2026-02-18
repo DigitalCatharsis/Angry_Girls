@@ -28605,7 +28605,7 @@ GameObject:
   - component: {fileID: 2691327820251538289}
   - component: {fileID: 6587955497302116823}
   m_Layer: 13
-  m_Name: VFX_Damage_White
+  m_Name: PRE_VFX_Damage_White
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

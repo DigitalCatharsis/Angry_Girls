@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class AttackLogic_Alternate_Uppercut_Prep : AttackAbilityLogic
+    public class AttackLogic_Alternate_Uppercut_Prep : AttackAbility
     {
         public AttackLogic_Alternate_Uppercut_Prep(AttackAbilityData attackAbilityData) : base(attackAbilityData) { }
 

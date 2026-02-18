@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class AttackLogic_Alternate_SendFireball_Front : AttackAbilityLogic
+    public class AttackLogic_Alternate_SendFireball_Front : AttackAbility
     {
         public AttackLogic_Alternate_SendFireball_Front(AttackAbilityData attackAbilityData) : base(attackAbilityData) { }
 
