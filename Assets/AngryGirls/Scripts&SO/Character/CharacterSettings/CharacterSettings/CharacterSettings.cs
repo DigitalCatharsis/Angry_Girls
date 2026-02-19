@@ -18,6 +18,7 @@ namespace Angry_Girls
     [CreateAssetMenu(fileName = "Settings", menuName = "Angry_Girls/CharacterSettings/CharacterSettings")]
     public class CharacterSettings : ScriptableObject
     {
+        public AttackType attackType;
         [Header("Setup")]
         [Space(10)]
         [Header("Unit type")]
@@ -43,11 +44,11 @@ namespace Angry_Girls
 
         public bool deathByAnimation = true;
 
-        [Header("Launched Attack Ability")]
-        public AttackAbilityData AttackAbility_Launch;
+        //[Header("Launched Attack Ability")]
+        //public AttackAbilityData AttackAbility_Launch;
 
-        [Header("Alternate Attack Ability")]
-        public AttackAbilityData AttackAbility_Alternate;
+        //[Header("Alternate Attack Ability")]
+        //public AttackAbilityData AttackAbility_Alternate;
 
         /// <summary>
         /// Returns random animation state from collection
@@ -56,30 +57,6 @@ namespace Angry_Girls
         {
             var index = UnityEngine.Random.Range(0, collection.Count);
             return collection[index];
-        }
-
-        private void NotifyForNONE_Value<T>(CharAnimationData<T> charAnimationData, CControl control) where T : Enum
-        {
-            if (charAnimationData.animation.ToString() == "NONE")
-            {
-                ColorDebugLog.Log(control.name + "'s " + charAnimationData + " is NONE", System.Drawing.KnownColor.Yellow);
-            }
-        }
-
-        private void NotifyForNONE_Value<T>(List<CharAnimationData<T>> charAnimationData, CControl control) where T : Enum
-        {
-            if (charAnimationData.Count == 0)
-            {
-                ColorDebugLog.Log(control.name + "'s " + charAnimationData + " is empty", System.Drawing.KnownColor.Yellow);
-            }
-
-            foreach (var elem in charAnimationData)
-            {
-                if (elem.animation.ToString() == "NONE")
-                {
-                    ColorDebugLog.Log(control.name + "'s " + elem + " is NONE", System.Drawing.KnownColor.Yellow);
-                }
-            }
         }
     }
 

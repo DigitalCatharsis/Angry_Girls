@@ -1,8 +1,3 @@
-using AYellowpaper.SerializedCollections;
-using System;
-using System.Diagnostics;
-using UnityEngine;
-
 namespace Angry_Girls
 {
     public class AnimationProcessor : SubComponent
@@ -22,7 +17,7 @@ namespace Angry_Girls
             control.UnitPerformedAttack += ProcessAttack;
             control.UnitPerformedAttackFinish += ProcessAttackFinish;
             control.UnitCallsForStopAttack += CalculatePhaseAfterAttack;
-            control.UnitCallsForStopAttackfiniss += ProcessIdle;
+            control.UnitCallsForStopAttackfinish += ProcessIdle;
             control.UnitHasFinishedLanding += ProcessIdle;
             control.UnitGotHit += ProcessHitReacton;
             control.UnitHasFinishedHitReaction += ProcessIdleOrAirboned;
@@ -38,7 +33,7 @@ namespace Angry_Girls
             control.UnitPerformedAttack -= ProcessAttack;
             control.UnitPerformedAttackFinish -= ProcessAttackFinish;
             control.UnitCallsForStopAttack -= CalculatePhaseAfterAttack;
-            control.UnitCallsForStopAttackfiniss -= ProcessIdle;
+            control.UnitCallsForStopAttackfinish -= ProcessIdle;
             control.UnitHasFinishedLanding -= ProcessIdle;
             control.UnitGotHit -= ProcessHitReacton;
             control.UnitHasFinishedHitReaction -= ProcessIdleOrAirboned;

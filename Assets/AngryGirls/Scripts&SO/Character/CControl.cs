@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Angry_Girls
 {
@@ -43,7 +42,7 @@ namespace Angry_Girls
         public Action UnitPerformedAttack;
         public Action UnitPerformedAttackFinish;
         public Action UnitCallsForStopAttack;
-        public Action UnitCallsForStopAttackfiniss;
+        public Action UnitCallsForStopAttackfinish;
         public Action UnitHasPerformedLanding;
         public Action UnitIsAirboned;
         public Action UnitHasFinishedLanding;
@@ -61,7 +60,7 @@ namespace Angry_Girls
         public BoxCollider boxCollider;
         public Animator animator;
 
-        public AttackSystem_Data attackSystem_Data;
+        public AttackAbility attackAbility;
 
         public PlayerOrAi playerOrAi;
 
@@ -324,6 +323,11 @@ namespace Angry_Girls
             canUseAbility = false;
             isAttacking = false;
             StartCoroutine(ExecuteFinishTurnTimer());
+        }
+
+        public AnimatorStateInfo GetAnimatorStateInfo()
+        {
+            return animator.GetCurrentAnimatorStateInfo(0);
         }
 
         /// <summary>

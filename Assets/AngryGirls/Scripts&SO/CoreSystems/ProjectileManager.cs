@@ -18,9 +18,8 @@ namespace Angry_Girls
         /// <summary>
         /// Spawns projectile based on character's current ability
         /// </summary>
-        public GameObject SpawnByProjectileAbility(CControl control)
+        public GameObject SpawnByProjectileAbility(CControl control, AttackAbilityData ability)
         {
-            var ability = GetCurrentAbility(control);
             var projectileConfig = new ProjectileConfig
             {
                 VFXConfig = new VFXConfig
@@ -126,12 +125,12 @@ namespace Angry_Girls
             CoreManager.Instance.VFXManager.CallVFXDispose(projectile);
         }
 
-        private AttackAbilityData GetCurrentAbility(CControl control)
-        {
-            return GameplayCoreManager.Instance.PhaseFlowController.CurrentGameState == GameState.AlternatePhase
-                ? control.CharacterSettings.AttackAbility_Alternate
-                : control.CharacterSettings.AttackAbility_Launch;
-        }
+        //private AttackAbilityData GetCurrentAbility(CControl control)
+        //{
+        //    return GameplayCoreManager.Instance.PhaseFlowController.CurrentGameState == GameState.AlternatePhase
+        //        ? control.CharacterSettings.AttackAbility_Alternate
+        //        : control.CharacterSettings.AttackAbility_Launch;
+        //}
 
         #region projectile templates
 

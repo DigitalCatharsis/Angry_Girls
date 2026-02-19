@@ -2,11 +2,22 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
+    public enum AttackUsage { Launch, Alternate }
+    public enum AttackPhase { Prep, Finish }
+    public enum AttackType { Uppercut, Fireball, HeadSpin, SwordSpin }
+
     [CreateAssetMenu(fileName = "Settings", menuName = "Angry_Girls/CharacterSettings/AttackAbilityData")]
     [System.Serializable]
     public class AttackAbilityData : ScriptableObject
     {
         [Header("Setup")]
+
+        public AttackType attackType;       // тип атаки (Uppercut, Fireball...)
+        public AttackUsage usage;           // Launch или Alternate
+        public AttackPhase phase;           // Prep или Finish
+
+
+
         [Header("Animation")]
         public CharAnimationData<Attack_States> attack_State;
 
