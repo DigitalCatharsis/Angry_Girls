@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5712a747d1a17fc42b72503a7509d404, type: 3}
   m_Name: SO_CharacterSettings_Player_YBot_Ground_Blue
   m_EditorClassIdentifier: 
+  attackType: 1
   unitType: 0
   characterType: 5
   portrait:
@@ -56,7 +57,3 @@ MonoBehaviour:
   - animation: 1
     transitionDuration: 0.1
   deathByAnimation: 0
-  AttackAbility_Launch: {fileID: 11400000, guid: bada94d1a62ddf448aca8b765c91f4a2,
-    type: 2}
-  AttackAbility_Alternate: {fileID: 11400000, guid: 545cd1a24618d664dacdb2ed9f6a62fd,
-    type: 2}

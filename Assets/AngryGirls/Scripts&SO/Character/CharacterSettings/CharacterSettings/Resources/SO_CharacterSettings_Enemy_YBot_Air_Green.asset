@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5712a747d1a17fc42b72503a7509d404, type: 3}
   m_Name: SO_CharacterSettings_Enemy_YBot_Air_Green
   m_EditorClassIdentifier: 
+  attackType: 2
   unitType: 2
   characterType: 6
   portrait:
@@ -50,7 +51,3 @@ MonoBehaviour:
   - animation: 1
     transitionDuration: 0.1
   deathByAnimation: 0
-  AttackAbility_Launch: {fileID: 11400000, guid: 8230bc02d932fdb4890b9296e4aa8250,
-    type: 2}
-  AttackAbility_Alternate: {fileID: 11400000, guid: c1830bd3eef988a449c6d351352687d0,
-    type: 2}

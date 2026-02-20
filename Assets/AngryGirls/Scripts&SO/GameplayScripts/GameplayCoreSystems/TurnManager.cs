@@ -10,6 +10,7 @@ namespace Angry_Girls
     public class TurnManager : GameplayManagerClass
     {
         [SerializeField] private float _timeToWaitAfterUnitFinishedAttack = 0.7f;
+        public float TimeToWaitAfterUnitFinishedAttack => _timeToWaitAfterUnitFinishedAttack;
 
         private CameraManager _cameraManager;
         private GameplayCharactersManager _charactersManager;
@@ -102,11 +103,9 @@ namespace Angry_Girls
             _cameraManager.CameraFollowForRigidBody(character.CharacterMovement.Rigidbody);
             _charactersManager.CurrentlyAttackingUnit = character;
 
-            character.isAttacking = true;
-            yield return new WaitWhile(() => character.isAttacking && !character.isDead);
+            yield return new WaitWhile(() => !character.hasFinishedAlternateAttackTurn && !character.isDead);
             yield return new WaitForSeconds(_timeToWaitAfterUnitFinishedAttack);
 
-            character.hasFinishedAlternateAttackTurn = true; 
             _charactersManager.CurrentlyAttackingUnit = null;
         }
 

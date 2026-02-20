@@ -49,7 +49,8 @@ namespace Angry_Girls
             var vfxGameobject = CoreManager.Instance.VFXManager.SpawnVFX(projectileConfig.VFXConfig);
             if (vfxGameobject != null)
             {
-                vfxGameobject.GetComponent<Projectile>().InitProjectile(projectileConfig);
+                var proj = vfxGameobject.GetComponent<Projectile>();
+                proj.InitProjectile(projectileConfig);
             }
             return vfxGameobject;
         }

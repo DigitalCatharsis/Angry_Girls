@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5712a747d1a17fc42b72503a7509d404, type: 3}
   m_Name: SO_CharacterSettings_Enemy_AirToGround_Yellow
   m_EditorClassIdentifier: 
+  attackType: 4
   unitType: 1
   characterType: 9
   portrait:
@@ -60,7 +61,3 @@ MonoBehaviour:
   - animation: 1
     transitionDuration: 0.1
   deathByAnimation: 0
-  AttackAbility_Launch: {fileID: 11400000, guid: 564518373937fe24cb5883216d98ce15,
-    type: 2}
-  AttackAbility_Alternate: {fileID: 11400000, guid: c05a7ec09c49c8041beb97a10853c5da,
-    type: 2}

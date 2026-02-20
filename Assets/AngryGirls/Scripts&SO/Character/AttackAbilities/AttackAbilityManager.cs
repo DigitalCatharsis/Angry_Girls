@@ -15,7 +15,7 @@ namespace Angry_Girls
 
         private void LoadAbilities()
         {
-            AttackAbilityData[] allData = Resources.LoadAll<AttackAbilityData>("AttacksAbilities");
+            AttackAbilityData[] allData = Resources.LoadAll<AttackAbilityData>("AttackAbilitiesTemplates");
             var grouped = allData.GroupBy(d => d.attackType);
 
             //TODO: refresh this i nyour memory
@@ -23,15 +23,12 @@ namespace Angry_Girls
             {
                 var attackType = group.Key;
                 var launchPrep = group.FirstOrDefault(d => d.usage == AttackUsage.Launch && d.phase == AttackPhase.Prep);
-                var launchFinish = group.FirstOrDefault(d => d.usage == AttackUsage.Launch && d.phase == AttackPhase.Finish);
                 var alternatePrep = group.FirstOrDefault(d => d.usage == AttackUsage.Alternate && d.phase == AttackPhase.Prep);
-                var alternateFinish = group.FirstOrDefault(d => d.usage == AttackUsage.Alternate && d.phase == AttackPhase.Finish);
-
-                if (launchPrep == null || launchFinish == null || alternatePrep == null || alternateFinish == null)
-                {
-                    Debug.LogError($"Missing data for attack type {attackType}. All four combinations required.");
-                    continue;
-                }
+                //TODO: rework finish logic
+                //var launchFinish = group.FirstOrDefault(d => d.usage == AttackUsage.Launch && d.phase == AttackPhase.Finish);
+                //var alternateFinish = group.FirstOrDefault(d => d.usage == AttackUsage.Alternate && d.phase == AttackPhase.Finish);
+                AttackAbilityData launchFinish = null;
+                AttackAbilityData alternateFinish = null;
 
                 AttackAbility ability = CreateAbility(attackType, launchPrep, launchFinish, alternatePrep, alternateFinish);
                 if (ability != null)

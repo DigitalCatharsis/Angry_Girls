@@ -82,7 +82,7 @@ namespace Angry_Girls
 
         private void PrepareLaunchPhase()
         {
-            var characters = GameplayCoreManager.Instance.GameplayCharactersManager.GetLaunchableCharacters();
+            var characters = _gameplayCharactersManager.GetLaunchableCharacters();
 
             _characterLauncher = _stageManager.CurrentCharacterLauncher;
             _executionService.PrepareLaunch(

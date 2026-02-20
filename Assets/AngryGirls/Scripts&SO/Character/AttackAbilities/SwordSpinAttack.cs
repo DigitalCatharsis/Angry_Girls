@@ -6,7 +6,7 @@ namespace Angry_Girls
     {
         public SwordSpinAttack(AttackAbilityData launchPrep, AttackAbilityData launchFinish, AttackAbilityData alternatePrep, AttackAbilityData alternateFinish) : base(launchPrep, launchFinish, alternatePrep, alternateFinish) { }
         private float _timeInCurrentLoop;
-        private int _timesToRepeat_Attack_State = 22;
+        private int _timesToRepeat_Attack_State = 6;
         private GameObject _projectile;
         private bool _hasEnteredAttackState = false;
 
@@ -23,6 +23,50 @@ namespace Angry_Girls
         public override void OnLaunchPrepUpdate(CControl control)
         {
             base.OnLaunchPrepUpdate(control);
+            UpdateEnter(control);
+        }
+        public override void OnLaunchPrepExit(CControl control)
+        {
+            base.OnLaunchPrepExit(control);
+        }
+        #endregion
+
+        #region Alternate
+        public override void OnAlternatePrepEnter(CControl control)
+        {
+            base.OnLaunchPrepEnter(control);
+            PrepEnter(control, control.attackAbility.AlternatePrepData);
+        }
+        public override void OnAlternatePrepUpdate(CControl control)
+        {
+            base.OnAlternatePrepUpdate(control);
+            UpdateEnter(control);
+        }
+
+
+        public override void OnAlternatePrepExit(CControl control)
+        {
+            base.OnAlternatePrepExit(control);
+            PrepExit(control);
+        }
+        #endregion
+
+        #region private
+        private void PrepEnter(CControl control, AttackAbilityData attackAbilityData)
+        {
+            _projectile = projectileManager.SpawnByProjectileAbilityData(control, attackAbilityData);
+
+            if (!_hasEnteredAttackState)
+            {
+                CoreManager.Instance.AudioManager.PlayCustomSound(AudioSourceType.SFX_Impact, 4);
+                _hasEnteredAttackState = true;
+            }
+
+            // Initialize the array for tracking sounds in this cycle
+            _hasPlayedSoundInThisCycle = new bool[_soundTriggers.Length];
+        }
+        private void UpdateEnter(CControl control)
+        {
             var stateInfo = control.GetAnimatorStateInfo();
             float normalizedTime = stateInfo.normalizedTime % 1; // Current position in the cycle [0, 1)
 
@@ -50,55 +94,16 @@ namespace Angry_Girls
             if (stateInfo.normalizedTime >= _timesToRepeat_Attack_State)
             {
                 _timeInCurrentLoop = 0f;
-                control.isAttacking = false;
                 _hasEnteredAttackState = false;
+                projectileManager.DisposeProjectile(_projectile);
+                control.UnitCallsForStopAttack?.Invoke();
             }
         }
-        public override void OnLaunchPrepExit(CControl control)
-        {
-            base.OnLaunchPrepExit(control);
-
-
-            PrepExit(control);
-        }
-        #endregion
-
-        #region Alternate
-        public override void OnAlternatePrepEnter(CControl control)
-        {
-            base.OnLaunchPrepEnter(control);
-            PrepEnter(control, control.attackAbility.AlternatePrepData);
-        }
-        public override void OnAlternatePrepUpdate(CControl control)
-        {
-            base.OnAlternatePrepUpdate(control);
-        }
-        public override void OnAlternatePrepExit(CControl control)
-        {
-            base.OnAlternatePrepExit(control);
-            PrepExit(control);
-        }
-        #endregion
-
-        #region private
         private void PrepExit(CControl control)
         {
             control.UnitCallsForStopAttack?.Invoke();
             if (_projectile != null)
                 GameplayCoreManager.Instance.ProjectileManager.DisposeProjectile(_projectile);
-        }
-        private void PrepEnter(CControl control, AttackAbilityData attackAbilityData)
-        {
-            _projectile = GameplayCoreManager.Instance.ProjectileManager.SpawnByProjectileAbilityData(control, attackAbilityData);
-
-            if (!_hasEnteredAttackState)
-            {
-                CoreManager.Instance.AudioManager.PlayCustomSound(AudioSourceType.SFX_Impact, 4);
-                _hasEnteredAttackState = true;
-            }
-
-            // Initialize the array for tracking sounds in this cycle
-            _hasPlayedSoundInThisCycle = new bool[_soundTriggers.Length];
         }
         #endregion
     }

@@ -70,7 +70,6 @@ namespace Angry_Girls
             //Second cast, second character move
             control.CharacterMovement.ApplyRigidForce(attackAbilityData.attackMovementForce, ForceMode.VelocityChange);
             projectileManager.ProcessFireballs_HeadSpin(control, _secondShoot_ProjectileAngles, attackAbilityData);
-            control.isAttacking = false;
         }
         #endregion
     }

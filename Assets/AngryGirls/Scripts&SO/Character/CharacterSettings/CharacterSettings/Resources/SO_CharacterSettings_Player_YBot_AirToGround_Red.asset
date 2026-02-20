@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5712a747d1a17fc42b72503a7509d404, type: 3}
   m_Name: SO_CharacterSettings_Player_YBot_AirToGround_Red
   m_EditorClassIdentifier: 
+  attackType: 3
   unitType: 1
   characterType: 2
   portrait:
@@ -50,7 +51,3 @@ MonoBehaviour:
   - animation: 1
     transitionDuration: 0.1
   deathByAnimation: 0
-  AttackAbility_Launch: {fileID: 11400000, guid: e35d5a6e8a68115488c24f09ded5e324,
-    type: 2}
-  AttackAbility_Alternate: {fileID: 11400000, guid: 69fef6e1f5c2af04bbce14acc0bcc598,
-    type: 2}

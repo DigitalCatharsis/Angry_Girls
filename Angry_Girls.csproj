@@ -74,7 +74,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\TODO.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\UI_Slots\UI_CharacterSlot.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\UI_GameplayManagersComponent.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackAbilities\UppercutAttack.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\AttackLogic(obsolete)\LaunchingAttackLogic\AttackLogic_Launch_SwordAttack.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\TurnOrderService.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Shop and Inventory\ItemSettings\Editor\ItemSettingsEditor.cs" />
@@ -86,7 +85,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\CameraManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\UI_Slots\UI_ItemSlot.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\TempClassesOrBadCode\Mediator\IMediator.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackAbilities\SwordSpinAttack.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\CharacterSettings\CharacterSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\IPickable.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\SettingsManager.cs" />
@@ -120,6 +118,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\ProjectileManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\Core\GameStateManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\AttackLogic(obsolete)\LaunchingAttackLogic\AttackLogic_Launch_SendFireball_Front.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\AttackAbilities\AttackAbilityManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\UI_Slots\UI_EquipmentSlot.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\PauseMenu.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponent.cs" />
@@ -127,7 +126,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\CharactersManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterStateBehaviors\AlternateAttack_Behavior_Prep.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LayerAdder\Editor\LayerChangerEditor.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\AttackAbility.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\NotificationManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\CameraSizer.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\ScoreDisplay.cs" />
@@ -146,24 +144,26 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\MaterialChaner\Editor\MaterialChangerEditor.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\TempClassesOrBadCode\CharacterExtraObjects\IExtraCharacterObject.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\StatesContainer.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\AttackAbilities\HeadspinAttack.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\AttackLogic(obsolete)\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_Uppercut_DownSmash_Finish.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackAbilities\AttackAbilityData.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LayerAdder\LayerChanger.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\Input\VirtualInput.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\TrajectoryCheatToggle.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\SaveLoad\SaveLoadManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\Spawn\SpawnFactory\Factories\BaseFactory.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\InteractionManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\AttackAbilities\AttackAbility.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\IUIPanel.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\UI_SettingsMenu.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\AttackLogic(obsolete)\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_SwordAttack.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponentMediator.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\MissionsManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\HealthBarManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\AttackAbilities\AttackAbilityData.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\BoxColliderUpdater.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\PoolManager\PoolObject\PoolObject.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\AttackAbilities\FireballAttack.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Shop and Inventory\ShopSettings.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackAbilities\FireballAttack.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterProfileInfo.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\CharacterLauncher.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\HelperComponent\ReadOnlyDrawer.cs" />
@@ -202,13 +202,12 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\Spawn\SpawnFactory\Factories\UIObjectsFactory.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\AudioManager\SoundClipsCollection.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\GameResultUI.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackAbilities\HeadspinAttack.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\UI_Slots\UI_MissionSlot.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\AttackLogic(obsolete)\AlternateAttackAttackLogic\AttackLogic_Alternate_Uppercut_Prep.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\CatalogsRepositoriesDataTemplates\MissionsRepository.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\Settings\PhysicsSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\Panels\UI_ShopPanel.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\AttackAbilities\AttackAbilityManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\AttackAbilities\SwordSpinAttack.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterStateBehaviors\AlternateAttack_Behavior_OnGround.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\VFXManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterComponents\ChracterMovement.cs" />
@@ -221,6 +220,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\Screens\UI_LoadingScreen.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\ListOfLists\SerializableList.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\ShowOnlyAttribute\Editor\ShowOnlyDrawer.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\AttackAbilities\UppercutAttack.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AngryGirls\Scripts&amp;SO\Angry_Girls.asmdef" />

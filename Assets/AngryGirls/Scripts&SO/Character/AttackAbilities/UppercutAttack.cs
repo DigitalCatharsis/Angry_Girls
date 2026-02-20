@@ -12,6 +12,8 @@ namespace Angry_Girls
 
         public UppercutAttack(AttackAbilityData launchPrep, AttackAbilityData launchFinish, AttackAbilityData alternatePrep, AttackAbilityData alternateFinish) : base(launchPrep, launchFinish, alternatePrep, alternateFinish) { }
 
+        //TEMP: finish if landed in update
+
         #region Launch
         public override void OnLaunchPrepEnter(CControl control)
         {

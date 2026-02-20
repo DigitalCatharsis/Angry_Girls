@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cc6f2d4e64007046b4da3c7e3c53b04, type: 3}
-  m_Name: SO_AttackAbilityData_Alternate_AirToGround_SwordSpin
+  m_Name: SO_AttackAbilityData_Launch_Ground_Uppercut
   m_EditorClassIdentifier: 
-  attackType: 4
-  usage: 2
+  attackType: 1
+  usage: 1
   phase: 1
   attack_State:
-    animation: 9
-    transitionDuration: 0
+    animation: 1
+    transitionDuration: 0.1
   attackFininsh_State:
-    animation: 0
-    transitionDuration: 0
+    animation: 1
+    transitionDuration: 0.1
   attackTimeDuration: 3
   enemyKnockbackValue: 1
-  attackMovementForce: {x: 0, y: 10, z: 2}
-  vfxType: 5
+  attackMovementForce: {x: 1, y: -8, z: 0}
+  vfxType: 3
   vfxColor: {r: 1, g: 1, b: 1, a: 1}
   connectToOwner: 1
   teamfire: 0
@@ -37,6 +37,6 @@ MonoBehaviour:
   enableCollider: 0
   enableTrigger: 1
   spawnSourceType: 4
-  spawnIndex: 4
+  spawnIndex: 3
   destroySourceType: 0
   destoyIndex: 0

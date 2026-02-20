@@ -214,7 +214,6 @@ namespace Angry_Girls
 
         public override void OnEnter()
         {
-            _control.isAttacking = true;
             _control.canUseAbility = false;
 
             if (_phaseFlowController == null)
@@ -247,7 +246,7 @@ namespace Angry_Girls
                 _abilityData.attack_State.transitionDuration);
 
             //process On method
-            _onExitDelegate.Invoke(_control);
+            _onEnterDelegate.Invoke(_control);
         }
 
         public override void OnUpdate()
@@ -259,8 +258,8 @@ namespace Angry_Girls
         {
             _onExitDelegate?.Invoke(_control);
 
-            //Unsubscribe
-            var enterSubscribedList = _onEnterDelegate.GetInvocationList();
+        //Unsubscribe
+        var enterSubscribedList = _onEnterDelegate.GetInvocationList();
             foreach (var sub in enterSubscribedList)
             {
                 _onEnterDelegate -= sub as Action<CControl>;
@@ -276,6 +275,9 @@ namespace Angry_Girls
             {
                 _onExitDelegate -= sub as Action<CControl>;
             }
+
+            //finish turn
+            _control.FinishTurn();
         }
 
         public override bool CanTransitionTo(IAnimationPhase nextState)

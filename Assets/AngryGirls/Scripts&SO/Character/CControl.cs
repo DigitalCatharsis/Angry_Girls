@@ -1,4 +1,5 @@
 using AYellowpaper.SerializedCollections;
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,12 +21,12 @@ namespace Angry_Girls
     /// </summary>
     public class CControl : PoolObject
     {
-        public bool isAttacking = false;
+        //public bool isAttacking = false;
+        //public bool isLanding = false;
         public bool isDead = false;
         public bool canUseAbility = false;
         public bool isBehaviorAlternate = true;
         public bool canCheckGlobalBehavior = false;
-        public bool isLanding = false;
 
         //public bool unitGotHit = false;
         public bool hasBeenLaunched = false;
@@ -37,8 +38,6 @@ namespace Angry_Girls
         public Action<ProjectileConfig, InteractionData> UnitGotKilled;
         public Action UnitHasTouchedDeathZone;
         public Action UnitHasBeenLaunched;
-        public Action UnitHasFinishedLaunchingTurn;
-        public Action UnitHasFinishedAlternateAttackTurn;
         public Action UnitPerformedAttack;
         public Action UnitPerformedAttackFinish;
         public Action UnitCallsForStopAttack;
@@ -77,6 +76,7 @@ namespace Angry_Girls
         private AudioManager _audioManager;
         private CameraManager _cameraManager;
         private AttackAbilityManager _attackAbilityManager;
+        private TurnManager _turnManager;
 
         #region init
         private void Awake()
@@ -86,6 +86,7 @@ namespace Angry_Girls
             _audioManager = CoreManager.Instance.AudioManager;
             _cameraManager = GameplayCoreManager.Instance.CameraManager;
             _attackAbilityManager = GameplayCoreManager.Instance.AttackAbilityManager;
+            _turnManager = GameplayCoreManager.Instance.TurnManager;
 
             //subscribe
             UnitGotHit += CheckAndApplyIncomingDamage;
@@ -237,18 +238,6 @@ namespace Angry_Girls
             gameObject.layer = LayerMask.NameToLayer("DeadBody");
         }
 
-        private IEnumerator ExecuteFinishTurnTimer(float timeToCheck = 0)
-        {
-            float timer = 0;
-            while (timer < timeToCheck)
-            {
-                timer += Time.deltaTime;
-                yield return null;
-            }
-            UnitHasFinishedLaunchingTurn?.Invoke();
-            UnitHasFinishedAlternateAttackTurn?.Invoke();
-        }
-
         private Vector3 GetProjectileForceDirection(InteractionData interactionData)
         {
             // 1. Try to get the velocity direction from the Rigidbody
@@ -323,9 +312,13 @@ namespace Angry_Girls
         /// </summary>
         public void FinishTurn()
         {
+            hasFinishedLaunchingTurn = true;
+            hasFinishedAlternateAttackTurn = true;
             canUseAbility = false;
-            isAttacking = false;
-            StartCoroutine(ExecuteFinishTurnTimer());
+
+            var delay = (int)(_turnManager.TimeToWaitAfterUnitFinishedAttack * 1000);
+            Debug.Log(delay);
+            UniTask.Delay(delay);
         }
 
         public AnimatorStateInfo GetAnimatorStateInfo()
@@ -333,17 +326,17 @@ namespace Angry_Girls
             return animator.GetCurrentAnimatorStateInfo(0);
         }
 
-        /// <summary>
-        /// Checks if character can finish attack based on ground state and turn
-        /// </summary>
-        /// <returns>True if attack can be finished</returns>
-        public bool CheckAttackFinishCondition()
-        {
-            if (isDead) return false;
+        ///// <summary>
+        ///// Checks if character can finish attack based on ground state and turn
+        ///// </summary>
+        ///// <returns>True if attack can be finished</returns>
+        //public bool CheckAttackFinishCondition()
+        //{
+        //    if (isDead) return false;
 
-            var currentAttacker = GameplayCoreManager.Instance.GameplayCharactersManager.CurrentlyAttackingUnit;
-            return CharacterMovement.IsGrounded && currentAttacker == this;
-        }
+        //    var currentAttacker = GameplayCoreManager.Instance.GameplayCharactersManager.CurrentlyAttackingUnit;
+        //    return CharacterMovement.IsGrounded && currentAttacker == this;
+        //}
 
         /// <summary>
         /// Checks if another character is an ally

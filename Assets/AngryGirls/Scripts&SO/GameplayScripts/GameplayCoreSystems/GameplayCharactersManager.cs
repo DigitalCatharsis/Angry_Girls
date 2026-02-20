@@ -153,7 +153,7 @@ namespace Angry_Girls
                 character.gameObject.layer = LayerMask.NameToLayer("CharacterToLaunch");
                 character.isBehaviorAlternate = false;
                 character.hasBeenLaunched = false;
-                character.hasUsedAbility = false;
+                //character.hasUsedAbility = false;
                 character.hasFinishedLaunchingTurn = false;
                 character.hasFinishedAlternateAttackTurn = true;
                 character.canCheckGlobalBehavior = false;

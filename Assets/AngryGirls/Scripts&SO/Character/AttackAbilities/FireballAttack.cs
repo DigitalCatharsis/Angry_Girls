@@ -6,7 +6,6 @@ namespace Angry_Girls
     {
         public FireballAttack(AttackAbilityData launchPrep, AttackAbilityData launchFinish, AttackAbilityData alternatePrep, AttackAbilityData alternateFinish) : base(launchPrep, launchFinish, alternatePrep, alternateFinish) { }
 
-        private int _loopsCount;
         private float _timeInCurrentLoop;
         private bool _fireballSentThisLoop = false;
         private int _timesToRepeat_Attack_State = 3;
@@ -54,7 +53,6 @@ namespace Angry_Girls
         {
             control.CharacterMovement.Rigidbody.isKinematic = false;
 
-            _loopsCount = 1;
             _timeInCurrentLoop = 0f;
             _fireballSentThisLoop = false;
 
@@ -83,10 +81,7 @@ namespace Angry_Girls
             // Check for the end of ALL animation loops
             if (stateInfo.normalizedTime >= _timesToRepeat_Attack_State * stateInfo.length + 0.8f)
             {
-                _loopsCount = 0;
                 _timeInCurrentLoop = 0f;
-                control.isAttacking = false;
-                control.FinishTurn();
             }
 
             //Reset the flag at the end of the loop
@@ -94,7 +89,6 @@ namespace Angry_Girls
             {
                 _timeInCurrentLoop -= stateInfo.length;
                 _fireballSentThisLoop = false;
-                _loopsCount++;
             }
         }
         private void PrepExit(CControl control)
