@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cc6f2d4e64007046b4da3c7e3c53b04, type: 3}
   m_Name: SO_AttackAbilityData_Launch_Ground_UppercutDownSmash
   m_EditorClassIdentifier: 
+  attackType: 1
+  usage: 1
+  phase: 2
   attack_State:
     animation: 1
     transitionDuration: 0.1
   attackFininsh_State:
     animation: 1
     transitionDuration: 0.1
-  attackDamage: 25
   attackTimeDuration: 3
   enemyKnockbackValue: 1
   attackMovementForce: {x: 1, y: -8, z: 0}

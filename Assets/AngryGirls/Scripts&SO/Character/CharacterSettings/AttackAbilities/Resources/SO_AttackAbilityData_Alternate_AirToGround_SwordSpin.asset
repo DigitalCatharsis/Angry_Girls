@@ -10,22 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cc6f2d4e64007046b4da3c7e3c53b04, type: 3}
-  m_Name: SO_AttackAbilityData_Launch_AirToGround_SwordAttack
+  m_Name: SO_AttackAbilityData_Alternate_AirToGround_SwordSpin
   m_EditorClassIdentifier: 
+  attackType: 4
+  usage: 2
+  phase: 1
   attack_State:
-    animation: 5
+    animation: 9
     transitionDuration: 0
   attackFininsh_State:
     animation: 0
     transitionDuration: 0
-  attackDamage: 25
   attackTimeDuration: 3
   enemyKnockbackValue: 1
   attackMovementForce: {x: 0, y: 10, z: 2}
   vfxType: 5
   vfxColor: {r: 1, g: 1, b: 1, a: 1}
   connectToOwner: 1
-  teamfire: 1
+  teamfire: 0
   timeToLive: 99
   projectileMovementSpeed: {x: 0, y: 0, z: 0}
   destroyOnCollision: 0

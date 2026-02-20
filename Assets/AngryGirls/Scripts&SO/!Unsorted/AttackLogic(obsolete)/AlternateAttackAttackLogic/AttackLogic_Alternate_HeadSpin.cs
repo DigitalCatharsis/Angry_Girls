@@ -4,11 +4,11 @@
 //{
 //    public class AttackLogic_Alternate_HeadSpin : AttackAbility
 //    {
-//        public AttackLogic_Alternate_HeadSpin(AttackAbilityData attackAbilityData): base(attackAbilityData) { }
+//        public AttackLogic_Alternate_HeadSpin(AttackAbilityData attackAbilityData) : base(attackAbilityData) { }
 //        private bool _haveShootedFirstTime = false;
 
 
-//       private Vector3[] _firstShoot_ProjectileAngles = {
+//        private Vector3[] _firstShoot_ProjectileAngles = {
 //                  new Vector3(170f,0,0),
 //                  new Vector3(200f,0,0),
 //                  new Vector3(230f,0,0),
@@ -34,7 +34,7 @@
 //        {
 //            //control.CheckAttackFinishCondition();
 
-//            if (control.CharacterMovement.Rigidbody.velocity.y <= - 0.2f && !_haveShootedFirstTime)            
+//            if (control.CharacterMovement.Rigidbody.velocity.y <= -0.2f && !_haveShootedFirstTime)
 //            {
 //                //Second cast, second character move
 //                control.CharacterMovement.ApplyRigidForce(control.CharacterSettings.AttackAbility_Alternate.attackMovementForce, ForceMode.VelocityChange);

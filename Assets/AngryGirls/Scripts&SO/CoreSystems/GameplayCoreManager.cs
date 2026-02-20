@@ -18,6 +18,8 @@ namespace Angry_Girls
         public LaunchExecutionService LaunchExecutionService { get; private set; }
         public TurnOrderService TurnOrderService { get; private set; }
 
+        public AttackAbilityManager AttackAbilityManager { get; private set; }
+
         public ProjectileManager ProjectileManager { get; private set; }
 
         public Action OnInitialized;
@@ -43,7 +45,7 @@ namespace Angry_Girls
 
             LaunchExecutionService = InitializeSystem<LaunchExecutionService>();
             TurnOrderService = InitializeSystem<TurnOrderService>();
-            GameplayCharactersManager = InitializeSystem<GameplayCharactersManager>(); //needs CharacterSelectionService
+            GameplayCharactersManager = InitializeSystem<GameplayCharactersManager>();
 
             TurnManager = InitializeSystem<TurnManager>();
             StageManager = InitializeSystem<StageManager>();
@@ -51,6 +53,7 @@ namespace Angry_Girls
             LaunchManager = InitializeSystem<LaunchManager>();
             ProjectileManager = InitializeSystem<ProjectileManager>();
 
+            AttackAbilityManager = InitializeSystem<AttackAbilityManager>();
             PhaseFlowController = InitializeSystem<PhaseFlowController>();
 
             Debug.Log("All gameplay systems initialized successfully");

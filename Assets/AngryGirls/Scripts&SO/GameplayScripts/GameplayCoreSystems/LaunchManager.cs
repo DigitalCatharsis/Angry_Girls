@@ -132,7 +132,7 @@ namespace Angry_Girls
             // First turn special case: allow 2 launches before alternate phase
             if (_firstTurn && _launchCountThisStage < _launchesBeforeFirstAlternate)
             {
-                _phaseFlowController.SwitchState(GameState.LaunchPhase);
+                _phaseFlowController.SwitchState(GamePhaseState.LaunchPhaseState);
                 yield break;
             }
 
@@ -140,7 +140,7 @@ namespace Angry_Girls
             if (_currentStageIndex != _stageManager.CurrentStageIndex)
             {
                 _currentStageIndex = _stageManager.CurrentStageIndex;
-                _phaseFlowController.SwitchState(GameState.LaunchPhase);
+                _phaseFlowController.SwitchState(GamePhaseState.LaunchPhaseState);
                 yield break;
             }
 

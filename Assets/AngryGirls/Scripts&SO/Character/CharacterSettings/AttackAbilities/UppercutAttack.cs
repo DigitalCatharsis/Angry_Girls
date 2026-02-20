@@ -83,7 +83,7 @@ namespace Angry_Girls
         private void PrepEnter(CControl control, AttackAbilityData abilityData)
         {
 
-            _projectile = projectileManager.SpawnByProjectileAbility(control, abilityData);
+            _projectile = projectileManager.SpawnByProjectileAbilityData(control, abilityData);
             _layersModified = false;
 
             // Determine the target layer depending on the object type

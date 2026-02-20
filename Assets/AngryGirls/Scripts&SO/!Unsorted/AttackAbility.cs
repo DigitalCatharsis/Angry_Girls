@@ -1,6 +1,4 @@
-
 using UnityEngine;
-using UnityEngine.VFX;
 
 namespace Angry_Girls
 {
@@ -14,6 +12,7 @@ namespace Angry_Girls
         protected ProjectileManager projectileManager;
         protected VFXManager vFXManager;
         protected CameraManager cameraManager;
+        protected PhaseFlowController phaseFlowController;
 
         protected AttackAbility(
             AttackAbilityData launchPrep,
@@ -29,13 +28,13 @@ namespace Angry_Girls
             projectileManager = GameplayCoreManager.Instance.ProjectileManager;
             vFXManager = CoreManager.Instance.VFXManager;
             cameraManager = GameplayCoreManager.Instance.CameraManager;
+            phaseFlowController = GameplayCoreManager.Instance.PhaseFlowController;
         }
 
-        #region
+        #region Launch Prep
         // Launch Prep
         public virtual void OnLaunchPrepEnter(CControl control)
         {
-            //control.isAttacking = true;
             control.CharacterMovement.ResetVelocity();
             control.CharacterMovement.ApplyRigidForce(new Vector3(0, LaunchPrepData.attackMovementForce.y, LaunchPrepData.attackMovementForce.z * control.transform.forward.z), ForceMode.VelocityChange);
         }
@@ -43,7 +42,7 @@ namespace Angry_Girls
         public virtual void OnLaunchPrepExit(CControl control) { }
         #endregion
 
-        #region alternate
+        #region Alternate
         // Alternate Prep
         public virtual void OnAlternatePrepEnter(CControl control)
         {
@@ -51,10 +50,11 @@ namespace Angry_Girls
             control.CharacterMovement.ResetVelocity();
             control.CharacterMovement.ApplyRigidForce(new Vector3(0, LaunchPrepData.attackMovementForce.y, LaunchPrepData.attackMovementForce.z * control.transform.forward.z), ForceMode.VelocityChange);
         }
-
         public virtual void OnAlternatePrepUpdate(CControl control) { }
         public virtual void OnAlternatePrepExit(CControl control) { }
+        #endregion
 
+        #region Finish Launch
         // Launch Finish
         public virtual void OnLaunchFinishEnter(CControl control)
         {
@@ -64,7 +64,9 @@ namespace Angry_Girls
         }
         public virtual void OnLaunchFinishUpdate(CControl control) { }
         public virtual void OnLaunchFinishExit(CControl control) { }
+        #endregion
 
+        #region Finish Alternate
         // Alternate Finish
         public virtual void OnAlternateFinishEnter(CControl control)
         {
@@ -80,5 +82,7 @@ namespace Angry_Girls
             control.CharacterMovement.ApplyRigidForce(new Vector3(0, AlternateFinishData.attackMovementForce.y, AlternateFinishData.attackMovementForce.z * control.transform.forward.z), ForceMode.VelocityChange);
         }
         #endregion
+
+
     }
 }

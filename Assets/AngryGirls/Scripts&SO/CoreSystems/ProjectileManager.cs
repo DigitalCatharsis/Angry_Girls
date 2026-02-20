@@ -18,7 +18,7 @@ namespace Angry_Girls
         /// <summary>
         /// Spawns projectile based on character's current ability
         /// </summary>
-        public GameObject SpawnByProjectileAbility(CControl control, AttackAbilityData ability)
+        public GameObject SpawnByProjectileAbilityData(CControl control, AttackAbilityData ability)
         {
             var projectileConfig = new ProjectileConfig
             {
@@ -138,7 +138,7 @@ namespace Angry_Girls
         /// Processes fireballs for head spin attack with specified angles
         /// </summary>
         /// red
-        public void ProcessFireballs_HeadSpin(CControl control, Vector3[] angles, float moveDuration = 1.5f)
+        public void ProcessFireballs_HeadSpin(CControl control, Vector3[] angles, AttackAbilityData attackAbilityData, float moveDuration = 1.5f)
         {
             var _impulseY = 7f;
             var _impulseZ = 5f;
@@ -146,7 +146,7 @@ namespace Angry_Girls
 
             for (var i = 0; i < angles.Length; i++)
             {
-                var projectile = GameplayCoreManager.Instance.ProjectileManager.SpawnByProjectileAbility(control);
+                var projectile = SpawnByProjectileAbilityData(control, attackAbilityData);
                 if (projectile == null) continue;
 
                 projectile.transform.position = control.projectileSpawnTransform.position;
@@ -174,13 +174,13 @@ namespace Angry_Girls
         }
 
         //green
-        public void SendFireballFrontAlternate(CControl control, Vector3 startPoint, Vector3 targetEuler, float attackAngleChangeValue, float rotationDuration = 1.5f)
+        public void SendFireballFront(CControl control, Vector3 startPoint, Vector3 targetEuler, float attackAngleChangeValue, AttackAbilityData attackAbilityData, float rotationDuration = 1.5f)
         {
             // Spawn fireball
-            var vfx = GameplayCoreManager.Instance.ProjectileManager.SpawnByProjectileAbility(control);
+            var projectile = SpawnByProjectileAbilityData(control, attackAbilityData);
 
             // Set the initial position
-            vfx.transform.position = startPoint;
+            projectile.transform.position = startPoint;
 
             // Determine the initial rotation based on the control direction
             float initialYRotation = control.CharacterMovement.Rigidbody.transform.forward.z > 0 ? 0f : 180f;
@@ -191,7 +191,7 @@ namespace Angry_Girls
             );
 
             // Set the initial direction taking into account the correction
-            vfx.transform.rotation = initialRotation;
+            projectile.transform.rotation = initialRotation;
 
             // Define the target rotation angle only along the X axis
             var targetEulerAngles = new Vector3(
@@ -200,72 +200,20 @@ namespace Angry_Girls
             0 // Leave Z unchanged
             );
 
-            // Log the initial and target rotation
-            ColorDebugLog.Log("Start: " + vfx.transform.rotation.eulerAngles, System.Drawing.KnownColor.Yellow);
-            ColorDebugLog.Log("Goal: " + targetEulerAngles, System.Drawing.KnownColor.Yellow);
-
             // Apply rotation using DOTween (only on the X axis)
-            vfx.transform.DORotate(targetEulerAngles, rotationDuration, RotateMode.Fast);
-
-            // Log the rotation after the animation starts
-            ColorDebugLog.Log("rotating start:: " + vfx.transform.rotation.eulerAngles, System.Drawing.KnownColor.Yellow);
+            projectile.transform.DORotate(targetEulerAngles, rotationDuration, RotateMode.Fast);
 
             // Set the impulse
             var impulse = new Vector3(
             0,
-            control.CharacterSettings.AttackAbility_Alternate.projectileMovementSpeed.y * vfx.transform.forward.y - attackAngleChangeValue,
-            control.CharacterSettings.AttackAbility_Alternate.projectileMovementSpeed.z * vfx.transform.forward.z
+            attackAbilityData.projectileMovementSpeed.y * projectile.transform.forward.y - attackAngleChangeValue,
+            attackAbilityData.projectileMovementSpeed.z * projectile.transform.forward.z
             );
 
-            vfx.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);
-
-            // Log the rotation after applying the force
-            ColorDebugLog.Log("got the force: " + vfx.transform.rotation.eulerAngles, System.Drawing.KnownColor.Yellow);
+            projectile.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);
 
             // Apply force to control.rigidBody 
-            control.CharacterMovement.ApplyRigidForce(control.CharacterSettings.AttackAbility_Alternate.attackMovementForce * control.CharacterMovement.Rigidbody.transform.forward.z, ForceMode.VelocityChange);
-        }
-
-        //green
-        public void SendFireballFrontLaunch(CControl control, Vector3 startPoint, Vector3 targetEuler, float attackAngleChangeValue, float rotationDuration = 1.5f)
-        {
-            var vfx = GameplayCoreManager.Instance.ProjectileManager.SpawnByProjectileAbility(control);
-
-            // Set the initial position
-            vfx.transform.position = startPoint;
-
-            // Determine the initial rotation based on the direction of control
-            float initialYRotation = control.CharacterMovement.Rigidbody.transform.forward.z > 0 ? 0f : 180f;
-            var initialRotation = Quaternion.Euler(
-            attackAngleChangeValue * 4, // X-axis tilt
-            initialYRotation, // Y-axis direction (0 or 180)
-            0 // Z-axis tilt (not used)
-            );
-
-            // Set the initial direction taking into account the correction
-            vfx.transform.rotation = initialRotation;
-
-            // Determine the target rotation angle along the X axis only
-            var targetEulerAngles = new Vector3(
-            targetEuler.x, // Target angle along the X axis
-            initialYRotation, // Leave Y unchanged
-            0 // Leave Z unchanged
-            );
-
-            // Apply rotation using DOTween (only along the X axis)
-            vfx.transform.DORotate(targetEulerAngles, rotationDuration, RotateMode.Fast);
-
-            // Set the impulse 
-            var impulse = new Vector3(
-            0,
-            control.CharacterSettings.AttackAbility_Launch.projectileMovementSpeed.y * vfx.transform.forward.y - attackAngleChangeValue,
-            control.CharacterSettings.AttackAbility_Launch.projectileMovementSpeed.z * vfx.transform.forward.z
-            );
-
-            vfx.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);
-
-            // Apply force to control.rigidBody 
-            control.CharacterMovement.ApplyRigidForce(control.CharacterSettings.AttackAbility_Launch.attackMovementForce * control.CharacterMovement.Rigidbody.transform.forward.z, ForceMode.VelocityChange);
+            control.CharacterMovement.ApplyRigidForce(attackAbilityData.attackMovementForce * control.CharacterMovement.Rigidbody.transform.forward.z, ForceMode.VelocityChange);
         }
 
         public GameObject SpawnDownSmash(CControl control, AttackAbilityData ability)

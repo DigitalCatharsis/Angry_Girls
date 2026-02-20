@@ -203,8 +203,10 @@ namespace Angry_Girls
 
     public class AnimationPhase_Attack : AnimationStateBase
     {
-        private AttackAbilityData _attackAbilityData;
-        private AttackAbility _attackAbilityLogic;
+        private AttackAbilityData _abilityData;
+        private Action<CControl> _onEnterDelegate;
+        private Action<CControl> _onUpdateDelegate;
+        private Action<CControl> _onExitDelegate;
 
         public AnimationPhase_Attack(CControl control) : base(control) { }
 
@@ -212,36 +214,68 @@ namespace Angry_Girls
 
         public override void OnEnter()
         {
-
-            //TODO:
             _control.isAttacking = true;
             _control.canUseAbility = false;
 
+            if (_phaseFlowController == null)
+            {
+                _phaseFlowController = GameplayCoreManager.Instance.PhaseFlowController;
+            }
+
+            //get data
+            if (_phaseFlowController.CurrentGameState == GamePhaseState.LaunchPhaseState)
+            {
+                _abilityData = _control.attackAbility.LaunchPrepData;
+                _onEnterDelegate += _control.attackAbility.OnLaunchPrepEnter;
+                _onUpdateDelegate += _control.attackAbility.OnLaunchPrepUpdate;
+                _onExitDelegate += _control.attackAbility.OnLaunchPrepExit;
+
+
+            }
+            else if (_phaseFlowController.CurrentGameState == GamePhaseState.AlternatePhaseState)
+            {
+                _abilityData = _control.attackAbility.AlternatePrepData;
+                _onEnterDelegate += _control.attackAbility.OnAlternatePrepEnter;
+                _onUpdateDelegate += _control.attackAbility.OnAlternatePrepUpdate;
+                _onExitDelegate += _control.attackAbility.OnAlternatePrepExit;
+            }
+
+            //process animation
             AnimationTransitioner.ChangeAnimationStateCrossFade(
                 _control.animator,
-                StatesContainer.AttackDictionary[_attackAbilityData.attack_State.animation],
-                _attackAbilityData.attack_State.transitionDuration);
+                StatesContainer.AttackDictionary[_abilityData.attack_State.animation],
+                _abilityData.attack_State.transitionDuration);
 
-            var abilityData = _control.abilityData; //какой-то типа обращения к Ccontrol, который уже где-то в инцилизации обратился к менеджеру и получил нужный AttackAbility
-            var currentPhase = _phaseFlowController.CurrentPhase;
-            var stateInfo = _control.animator.GetCurrentAnimatorStateInfo(0);
-            abilityData.AttackPrep(currentPhase).OnStateEnter(_control, _control.animator, _control.animator.GetCurrentAnimatorStateInfo(0));
+            //process On method
+            _onExitDelegate.Invoke(_control);
         }
 
         public override void OnUpdate()
         {
-            var abilityData = _control.abilityData; //какой-то типа обращения к Ccontrol, который уже где-то в инцилизации обратился к менеджеру и получил нужный AttackAbility
-            var currentPhase = _phaseFlowController.CurrentPhase;
-            var stateInfo = _control.animator.GetCurrentAnimatorStateInfo(0);
-            abilityData.AttackPrep(currentPhase).OnStateEnter(_control, _control.animator, _control.animator.GetCurrentAnimatorStateInfo(0));
+            _onUpdateDelegate.Invoke(_control);
         }
 
         public override void OnExit()
         {
-            var abilityData = _control.abilityData; //какой-то типа обращения к Ccontrol, который уже где-то в инцилизации обратился к менеджеру и получил нужный AttackAbility
-            var currentPhase = _phaseFlowController.CurrentPhase;
-            var stateInfo = _control.animator.GetCurrentAnimatorStateInfo(0);
-            abilityData.AttackPrep(currentPhase).OnStateEnter(_control, _control.animator, _control.animator.GetCurrentAnimatorStateInfo(0));
+            _onExitDelegate?.Invoke(_control);
+
+            //Unsubscribe
+            var enterSubscribedList = _onEnterDelegate.GetInvocationList();
+            foreach (var sub in enterSubscribedList)
+            {
+                _onEnterDelegate -= sub as Action<CControl>;
+            }
+
+            var updateSubscribedList = _onUpdateDelegate.GetInvocationList();
+            foreach (var sub in updateSubscribedList)
+            {
+                _onUpdateDelegate -= sub as Action<CControl>;
+            }
+            var exitSubscribedList = _onExitDelegate.GetInvocationList();
+            foreach (var sub in exitSubscribedList)
+            {
+                _onExitDelegate -= sub as Action<CControl>;
+            }
         }
 
         public override bool CanTransitionTo(IAnimationPhase nextState)
@@ -269,15 +303,72 @@ namespace Angry_Girls
         public AnimationPhase_AttackFinish(CControl control)
             : base(control) { }
 
+        private PhaseFlowController _phaseFlowController;
+
+        private AttackAbilityData _abilityData;
+        private Action<CControl> _onEnterDelegate;
+        private Action<CControl> _onUpdateDelegate;
+        private Action<CControl> _onExitDelegate;
         public override void OnEnter()
         {
-            var attackFinishState = _control.Get_AttackAbilityData().attackFininsh_State;
-            AnimationTransitioner.ChangeAnimationStateFixedTime(
-                _control.animator,
-                StatesContainer.AttackFinishDictionary[attackFinishState.animation],
-                attackFinishState.transitionDuration);
+            if (_phaseFlowController == null)
+            {
+                _phaseFlowController = GameplayCoreManager.Instance.PhaseFlowController;
+            }
 
-            _control.isAttacking = false;
+            //get data
+            if (_phaseFlowController.CurrentGameState == GamePhaseState.LaunchPhaseState)
+            {
+                _abilityData = _control.attackAbility.LaunchFinishData;
+                _onEnterDelegate += _control.attackAbility.OnLaunchFinishEnter;
+                _onUpdateDelegate += _control.attackAbility.OnLaunchFinishUpdate;
+                _onExitDelegate += _control.attackAbility.OnLaunchFinishExit;
+
+
+            }
+            else if (_phaseFlowController.CurrentGameState == GamePhaseState.AlternatePhaseState)
+            {
+                _abilityData = _control.attackAbility.AlternatePrepData;
+                _onEnterDelegate += _control.attackAbility.OnAlternateFinishEnter;
+                _onUpdateDelegate += _control.attackAbility.OnAlternateFinishUpdate;
+                _onExitDelegate += _control.attackAbility.OnAlternateFinishExit;
+            }
+
+            //process animation
+            AnimationTransitioner.ChangeAnimationStateCrossFade(
+                _control.animator,
+                StatesContainer.AttackDictionary[_abilityData.attack_State.animation],
+                _abilityData.attack_State.transitionDuration);
+
+            //process On method
+            _onExitDelegate.Invoke(_control);
+        }
+        public override void OnUpdate()
+        {
+            _onEnterDelegate.Invoke(_control);
+        }
+
+        public override void OnExit()
+        {
+            _onExitDelegate?.Invoke(_control);
+
+            //Unsubscribe
+            var enterSubscribedList = _onEnterDelegate.GetInvocationList();
+            foreach (var sub in enterSubscribedList)
+            {
+                _onEnterDelegate -= sub as Action<CControl>;
+            }
+
+            var updateSubscribedList = _onUpdateDelegate.GetInvocationList();
+            foreach (var sub in updateSubscribedList)
+            {
+                _onUpdateDelegate -= sub as Action<CControl>;
+            }
+            var exitSubscribedList = _onExitDelegate.GetInvocationList();
+            foreach (var sub in exitSubscribedList)
+            {
+                _onExitDelegate -= sub as Action<CControl>;
+            }
         }
 
         public override bool CanTransitionTo(IAnimationPhase nextState)

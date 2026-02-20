@@ -3,38 +3,39 @@ using System.Collections.Generic;
 
 namespace Angry_Girls
 {
-    public enum GameState
+    public enum GamePhaseState
     {
-        GameStart,
-        StageSetup,
-        LaunchPhase,
-        AlternatePhase,
-        StageComplete,
-        Victory,
-        Defeat
+        GameStartState,
+        StageSetupState,
+        LaunchPhaseState,
+        AlternatePhaseState,
+        StageCompleteState,
+        VictoryState,
+        DefeatState
     }
+
     /// <summary>
     /// Controls game state flow and transitions between phases
     /// </summary>
     public class PhaseFlowController : GameplayManagerClass
     {
-        private Dictionary<GameState, IPhase> _phases;
+        private Dictionary<GamePhaseState, IPhase> _phases;
         private IPhase _currentPhase;
         public IPhase CurrentPhase => _currentPhase;
-        public GameState CurrentGameState { get; private set; }
+        public GamePhaseState CurrentGameState { get; private set; }
 
         public override void Initialize()
         {
 
-            _phases = new Dictionary<GameState, IPhase>
+            _phases = new Dictionary<GamePhaseState, IPhase>
             {
-                { GameState.GameStart, new GameStartPhase(this) },
-                { GameState.StageSetup, new StageSetupPhase(this) },
-                { GameState.LaunchPhase, new LaunchPhase(this) },
-                { GameState.AlternatePhase, new AlternatePhase(this) },
-                { GameState.StageComplete, new StageCompletePhase(this) },
-                { GameState.Victory, new VictoryPhase(this) },
-                { GameState.Defeat, new DefeatPhase(this) },
+                { GamePhaseState.GameStartState, new GameStartPhase(this) },
+                { GamePhaseState.StageSetupState, new StageSetupPhase(this) },
+                { GamePhaseState.LaunchPhaseState, new LaunchPhase(this) },
+                { GamePhaseState.AlternatePhaseState, new AlternatePhase(this) },
+                { GamePhaseState.StageCompleteState, new StageCompletePhase(this) },
+                { GamePhaseState.VictoryState, new VictoryPhase(this) },
+                { GamePhaseState.DefeatState, new DefeatPhase(this) },
             };
 
             GameplayCoreManager.Instance.OnInitialized += LateInitialize;
@@ -45,13 +46,13 @@ namespace Angry_Girls
         private void LateInitialize()
         {
             GameplayCoreManager.Instance.OnInitialized -= LateInitialize;
-            SwitchState(GameState.GameStart);
+            SwitchState(GamePhaseState.GameStartState);
         }
 
         /// <summary>
         /// Transitions to new game state
         /// </summary>
-        public void SwitchState(GameState newState)
+        public void SwitchState(GamePhaseState newState)
         {
             _currentPhase?.EndPhase();
             CurrentGameState = newState;
@@ -91,7 +92,7 @@ namespace Angry_Girls
         public override void StartPhase()
         {
             Debug.Log("Game Start");
-            _gameFlow.SwitchState(GameState.StageSetup);
+            _gameFlow.SwitchState(GamePhaseState.StageSetupState);
         }
     }
 
@@ -111,7 +112,7 @@ namespace Angry_Girls
             }
 
             _stageManager.SetupCurrentStage();
-            _gameFlow.SwitchState(GameState.LaunchPhase);
+            _gameFlow.SwitchState(GamePhaseState.LaunchPhaseState);
         }
     }
 
@@ -135,13 +136,13 @@ namespace Angry_Girls
 
             if (checker.AllEnemiesDefeated())
             {
-                _gameFlow.SwitchState(GameState.StageComplete);
+                _gameFlow.SwitchState(GamePhaseState.StageCompleteState);
                 return;
             }
 
             if (!checker.AnyPlayersAlive())
             {
-                _gameFlow.SwitchState(GameState.AlternatePhase);
+                _gameFlow.SwitchState(GamePhaseState.AlternatePhaseState);
                 return;
             }
 
@@ -149,17 +150,17 @@ namespace Angry_Girls
             {
                 if (checker.AllEnemiesDefeated())
                 {
-                    _gameFlow.SwitchState(GameState.StageComplete);
+                    _gameFlow.SwitchState(GamePhaseState.StageCompleteState);
                     return;
                 }
 
                 if (_charactersManager.GetAliveCharacters(PlayerOrAi.Player).Count <= 1 || GameplayCoreManager.Instance.LaunchManager.GetCandidateToLaunch() != null)
                 {
-                    _gameFlow.SwitchState(GameState.AlternatePhase);
+                    _gameFlow.SwitchState(GamePhaseState.AlternatePhaseState);
                     return;
                 }
 
-                _gameFlow.SwitchState(GameState.LaunchPhase);
+                _gameFlow.SwitchState(GamePhaseState.LaunchPhaseState);
             });
         }
     }
@@ -193,21 +194,21 @@ namespace Angry_Girls
                 {
                     if (GameplayCoreManager.Instance.StageManager.HasNextStage())
                     {
-                        _gameFlow.SwitchState(GameState.StageComplete);
+                        _gameFlow.SwitchState(GamePhaseState.StageCompleteState);
                     }
                     else
                     {
-                        _gameFlow.SwitchState(GameState.Victory);
+                        _gameFlow.SwitchState(GamePhaseState.VictoryState);
                     }
                     return;
                 }
 
                 if (!checker.AnyLaunchableCharactersLeft())
                 {
-                    _gameFlow.SwitchState(GameState.Defeat);
+                    _gameFlow.SwitchState(GamePhaseState.DefeatState);
                     return;
                 }
-                _gameFlow.SwitchState(GameState.LaunchPhase);
+                _gameFlow.SwitchState(GamePhaseState.LaunchPhaseState);
             });
         }
     }
@@ -225,11 +226,11 @@ namespace Angry_Girls
             if (_stageManager.HasNextStage())
             {
                 _stageManager.ProceedToNextStage();
-                _gameFlow.SwitchState(GameState.StageSetup);
+                _gameFlow.SwitchState(GamePhaseState.StageSetupState);
             }
             else
             {
-                _gameFlow.SwitchState(GameState.Victory);
+                _gameFlow.SwitchState(GamePhaseState.VictoryState);
             }
         }
     }

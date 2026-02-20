@@ -17,57 +17,17 @@ namespace Angry_Girls
         public override void OnLaunchPrepEnter(CControl control)
         {
             base.OnLaunchPrepEnter(control);
-            control.CharacterMovement.Rigidbody.isKinematic = false;
-
-            _loopsCount = 1;
-            _timeInCurrentLoop = 0f;
-            _fireballSentThisLoop = false;
-
-            control.CharacterMovement.Rigidbody.useGravity = false;
-            _attackAngleChangeValue = 0f;
+            PrepEnter(control);
         }
         public override void OnLaunchPrepUpdate(CControl control)
         {
             base.OnLaunchPrepUpdate(control);
-            _timeInCurrentLoop += Time.deltaTime;
-
-            // Determine the target rotation along the X and Y axes
-            var targetEuler = control.CharacterMovement.Rigidbody.transform.forward.z > 0
-            ? new Vector3(45, 0, 0) // Rotate downwards
-            : new Vector3(45, 180, 0); // Rotate upward
-
-            // Check for 40% in the CURRENT animation loop
-            if (!_fireballSentThisLoop && _timeInCurrentLoop / stateInfo.length >= _spawnProjectile_TransitionOffset)
-            {
-
-                GameplayCoreManager.Instance.ProjectileManager.SendFireballFrontLaunch(control, control.projectileSpawnTransform.position, targetEuler, _attackAngleChangeValue);
-                _fireballSentThisLoop = true;
-                _attackAngleChangeValue += 4;
-            }
-
-            // Check for the end of ALL animation loops
-            if (stateInfo.normalizedTime >= _timesToRepeat_Attack_State * stateInfo.length + 0.8f)
-            {
-                _loopsCount = 0;
-                _timeInCurrentLoop = 0f;
-                control.isAttacking = false;
-                control.FinishTurn();
-            }
-
-            //Reset the flag at the end of the loop
-            if (_timeInCurrentLoop >= stateInfo.length)
-            {
-                _timeInCurrentLoop -= stateInfo.length;
-                _fireballSentThisLoop = false;
-                _loopsCount++;
-            }
+            PrepUpdate(control, control.attackAbility.LaunchPrepData);
         }
         public override void OnLaunchPrepExit(CControl control)
         {
             base.OnLaunchPrepExit(control);
-            _attackAngleChangeValue = 0f;
-            control.CharacterMovement.Rigidbody.velocity = Vector3.zero;
-            control.CharacterMovement.Rigidbody.isKinematic = true;
+            PrepExit(control);
         }
         #endregion
 
@@ -75,20 +35,34 @@ namespace Angry_Girls
         public override void OnAlternatePrepEnter(CControl control)
         {
             base.OnAlternatePrepEnter(control);
+            PrepEnter(control);
+        }
+        public override void OnAlternatePrepUpdate(CControl control)
+        {
+            base.OnAlternatePrepUpdate(control);
+            PrepUpdate(control, control.attackAbility.AlternatePrepData);
+        }
+        public override void OnAlternatePrepExit(CControl control)
+        {
+            base.OnAlternatePrepExit(control);
+            PrepExit(control);
+        }
+        #endregion
+
+        #region Private
+        private void PrepEnter(CControl control)
+        {
             control.CharacterMovement.Rigidbody.isKinematic = false;
 
             _loopsCount = 1;
             _timeInCurrentLoop = 0f;
             _fireballSentThisLoop = false;
 
-            base.OnStateEnter(control, animator, stateInfo);
             control.CharacterMovement.Rigidbody.useGravity = false;
             _attackAngleChangeValue = 0f;
         }
-
-        public override void OnAlternatePrepUpdate(CControl control)
+        private void PrepUpdate(CControl control, AttackAbilityData attackAbilityData)
         {
-            base.OnAlternatePrepUpdate(control);
             _timeInCurrentLoop += Time.deltaTime;
 
             // Determine the target rotation along the X and Y axes
@@ -96,11 +70,12 @@ namespace Angry_Girls
             ? new Vector3(45, 0, 0) // Rotate downwards
             : new Vector3(45, 180, 0); // Rotate upward
 
+            var stateInfo = control.GetAnimatorStateInfo();
             // Check for 40% in the CURRENT animation loop
             if (!_fireballSentThisLoop && _timeInCurrentLoop / stateInfo.length >= _spawnProjectile_TransitionOffset)
             {
 
-                GameplayCoreManager.Instance.ProjectileManager.SendFireballFrontAlternate(control, control.projectileSpawnTransform.position, targetEuler, _attackAngleChangeValue);
+                projectileManager.SendFireballFront(control, control.projectileSpawnTransform.position, targetEuler, _attackAngleChangeValue, attackAbilityData);
                 _fireballSentThisLoop = true;
                 _attackAngleChangeValue += 4;
             }
@@ -122,9 +97,8 @@ namespace Angry_Girls
                 _loopsCount++;
             }
         }
-        public override void OnAlternatePrepExit(CControl control)
+        private void PrepExit(CControl control)
         {
-            base.OnAlternatePrepExit(control);
             _attackAngleChangeValue = 0f;
             control.CharacterMovement.ResetVelocity();
             control.CharacterMovement.Rigidbody.isKinematic = true;

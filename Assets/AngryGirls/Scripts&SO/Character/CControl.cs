@@ -76,6 +76,7 @@ namespace Angry_Girls
         private VFXManager _vFXManager;
         private AudioManager _audioManager;
         private CameraManager _cameraManager;
+        private AttackAbilityManager _attackAbilityManager;
 
         #region init
         private void Awake()
@@ -84,6 +85,7 @@ namespace Angry_Girls
             _vFXManager = CoreManager.Instance.VFXManager;
             _audioManager = CoreManager.Instance.AudioManager;
             _cameraManager = GameplayCoreManager.Instance.CameraManager;
+            _attackAbilityManager = GameplayCoreManager.Instance.AttackAbilityManager;
 
             //subscribe
             UnitGotHit += CheckAndApplyIncomingDamage;
@@ -143,7 +145,8 @@ namespace Angry_Girls
                 weapon.transform.position = weaponHolder.position;
                 weapon.transform.rotation = weaponHolder.rotation;
             }
-            AttackLogicContainer.SetCharacterAttackLogic(this);
+
+            attackAbility = _attackAbilityManager.GetAbility(CharacterSettings.attackType);
         }
 
         private void FixedUpdate()
@@ -340,28 +343,6 @@ namespace Angry_Girls
 
             var currentAttacker = GameplayCoreManager.Instance.GameplayCharactersManager.CurrentlyAttackingUnit;
             return CharacterMovement.IsGrounded && currentAttacker == this;
-        }
-
-        /// <summary>
-        /// Gets the appropriate attack logic based on current game state
-        /// </summary>
-        /// <returns>Attack ability logic for current phase</returns>
-        public AttackAbility Get_AttackFinish_AttackAbilityLogic()
-        {
-            return GameplayCoreManager.Instance.PhaseFlowController.CurrentGameState == GameState.LaunchPhase
-                ? attackSystem_Data.launch_AttackFinishLogic
-                : attackSystem_Data.alternate_AttackFinishLogic;
-        }
-
-        /// <summary>
-        /// Gets the attack ability data based on current game state
-        /// </summary>
-        /// <returns>Attack ability data for current phase</returns>
-        public AttackAbilityData Get_AttackAbilityData()
-        {
-            return GameplayCoreManager.Instance.PhaseFlowController.CurrentGameState == GameState.LaunchPhase
-                ? CharacterSettings.AttackAbility_Launch
-                : CharacterSettings.AttackAbility_Alternate;
         }
 
         /// <summary>

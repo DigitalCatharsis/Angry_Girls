@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public enum AttackUsage { Launch, Alternate }
-    public enum AttackPhase { Prep, Finish }
-    public enum AttackType { Uppercut, Fireball, HeadSpin, SwordSpin }
+    public enum AttackUsage {None = 0, Launch = 1, Alternate = 2 }
+    public enum AttackPhase { None = 0, Prep = 1, Finish =2 }
+    public enum AttackType { None = 0, Uppercut = 1, Fireball =2, HeadSpin =3 , SwordSpin = 4 }
 
     [CreateAssetMenu(fileName = "Settings", menuName = "Angry_Girls/CharacterSettings/AttackAbilityData")]
     [System.Serializable]

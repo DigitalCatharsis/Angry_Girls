@@ -5,32 +5,20 @@ namespace Angry_Girls
     public class SwordSpinAttack : AttackAbility
     {
         public SwordSpinAttack(AttackAbilityData launchPrep, AttackAbilityData launchFinish, AttackAbilityData alternatePrep, AttackAbilityData alternateFinish) : base(launchPrep, launchFinish, alternatePrep, alternateFinish) { }
-
         private float _timeInCurrentLoop;
-        private int _timesToRepeat_Attack_State = 4;
+        private int _timesToRepeat_Attack_State = 22;
         private GameObject _projectile;
         private bool _hasEnteredAttackState = false;
 
         // Sound settings: normalizedTime moments when they should play (e.g., 0.0 - start, 0.5 - middle)
         private readonly float[] _soundTriggers = { 0.0f, 0.5f }; // Can be changed to {0.0f, 0.3f, 0.7f}, etc.
         private bool[] _hasPlayedSoundInThisCycle; // Tracks which sounds have already played
-        private ProjectileManager _projectileManager;
 
         #region Launch
         public override void OnLaunchPrepEnter(CControl control)
         {
             base.OnLaunchPrepEnter(control);
-
-            _projectile = GameplayCoreManager.Instance.ProjectileManager.SpawnByProjectileAbility(control);
-
-            if (!_hasEnteredAttackState)
-            {
-                CoreManager.Instance.AudioManager.PlayCustomSound(AudioSourceType.SFX_Impact, 4);
-                _hasEnteredAttackState = true;
-            }
-
-            // Initialize the array for tracking sounds in this cycle
-            _hasPlayedSoundInThisCycle = new bool[_soundTriggers.Length];
+            PrepEnter(control, control.attackAbility.LaunchPrepData);
         }
         public override void OnLaunchPrepUpdate(CControl control)
         {
@@ -69,25 +57,39 @@ namespace Angry_Girls
         public override void OnLaunchPrepExit(CControl control)
         {
             base.OnLaunchPrepExit(control);
-            control.isAttacking = false;
-            _hasEnteredAttackState = false;
 
-            if (_projectile != null)
-                GameplayCoreManager.Instance.ProjectileManager.DisposeProjectile(_projectile);
+
+            PrepExit(control);
         }
         #endregion
 
         #region Alternate
         public override void OnAlternatePrepEnter(CControl control)
         {
-            base.OnAlternatePrepEnter(control);
+            base.OnLaunchPrepEnter(control);
+            PrepEnter(control, control.attackAbility.AlternatePrepData);
+        }
+        public override void OnAlternatePrepUpdate(CControl control)
+        {
+            base.OnAlternatePrepUpdate(control);
+        }
+        public override void OnAlternatePrepExit(CControl control)
+        {
+            base.OnAlternatePrepExit(control);
+            PrepExit(control);
+        }
+        #endregion
 
-            if (_projectileManager == null)
-            {
-                _projectileManager = GameplayCoreManager.Instance.ProjectileManager;
-            }
-
-            _projectile = _projectileManager.SpawnByProjectileAbility(control);
+        #region private
+        private void PrepExit(CControl control)
+        {
+            control.UnitCallsForStopAttack?.Invoke();
+            if (_projectile != null)
+                GameplayCoreManager.Instance.ProjectileManager.DisposeProjectile(_projectile);
+        }
+        private void PrepEnter(CControl control, AttackAbilityData attackAbilityData)
+        {
+            _projectile = GameplayCoreManager.Instance.ProjectileManager.SpawnByProjectileAbilityData(control, attackAbilityData);
 
             if (!_hasEnteredAttackState)
             {
@@ -97,21 +99,6 @@ namespace Angry_Girls
 
             // Initialize the array for tracking sounds in this cycle
             _hasPlayedSoundInThisCycle = new bool[_soundTriggers.Length];
-        }
-
-        public override void OnAlternatePrepUpdate(CControl control)
-        {
-            base.OnAlternatePrepUpdate(control);
-        }
-        public override void OnAlternatePrepExit(CControl control)
-        {
-            base.OnAlternatePrepExit(control);
-
-            control.isAttacking = false;
-            _hasEnteredAttackState = false;
-
-            if (_projectile != null)
-                GameplayCoreManager.Instance.ProjectileManager.DisposeProjectile(_projectile);
         }
         #endregion
     }

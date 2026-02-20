@@ -4,16 +4,12 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
-    public class AttackAbilityManager : MonoBehaviour
+    public class AttackAbilityManager : GameplayManagerClass
     {
-        public static AttackAbilityManager Instance { get; private set; }
         private Dictionary<AttackType, AttackAbility> _abilities = new();
 
-        private void Awake()
+        public override void Initialize()
         {
-            if (Instance) { Destroy(gameObject); return; }
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
             LoadAbilities();
         }
 
@@ -62,5 +58,6 @@ namespace Angry_Girls
 
         public AttackAbility GetAbility(AttackType type) =>
             _abilities.TryGetValue(type, out var ability) ? ability : null;
+
     }
 }
