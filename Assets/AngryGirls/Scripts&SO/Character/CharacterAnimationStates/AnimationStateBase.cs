@@ -114,6 +114,11 @@ namespace Angry_Girls
 
         public override bool CanTransitionTo(IAnimationPhase nextState)
         {
+            if (_control.CharacterSettings.unitType == UnitType.Air && _control.hasBeenLaunched)
+            {
+                return nextState is not AnimationPhase_AttackFinish && nextState is not AnimationPhase_Landing && nextState is not AnimationPhase_Airboned;
+            }
+
             return nextState is not AnimationPhase_AttackFinish && nextState is not AnimationPhase_Landing;
         }
 

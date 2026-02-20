@@ -58,7 +58,7 @@ namespace Angry_Girls
 
             if (!_hasEnteredAttackState)
             {
-                CoreManager.Instance.AudioManager.PlayCustomSound(AudioSourceType.SFX_Impact, 4);
+                audioManager.PlayCustomSound(AudioSourceType.SFX_Impact, 4);
                 _hasEnteredAttackState = true;
             }
 
@@ -76,7 +76,7 @@ namespace Angry_Girls
                 // If the trigger has passed and the sound has not yet played
                 if (normalizedTime >= _soundTriggers[i] && !_hasPlayedSoundInThisCycle[i])
                 {
-                    CoreManager.Instance.AudioManager.PlayCustomSound(AudioSourceType.SFX_Impact, 4);
+                    audioManager.PlayCustomSound(AudioSourceType.SFX_Impact, 4);
                     _hasPlayedSoundInThisCycle[i] = true;
                 }
             }
@@ -101,9 +101,9 @@ namespace Angry_Girls
         }
         private void PrepExit(CControl control)
         {
-            control.UnitCallsForStopAttack?.Invoke();
             if (_projectile != null)
                 GameplayCoreManager.Instance.ProjectileManager.DisposeProjectile(_projectile);
+            control.UnitCallsForStopAttack?.Invoke();
         }
         #endregion
     }

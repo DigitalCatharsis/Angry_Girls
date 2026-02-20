@@ -12,6 +12,7 @@ namespace Angry_Girls
         protected ProjectileManager projectileManager;
         protected VFXManager vFXManager;
         protected CameraManager cameraManager;
+        protected AudioManager audioManager;
 
         protected AttackAbility(
             AttackAbilityData launchPrep,
@@ -27,6 +28,7 @@ namespace Angry_Girls
             projectileManager = GameplayCoreManager.Instance.ProjectileManager;
             vFXManager = CoreManager.Instance.VFXManager;
             cameraManager = GameplayCoreManager.Instance.CameraManager;
+            audioManager = CoreManager.Instance.AudioManager;
         }
 
         #region Launch Prep

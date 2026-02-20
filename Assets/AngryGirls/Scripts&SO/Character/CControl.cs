@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -310,15 +311,34 @@ namespace Angry_Girls
         /// <summary>
         /// Completes the character's current turn and resets attack state
         /// </summary>
-        public void FinishTurn()
+        public async void FinishTurn()
         {
+            if (CharacterSettings.unitType != UnitType.Air)
+            {
+                // Create a token that will cancel after 4 seconds
+                using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(4)))
+                {
+                    try
+                    {
+                        // Wait until it lands, but no more than 4 seconds
+                        await UniTask.WaitWhile(() => (!CharacterMovement.IsGrounded),
+                        cancellationToken: cts.Token);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        // Timeout - 4 seconds have passed, and the unit is still in the air
+                        Debug.LogWarning("Wait grounded timeout after 4 seconds");
+                    }
+                }
+            }
+
+            //general delay
+            var delay = (int)(_turnManager.TimeToWaitAfterUnitFinishedAttack * 1000);
+            await UniTask.Delay(delay);
+
             hasFinishedLaunchingTurn = true;
             hasFinishedAlternateAttackTurn = true;
             canUseAbility = false;
-
-            var delay = (int)(_turnManager.TimeToWaitAfterUnitFinishedAttack * 1000);
-            Debug.Log(delay);
-            UniTask.Delay(delay);
         }
 
         public AnimatorStateInfo GetAnimatorStateInfo()

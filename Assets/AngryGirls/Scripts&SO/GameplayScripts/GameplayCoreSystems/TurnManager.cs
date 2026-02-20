@@ -102,6 +102,7 @@ namespace Angry_Girls
         {
             _cameraManager.CameraFollowForRigidBody(character.CharacterMovement.Rigidbody);
             _charactersManager.CurrentlyAttackingUnit = character;
+            character.UnitPerformedAttack?.Invoke();
 
             yield return new WaitWhile(() => !character.hasFinishedAlternateAttackTurn && !character.isDead);
             yield return new WaitForSeconds(_timeToWaitAfterUnitFinishedAttack);

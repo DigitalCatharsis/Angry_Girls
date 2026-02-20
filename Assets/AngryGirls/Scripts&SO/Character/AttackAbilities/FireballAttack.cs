@@ -81,6 +81,7 @@ namespace Angry_Girls
             // Check for the end of ALL animation loops
             if (stateInfo.normalizedTime >= _timesToRepeat_Attack_State * stateInfo.length + 0.8f)
             {
+                control.UnitCallsForStopAttack();
                 _timeInCurrentLoop = 0f;
             }
 
