@@ -4,7 +4,7 @@ namespace Angry_Girls
 {
     public class SwordSpinAttack : AttackAbility
     {
-        public SwordSpinAttack(AttackAbilityData launchPrep, AttackAbilityData launchFinish, AttackAbilityData alternatePrep, AttackAbilityData alternateFinish) : base(launchPrep, launchFinish, alternatePrep, alternateFinish) { }
+        public SwordSpinAttack(AttackAbilityData launchPrep, AttackAbilityData alternatePrep) : base(launchPrep,alternatePrep) { }
         private float _timeInCurrentLoop;
         private bool _hasEnteredAttackState = false;
         private int _timesToRepeat_Attack_State = 6;

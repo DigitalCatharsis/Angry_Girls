@@ -4,7 +4,7 @@ namespace Angry_Girls
 {
     public class FireballAttack : AttackAbility
     {
-        public FireballAttack(AttackAbilityData launchPrep, AttackAbilityData launchFinish, AttackAbilityData alternatePrep, AttackAbilityData alternateFinish) : base(launchPrep, launchFinish, alternatePrep, alternateFinish) { }
+        public FireballAttack(AttackAbilityData launchPrep, AttackAbilityData alternatePrep) : base(launchPrep, alternatePrep) { }
 
         private float _timeInCurrentLoop;
         private bool _fireballSentThisLoop = false;

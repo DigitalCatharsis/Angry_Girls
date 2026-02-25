@@ -40,9 +40,7 @@ namespace Angry_Girls
         public Action UnitHasTouchedDeathZone;
         public Action UnitHasBeenLaunched;
         public Action UnitPerformedAttack;
-        public Action UnitPerformedAttackFinish;
         public Action UnitCallsForStopAttack;
-        public Action UnitCallsForStopAttackfinish;
         public Action UnitHasPerformedLanding;
         public Action UnitIsAirboned;
         public Action UnitHasFinishedLanding;

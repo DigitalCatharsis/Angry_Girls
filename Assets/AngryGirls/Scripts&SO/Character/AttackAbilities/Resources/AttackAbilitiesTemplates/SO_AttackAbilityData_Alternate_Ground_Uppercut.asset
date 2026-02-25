@@ -13,17 +13,13 @@ MonoBehaviour:
   m_Name: SO_AttackAbilityData_Alternate_Ground_Uppercut
   m_EditorClassIdentifier: 
   attackType: 1
-  usage: 1
-  phase: 1
+  usage: 2
   attack_State:
-    animation: 6
-    transitionDuration: 0.1
-  attackFininsh_State:
-    animation: 2
+    animation: 11
     transitionDuration: 0.1
   attackTimeDuration: 3
   enemyKnockbackValue: 1
-  attackMovementForce: {x: 0, y: 3, z: 2}
+  attackMovementForce: {x: 0, y: 10, z: 2}
   vfxType: 3
   vfxColor: {r: 1, g: 1, b: 1, a: 1}
   connectToOwner: 1

@@ -115,9 +115,6 @@ namespace Angry_Girls
 
             Debug.Log("you are not supposed 2 b here");
         }
-
-
-        //TODO: do i need this? is that bugfix?
         private void FinalizeLaunch(CControl character)
         {
             GameplayCoreManager.Instance.GameplayCharactersManager.CurrentlyAttackingUnit = character;

@@ -145,7 +145,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\TempClassesOrBadCode\CharacterExtraObjects\IExtraCharacterObject.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\StatesContainer.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\AttackAbilities\HeadspinAttack.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\AttackLogic(obsolete)\AlternateAttackAttackLogic\AttackLogic_AlternateAttack_Uppercut_DownSmash_Finish.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LayerAdder\LayerChanger.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\Input\VirtualInput.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\TrajectoryCheatToggle.cs" />
@@ -212,7 +211,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterStateBehaviors\AlternateAttack_Behavior_OnGround.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\VFXManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterComponents\ChracterMovement.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\AttackLogic(obsolete)\LaunchingAttackLogic\AttackLogic_Launch_Uppercut_DownSmash_Finish.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\VFX.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CControl.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\CatalogsRepositoriesDataTemplates\DefaultSaveTemplate.cs" />

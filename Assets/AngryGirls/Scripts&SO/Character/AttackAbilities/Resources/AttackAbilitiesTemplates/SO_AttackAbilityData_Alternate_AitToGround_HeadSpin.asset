@@ -14,16 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackType: 3
   usage: 2
-  phase: 1
   attack_State:
     animation: 8
     transitionDuration: 0
-  attackFininsh_State:
-    animation: 0
-    transitionDuration: 0
   attackTimeDuration: 0
   enemyKnockbackValue: 1
-  attackMovementForce: {x: 0, y: 4, z: 0}
+  attackMovementForce: {x: 0, y: 3, z: 0}
   vfxType: 2
   vfxColor: {r: 1, g: 1, b: 1, a: 1}
   connectToOwner: 0

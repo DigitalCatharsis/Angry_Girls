@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d8118fbe2c4a7ea4fae242814e2568b2
+guid: 8bd9215af7666e246a73ac1fb79be298
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -52,10 +52,10 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Alternate_Uppercut_Finish
+      name: Uppercut_New
       takeName: Take 001
       internalID: 1827226128182048838
-      firstFrame: 25
+      firstFrame: 6
       lastFrame: 58
       wrapMode: 0
       orientationOffsetY: 0
@@ -67,7 +67,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1

@@ -3,7 +3,6 @@ using UnityEngine;
 namespace Angry_Girls
 {
     public enum AttackUsage {None = 0, Launch = 1, Alternate = 2 }
-    public enum AttackPhase { None = 0, Prep = 1, Finish =2 }
     public enum AttackType { None = 0, Uppercut = 1, Fireball =2, HeadSpin =3 , SwordSpin = 4 }
 
     [CreateAssetMenu(fileName = "Settings", menuName = "Angry_Girls/CharacterSettings/AttackAbilityData")]
@@ -12,21 +11,13 @@ namespace Angry_Girls
     {
         [Header("Setup")]
 
-        public AttackType attackType;       // тип атаки (Uppercut, Fireball...)
-        public AttackUsage usage;           // Launch или Alternate
-        public AttackPhase phase;           // Prep или Finish
+        public AttackType attackType;
+        public AttackUsage usage;       
 
 
 
         [Header("Animation")]
         public CharAnimationData<Attack_States> attack_State;
-
-        [Header("AttackFinish state (if unit is ground type)")]
-        public CharAnimationData<AttackFinish_States> attackFininsh_State;
-
-        //[Space(5)]
-        //[Header("Attack")]
-        //public float attackDamage = 25f;
         [Space(5)]
         public float attackTimeDuration = 3f; 
         [Space(5)]

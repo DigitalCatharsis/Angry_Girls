@@ -4,7 +4,7 @@ namespace Angry_Girls
 {
     public class HeadspinAttack : AttackAbility
     {
-        public HeadspinAttack(AttackAbilityData launchPrep, AttackAbilityData launchFinish, AttackAbilityData alternatePrep, AttackAbilityData alternateFinish) : base(launchPrep, launchFinish, alternatePrep, alternateFinish) { }
+        public HeadspinAttack(AttackAbilityData launchPrep, AttackAbilityData alternatePrep) : base(launchPrep, alternatePrep) { }
 
         private bool _firstShotFired = false;
         private float _firstShotTime;

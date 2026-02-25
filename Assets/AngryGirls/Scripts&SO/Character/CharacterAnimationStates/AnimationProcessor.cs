@@ -15,12 +15,10 @@ namespace Angry_Girls
             }
 
             control.UnitHasBeenLaunched += ProcessLaunch;
-            control.UnitHasPerformedLanding += PerformLanding;
+            control.UnitHasPerformedLanding += PerformLandingOrIdle;
             control.UnitIsAirboned += PerformAirboned;
             control.UnitPerformedAttack += ProcessAttack;
-            control.UnitPerformedAttackFinish += ProcessAttackFinish;
             control.UnitCallsForStopAttack += CalculatePhaseAfterAttack;
-            control.UnitCallsForStopAttackfinish += ProcessIdle;
             control.UnitHasFinishedLanding += ProcessIdle;
             control.UnitGotHit += ProcessHitReacton;
             control.UnitHasFinishedHitReaction += ProcessIdleOrAirboned;
@@ -33,12 +31,10 @@ namespace Angry_Girls
         private void OnDestroy()
         {
             control.UnitHasBeenLaunched -= ProcessLaunch;
-            control.UnitHasPerformedLanding -= PerformLanding;
+            control.UnitHasPerformedLanding -= PerformLandingOrIdle;
             control.UnitIsAirboned -= PerformAirboned;
             control.UnitPerformedAttack -= ProcessAttack;
-            control.UnitPerformedAttackFinish -= ProcessAttackFinish;
             control.UnitCallsForStopAttack -= CalculatePhaseAfterAttack;
-            control.UnitCallsForStopAttackfinish -= ProcessIdle;
             control.UnitHasFinishedLanding -= ProcessIdle;
             control.UnitGotHit -= ProcessHitReacton;
             control.UnitHasFinishedHitReaction -= ProcessIdleOrAirboned;
@@ -50,7 +46,6 @@ namespace Angry_Girls
             {
                 new AnimationPhase_Idle(control),
                 new AnimationPhase_Attack(control),
-                new AnimationPhase_AttackFinish(control),
                 new AnimationPhase_HitReaction(control),
                 new AnimationPhase_Death(control),
                 new AnimationPhase_Landing(control),
@@ -92,21 +87,26 @@ namespace Angry_Girls
             _phaseMachine.ChangeAnimationPhase<AnimationPhase_Airboned>(control.gameObject);
         }
 
-        private void PerformLanding()
+        private void PerformLandingOrIdle()
         {
             if (control.GetCurrentLayerName() == "CharacterToLaunch")
             {
                 return;
             }
 
-            //if (!control.hasFinishedAlternateAttackTurn)
-            //{
-            //    return;
-            //}
-
-            if (control.CharacterSettings.characterType == CharacterType.Player_YBot_Air_Green || control.CharacterSettings.characterType == CharacterType.Enemy_YBot_Air_Green)
+            if (control.CharacterSettings.unitType == UnitType.Air)
             {
                 _phaseMachine.ChangeAnimationPhase<AnimationPhase_Idle>(control.gameObject);
+                return;
+            }
+
+            if (control.CharacterSettings.unitType == UnitType.Ground 
+                && StatesContainer.AttackDictionary.ContainsValue(control.GetCurrentAnimationHash())
+                && !control.IsAttacking)
+            {
+
+                _phaseMachine.ChangeAnimationPhase<AnimationPhase_Idle>(control.gameObject);
+                return;
             }
 
             _phaseMachine.ChangeAnimationPhase<AnimationPhase_Landing>(control.gameObject);
@@ -148,17 +148,9 @@ namespace Angry_Girls
 
         private void CalculatePhaseAfterAttack()
         {
-            if (control.CharacterSettings.characterType == CharacterType.Player_YBot_Air_Green || control.CharacterSettings.characterType == CharacterType.Enemy_YBot_Air_Green)
+            if (control.CharacterSettings.unitType == UnitType.Air || control.CharacterSettings.unitType == UnitType.Ground)
             {
                 _phaseMachine.ChangeAnimationPhase<AnimationPhase_Idle>(control.gameObject);
-            }
-
-
-            if (control.CharacterSettings.characterType == CharacterType.Player_YBot_Ground_Blue
-                || control.CharacterSettings.characterType == CharacterType.Enemy_YBot_Ground_Blue
-                || control.CharacterSettings.characterType == CharacterType.Player_YBot_Ground_Original)
-            {
-                _phaseMachine.ChangeAnimationPhase<AnimationPhase_AttackFinish>(control.gameObject);
             }
 
             if (control.CharacterMovement.IsGrounded)
@@ -174,11 +166,6 @@ namespace Angry_Girls
         private void ProcessAttack()
         {
             _phaseMachine.ChangeAnimationPhase<AnimationPhase_Attack>(control.gameObject);
-        }
-
-        private void ProcessAttackFinish()
-        {
-            _phaseMachine.ChangeAnimationPhase<AnimationPhase_AttackFinish>(control.gameObject);
         }
 
         ///// <summary>

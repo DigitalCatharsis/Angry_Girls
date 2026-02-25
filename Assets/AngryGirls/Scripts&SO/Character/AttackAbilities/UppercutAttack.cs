@@ -10,9 +10,12 @@ namespace Angry_Girls
         private LayerMask _targetLayer;
         private bool _cameraShaked = false;
 
-        public UppercutAttack(AttackAbilityData launchPrep, AttackAbilityData launchFinish, AttackAbilityData alternatePrep, AttackAbilityData alternateFinish) : base(launchPrep, launchFinish, alternatePrep, alternateFinish) { }
+        private bool _animationFrozen = false;
+        private float _freezeNormalizedTime = 0.33f;
+        private bool _waitingForLanding = false;
+        private bool _freezeTriggered = false;
 
-        //TEMP: finish if landed in update
+        public UppercutAttack(AttackAbilityData launchPrep, AttackAbilityData alternatePrep): base(launchPrep,alternatePrep) { }
 
         #region Launch
         public override void OnLaunchPrepEnter(CControl control)
@@ -20,11 +23,13 @@ namespace Angry_Girls
             base.OnLaunchPrepEnter(control);
             PrepEnter(control, control.attackAbility.LaunchPrepData);
         }
+
         public override void OnLaunchPrepUpdate(CControl control)
         {
             base.OnLaunchPrepUpdate(control);
             PrepUpdate(control);
         }
+
         public override void OnLaunchPrepExit(CControl control)
         {
             base.OnLaunchPrepExit(control);
@@ -38,11 +43,13 @@ namespace Angry_Girls
             base.OnAlternatePrepEnter(control);
             PrepEnter(control, control.attackAbility.AlternatePrepData);
         }
+
         public override void OnAlternatePrepUpdate(CControl control)
         {
             base.OnAlternatePrepUpdate(control);
             PrepUpdate(control);
         }
+
         public override void OnAlternatePrepExit(CControl control)
         {
             base.OnAlternatePrepExit(control);
@@ -50,124 +57,129 @@ namespace Angry_Girls
         }
         #endregion
 
-        public override void OnLaunchFinishEnter(CControl control)
-        {
-            base.OnLaunchFinishEnter(control);
-            _projectile = projectileManager.SpawnDownSmash(control, control.attackAbility.LaunchFinishData);
-        }
-        public override void OnLaunchFinishUpdate(CControl control)
-        {
-            FinishUpdate(control, 0.09f);
-        }
-        public override void OnLaunchFinishExit(CControl control)
-        {
-            base.OnLaunchFinishExit(control);
-            FinishEnd(control);
-        }
-        public override void OnAlternateFinishEnter(CControl control)
-        {
-            base.OnAlternateFinishEnter(control);
-            _projectile = projectileManager.SpawnDownSmash(control, control.attackAbility.AlternateFinishData);
-            _projectile.transform.position = control.CharacterMovement.Rigidbody.position;
-        }
-        public override void OnAlternateFinishUpdate(CControl control)
-        {
-            FinishUpdate(control, 0.14f);
-        }
-        public override void OnAlternateFinishExit(CControl control)
-        {
-            base.OnAlternateFinishExit(control);
-            FinishEnd(control);
-        }
-
-
-        #region same logic
+        #region Main Logic
         private void PrepEnter(CControl control, AttackAbilityData abilityData)
         {
-
             _projectile = projectileManager.SpawnByProjectileAbilityData(control, abilityData);
-            _layersModified = false;
+            _projectile.transform.position = control.CharacterMovement.Rigidbody.position;
 
-            // Determine the target layer depending on the object type
-            _targetLayer = control.playerOrAi == PlayerOrAi.Player ? LayerMask.GetMask("Bot") : LayerMask.GetMask("Character");
+            control.CharacterMovement.ResetVelocity();
+
+            _layersModified = false;
+            _animationFrozen = false;
+            _waitingForLanding = false;
+            _cameraShaked = false;
+            _freezeTriggered = false;
+
+            _targetLayer = control.playerOrAi == PlayerOrAi.Player
+                ? LayerMask.GetMask("Bot")
+                : LayerMask.GetMask("Character");
+
+            SetAnimationSpeed(control, 1f);
         }
+
         private void PrepUpdate(CControl control)
         {
-            // Get the bottom point of the collider
-            var bounds = control.boxCollider.bounds;
-            var bottomPoint = new Vector3(bounds.center.x, bounds.min.y, bounds.center.z);
-            // BoxCast parameters
-            var boxCenter = bottomPoint + Vector3.up * 0.13f;
-            var boxHalfExtents = new Vector3(bounds.size.x * 0.5f, 0.05f, bounds.size.z * 0.5f);
-            float rayLength = 0.13f;
+            var animator = control.animator;
+            var stateInfo = animator.IsInTransition(0)
+                ? animator.GetNextAnimatorStateInfo(0)
+                : animator.GetCurrentAnimatorStateInfo(0);
+            float normalizedTime = stateInfo.normalizedTime % 1f;
 
-            var hits = Physics.BoxCastAll(
-            boxCenter,
-            boxHalfExtents,
-            Vector3.down,
-            control.transform.rotation,
-            rayLength,
-            _targetLayer);
-
-            // If 2+ objects of the desired layer are detected
-            if (hits.Length >= 1)
-            {
-                if (!_layersModified)
-                {
-                    // Keep the original excluded layers
-                    _originalExcludeLayers = control.boxCollider.excludeLayers;
-
-                    // Add the target layer to the excluded layers
-                    control.boxCollider.excludeLayers |= _targetLayer;
-                    _layersModified = true;
-                }
-            }
-            else if (_layersModified)
-            {
-                // Restore the original excluded layers
-                control.boxCollider.excludeLayers = _originalExcludeLayers;
-                _layersModified = false;
-            }
-
-            if (control.CharacterMovement.IsGrounded)
+            if (normalizedTime >= 0.9f)
             {
                 control.UnitCallsForStopAttack?.Invoke();
+                return;
+            }
+
+            UpdateLayerModification(control);
+
+            if (_animationFrozen && _waitingForLanding)
+            {
+                if (control.CharacterMovement.IsGrounded)
+                {
+                    SetAnimationSpeed(control, 1f);
+                    _animationFrozen = false;
+                    _waitingForLanding = false;
+                    GameplayCoreManager.Instance.CameraManager.ShakeCamera();
+                    _cameraShaked = true;
+                }
+                return;
+            }
+
+            if (!_freezeTriggered && !_animationFrozen && normalizedTime >= _freezeNormalizedTime)
+            {
+                _freezeTriggered = true;
+                SetAnimationSpeed(control, 0f);
+                _animationFrozen = true;
+
+                if (control.CharacterMovement.IsGrounded)
+                {
+                    SetAnimationSpeed(control, 1f);
+                    _animationFrozen = false;
+                    GameplayCoreManager.Instance.CameraManager.ShakeCamera();
+                    _cameraShaked = true;
+                }
+                else
+                {
+                    _waitingForLanding = true;
+                }
             }
         }
+
         private void PrepExit(CControl control)
         {
-            // Ensure we restore the original excludeLayers
+            SetAnimationSpeed(control, 1f);
+
             if (_layersModified && control.boxCollider != null)
             {
                 control.boxCollider.excludeLayers = _originalExcludeLayers;
                 _layersModified = false;
             }
 
-            vFXManager.FadeOutAndDisposeVFX(_projectile, 2f, 3f);
-        }
-
-
-        private void FinishUpdate(CControl control, float animationNormilizedTimeForShakeCamera)
-        {
-            base.OnLaunchFinishUpdate(control);
-            var stateInfo = control.GetAnimatorStateInfo();
-            if (stateInfo.normalizedTime >= animationNormilizedTimeForShakeCamera && control.CharacterMovement.IsGrounded && _cameraShaked == false)
+            if (_projectile != null)
             {
-                GameplayCoreManager.Instance.CameraManager.ShakeCamera();
-
-                _cameraShaked = true;
-            }
-
-            if (stateInfo.normalizedTime >= 1 && control.CharacterMovement.IsGrounded)
-            {
-                control.UnitCallsForStopAttackfinish?.Invoke();
+                vFXManager.FadeOutAndDisposeVFX(_projectile, 2f, 3f);
             }
         }
-        private void FinishEnd(CControl control)
+
+        private void SetAnimationSpeed(CControl control, float speed)
         {
-            GameplayCoreManager.Instance.ProjectileManager.DisposeProjectile(_projectile);
-            _cameraShaked = false;
-            control.UnitPerformedAttackFinish?.Invoke();
+            if (control.animator != null)
+            {
+                control.animator.speed = speed;
+            }
+        }
+
+        private void UpdateLayerModification(CControl control)
+        {
+            var bounds = control.boxCollider.bounds;
+            var bottomPoint = new Vector3(bounds.center.x, bounds.min.y, bounds.center.z);
+            var boxCenter = bottomPoint + Vector3.up * 0.13f;
+            var boxHalfExtents = new Vector3(bounds.size.x * 0.5f, 0.05f, bounds.size.z * 0.5f);
+
+            var hits = Physics.BoxCastAll(
+                boxCenter,
+                boxHalfExtents,
+                Vector3.down,
+                control.transform.rotation,
+                0.13f,
+                _targetLayer);
+
+            if (hits.Length >= 1)
+            {
+                if (!_layersModified)
+                {
+                    _originalExcludeLayers = control.boxCollider.excludeLayers;
+                    control.boxCollider.excludeLayers |= _targetLayer;
+                    _layersModified = true;
+                }
+            }
+            else if (_layersModified)
+            {
+                control.boxCollider.excludeLayers = _originalExcludeLayers;
+                _layersModified = false;
+            }
         }
         #endregion
     }

@@ -23,6 +23,7 @@ namespace Angry_Girls
         protected readonly CControl _control;
         protected readonly Animator _animator;
         protected readonly CharacterSettings _settings;
+        protected readonly AttackAbilityData _attackAbilityData;
 
         protected AnimationStateBase(CControl control)
         {
@@ -116,10 +117,10 @@ namespace Angry_Girls
         {
             if (_control.CharacterSettings.unitType == UnitType.Air && _control.hasBeenLaunched)
             {
-                return nextState is not AnimationPhase_AttackFinish && nextState is not AnimationPhase_Landing && nextState is not AnimationPhase_Airboned;
+                return nextState is not AnimationPhase_Landing && nextState is not AnimationPhase_Airboned;
             }
 
-            return nextState is not AnimationPhase_AttackFinish && nextState is not AnimationPhase_Landing;
+            return nextState is not AnimationPhase_Landing;
         }
 
         private void TurnToTheClosestEnemy(PlayerOrAi typeOfUnitToTurn)
@@ -199,10 +200,10 @@ namespace Angry_Girls
         {
             if (_control.CharacterSettings.characterType == CharacterType.Player_YBot_Air_Green || _control.CharacterSettings.characterType == CharacterType.Enemy_YBot_Air_Green)
             {
-                return nextState is not AnimationPhase_Landing && nextState is not AnimationPhase_AttackFinish;
+                return nextState is not AnimationPhase_Landing;
             }
 
-            return nextState is not AnimationPhase_Idle;
+            return nextState is not AnimationPhase_Idle && nextState is not AnimationPhase_Airboned;
         }
     }
 
@@ -226,6 +227,7 @@ namespace Angry_Girls
                 _phaseFlowController = GameplayCoreManager.Instance.GamePhaseFlowController;
             }
 
+
             //get data
             if (_phaseFlowController.CurrentGamePhaseState == GamePhaseNames.LaunchPhase)
             {
@@ -243,6 +245,9 @@ namespace Angry_Girls
                 _onUpdateDelegate += _control.attackAbility.OnAlternatePrepUpdate;
                 _onExitDelegate += _control.attackAbility.OnAlternatePrepExit;
             }
+
+            _control.CharacterMovement.ResetVelocity();
+            _control.CharacterMovement.ApplyRigidForce(new Vector3(0, _abilityData.attackMovementForce.y, _abilityData.attackMovementForce.z * _control.transform.forward.z), ForceMode.VelocityChange);
 
             //process animation
             AnimationTransitioner.ChangeAnimationStateCrossFade(
@@ -288,15 +293,15 @@ namespace Angry_Girls
         public override bool CanTransitionTo(IAnimationPhase nextState)
         {
             //air 
-            if (_control.CharacterSettings.characterType == CharacterType.Player_YBot_Air_Green || _control.CharacterSettings.characterType == CharacterType.Enemy_YBot_Air_Green)
+            if (_control.CharacterSettings.unitType == UnitType.Air)
             {
                 return nextState is not AnimationPhase_Landing && nextState is not AnimationPhase_Airboned;
             }
 
             //ground
-            if (_control.CharacterSettings.characterType == CharacterType.Player_YBot_Ground_Blue || _control.CharacterSettings.characterType == CharacterType.Enemy_YBot_Ground_Blue || _control.CharacterSettings.characterType == CharacterType.Player_YBot_Ground_Original)
+            if (_control.CharacterSettings.unitType == UnitType.Ground)
             {
-                return nextState is AnimationPhase_AttackFinish || nextState is AnimationPhase_HitReaction || nextState is AnimationPhase_Death;
+                return nextState is AnimationPhase_HitReaction || nextState is AnimationPhase_Death || nextState is AnimationPhase_Idle;
             }
 
             return nextState is not AnimationPhase_Idle;
@@ -304,86 +309,6 @@ namespace Angry_Girls
         }
 
     }
-
-    public class AnimationPhase_AttackFinish : AnimationStateBase
-    {
-        public AnimationPhase_AttackFinish(CControl control)
-            : base(control) { }
-
-        private GamePhaseFlowController _phaseFlowController;
-
-        private AttackAbilityData _abilityData;
-        private Action<CControl> _onEnterDelegate;
-        private Action<CControl> _onUpdateDelegate;
-        private Action<CControl> _onExitDelegate;
-        public override void OnEnter()
-        {
-            if (_phaseFlowController == null)
-            {
-                _phaseFlowController = GameplayCoreManager.Instance.GamePhaseFlowController;
-            }
-
-            //get data
-            if (_phaseFlowController.CurrentGamePhaseState == GamePhaseNames.LaunchPhase)
-            {
-                _abilityData = _control.attackAbility.LaunchFinishData;
-                _onEnterDelegate += _control.attackAbility.OnLaunchFinishEnter;
-                _onUpdateDelegate += _control.attackAbility.OnLaunchFinishUpdate;
-                _onExitDelegate += _control.attackAbility.OnLaunchFinishExit;
-
-
-            }
-            else if (_phaseFlowController.CurrentGamePhaseState == GamePhaseNames.AlternatePhase)
-            {
-                _abilityData = _control.attackAbility.AlternatePrepData;
-                _onEnterDelegate += _control.attackAbility.OnAlternateFinishEnter;
-                _onUpdateDelegate += _control.attackAbility.OnAlternateFinishUpdate;
-                _onExitDelegate += _control.attackAbility.OnAlternateFinishExit;
-            }
-
-            //process animation
-            AnimationTransitioner.ChangeAnimationStateCrossFade(
-                _control.animator,
-                StatesContainer.AttackDictionary[_abilityData.attack_State.animation],
-                _abilityData.attack_State.transitionDuration);
-
-            //process On method
-            _onExitDelegate.Invoke(_control);
-        }
-        public override void OnUpdate()
-        {
-            _onEnterDelegate.Invoke(_control);
-        }
-
-        public override void OnExit()
-        {
-            _onExitDelegate?.Invoke(_control);
-
-            //Unsubscribe
-            var enterSubscribedList = _onEnterDelegate.GetInvocationList();
-            foreach (var sub in enterSubscribedList)
-            {
-                _onEnterDelegate -= sub as Action<CControl>;
-            }
-
-            var updateSubscribedList = _onUpdateDelegate.GetInvocationList();
-            foreach (var sub in updateSubscribedList)
-            {
-                _onUpdateDelegate -= sub as Action<CControl>;
-            }
-            var exitSubscribedList = _onExitDelegate.GetInvocationList();
-            foreach (var sub in exitSubscribedList)
-            {
-                _onExitDelegate -= sub as Action<CControl>;
-            }
-        }
-
-        public override bool CanTransitionTo(IAnimationPhase nextState)
-        {
-            return nextState is not AnimationPhase_Airboned && nextState is not AnimationPhase_Landing;
-        }
-    }
-
 
     public class AnimationPhase_HitReaction : AnimationStateBase
     {
