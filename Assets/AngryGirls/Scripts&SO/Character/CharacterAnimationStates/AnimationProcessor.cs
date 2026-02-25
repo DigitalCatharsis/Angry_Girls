@@ -1,8 +1,11 @@
+using Cysharp.Threading.Tasks;
+
 namespace Angry_Girls
 {
     public class AnimationProcessor : SubComponent
     {
         private AnimationPhaseMachine _phaseMachine;
+        private GamePhaseFlowController _gamePhaseFlowController;
 
         public override void OnStart()
         {
@@ -21,6 +24,8 @@ namespace Angry_Girls
             control.UnitHasFinishedLanding += ProcessIdle;
             control.UnitGotHit += ProcessHitReacton;
             control.UnitHasFinishedHitReaction += ProcessIdleOrAirboned;
+
+            _gamePhaseFlowController = GameplayCoreManager.Instance.GamePhaseFlowController;
 
             InitializeStateMachine();
         }
@@ -64,17 +69,27 @@ namespace Angry_Girls
 
         private void ProcessHitReacton(ProjectileConfig pro, InteractionData intdata)
         {
-            _phaseMachine.ChangePhase<AnimationPhase_HitReaction>(control.gameObject);
+            _phaseMachine.ChangeAnimationPhase<AnimationPhase_HitReaction>(control.gameObject);
         }
 
         private void PerformAirboned()
         {
+            if (control.IsAttacking)
+            {
+                return;
+            }
+
+            if (!control.hasFinishedAlternateAttackTurn && _gamePhaseFlowController.CurrentGamePhaseState == GamePhaseNames.AlternatePhase)
+            {
+                return;
+            }
+
             if (control.GetCurrentLayerName() == "CharacterToLaunch")
             {
                 return;
             }
 
-            _phaseMachine.ChangePhase<AnimationPhase_Airboned>(control.gameObject);
+            _phaseMachine.ChangeAnimationPhase<AnimationPhase_Airboned>(control.gameObject);
         }
 
         private void PerformLanding()
@@ -84,41 +99,58 @@ namespace Angry_Girls
                 return;
             }
 
+            //if (!control.hasFinishedAlternateAttackTurn)
+            //{
+            //    return;
+            //}
+
             if (control.CharacterSettings.characterType == CharacterType.Player_YBot_Air_Green || control.CharacterSettings.characterType == CharacterType.Enemy_YBot_Air_Green)
             {
-                _phaseMachine.ChangePhase<AnimationPhase_Idle>(control.gameObject);
+                _phaseMachine.ChangeAnimationPhase<AnimationPhase_Idle>(control.gameObject);
             }
 
-            _phaseMachine.ChangePhase<AnimationPhase_Landing>(control.gameObject);
+            _phaseMachine.ChangeAnimationPhase<AnimationPhase_Landing>(control.gameObject);
         }
 
         private void ProcessIdleOrAirboned()
         {
             if (control.CharacterMovement.IsGrounded)
             {
-                _phaseMachine.ChangePhase<AnimationPhase_Idle>(control.gameObject);
+                _phaseMachine.ChangeAnimationPhase<AnimationPhase_Idle>(control.gameObject);
             }
             else
             {
-                _phaseMachine.ChangePhase<AnimationPhase_Airboned>(control.gameObject);
+                _phaseMachine.ChangeAnimationPhase<AnimationPhase_Airboned>(control.gameObject);
             }
         }
 
         private void ProcessLaunch()
         {
-            _phaseMachine.ChangePhase<AnimationPhase_Airboned>(control.gameObject);
+            _phaseMachine.ChangeAnimationPhase<AnimationPhase_Airboned>(control.gameObject);
         }
 
         private void ProcessIdle()
         {
-            _phaseMachine.ChangePhase<AnimationPhase_Idle>(control.gameObject);
+            _phaseMachine.ChangeAnimationPhase<AnimationPhase_Idle>(control.gameObject);
+            if (_gamePhaseFlowController.CurrentGamePhaseState == GamePhaseNames.LaunchPhase 
+                && control.GetCurrentLayerName() == "Character"
+                && !control.hasUsedAbility)
+            {
+                UniTask.WaitForSeconds(2f);
+
+                if (!control.hasUsedAbility)
+                {
+                    control.canUseAbility = false;
+                    control.FinishTurn();
+                }
+            }
         }
 
         private void CalculatePhaseAfterAttack()
         {
             if (control.CharacterSettings.characterType == CharacterType.Player_YBot_Air_Green || control.CharacterSettings.characterType == CharacterType.Enemy_YBot_Air_Green)
             {
-                _phaseMachine.ChangePhase<AnimationPhase_Idle>(control.gameObject);
+                _phaseMachine.ChangeAnimationPhase<AnimationPhase_Idle>(control.gameObject);
             }
 
 
@@ -126,27 +158,27 @@ namespace Angry_Girls
                 || control.CharacterSettings.characterType == CharacterType.Enemy_YBot_Ground_Blue
                 || control.CharacterSettings.characterType == CharacterType.Player_YBot_Ground_Original)
             {
-                _phaseMachine.ChangePhase<AnimationPhase_AttackFinish>(control.gameObject);
+                _phaseMachine.ChangeAnimationPhase<AnimationPhase_AttackFinish>(control.gameObject);
             }
 
             if (control.CharacterMovement.IsGrounded)
             {
-                _phaseMachine.ChangePhase<AnimationPhase_Landing>(control.gameObject);
+                _phaseMachine.ChangeAnimationPhase<AnimationPhase_Landing>(control.gameObject);
             }
             else
             {
-                _phaseMachine.ChangePhase<AnimationPhase_Airboned>(control.gameObject);
+                _phaseMachine.ChangeAnimationPhase<AnimationPhase_Airboned>(control.gameObject);
             }
         }
 
         private void ProcessAttack()
         {
-            _phaseMachine.ChangePhase<AnimationPhase_Attack>(control.gameObject);
+            _phaseMachine.ChangeAnimationPhase<AnimationPhase_Attack>(control.gameObject);
         }
 
         private void ProcessAttackFinish()
         {
-            _phaseMachine.ChangePhase<AnimationPhase_AttackFinish>(control.gameObject);
+            _phaseMachine.ChangeAnimationPhase<AnimationPhase_AttackFinish>(control.gameObject);
         }
 
         ///// <summary>

@@ -6,9 +6,9 @@ namespace Angry_Girls
     {
         public SwordSpinAttack(AttackAbilityData launchPrep, AttackAbilityData launchFinish, AttackAbilityData alternatePrep, AttackAbilityData alternateFinish) : base(launchPrep, launchFinish, alternatePrep, alternateFinish) { }
         private float _timeInCurrentLoop;
+        private bool _hasEnteredAttackState = false;
         private int _timesToRepeat_Attack_State = 6;
         private GameObject _projectile;
-        private bool _hasEnteredAttackState = false;
 
         // Sound settings: normalizedTime moments when they should play (e.g., 0.0 - start, 0.5 - middle)
         private readonly float[] _soundTriggers = { 0.0f, 0.5f }; // Can be changed to {0.0f, 0.3f, 0.7f}, etc.
@@ -28,6 +28,7 @@ namespace Angry_Girls
         public override void OnLaunchPrepExit(CControl control)
         {
             base.OnLaunchPrepExit(control);
+            PrepExit(control);
         }
         #endregion
 
@@ -42,7 +43,6 @@ namespace Angry_Girls
             base.OnAlternatePrepUpdate(control);
             UpdateEnter(control);
         }
-
 
         public override void OnAlternatePrepExit(CControl control)
         {
@@ -93,17 +93,15 @@ namespace Angry_Girls
             // Check if the entire animation has completed
             if (stateInfo.normalizedTime >= _timesToRepeat_Attack_State)
             {
-                _timeInCurrentLoop = 0f;
-                _hasEnteredAttackState = false;
-                projectileManager.DisposeProjectile(_projectile);
                 control.UnitCallsForStopAttack?.Invoke();
             }
         }
         private void PrepExit(CControl control)
         {
+            _timeInCurrentLoop = 0f;
+            _hasEnteredAttackState = false;
             if (_projectile != null)
                 GameplayCoreManager.Instance.ProjectileManager.DisposeProjectile(_projectile);
-            control.UnitCallsForStopAttack?.Invoke();
         }
         #endregion
     }

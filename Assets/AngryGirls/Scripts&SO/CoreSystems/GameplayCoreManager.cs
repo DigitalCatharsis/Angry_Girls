@@ -12,7 +12,7 @@ namespace Angry_Girls
         public TurnManager TurnManager { get; private set; }
         public LaunchManager LaunchManager { get; private set; }
         public GameLogic GameLogic { get; private set; }
-        public PhaseFlowController PhaseFlowController { get; private set; }
+        public GamePhaseFlowController GamePhaseFlowController { get; private set; }
         public InputManager InputManager { get; private set; }
         public GameplayCharactersManager GameplayCharactersManager { get; private set; }
         public LaunchExecutionService LaunchExecutionService { get; private set; }
@@ -54,7 +54,7 @@ namespace Angry_Girls
             ProjectileManager = InitializeSystem<ProjectileManager>();
 
             AttackAbilityManager = InitializeSystem<AttackAbilityManager>();
-            PhaseFlowController = InitializeSystem<PhaseFlowController>();
+            GamePhaseFlowController = InitializeSystem<GamePhaseFlowController>();
 
             Debug.Log("All gameplay systems initialized successfully");
             OnInitialized?.Invoke();

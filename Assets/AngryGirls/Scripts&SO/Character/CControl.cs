@@ -1,7 +1,6 @@
 using AYellowpaper.SerializedCollections;
 using Cysharp.Threading.Tasks;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -22,7 +21,8 @@ namespace Angry_Girls
     /// </summary>
     public class CControl : PoolObject
     {
-        //public bool isAttacking = false;
+        public bool IsAttacking { get; private set; }
+
         //public bool isLanding = false;
         public bool isDead = false;
         public bool canUseAbility = false;
@@ -89,7 +89,17 @@ namespace Angry_Girls
             _attackAbilityManager = GameplayCoreManager.Instance.AttackAbilityManager;
             _turnManager = GameplayCoreManager.Instance.TurnManager;
 
+#if UNITY_EDITOR
+            UnitCallsForStopAttack += () => { Debug.Log($"{this.name} UnitCallsForStopAttack invoking"); };
+            UnitIsAirboned += () => { Debug.Log($"{this.name} UnitIsAirboned invoking"); };
+            UnitHasPerformedLanding += () => { Debug.Log($"{this.name} UnitHasPerformedLanding invoking"); };
+            UnitHasFinishedLanding += () => { Debug.Log($"{this.name} UnitHasFinishedLanding invoking"); };
+            UnitPerformedAttack += () => { Debug.Log($"{this.name} UnitPerformedAttack invoking"); };
+#endif
+
             //subscribe
+            UnitPerformedAttack += SetAttackBoolTrue;
+            UnitCallsForStopAttack += SetAttackBoolfalse;
             UnitGotHit += CheckAndApplyIncomingDamage;
             UnitGotKilled += ApplyDeath;
             UnitHasTouchedDeathZone += ApplyDeathByDeadZone;
@@ -109,6 +119,8 @@ namespace Angry_Girls
                 ownerGO = gameObject
             });
         }
+        private void SetAttackBoolTrue() => IsAttacking = true;
+        private void SetAttackBoolfalse() => IsAttacking = false;
 
         private void OnDestroy()
         {
@@ -313,6 +325,7 @@ namespace Angry_Girls
         /// </summary>
         public async void FinishTurn()
         {
+            canUseAbility = false;
             if (CharacterSettings.unitType != UnitType.Air)
             {
                 // Create a token that will cancel after 4 seconds
@@ -338,7 +351,6 @@ namespace Angry_Girls
 
             hasFinishedLaunchingTurn = true;
             hasFinishedAlternateAttackTurn = true;
-            canUseAbility = false;
         }
 
         public AnimatorStateInfo GetAnimatorStateInfo()

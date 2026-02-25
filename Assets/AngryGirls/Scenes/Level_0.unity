@@ -14580,7 +14580,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2745796217685220144}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0de10decc54076419df698c09699f84, type: 3}
+  m_Script: {fileID: 11500000, guid: 58c7a0b5344b8484b9f598fdbe7a7f04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2745796217685220144
@@ -14594,7 +14594,7 @@ GameObject:
   - component: {fileID: 8074067072264196159}
   - component: {fileID: 2689196733955300762}
   m_Layer: 0
-  m_Name: GameFlowControoler
+  m_Name: GamePhaseFlowControoler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

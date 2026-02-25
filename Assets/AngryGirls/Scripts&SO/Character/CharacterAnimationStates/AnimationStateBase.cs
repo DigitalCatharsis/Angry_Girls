@@ -79,7 +79,7 @@ namespace Angry_Girls
                    idleState.transitionDuration
                 );
 
-            _hasTriggeredTransition = false; // —брасываем флаг при входе в состо€ние
+            _hasTriggeredTransition = false;
         }
 
         public override void OnUpdate()
@@ -215,7 +215,7 @@ namespace Angry_Girls
 
         public AnimationPhase_Attack(CControl control) : base(control) { }
 
-        private PhaseFlowController _phaseFlowController;
+        private GamePhaseFlowController _phaseFlowController;
 
         public override void OnEnter()
         {
@@ -223,11 +223,11 @@ namespace Angry_Girls
 
             if (_phaseFlowController == null)
             {
-                _phaseFlowController = GameplayCoreManager.Instance.PhaseFlowController;
+                _phaseFlowController = GameplayCoreManager.Instance.GamePhaseFlowController;
             }
 
             //get data
-            if (_phaseFlowController.CurrentGameState == GamePhaseState.LaunchPhaseState)
+            if (_phaseFlowController.CurrentGamePhaseState == GamePhaseNames.LaunchPhase)
             {
                 _abilityData = _control.attackAbility.LaunchPrepData;
                 _onEnterDelegate += _control.attackAbility.OnLaunchPrepEnter;
@@ -236,7 +236,7 @@ namespace Angry_Girls
 
 
             }
-            else if (_phaseFlowController.CurrentGameState == GamePhaseState.AlternatePhaseState)
+            else if (_phaseFlowController.CurrentGamePhaseState == GamePhaseNames.AlternatePhase)
             {
                 _abilityData = _control.attackAbility.AlternatePrepData;
                 _onEnterDelegate += _control.attackAbility.OnAlternatePrepEnter;
@@ -310,7 +310,7 @@ namespace Angry_Girls
         public AnimationPhase_AttackFinish(CControl control)
             : base(control) { }
 
-        private PhaseFlowController _phaseFlowController;
+        private GamePhaseFlowController _phaseFlowController;
 
         private AttackAbilityData _abilityData;
         private Action<CControl> _onEnterDelegate;
@@ -320,11 +320,11 @@ namespace Angry_Girls
         {
             if (_phaseFlowController == null)
             {
-                _phaseFlowController = GameplayCoreManager.Instance.PhaseFlowController;
+                _phaseFlowController = GameplayCoreManager.Instance.GamePhaseFlowController;
             }
 
             //get data
-            if (_phaseFlowController.CurrentGameState == GamePhaseState.LaunchPhaseState)
+            if (_phaseFlowController.CurrentGamePhaseState == GamePhaseNames.LaunchPhase)
             {
                 _abilityData = _control.attackAbility.LaunchFinishData;
                 _onEnterDelegate += _control.attackAbility.OnLaunchFinishEnter;
@@ -333,7 +333,7 @@ namespace Angry_Girls
 
 
             }
-            else if (_phaseFlowController.CurrentGameState == GamePhaseState.AlternatePhaseState)
+            else if (_phaseFlowController.CurrentGamePhaseState == GamePhaseNames.AlternatePhase)
             {
                 _abilityData = _control.attackAbility.AlternatePrepData;
                 _onEnterDelegate += _control.attackAbility.OnAlternateFinishEnter;
@@ -417,6 +417,11 @@ namespace Angry_Girls
 
         public override bool CanTransitionTo(IAnimationPhase nextState)
         {
+            if (_control.CharacterSettings.unitType == UnitType.Air)
+            {
+                return nextState is AnimationPhase_HitReaction || nextState is AnimationPhase_Death || nextState is AnimationPhase_Idle;
+            }
+
             return nextState is not AnimationPhase_Landing;
         }
     }
@@ -446,7 +451,8 @@ namespace Angry_Girls
         {
             return nextState is AnimationPhase_Idle
                 || nextState is AnimationPhase_HitReaction
-                || nextState is AnimationPhase_Death;
+                || nextState is AnimationPhase_Death
+                || nextState is AnimationPhase_Attack;
         }
     }
 }

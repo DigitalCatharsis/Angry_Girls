@@ -13,7 +13,7 @@ namespace Angry_Girls
 
         private CameraManager _cameraManager;
         private InputManager _inputManager;
-        private PhaseFlowController _phaseFlowController;
+        private GamePhaseFlowController _phaseFlowController;
         private StageManager _stageManager;
         private GameLogic _gameLogic;
         private LaunchExecutionService _executionService;
@@ -51,7 +51,7 @@ namespace Angry_Girls
         {
             _cameraManager = GameplayCoreManager.Instance.CameraManager;
             _inputManager = GameplayCoreManager.Instance.InputManager;
-            _phaseFlowController = GameplayCoreManager.Instance.PhaseFlowController;
+            _phaseFlowController = GameplayCoreManager.Instance.GamePhaseFlowController;
             _stageManager = GameplayCoreManager.Instance.StageManager;
             _gameLogic = GameplayCoreManager.Instance.GameLogic;
             _executionService = GameplayCoreManager.Instance.LaunchExecutionService;
@@ -132,7 +132,7 @@ namespace Angry_Girls
             // First turn special case: allow 2 launches before alternate phase
             if (_firstTurn && _launchCountThisStage < _launchesBeforeFirstAlternate)
             {
-                _phaseFlowController.SwitchState(GamePhaseState.LaunchPhaseState);
+                _phaseFlowController.SwitchState(GamePhaseNames.LaunchPhase);
                 yield break;
             }
 
@@ -140,7 +140,7 @@ namespace Angry_Girls
             if (_currentStageIndex != _stageManager.CurrentStageIndex)
             {
                 _currentStageIndex = _stageManager.CurrentStageIndex;
-                _phaseFlowController.SwitchState(GamePhaseState.LaunchPhaseState);
+                _phaseFlowController.SwitchState(GamePhaseNames.LaunchPhase);
                 yield break;
             }
 

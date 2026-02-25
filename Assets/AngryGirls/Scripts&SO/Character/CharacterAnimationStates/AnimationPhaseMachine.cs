@@ -28,16 +28,20 @@ namespace Angry_Girls
         /// </summary>
         /// <typeparam name="T">Type of phase to change to</typeparam>
         /// <param name="owner">Owner GameObject for debugging</param>
-        public void ChangePhase<T>(GameObject owner) where T : IAnimationPhase
+        public void ChangeAnimationPhase<T>(GameObject owner) where T : IAnimationPhase
         {
             var newPhaseType = typeof(T);
             if (!_phases.TryGetValue(newPhaseType, out var newPhase))
                 throw new ArgumentException($"State {newPhaseType.Name} not registered");
 
+            ////TEMP
+            //if (_currentPhase == newPhase) { return; }
+
             if (_currentPhase != null && !_currentPhase.CanTransitionTo(newPhase))
                 return;
 
             _currentPhase?.OnExit();
+            Debug.Log($"Changing AnimationPhase for {owner.name} from {CurrentPhase?.ToString()} to {newPhase.ToString()}");
             _currentPhase = newPhase;
             _currentPhase.OnEnter();
         }

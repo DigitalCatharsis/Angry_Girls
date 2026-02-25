@@ -196,6 +196,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\ColorDebugLog\ColorDebugLog.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\Spawn\SpawnFactory\Factories\CharacterFactory.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\LaunchExecutionService.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\Core\GamePhaseFlowController.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\Projectile.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\UIManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\PauseControl.cs" />
@@ -213,7 +214,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterComponents\ChracterMovement.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\AttackLogic(obsolete)\LaunchingAttackLogic\AttackLogic_Launch_Uppercut_DownSmash_Finish.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\VFX.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\Core\PhaseFlowController.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CControl.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\CatalogsRepositoriesDataTemplates\DefaultSaveTemplate.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\ISaveReinitManager.cs" />
