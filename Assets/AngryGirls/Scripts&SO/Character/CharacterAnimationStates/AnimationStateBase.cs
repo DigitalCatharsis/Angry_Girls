@@ -99,7 +99,7 @@ namespace Angry_Girls
                 TurnToTheClosestEnemy(PlayerOrAi.Player);
             }
 
-            if (_control.IsInIdleState() && _control.IsCurrentAnimationNearEnd(0.95f) && !_hasTriggeredTransition)
+            if (_control.IsInIdleState() && _control.IsAnimationEnding(_control.animator, 0.95f) && !_hasTriggeredTransition)
             {
                 _hasTriggeredTransition = true;
 
@@ -268,8 +268,8 @@ namespace Angry_Girls
         {
             _onExitDelegate?.Invoke(_control);
 
-        //Unsubscribe
-        var enterSubscribedList = _onEnterDelegate.GetInvocationList();
+            //Unsubscribe
+            var enterSubscribedList = _onEnterDelegate.GetInvocationList();
             foreach (var sub in enterSubscribedList)
             {
                 _onEnterDelegate -= sub as Action<CControl>;
@@ -315,8 +315,11 @@ namespace Angry_Girls
         public AnimationPhase_HitReaction(CControl control)
             : base(control) { }
 
+        //private bool _hasFinishedByTimer = false;
+
         public override void OnEnter()
         {
+            //_hasFinishedByTimer = false;
             var randomHitAnimation = _settings.GetRandomState(_settings.hitReaction_States).animation;
             AnimationTransitioner.ChangeAnimationState(
                 _control.animator,
@@ -329,8 +332,9 @@ namespace Angry_Girls
 
         public override void OnUpdate()
         {
-            if (_control.IsCurrentAnimationNearEnd(0.95f))
+            if (_control.IsAnimationEnding(_control.animator, 0.95f) && StatesContainer.HitReactionDictionary.ContainsValue(_control.GetCurrentAnimationHash()))
             {
+                //_hasFinishedByTimer = true;
                 _control.UnitHasFinishedHitReaction?.Invoke();
             }
         }
@@ -366,7 +370,7 @@ namespace Angry_Girls
 
         public override void OnUpdate()
         {
-            if (_control.IsAnimationNearEnd(_control.animator.GetCurrentAnimatorStateInfo(0).shortNameHash, StatesContainer.LandingDictionary))
+            if (_control.IsAnimationEnding(_control.animator, 0.95f))
             {
                 _control.UnitHasFinishedLanding?.Invoke();
             }

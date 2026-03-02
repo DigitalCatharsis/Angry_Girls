@@ -96,7 +96,9 @@ namespace Angry_Girls
 
             if (control.CharacterSettings.unitType == UnitType.Air)
             {
-                _phaseMachine.ChangeAnimationPhase<AnimationPhase_Idle>(control.gameObject);
+                //idle gonna be inside
+                control.UnitCallsForStopAttack?.Invoke();
+
                 return;
             }
 
@@ -132,6 +134,7 @@ namespace Angry_Girls
         private void ProcessIdle()
         {
             _phaseMachine.ChangeAnimationPhase<AnimationPhase_Idle>(control.gameObject);
+
             if (_gamePhaseFlowController.CurrentGamePhaseState == GamePhaseNames.LaunchPhase 
                 && control.GetCurrentLayerName() == "Character"
                 && !control.hasUsedAbility)
@@ -151,6 +154,7 @@ namespace Angry_Girls
             if (control.CharacterSettings.unitType == UnitType.Air || control.CharacterSettings.unitType == UnitType.Ground)
             {
                 _phaseMachine.ChangeAnimationPhase<AnimationPhase_Idle>(control.gameObject);
+                control.FinishTurn();
             }
 
             if (control.CharacterMovement.IsGrounded)

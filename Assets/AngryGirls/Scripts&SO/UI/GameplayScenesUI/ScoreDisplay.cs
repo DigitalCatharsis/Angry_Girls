@@ -19,7 +19,7 @@ namespace Angry_Girls
             base.Initialize();
 
             _coinCollector = GameplayCoreManager.Instance.gameObject.AddComponent<CoinCollector>();
-            _coinCollector.OnCoinCollected += AddScore;
+            //_coinCollector.OnCoinCollected += AddScore;
 
             _currentScore = 0;
             UpdateDisplay();
@@ -45,7 +45,7 @@ namespace Angry_Girls
     /// </summary>
     public class CoinCollector : MonoBehaviour
     {
-        public event System.Action<int> OnCoinCollected;
+        //public event System.Action<int> OnCoinCollected;
 
         private void OnEnable()
         {

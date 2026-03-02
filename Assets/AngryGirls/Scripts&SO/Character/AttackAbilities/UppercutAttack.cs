@@ -8,7 +8,7 @@ namespace Angry_Girls
         private LayerMask _originalExcludeLayers;
         private bool _layersModified;
         private LayerMask _targetLayer;
-        private bool _cameraShaked = false;
+        //private bool _cameraShaked = false;
 
         private bool _animationFrozen = false;
         private float _freezeNormalizedTime = 0.33f;
@@ -68,7 +68,7 @@ namespace Angry_Girls
             _layersModified = false;
             _animationFrozen = false;
             _waitingForLanding = false;
-            _cameraShaked = false;
+            //_cameraShaked = false;
             _freezeTriggered = false;
 
             _targetLayer = control.playerOrAi == PlayerOrAi.Player
@@ -102,7 +102,7 @@ namespace Angry_Girls
                     _animationFrozen = false;
                     _waitingForLanding = false;
                     GameplayCoreManager.Instance.CameraManager.ShakeCamera();
-                    _cameraShaked = true;
+                    //_cameraShaked = true;
                 }
                 return;
             }
@@ -118,7 +118,7 @@ namespace Angry_Girls
                     SetAnimationSpeed(control, 1f);
                     _animationFrozen = false;
                     GameplayCoreManager.Instance.CameraManager.ShakeCamera();
-                    _cameraShaked = true;
+                    //_cameraShaked = true;
                 }
                 else
                 {

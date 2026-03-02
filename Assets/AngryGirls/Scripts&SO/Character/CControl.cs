@@ -430,37 +430,67 @@ namespace Angry_Girls
         //    }
         //}
 
-        /// <summary>
-        /// Checks if animation is near its end, properly handling looped animations
-        /// </summary>
-        /// <param name="stateHash">Hash of animation to check</param>
-        /// <param name="dict">Dictionary containing animation hashes</param>
-        /// <param name="threshold">Normalized time threshold (0-1)</param>
-        /// <returns>True if animation is near its end</returns>
-        public bool IsAnimationNearEnd<T>(int stateHash, SerializedDictionary<T, int> dict, float threshold = 0.9f) where T : Enum
+        ///// <summary>
+        ///// Checks if animation is near its end, properly handling looped animations
+        ///// </summary>
+        ///// <param name="stateHash">Hash of animation to check</param>
+        ///// <param name="dict">Dictionary containing animation hashes</param>
+        ///// <param name="threshold">Normalized time threshold (0-1)</param>
+        ///// <returns>True if animation is near its end</returns>
+        //public bool IsAnimationNearEnd<T>(int stateHash, SerializedDictionary<T, int> dict, float threshold = 0.9f) where T : Enum
+        //{
+        //    // Check if this animation is in our dictionary
+        //    if (!dict.ContainsValue(stateHash))
+        //        return false;
+
+        //    AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        //    // Get normalized time within current loop (0-1)
+        //    float normalizedTime = stateInfo.normalizedTime % 1f;
+
+        //    // For looped animations, check if we're near the end of current loop
+        //    return normalizedTime >= threshold;
+        //}
+
+        public bool IsAnimationEnding(Animator animator, float threshold)
         {
-            // Check if this animation is in our dictionary
-            if (!dict.ContainsValue(stateHash))
-                return false;
+            AnimatorStateInfo info;
+            if (animator.IsInTransition(0))
+            {
+                info = animator.GetNextAnimatorStateInfo(0);
+            }
+            else
+            {
+                info = animator.GetCurrentAnimatorStateInfo(0);
+            }
 
-            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            var stateName = StatesContainer.GetStateNameByHash(info.shortNameHash);
 
-            // Get normalized time within current loop (0-1)
-            float normalizedTime = stateInfo.normalizedTime % 1f;
-
-            // For looped animations, check if we're near the end of current loop
-            return normalizedTime >= threshold;
+            return info.normalizedTime >= threshold;
         }
 
-        /// <summary>
-        /// Checks if current animation (regardless of type) is near its end
-        /// </summary>
-        public bool IsCurrentAnimationNearEnd(float threshold = 0.9f)
-        {
-            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-            float normalizedTime = stateInfo.normalizedTime % 1f;
-            return normalizedTime >= threshold;
-        }
+        ///// <summary>
+        ///// Checks if current animation (regardless of type) is near its end
+        ///// </summary>
+        //public bool IsAnyAnimationNearEnd(float threshold = 0.9f)
+        //{
+
+        //    var current = animator.GetCurrentAnimatorStateInfo(0);
+        //    if (IsStateNearEnd(current, threshold)) return true;
+
+        //    if (animator.IsInTransition(0))
+        //    {
+        //        var next = animator.GetNextAnimatorStateInfo(0);
+        //        if (IsStateNearEnd(next, threshold)) return true;
+        //    }
+        //    return false;
+        //}
+
+        //private bool IsStateNearEnd(AnimatorStateInfo stateInfo, float threshold)
+        //{
+        //    float cycleTime = stateInfo.normalizedTime/* % 1f*/;
+        //    return cycleTime >= threshold;
+        //}
 
         /// <summary>
         /// Gets the current layer of the character's gameObject
