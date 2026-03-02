@@ -174,13 +174,6 @@ namespace Angry_Girls
             MoveCameraTo(targetPosition, _cameraMoveDuration, resetZoom);
         }
 
-        public Vector3 GetPointerWorldPosition()
-        {
-            Vector3 screenPosition = GameplayCoreManager.Instance.InputManager.Position;
-            screenPosition.z = _mainCamera.nearClipPlane + 1;
-            return _mainCamera.ScreenToWorldPoint(screenPosition);
-        }
-
         public void ShakeCamera(float shakeDuration = 0.3f, float shakeMagnitude = 0.05f)
         {
             StartCoroutine(ShakeCoroutine(shakeDuration, shakeMagnitude, _mainCamera.transform.localPosition));

@@ -14,13 +14,7 @@ namespace Angry_Girls
         public override void Initialize()
         {
             isInitialized = true;
-            GameplayCoreManager.Instance.OnInitialized += LateInitialize;
-        }
-
-        private void LateInitialize()
-        {
             _charactersManager = GameplayCoreManager.Instance.GameplayCharactersManager;
-            GameplayCoreManager.Instance.OnInitialized -= LateInitialize;
         }
 
         public List<CControl> BuildTurnOrder()

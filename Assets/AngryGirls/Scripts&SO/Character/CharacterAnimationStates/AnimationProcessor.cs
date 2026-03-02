@@ -116,13 +116,22 @@ namespace Angry_Girls
 
         private void ProcessIdleOrAirboned()
         {
+            if (control.CharacterSettings.unitType == UnitType.Air)
+            {
+                _phaseMachine.ChangeAnimationPhase<AnimationPhase_Idle>(control.gameObject);
+
+                return;
+            }
+
             if (control.CharacterMovement.IsGrounded)
             {
                 _phaseMachine.ChangeAnimationPhase<AnimationPhase_Idle>(control.gameObject);
+                return;
             }
             else
             {
                 _phaseMachine.ChangeAnimationPhase<AnimationPhase_Airboned>(control.gameObject);
+                return;
             }
         }
 

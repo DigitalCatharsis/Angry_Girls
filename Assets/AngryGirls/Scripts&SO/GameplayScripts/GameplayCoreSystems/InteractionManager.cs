@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -60,8 +61,13 @@ namespace Angry_Girls
 
         private int _currentFrame;
 
+        private StageManager _stageManager;
+
         public override void Initialize()
         {
+            _stageManager = GameplayCoreManager.Instance.StageManager;
+            _stageManager.UnitSpawned += RegisterUnit;
+
             // Register all interaction handlers
             AddHandler(new ProjectileCharacter_TriggerHandler());
             AddHandler(new ProjectilePickable_TriggerHandler());
@@ -71,6 +77,15 @@ namespace Angry_Girls
             AddHandler(new ProjectileDeathzone_TriggerHandler());
             AddHandler(new CharacterDeathzone_TriggerHandler());
             isInitialized = true;
+        }
+
+        private void RegisterUnit(CControl control)
+        {
+            Register(control.gameObject, new InteractionConfig
+            {
+                type = InteractionMemberType.Character,
+                ownerGO = gameObject
+            });
         }
 
         public void AddHandler(IInteractionHandler handler)

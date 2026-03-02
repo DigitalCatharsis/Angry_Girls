@@ -217,9 +217,9 @@ namespace Angry_Girls
             control.CharacterMovement.ApplyRigidForce(attackAbilityData.attackMovementForce * control.CharacterMovement.Rigidbody.transform.forward.z, ForceMode.VelocityChange);
         }
 
-        public GameObject SpawnDownSmash(CControl control, AttackAbilityData ability)
+        public GameObject SpawnDownSmash(CControl control, float enemyKnockBackValue)
         {
-            var proj = GameplayCoreManager.Instance.ProjectileManager.SpawnProjectile
+            var proj = SpawnProjectile
                 (
                 teamfire: false,
                 spawnTransform: control.projectileSpawnTransform,
@@ -232,7 +232,7 @@ namespace Angry_Girls
                 destroyOnCollision: false,
                 destroyOnCharacterTrigger: false,
                 attackDamageValue: control.profile.GetCurrentStats.damage,
-                enemyKnockBackValue: ability.enemyKnockbackValue,
+                enemyKnockBackValue: enemyKnockBackValue,
                 enableCollider: false,
                 enableTrigger: true,
                 spawnSound: new Tuple<AudioSourceType, int>(AudioSourceType.SFX_Impact, 2),

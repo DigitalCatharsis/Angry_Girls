@@ -118,6 +118,7 @@ namespace Angry_Girls
                     SetAnimationSpeed(control, 1f);
                     _animationFrozen = false;
                     GameplayCoreManager.Instance.CameraManager.ShakeCamera();
+                    GameplayCoreManager.Instance.ProjectileManager.SpawnDownSmash(control,100f);
                     //_cameraShaked = true;
                 }
                 else

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 namespace Angry_Girls
@@ -8,7 +9,7 @@ namespace Angry_Girls
     /// <summary>
     /// Manages health bar creation, positioning and updates for all characters
     /// </summary>
-    public class HealthBarManager : UI_GameplayManagersComponent
+    public class HealthBarManager : GameplayManagerClass
     {
         [SerializeField] private GameObject _healthBarPrefab;
         [SerializeField] private float _healthbatUpDelta = 1.21f;
@@ -16,22 +17,20 @@ namespace Angry_Girls
 
         private Dictionary<CControl, Slider> _healthBars = new();
         private GameplayCharactersManager _charactersManager;
+        private StageManager _stageManager;
         
 
         public override void Initialize()
         {
 
             _charactersManager = GameplayCoreManager.Instance.GameplayCharactersManager;
+            _stageManager = GameplayCoreManager.Instance.StageManager;
+            _stageManager.UnitSpawned += SpawnhealthBars;
 
-            foreach (var character in _charactersManager.AllCharacters)
-            {
-                RegisterCharacter(character);
-            }
-            base.Initialize();
             isInitialized = true;
         }
 
-        private void RegisterCharacter(CControl character)
+        private void SpawnhealthBars(CControl character)
         {
             if (_healthBars.ContainsKey(character)) return;
 
@@ -59,7 +58,7 @@ namespace Angry_Girls
             _healthBars[character] = slider;
         }
 
-        protected override void LateUpdate()
+        private void LateUpdate()
         {
             if (!isInitialized) return;
 
@@ -88,6 +87,11 @@ namespace Angry_Girls
                     slider.transform.position = targetPos;
                 }
             }
+        }
+
+        private void OnDestroy()
+        {
+            _stageManager.UnitSpawned -= SpawnhealthBars;
         }
     }
 }

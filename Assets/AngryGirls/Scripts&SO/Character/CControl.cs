@@ -21,16 +21,16 @@ namespace Angry_Girls
     /// </summary>
     public class CControl : PoolObject
     {
-        public bool IsAttacking { get; private set; }
+        [field: SerializeField] public bool IsAttacking { get; private set; }
 
         //public bool isLanding = false;
         public bool isDead = false;
-        public bool canUseAbility = false;
         public bool isBehaviorAlternate = true;
         public bool canCheckGlobalBehavior = false;
 
         //public bool unitGotHit = false;
         public bool hasBeenLaunched = false;
+        public bool canUseAbility = false;
         public bool hasUsedAbility = false;
         public bool hasFinishedLaunchingTurn = false;
         public bool hasFinishedAlternateAttackTurn = true;
@@ -46,9 +46,10 @@ namespace Angry_Girls
         public Action UnitHasFinishedLanding;
         public Action UnitHasFinishedHitReaction;
 
-        public CharacterHealth Health { get; private set; }
-        public CharacterMovement CharacterMovement { get; private set; }
-        public Ragdoll Ragdoll { get; private set; }
+
+        [field: SerializeField] public CharacterHealth Health { get; private set; }
+        [field: SerializeField] public CharacterMovement CharacterMovement { get; private set; }
+        [field: SerializeField] public Ragdoll Ragdoll { get; private set; }
 
         public CharacterProfile profile;
         private CharacteProfileInfo _characterProfileInfo;
@@ -76,9 +77,11 @@ namespace Angry_Girls
         private CameraManager _cameraManager;
         private AttackAbilityManager _attackAbilityManager;
         private TurnManager _turnManager;
+        private InteractionManager _interactionManager;
 
         #region init
-        private void Awake()
+
+        public void InitializeCharacter()
         {
             //coreRefs
             _vFXManager = CoreManager.Instance.VFXManager;
@@ -86,6 +89,7 @@ namespace Angry_Girls
             _cameraManager = GameplayCoreManager.Instance.CameraManager;
             _attackAbilityManager = GameplayCoreManager.Instance.AttackAbilityManager;
             _turnManager = GameplayCoreManager.Instance.TurnManager;
+            _interactionManager = GameplayCoreManager.Instance.InteractionManager;
 
 #if UNITY_EDITOR
             UnitCallsForStopAttack += () => { Debug.Log($"{this.name} UnitCallsForStopAttack invoking"); };
@@ -111,34 +115,10 @@ namespace Angry_Girls
             _subComponentsController = GetComponentInChildren<SubComponentsController>();
             _subComponentsController.OnAwake();
 
-            GameplayCoreManager.Instance.InteractionManager.Register(gameObject, new InteractionConfig
-            {
-                type = InteractionMemberType.Character,
-                ownerGO = gameObject
-            });
-        }
-        private void SetAttackBoolTrue() => IsAttacking = true;
-        private void SetAttackBoolfalse() => IsAttacking = false;
-
-        private void OnDestroy()
-        {
-            //unsubscribe bleat!!!
-            UnitGotHit -= CheckAndApplyIncomingDamage;
-            UnitGotKilled -= ApplyDeath;
-            UnitHasTouchedDeathZone -= ApplyDeathByDeadZone;
-        }
-
-        private void OnEnable()
-        {
-            _subComponentsController.OnComponentEnable();
-        }
-        private void Start()
-        {
             Health.Initialize(profile.GetCurrentStats.health);
             _characterProfileInfo = GetComponent<CharacteProfileInfo>();
             _characterProfileInfo.InitAndRun(profile);
 
-            _subComponentsController.OnStart();
 
             //TODO: TEMP
             if (weaponHolder != null)
@@ -159,6 +139,22 @@ namespace Angry_Girls
             }
 
             attackAbility = _attackAbilityManager.GetAbility(CharacterSettings.attackType);
+        }
+        private void SetAttackBoolTrue() => IsAttacking = true;
+        public void SetAttackBoolfalse() => IsAttacking = false;
+
+        private void OnDestroy()
+        {
+            //unsubscribe bleat!!!
+            UnitGotHit -= CheckAndApplyIncomingDamage;
+            UnitGotKilled -= ApplyDeath;
+            UnitHasTouchedDeathZone -= ApplyDeathByDeadZone;
+        }
+
+        private void Start()
+        {
+
+            _subComponentsController.OnStart();
         }
 
         private void FixedUpdate()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,15 +13,19 @@ namespace Angry_Girls
         [SerializeField] private List<StageData> _stages;
         private int _currentStageIndex = 0;
         private CharacterLauncher _currentCharacterLauncher;
-        private TurnManager _turnManager;
+        //private TurnManager _turnManager;
         private GameplayCharactersManager _charactersManager;
 
         public int CurrentStageIndex => _currentStageIndex;
         public CharacterLauncher CurrentCharacterLauncher => _currentCharacterLauncher;
 
+        public Action<int> TheStageIsSet;
+        public Action ClearScene;
+        public Action<CControl> UnitSpawned;
+
         public override void Initialize()
         {
-            _turnManager = GameplayCoreManager.Instance.TurnManager;
+            //_turnManager = GameplayCoreManager.Instance.TurnManager;
             _charactersManager = GameplayCoreManager.Instance.GameplayCharactersManager;
             isInitialized = true;
         }
@@ -39,7 +44,13 @@ namespace Angry_Girls
             if (_currentStageIndex == 0)
             {
                 _charactersManager.SpawnInitialPlayerCharacters(_currentCharacterLauncher.UnitsTransforms);
+                foreach (var unit in _charactersManager.PlayerCharacters)
+                {
+                    UnitSpawned?.Invoke(unit);
+                }
             }
+
+            TheStageIsSet?.Invoke(_currentStageIndex);
         }
 
         public void ProceedToNextStage()
@@ -60,12 +71,14 @@ namespace Angry_Girls
                 var CharData = new CharacterProfile(enemyData.CharacterSettings);
                 CharData.ModifyBonusStats(enemyData.BonusStats);
                 var character = _charactersManager.SpawnEnemy(CharData, enemyData.spawnTransform.position);
+                UnitSpawned?.Invoke(character);
             }
         }
 
         private void ClearCurrentScene()
         {
-            _turnManager.ClearTurnList();
+            ClearScene?.Invoke();
+            //_turnManager.ClearTurnList();
             CurrentCharacterLauncher?.gameObject.SetActive(false);
         }
 

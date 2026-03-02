@@ -65,23 +65,7 @@ namespace Angry_Girls
                 character.profile = _initialCharactersProfiles[i];
 
                 RegisterCharacter(character, PlayerOrAi.Player);
-
-                //    RegisterCharacter(character, PlayerOrAi.Player);
-                //for (int i = 0; i < _initialPlayerSettings.Length && i < spawnPositions.Length; i++)
-                //{
-                //    if (_initialPlayerSettings[i] == null) continue;
-
-                //    var poolObject = _poolManager.GetObject(
-                //        _initialPlayerSettings[i].characterType,
-                //        spawnPositions[i].position,
-                //        Quaternion.identity
-                //    );
-
-                //    var character = poolObject.GetComponent<CControl>();
-                //    character.playerOrAi = PlayerOrAi.Player;
-                //    character.profile = _initialPlayerSettings[i];
-
-                //    RegisterCharacter(character, PlayerOrAi.Player);
+                character.InitializeCharacter();
             }
         }
 
@@ -98,6 +82,7 @@ namespace Angry_Girls
             character.profile = profile;
 
             RegisterCharacter(character, PlayerOrAi.Bot);
+            character.InitializeCharacter();
             return character;
         }
 
@@ -157,6 +142,7 @@ namespace Angry_Girls
                 character.hasFinishedLaunchingTurn = false;
                 character.hasFinishedAlternateAttackTurn = true;
                 character.canCheckGlobalBehavior = false;
+                character.SetAttackBoolfalse();
             }
 
             NotifyLaunchableCharactersChanged();

@@ -14,12 +14,17 @@ namespace Angry_Girls
 
         private CameraManager _cameraManager;
         private GameplayCharactersManager _charactersManager;
+        private StageManager _stageManager;
+        private LaunchManager _launchManager;
         private List<CControl> _currentTurnOrder = new();
 
         public override void Initialize()
         {
             _cameraManager = GameplayCoreManager.Instance.CameraManager;
             _charactersManager = GameplayCoreManager.Instance.GameplayCharactersManager;
+            _stageManager = GameplayCoreManager.Instance.StageManager;
+            _launchManager = GameplayCoreManager.Instance.LaunchManager;
+            _stageManager.ClearScene += ClearTurnList;
             isInitialized = true;
         }
 
@@ -56,7 +61,7 @@ namespace Angry_Girls
             (c.playerOrAi == PlayerOrAi.Bot) || // All bots move
             (c.playerOrAi == PlayerOrAi.Player &&
             c.hasBeenLaunched &&
-            c != GameplayCoreManager.Instance.LaunchManager.LastLaunchedCharacter) // Launched players except the last launched
+            c != _launchManager.LastLaunchedCharacter) // Launched players except the last launched
             );
 
             // Grouping: all players first, then all enemies (as in the old working code)
@@ -123,6 +128,11 @@ namespace Angry_Girls
         public void ClearTurnList()
         {
             _currentTurnOrder.Clear();
+        }
+
+        private void OnDestroy()
+        {
+            _stageManager.ClearScene -= ClearTurnList;
         }
     }
 }

@@ -49,11 +49,15 @@ namespace Angry_Girls
         private bool _cheatModeActive = false;
         private int _originalDotsNumber;
 
+        private InputManager _inputManager;
+
         /// <summary>
         /// Initialize launcher components
         /// </summary>
         public void InitLauncher()
         {
+            _inputManager = GameplayCoreManager.Instance.InputManager;
+
             var transforms = new HashSet<Transform>(_positionsContainer.GetComponentsInChildren<Transform>());
             transforms.Remove(_positionsContainer.transform);
             UnitsTransforms = transforms.ToArray();
@@ -190,7 +194,10 @@ namespace Angry_Girls
 
         private void CalculateDirection()
         {
-            var pointerPosition = GameplayCoreManager.Instance.CameraManager.GetPointerWorldPosition();
+            var mainCamera = Camera.main;
+            Vector3 screenPosition = _inputManager.Position;
+            screenPosition.z = mainCamera.nearClipPlane + 1;
+            var pointerPosition = mainCamera.ScreenToWorldPoint(screenPosition);
             _offsetEndPostion = new Vector3(0, pointerPosition.y, pointerPosition.z);
             _directionVector = _offsetEndPostion - _offsetStartPoint;
         }

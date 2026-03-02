@@ -9,7 +9,6 @@ namespace Angry_Girls
     public class UI_GameplayScreen : UI_UIScreen
     {
         [Header("UI Components")]
-        [SerializeField] private HealthBarManager healthBarManager;
         [SerializeField] private ScoreDisplay scoreDisplay;
         [SerializeField] private UI_GameplayCharactersPanel charactersPanel;
         [SerializeField] private PauseMenu pauseMenu;
@@ -37,7 +36,6 @@ namespace Angry_Girls
 
         private void InitializeComponents()
         {
-            healthBarManager?.Initialize();
             scoreDisplay?.Initialize();
             charactersPanel?.Initialize();
             pauseMenu?.Initialize();
@@ -55,7 +53,6 @@ namespace Angry_Girls
             base.Show();
             if (_isInitialized)
             {
-                healthBarManager?.Show();
                 scoreDisplay?.Show();
                 charactersPanel?.Show();
                 pauseMenu?.Show();

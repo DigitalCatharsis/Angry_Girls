@@ -12,21 +12,26 @@ namespace Angry_Girls
         [SerializeField] private Vector3 _rotationVector3 = new Vector3(0, 180, 90);
         [SerializeField] private float _duration = 1f;
 
+        private InteractionManager _interactionManager;
+
         private Tween _tween;
 
         public int Value => _coinValue;
 
         private void Start()
         {
+            _interactionManager = GameplayCoreManager.Instance.InteractionManager;
+
             _tween = transform.DORotate(_rotationVector3, _duration, RotateMode.FastBeyond360)
                 .SetEase(Ease.Linear)
                 .SetLoops(-1);
             GameplayCoreManager.Instance.OnInitialized += RegisterInInteractionManager;
+
         }
 
         private void RegisterInInteractionManager()
         {
-            GameplayCoreManager.Instance.InteractionManager.Register(
+            _interactionManager.Register(
                 gameObject,
                 new InteractionConfig
                 {
@@ -37,7 +42,7 @@ namespace Angry_Girls
         private void Dispose()
         {
             _tween.Kill();
-            GameplayCoreManager.Instance.InteractionManager.Unregister(gameObject);
+            _interactionManager.Unregister(gameObject);
             Destroy(gameObject);
         }
 

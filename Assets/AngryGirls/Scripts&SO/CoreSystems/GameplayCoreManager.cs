@@ -15,12 +15,14 @@ namespace Angry_Girls
         public GamePhaseFlowController GamePhaseFlowController { get; private set; }
         public InputManager InputManager { get; private set; }
         public GameplayCharactersManager GameplayCharactersManager { get; private set; }
-        public LaunchExecutionService LaunchExecutionService { get; private set; }
+        //public LaunchExecutionService LaunchExecutionService { get; private set; }
         public TurnOrderService TurnOrderService { get; private set; }
 
         public AttackAbilityManager AttackAbilityManager { get; private set; }
 
         public ProjectileManager ProjectileManager { get; private set; }
+
+        public HealthBarManager HealthBarManager { get; private set; }
 
         public Action OnInitialized;
 
@@ -42,19 +44,19 @@ namespace Angry_Girls
             InputManager = InitializeSystem<InputManager>();
             CameraManager = InitializeSystem<CameraManager>();
             GameLogic = InitializeSystem<GameLogic>();
-
-            LaunchExecutionService = InitializeSystem<LaunchExecutionService>();
-            TurnOrderService = InitializeSystem<TurnOrderService>();
+            GamePhaseFlowController = InitializeSystem<GamePhaseFlowController>();
             GameplayCharactersManager = InitializeSystem<GameplayCharactersManager>();
-
-            TurnManager = InitializeSystem<TurnManager>();
             StageManager = InitializeSystem<StageManager>();
-            InteractionManager = InitializeSystem<InteractionManager>();
             LaunchManager = InitializeSystem<LaunchManager>();
+            TurnManager = InitializeSystem<TurnManager>();
+            HealthBarManager = InitializeSystem<HealthBarManager>();
+
+            TurnOrderService = InitializeSystem<TurnOrderService>();
+            
+            InteractionManager = InitializeSystem<InteractionManager>();
             ProjectileManager = InitializeSystem<ProjectileManager>();
 
             AttackAbilityManager = InitializeSystem<AttackAbilityManager>();
-            GamePhaseFlowController = InitializeSystem<GamePhaseFlowController>();
 
             Debug.Log("All gameplay systems initialized successfully");
             OnInitialized?.Invoke();
