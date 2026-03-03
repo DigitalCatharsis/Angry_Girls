@@ -1,4 +1,5 @@
 using UnityEngine;
+using static PlasticPipe.Server.MonitorStats;
 
 namespace Angry_Girls
 {
@@ -15,6 +16,7 @@ namespace Angry_Girls
         private bool _waitingForLanding = false;
         private bool _freezeTriggered = false;
 
+        private AttackAbilityData _currentData;
         public UppercutAttack(AttackAbilityData launchPrep, AttackAbilityData alternatePrep): base(launchPrep,alternatePrep) { }
 
         #region Launch
@@ -60,6 +62,7 @@ namespace Angry_Girls
         #region Main Logic
         private void PrepEnter(CControl control, AttackAbilityData abilityData)
         {
+            _currentData = abilityData;
             _projectile = projectileManager.SpawnByProjectileAbilityData(control, abilityData);
             _projectile.transform.position = control.CharacterMovement.Rigidbody.position;
 
@@ -118,7 +121,7 @@ namespace Angry_Girls
                     SetAnimationSpeed(control, 1f);
                     _animationFrozen = false;
                     GameplayCoreManager.Instance.CameraManager.ShakeCamera();
-                    GameplayCoreManager.Instance.ProjectileManager.SpawnDownSmash(control,100f);
+                    GameplayCoreManager.Instance.ProjectileManager.SpawnDownSmash(control, _currentData ,100f);
                     //_cameraShaked = true;
                 }
                 else
@@ -142,6 +145,7 @@ namespace Angry_Girls
             {
                 vFXManager.FadeOutAndDisposeVFX(_projectile, 2f, 3f);
             }
+            _currentData = null;
         }
 
         private void SetAnimationSpeed(CControl control, float speed)

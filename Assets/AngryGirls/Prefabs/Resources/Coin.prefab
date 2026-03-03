@@ -123,3 +123,4 @@ MonoBehaviour:
   _coinValue: 1
   _rotationVector3: {x: 0, y: 180, z: 90}
   _duration: 1
+  _audioClipData: {fileID: 11400000, guid: 5dde7c6302a1e1f44842a51a5f38633c, type: 2}

@@ -18,8 +18,8 @@ namespace Angry_Girls
         public bool enableCollider;
         public bool enableTrigger;
         public float enemyKnockBackValue;
-        public Tuple<AudioSourceType, int> spawnSound;
-        public Tuple<AudioSourceType, int> destroySound;
+        public AudioClipData[] spawnSound;
+        public AudioClipData[] destroySound;
         public float deadbodyForceMultiplier = 1f;
         public ForceMode deadbodyForceMode;
     }
@@ -36,7 +36,7 @@ namespace Angry_Girls
         /// </summary>
         public void OnDispose()
         {
-            PlaySound(_projectileConfig.destroySound);
+            PlaySound(_projectileConfig.destroySound?[0]);
             GameplayCoreManager.Instance.InteractionManager.Unregister(this.gameObject);
         }
 
@@ -55,7 +55,7 @@ namespace Angry_Girls
             });
 
             SetupColliders(config.enableCollider, config.enableTrigger);
-            PlaySound(config.spawnSound);
+            PlaySound(config.spawnSound?[0]);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -71,12 +71,9 @@ namespace Angry_Girls
             GameplayCoreManager.Instance.InteractionManager.HandleCollision(gameObject, collision);
         }
 
-        private void PlaySound(Tuple<AudioSourceType, int> sound)
+        private void PlaySound(AudioClipData data)
         {
-            if (sound != null && sound.Item1 != AudioSourceType.None)
-            {
-                CoreManager.Instance.AudioManager.PlayCustomSound(sound.Item1, sound.Item2);
-            }
+            CoreManager.Instance.AudioManager.PlayClipData(data, data.fallbackCategory, false);
         }
 
         private void SetupColliders(bool enableCollider, bool enableTrigger)

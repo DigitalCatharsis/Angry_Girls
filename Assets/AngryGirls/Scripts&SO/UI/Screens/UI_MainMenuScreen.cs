@@ -29,10 +29,13 @@ namespace Angry_Girls
         [SerializeField] private Button _confirmNewGameButton;
         [SerializeField] private Button _cancelNewGameButton;
 
+        private SettingsManager _settingsManager;
+
         /// <inheritdoc/>
         public override void Initialize()
         {
             base.Initialize();
+            _settingsManager = CoreManager.Instance.SettingsManager;
 
             SetupButtons();
             SetupSettingsPanel();
@@ -192,6 +195,8 @@ namespace Angry_Girls
 
             if (_mainMenuPanel != null)
                 _mainMenuPanel.SetActive(true);
+
+            _settingsManager.SaveSettings();
         }
 
         #endregion
@@ -231,6 +236,7 @@ namespace Angry_Girls
 
         private void ExitGame()
         {
+            _settingsManager.SaveSettings();
             Debug.Log("Exit Game");
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;

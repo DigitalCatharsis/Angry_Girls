@@ -1,5 +1,3 @@
-using System;
-
 namespace Angry_Girls
 {
     //public enum AttackTypes

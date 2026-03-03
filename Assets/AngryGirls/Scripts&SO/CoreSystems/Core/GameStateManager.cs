@@ -46,22 +46,18 @@ namespace Angry_Girls
                 var inventoryManager = CoreManager.Instance.InventoryManager;
                 var shopManager = CoreManager.Instance.ShopManager;
 
-                //    charactersManager
-                //    missionManager
-                //    moneyStorage
-                //    inventoryManager
-                //    shopManager
-
                 // 3. Reset all managers but Settings
                 ResetManagers(charactersManager, missionManager, creditsManager, inventoryManager, shopManager);
 
                 // 4. Reinit from defaultTemplate
-                var unitasks = new List<UniTask>();
-                unitasks.Add(charactersManager.ReinitDataFromTemplateAsync(template));
-                unitasks.Add(missionManager.ReinitDataFromTemplateAsync(template));
-                unitasks.Add(creditsManager.ReinitDataFromTemplateAsync(template));
-                unitasks.Add(inventoryManager.ReinitDataFromTemplateAsync(template));
-                unitasks.Add(shopManager.ReinitDataFromTemplateAsync(template));
+                var unitasks = new List<UniTask>
+                {
+                    charactersManager.ReinitDataFromTemplateAsync(template),
+                    missionManager.ReinitDataFromTemplateAsync(template),
+                    creditsManager.ReinitDataFromTemplateAsync(template),
+                    inventoryManager.ReinitDataFromTemplateAsync(template),
+                    shopManager.ReinitDataFromTemplateAsync(template)
+                };
 
                 await UniTask.WhenAll(unitasks);
 

@@ -32,7 +32,7 @@ MonoBehaviour:
   deadbodyForceMultiplier: 10
   enableCollider: 0
   enableTrigger: 1
-  spawnSourceType: 4
-  spawnIndex: 3
-  destroySourceType: 0
-  destoyIndex: 0
+  spawnAudioData:
+  - {fileID: 11400000, guid: e2bf9c7ef6ed2e447b9553482cec7a3a, type: 2}
+  destroyAudioData:
+  - {fileID: 11400000, guid: 151ada47bc087b24e8f7cc95c151b23d, type: 2}

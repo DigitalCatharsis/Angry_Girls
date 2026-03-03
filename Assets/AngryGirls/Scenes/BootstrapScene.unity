@@ -966,24 +966,24 @@ MonoBehaviour:
     _serializedList:
     - Key: 2
       Value:
-        audioSource: {fileID: 5575751306980425384}
-        audioClipCollection: {fileID: 11400000, guid: 9de9071c37e926d4dbeba2f219e28424,
+        audioClipLibrary: {fileID: 11400000, guid: 9de9071c37e926d4dbeba2f219e28424,
           type: 2}
+        category: 1
     - Key: 4
       Value:
-        audioSource: {fileID: 6364130716953284390}
-        audioClipCollection: {fileID: 11400000, guid: 1668bbf36b142464586c511f5dbd6b21,
+        audioClipLibrary: {fileID: 11400000, guid: 1668bbf36b142464586c511f5dbd6b21,
           type: 2}
+        category: 2
     - Key: 3
       Value:
-        audioSource: {fileID: 3285967802977828207}
-        audioClipCollection: {fileID: 11400000, guid: 3aaa69d655b70ae408437d504a121fac,
+        audioClipLibrary: {fileID: 11400000, guid: 3aaa69d655b70ae408437d504a121fac,
           type: 2}
+        category: 2
     - Key: 1
       Value:
-        audioSource: {fileID: 5164191187722957283}
-        audioClipCollection: {fileID: 11400000, guid: d4b78a068555f2c4d935bac2a0bca30d,
+        audioClipLibrary: {fileID: 11400000, guid: d4b78a068555f2c4d935bac2a0bca30d,
           type: 2}
+        category: 2
 --- !u!1 &5924608174478278544
 GameObject:
   m_ObjectHideFlags: 0

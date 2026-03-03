@@ -54,9 +54,7 @@ namespace Angry_Girls
 
         [Space(5)]
         [Header("SFX")]
-        public AudioSourceType spawnSourceType;
-        public int spawnIndex;
-        public AudioSourceType destroySourceType;
-        public int destoyIndex;
+        public AudioClipData[] spawnAudioData;
+        public AudioClipData[] destroyAudioData;
     }
 }

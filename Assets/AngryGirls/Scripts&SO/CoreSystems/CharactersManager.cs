@@ -14,7 +14,6 @@ namespace Angry_Girls
         public void ResetManagersData()
         {
             _charactersData.ResetData();
-            //OnDataChanged?.Invoke();
         }
 
         public async UniTask ReinitDataFromTemplateAsync(DefaultSaveTemplate template)

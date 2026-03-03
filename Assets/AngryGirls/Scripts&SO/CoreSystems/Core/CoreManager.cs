@@ -42,6 +42,9 @@ namespace Angry_Girls
             {
                 AddressableAssetManager = new AddressableAssetManager();
 
+                SettingsManager = new SettingsManager();
+                SettingsManager.Init();
+
                 HashManager = new HashManager();
 
                 PoolManager = new PoolManager();
@@ -57,7 +60,7 @@ namespace Angry_Girls
                 ShopManager = new();
                 ShopManager.Initialize(ItemSettingsRepository, MissionsManager, InventoryManager, _shopSettings);
 
-                SettingsManager = new SettingsManager();
+                
                 PauseControl = new PauseControl();
 
                 AudioManager = gameObject.GetComponentInChildren<AudioManager>();

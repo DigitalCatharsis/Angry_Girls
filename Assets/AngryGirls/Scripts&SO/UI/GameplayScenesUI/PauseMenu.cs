@@ -29,10 +29,13 @@ namespace Angry_Girls
         private PauseControl _pauseControl;
         private bool _isPaused;
 
+        private SettingsManager _settingsManager;
+
         public override void Initialize()
         {
             base.Initialize();
 
+            _settingsManager = CoreManager.Instance.SettingsManager;
             _pauseControl = new PauseControl();
             _pauseControl.OnPauseChanged += OnPauseChanged;
 
@@ -92,14 +95,29 @@ namespace Angry_Girls
         {
             await NavigationManager.NavigateToLastMission();
         }
-        private void OnOptionsPressed() 
+        private void OnOptionsPressed()
         {
             ShowOptionsPanel();
             HideGenericPanel();
-        } 
+        }
 
         private async UniTaskVoid OnQuitMissionPressed() => await NavigationManager.NavigateToScene(SceneType.MissionPreparation);
-        private void OnQuitGamePressed() => Application.Quit();
+        private void OnQuitGamePressed()
+        {
+            _settingsManager.SaveSettings();
+            ExitGame();
+        }
+
+        private void ExitGame()
+        {
+            _settingsManager.SaveSettings();
+            Debug.Log("Exit Game");
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
 
         private void OnCloseOptionsPressed()
         {
@@ -111,7 +129,7 @@ namespace Angry_Girls
         private void HideOptionsPanel() => _optionsPanel.SetActive(false);
         private void HideGenericPanel() => _genericPanel.SetActive(false);
 
-        private void OnMusicVolumeChanged(float value) =>  CoreManager.Instance.SettingsManager.SetupMusicVolume(value);
+        private void OnMusicVolumeChanged(float value) => CoreManager.Instance.SettingsManager.SetupMusicVolume(value);
 
         private void OnSoundsVolumeChanged(float value) => CoreManager.Instance.SettingsManager.SetupSoundsVolume(value);
 

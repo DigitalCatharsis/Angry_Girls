@@ -4,8 +4,9 @@ using UnityEngine;
 namespace Angry_Girls
 {
     /// <summary>
-    /// Settings data structure
+    /// Settings data structure.
     /// </summary>
+    [Serializable]
     public class SettingsData
     {
         [Range(0, 1)]
@@ -21,27 +22,42 @@ namespace Angry_Girls
     }
 
     /// <summary>
-    /// Manages game settings
+    /// Manages game settings.
     /// </summary>
     public sealed class SettingsManager
     {
         public event Action OnSettingsChanged;
-
         private SettingsData _currentSettingsData = new();
 
-        /// <summary>
-        /// Initialize settings from repository
-        /// </summary>
-        public void Init()
+        public void SaveSettings()
         {
-            //if (Repository.TryGetData<SettingsData>(out var data))
-            //{
-            //    SetupSettings(data);
-            //}
+            Repository.SetData(_currentSettingsData);
+            Repository.SaveState();
+            Debug.Log("SettingsManager: Settings saved directly to Repository.");
         }
 
         /// <summary>
-        /// Apply new settings
+        /// Initialize settings. No Repository load here - handled by SaveLoadManager.
+        /// Defaults are provided by SettingsData constructor.
+        /// </summary>
+        public void Init()
+        {
+            // Try load from Repository immediately on app start
+            if (Repository.LoadState())
+            {
+                var savedData = Repository.GetData<SettingsData>();
+                if (savedData != null)
+                {
+                    SetupSettings(savedData);
+                    Debug.Log("SettingsManager: Loaded settings from Repository.");
+                    return;
+                }
+            }
+            Debug.Log("SettingsManager: Using default settings.");
+        }
+
+        /// <summary>
+        /// Apply new settings externally (e.g., from UI sliders or SaveLoadManager).
         /// </summary>
         public void SetupSettings(SettingsData settingsData)
         {
@@ -53,7 +69,7 @@ namespace Angry_Girls
         }
 
         /// <summary>
-        /// Set music volume
+        /// Set music volume.
         /// </summary>
         public void SetupMusicVolume(float value)
         {
@@ -62,7 +78,7 @@ namespace Angry_Girls
         }
 
         /// <summary>
-        /// Set sounds volume
+        /// Set sounds volume.
         /// </summary>
         public void SetupSoundsVolume(float value)
         {
@@ -71,7 +87,8 @@ namespace Angry_Girls
         }
 
         /// <summary>
-        /// Get current settings
+        /// Get current settings data.
+        /// Used by SaveLoadManager save delegate.
         /// </summary>
         public SettingsData GetSettings()
         {

@@ -16,6 +16,8 @@ namespace Angry_Girls
 
         private Tween _tween;
 
+        [SerializeField] private AudioClipData _audioClipData;
+
         public int Value => _coinValue;
 
         private void Start()
@@ -60,7 +62,7 @@ namespace Angry_Girls
         /// </summary>
         public void OnPickUp()
         {
-            CoreManager.Instance.AudioManager.PlayCustomSound(AudioSourceType.Coins, 1, false);
+            CoreManager.Instance.AudioManager.PlayClipData(_audioClipData, _audioClipData.fallbackCategory, false);
             CoreManager.Instance.VFXManager.ShowCoinsValue(transform.position, _coinValue);
 
             Dispose();

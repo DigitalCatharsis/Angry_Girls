@@ -40,8 +40,8 @@ namespace Angry_Girls
                 enableCollider = ability.enableCollider,
                 enableTrigger = ability.enableTrigger,
                 teamfire = ability.teamfire,
-                spawnSound = new Tuple<AudioSourceType, int>(ability.spawnSourceType, ability.spawnIndex),
-                destroySound = new Tuple<AudioSourceType, int>(ability.destroySourceType, ability.destoyIndex),
+                spawnSound = ability.spawnAudioData,
+                destroySound = ability.destroyAudioData,
                 deadbodyForceMultiplier = ability.deadbodyForceMultiplier,
                 deadbodyForceMode = ability.deadbodyForceMode
             };
@@ -73,8 +73,8 @@ namespace Angry_Girls
             bool enableCollider,
             bool enableTrigger,
             bool teamfire,
-            Tuple<AudioSourceType, int> spawnSound,
-            Tuple<AudioSourceType, int> destroySound,
+            AudioClipData[] spawnSound,
+            AudioClipData[] destroySound,
             float deadbodyForceMultiplier,
             ForceMode deadbodyForceMode)
         {
@@ -217,7 +217,7 @@ namespace Angry_Girls
             control.CharacterMovement.ApplyRigidForce(attackAbilityData.attackMovementForce * control.CharacterMovement.Rigidbody.transform.forward.z, ForceMode.VelocityChange);
         }
 
-        public GameObject SpawnDownSmash(CControl control, float enemyKnockBackValue)
+        public GameObject SpawnDownSmash(CControl control, AttackAbilityData data ,float enemyKnockBackValue)
         {
             var proj = SpawnProjectile
                 (
@@ -235,8 +235,8 @@ namespace Angry_Girls
                 enemyKnockBackValue: enemyKnockBackValue,
                 enableCollider: false,
                 enableTrigger: true,
-                spawnSound: new Tuple<AudioSourceType, int>(AudioSourceType.SFX_Impact, 2),
-                destroySound: null,
+                spawnSound: data.spawnAudioData,
+                destroySound: data.destroyAudioData,
                 deadbodyForceMultiplier: 0,
                 deadbodyForceMode: ForceMode.Force
                 );

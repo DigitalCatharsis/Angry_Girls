@@ -14,12 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackType: 3
   usage: 1
-  phase: 1
   attack_State:
     animation: 3
-    transitionDuration: 0
-  attackFininsh_State:
-    animation: 0
     transitionDuration: 0
   attackTimeDuration: 3
   enemyKnockbackValue: 1
@@ -36,7 +32,7 @@ MonoBehaviour:
   deadbodyForceMultiplier: 10
   enableCollider: 1
   enableTrigger: 1
-  spawnSourceType: 4
-  spawnIndex: 0
-  destroySourceType: 4
-  destoyIndex: 1
+  spawnAudioData:
+  - {fileID: 11400000, guid: d74896f66d4f08d4ca2e6089894b82c8, type: 2}
+  destroyAudioData:
+  - {fileID: 11400000, guid: abc9083c12af0c94b9e6cfa302fab2c9, type: 2}

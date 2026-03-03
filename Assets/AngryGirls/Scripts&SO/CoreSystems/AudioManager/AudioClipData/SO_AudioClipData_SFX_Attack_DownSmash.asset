@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fa723ddffcb04b41bd863f5db3a3500, type: 3}
+  m_Name: SO_AudioClipData_SFX_Attack_DownSmash
+  m_EditorClassIdentifier: 
+  clip: {fileID: 8300000, guid: c23ac88d05cfa6b4c806c68541afdb7f, type: 3}
+  volumeOverride: 1.28
+  minPitch: 1
+  maxPitch: 1
+  fallbackCategory: 2
+  developerNote: 

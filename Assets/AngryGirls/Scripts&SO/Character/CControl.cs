@@ -1,4 +1,3 @@
-using AYellowpaper.SerializedCollections;
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
@@ -77,7 +76,6 @@ namespace Angry_Girls
         private CameraManager _cameraManager;
         private AttackAbilityManager _attackAbilityManager;
         private TurnManager _turnManager;
-        private InteractionManager _interactionManager;
 
         #region init
 
@@ -89,7 +87,6 @@ namespace Angry_Girls
             _cameraManager = GameplayCoreManager.Instance.CameraManager;
             _attackAbilityManager = GameplayCoreManager.Instance.AttackAbilityManager;
             _turnManager = GameplayCoreManager.Instance.TurnManager;
-            _interactionManager = GameplayCoreManager.Instance.InteractionManager;
 
 #if UNITY_EDITOR
             UnitCallsForStopAttack += () => { Debug.Log($"{this.name} UnitCallsForStopAttack invoking"); };

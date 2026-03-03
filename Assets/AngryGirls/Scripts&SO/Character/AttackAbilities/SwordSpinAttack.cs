@@ -14,6 +14,8 @@ namespace Angry_Girls
         private readonly float[] _soundTriggers = { 0.0f, 0.5f }; // Can be changed to {0.0f, 0.3f, 0.7f}, etc.
         private bool[] _hasPlayedSoundInThisCycle; // Tracks which sounds have already played
 
+        private AttackAbilityData _currentAbility;
+
         #region Launch
         public override void OnLaunchPrepEnter(CControl control)
         {
@@ -55,10 +57,11 @@ namespace Angry_Girls
         private void PrepEnter(CControl control, AttackAbilityData attackAbilityData)
         {
             _projectile = projectileManager.SpawnByProjectileAbilityData(control, attackAbilityData);
+            _currentAbility = attackAbilityData;
 
             if (!_hasEnteredAttackState)
             {
-                audioManager.PlayCustomSound(AudioSourceType.SFX_Impact, 4);
+                audioManager.PlayClipData(attackAbilityData.spawnAudioData[0], attackAbilityData.spawnAudioData[0].fallbackCategory, false);
                 _hasEnteredAttackState = true;
             }
 
@@ -76,7 +79,7 @@ namespace Angry_Girls
                 // If the trigger has passed and the sound has not yet played
                 if (normalizedTime >= _soundTriggers[i] && !_hasPlayedSoundInThisCycle[i])
                 {
-                    audioManager.PlayCustomSound(AudioSourceType.SFX_Impact, 4);
+                    audioManager.PlayClipData(_currentAbility.spawnAudioData[0], AudioCategory.SFX, false);
                     _hasPlayedSoundInThisCycle[i] = true;
                 }
             }
@@ -98,6 +101,7 @@ namespace Angry_Girls
         }
         private void PrepExit(CControl control)
         {
+            _currentAbility = null;
             _timeInCurrentLoop = 0f;
             _hasEnteredAttackState = false;
             if (_projectile != null)
