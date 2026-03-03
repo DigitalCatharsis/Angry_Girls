@@ -1034,12 +1034,12 @@
       <HintPath>Library\ScriptAssemblies\UniTask.Addressables.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.ShaderGraph.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.ShaderGraph.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.UI">
@@ -1132,9 +1132,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="ToonyColorsPro.Demo.Editor.csproj">
+      <Project>{21F500E4-098F-29B8-4FF8-D8FCF9B7EB76}</Project>
+      <Name>ToonyColorsPro.Demo.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="CFXRRuntime.csproj">
+      <Project>{F3AD458D-2F58-7B7B-35B1-D5F1FE616CAF}</Project>
+      <Name>CFXRRuntime</Name>
+    </ProjectReference>
+    <ProjectReference Include="CFXRDemo.csproj">
+      <Project>{1A0CB5BD-CD98-C1E0-823A-03FFD60DD30D}</Project>
+      <Name>CFXRDemo</Name>
+    </ProjectReference>
     <ProjectReference Include="Angry_Girls.csproj">
       <Project>{376284A3-CADE-6057-2FF4-2C81F6C5F7F2}</Project>
       <Name>Angry_Girls</Name>
+    </ProjectReference>
+    <ProjectReference Include="CFXR.WelcomeScreen.csproj">
+      <Project>{7235D89A-B907-D6BD-ABC6-9B4D33A66D3C}</Project>
+      <Name>CFXR.WelcomeScreen</Name>
+    </ProjectReference>
+    <ProjectReference Include="KinoBloom.Runtime.csproj">
+      <Project>{7CF2A3AD-1CD1-47DE-B580-F2467C4C746C}</Project>
+      <Name>KinoBloom.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="AYellowpaper.SerializedCollections.csproj">
       <Project>{326D005D-08DD-57B5-A616-7748B3425F80}</Project>
@@ -1143,6 +1163,10 @@
     <ProjectReference Include="AYellowpaper.SerializedCollections.Editor.csproj">
       <Project>{C2974D2C-048C-E4C4-22C6-6DC7CF2EE920}</Project>
       <Name>AYellowpaper.SerializedCollections.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="CFXREditor.csproj">
+      <Project>{29D4F294-B646-3F11-0881-5486AE96BB4C}</Project>
+      <Name>CFXREditor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

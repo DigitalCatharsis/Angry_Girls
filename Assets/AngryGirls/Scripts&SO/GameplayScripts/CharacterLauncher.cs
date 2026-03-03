@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -44,7 +45,9 @@ namespace Angry_Girls
         [Header("Zoom")]
         [SerializeField] private float _minDistanceForZoom;
 
-        public Transform[] UnitsTransforms { get; private set; }
+        //[SerializeField] Transform[] points = new Transform[6];
+
+        [field: SerializeField] public Transform[] UnitsTransforms { get; private set; }
 
         private bool _cheatModeActive = false;
         private int _originalDotsNumber;
@@ -58,9 +61,9 @@ namespace Angry_Girls
         {
             _inputManager = GameplayCoreManager.Instance.InputManager;
 
-            var transforms = new HashSet<Transform>(_positionsContainer.GetComponentsInChildren<Transform>());
-            transforms.Remove(_positionsContainer.transform);
-            UnitsTransforms = transforms.ToArray();
+            //var transforms = new HashSet<Transform>(_positionsContainer.GetComponentsInChildren<Transform>());
+            //transforms.Remove(_positionsContainer.transform);
+            //UnitsTransforms = transforms.ToArray();
 
             _originalDotsNumber = _dotsNumber;
             _trajectoryDots = new GameObject[_dotsNumber];
