@@ -27,6 +27,7 @@ namespace Angry_Girls
         public ShopManager ShopManager { get; private set; }
         public AddressableAssetManager AddressableAssetManager { get; private set; }
         public InventoryManager InventoryManager { get; private set; }
+        public ShopSettings ShopSettings => _shopSettings;
 
         [Header("Default Save Template")]
         [SerializeField] private DefaultSaveTemplate _defaultSaveTemplate;
@@ -58,7 +59,7 @@ namespace Angry_Girls
 
                 InventoryManager = new();
                 ShopManager = new();
-                ShopManager.Initialize(ItemSettingsRepository, MissionsManager, InventoryManager, _shopSettings);
+                ShopManager.Initialize();
 
                 
                 PauseControl = new PauseControl();

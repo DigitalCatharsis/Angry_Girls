@@ -12,10 +12,9 @@ namespace Angry_Girls
     public class ShopSaveData
     {
         // Collection availability (Easy/Normal/Hard)
-        public Dictionary<string, bool> collectionAvailability = new Dictionary<string, bool>();
+        public Dictionary<string, bool> collectionAvailability = new();
 
-        // Items temporarily removed from assortment since last refresh (by UniqueId)
-        public HashSet<string> temporarilyRemovedItems = new HashSet<string>();
+        public List<string> currentAssortiment = new();
 
         // Last refresh timestamp (ticks)
         public long lastRefreshTimeTicks;
@@ -27,27 +26,35 @@ namespace Angry_Girls
     [Serializable]
     public class ShopData : ISaveData<ShopData, ShopSaveData>
     {
-        [SerializeField]
-        private Dictionary<ShopAvailability, bool> _collectionAvailability =
-            new Dictionary<ShopAvailability, bool>();
-
-        [SerializeField] private HashSet<string> _temporarilyRemovedItems = new HashSet<string>();
+        [SerializeField] private Dictionary<ShopAvailability, bool> _collectionAvailability = new();
+        [SerializeField] private List<string> _currentItemIds = new(); // current product range identifiers
 
         [SerializeField] private DateTime _lastRefreshTime = DateTime.MinValue;
-
         public Dictionary<ShopAvailability, bool> CollectionAvailability => _collectionAvailability;
-        public HashSet<string> TemporarilyRemovedItems => _temporarilyRemovedItems;
+        public IReadOnlyList<string> CurrentItemIds => _currentItemIds;
         public DateTime LastRefreshTime => _lastRefreshTime;
 
         public void SetLastRefreshTime(DateTime dateTime)
         {
             _lastRefreshTime = dateTime;
         }
+        
+        public void SetCurrentAssortment(List<ItemSettings> assortment)
+        {
+            _currentItemIds.Clear();
+            foreach (var item in assortment)
+            {
+                if (item != null && !string.IsNullOrEmpty(item.UniqueId))
+                    _currentItemIds.Add(item.UniqueId);
+                else
+                    Debug.LogWarning($"ShopData: попытка добавить предмет без UniqueId: {item?.name}");
+            }
+        }
 
         public void ResetData()
         {
             _collectionAvailability.Clear();
-            _temporarilyRemovedItems.Clear();
+            _currentItemIds.Clear();
             _lastRefreshTime = DateTime.MinValue;
         }
 
@@ -62,12 +69,13 @@ namespace Angry_Girls
                 }
             }
 
-            _temporarilyRemovedItems.Clear();
-            if (saveData.temporarilyRemovedItems != null)
+            _currentItemIds.Clear();
+            if (saveData.currentAssortiment != null)
             {
-                foreach (var id in saveData.temporarilyRemovedItems)
+                foreach (var id in saveData.currentAssortiment)
                 {
-                    _temporarilyRemovedItems.Add(id);
+                    if (!string.IsNullOrEmpty(id))
+                        _currentItemIds.Add(id);
                 }
             }
 
@@ -83,8 +91,8 @@ namespace Angry_Girls
             var saveData = new ShopSaveData
             {
                 collectionAvailability = new Dictionary<string, bool>(),
-                temporarilyRemovedItems = new HashSet<string>(_temporarilyRemovedItems),
-                lastRefreshTimeTicks = _lastRefreshTime.Ticks
+                lastRefreshTimeTicks = _lastRefreshTime.Ticks,
+                currentAssortiment = new List<string>(_currentItemIds)
             };
 
             foreach (var kvp in _collectionAvailability)
@@ -106,20 +114,22 @@ namespace Angry_Girls
 
         private ItemSettingsRepository _itemSettingsRepository;
         private InventoryManager _inventoryManager;
+        private CreditsManager _creditsManager;
         private ShopData _shopData = new();
 
-        private List<ItemSettings> _currentAssortment = new List<ItemSettings>();
-        private List<ItemSettings> _easyItems = new List<ItemSettings>();
-        private List<ItemSettings> _normalItems = new List<ItemSettings>();
-        private List<ItemSettings> _hardItems = new List<ItemSettings>();
+        private List<ItemSettings> _currentAssortment = new();
+        private List<ItemSettings> _easyItems = new();
+        private List<ItemSettings> _normalItems = new();
+        private List<ItemSettings> _hardItems = new();
 
         public event Action OnDataChanged;
 
-        public void Initialize(ItemSettingsRepository itemRepo, MissionsManager missionsMgr, InventoryManager inventoryMgr, ShopSettings shopSettings)
+        public void Initialize()
         {
-            _itemSettingsRepository = itemRepo;
-            _inventoryManager = inventoryMgr;
-            _shopSettings = shopSettings;
+            _itemSettingsRepository = CoreManager.Instance.ItemSettingsRepository;
+            _inventoryManager = CoreManager.Instance.InventoryManager;
+            _shopSettings = CoreManager.Instance.ShopSettings;
+            _creditsManager = CoreManager.Instance.CreditsManager;
         }
 
         public void ResetManagersData()
@@ -141,12 +151,7 @@ namespace Angry_Girls
             _shopData.CollectionAvailability[ShopAvailability.Hard] = template.unlockHardCollection;
 
             // Initialize item pools from repository
-            if (_itemSettingsRepository != null)
-            {
-                _easyItems = new List<ItemSettings>(_itemSettingsRepository.GetItemsByAvailability(ShopAvailability.Easy));
-                _normalItems = new List<ItemSettings>(_itemSettingsRepository.GetItemsByAvailability(ShopAvailability.Normal));
-                _hardItems = new List<ItemSettings>(_itemSettingsRepository.GetItemsByAvailability(ShopAvailability.Hard));
-            }
+            RebuildItemPools();
 
             RefreshAssortment();
             OnDataChanged?.Invoke();
@@ -157,18 +162,32 @@ namespace Angry_Girls
         {
             await _shopData.UpdateFromSaveAsync(saveData);
 
-            // Rebuild item pools
+            // Convert saved IDs back to ItemSettings
+            _currentAssortment.Clear();
             if (_itemSettingsRepository != null)
             {
-                _easyItems = new List<ItemSettings>(_itemSettingsRepository.GetItemsByAvailability(ShopAvailability.Easy));
-                _normalItems = new List<ItemSettings>(_itemSettingsRepository.GetItemsByAvailability(ShopAvailability.Normal));
-                _hardItems = new List<ItemSettings>(_itemSettingsRepository.GetItemsByAvailability(ShopAvailability.Hard));
+                foreach (string id in _shopData.CurrentItemIds)
+                {
+                    var item = _itemSettingsRepository.GetItemByUniqueId(id);
+                    if (item != null)
+                        _currentAssortment.Add(item);
+                    else
+                        Debug.LogError($"ShopManager: Item with UniqueId '{id}' not found in repository. Skipping.");
+                }
             }
 
-            RefreshAssortment();
+            RebuildItemPools();
+
+            //RefreshAssortment();
             OnDataChanged?.Invoke();
         }
-
+        private void RebuildItemPools()
+        {
+            if (_itemSettingsRepository == null) return;
+            _easyItems = new List<ItemSettings>(_itemSettingsRepository.GetItemsByAvailability(ShopAvailability.Easy));
+            _normalItems = new List<ItemSettings>(_itemSettingsRepository.GetItemsByAvailability(ShopAvailability.Normal));
+            _hardItems = new List<ItemSettings>(_itemSettingsRepository.GetItemsByAvailability(ShopAvailability.Hard));
+        }
         public ShopSaveData ConvertDataForSave()
         {
             return _shopData.ConvertToSaveData();
@@ -180,6 +199,12 @@ namespace Angry_Girls
         /// </summary>
         public async UniTask<bool> RequestManualRefreshAsync()
         {
+            await RefreshAssortmentAsync();
+            return true;
+        }
+
+        private bool CheckRefreshTimer()
+        {
             // Check cooldown (e.g., 1 hour between manual refreshes)
             var timeSinceLastRefresh = DateTime.Now - _shopData.LastRefreshTime;
             if (timeSinceLastRefresh.TotalHours < 1.0)
@@ -187,8 +212,6 @@ namespace Angry_Girls
                 Debug.Log($"ShopManager: Manual refresh on cooldown. Remaining: {60 - timeSinceLastRefresh.TotalMinutes:F0} minutes");
                 return false;
             }
-
-            await RefreshAssortmentAsync();
             return true;
         }
 
@@ -200,8 +223,6 @@ namespace Angry_Girls
 
         public async UniTask RefreshAssortmentAsync()
         {
-            // Clear temporarily removed items on refresh
-            _shopData.TemporarilyRemovedItems.Clear();
             _shopData.SetLastRefreshTime(DateTime.Now);
             RefreshAssortment();
             await UniTask.CompletedTask;
@@ -227,65 +248,59 @@ namespace Angry_Girls
                 AddRandomItemsFromPool(_hardItems, _shopSettings.HardCollectionItemCountHigh);
             }
 
+            // Synchronize with ShopData
+            _shopData.SetCurrentAssortment(_currentAssortment);
+
             OnDataChanged?.Invoke();
         }
 
         private void AddRandomItemsFromPool(List<ItemSettings> pool, int count)
         {
-            if (pool == null || pool.Count == 0) return;
-
-            var availableItems = new List<ItemSettings>();
-            foreach (var item in pool)
-            {
-                if (!_shopData.TemporarilyRemovedItems.Contains(item.UniqueId))
-                {
-                    availableItems.Add(item);
-                }
-            }
-
-            if (availableItems.Count == 0) return;
-
-            var randomIndices = GetUniqueRandomIndices(availableItems.Count, count);
-            foreach (var index in randomIndices)
-            {
-                _currentAssortment.Add(availableItems[index]);
-            }
-        }
-
-        private List<int> GetUniqueRandomIndices(int maxIndex, int count)
-        {
-            var indices = new List<int>();
-            var available = new List<int>();
-            for (int i = 0; i < maxIndex; i++) available.Add(i);
-
-            count = Mathf.Min(count, maxIndex);
             for (int i = 0; i < count; i++)
             {
-                int randomIndex = UnityEngine.Random.Range(0, available.Count);
-                indices.Add(available[randomIndex]);
-                available.RemoveAt(randomIndex);
+                int randomIndex = UnityEngine.Random.Range(0, pool.Count);
+                _currentAssortment.Add(pool[randomIndex]);
             }
-            return indices;
         }
+
+        //private List<int> GetUniqueRandomIndices(int maxIndex, int count)
+        //{
+        //    var indices = new List<int>();
+        //    var available = new List<int>();
+        //    for (int i = 0; i < maxIndex; i++) available.Add(i);
+
+        //    count = Mathf.Min(count, maxIndex);
+        //    for (int i = 0; i < count; i++)
+        //    {
+        //        int randomIndex = UnityEngine.Random.Range(0, available.Count);
+        //        indices.Add(available[randomIndex]);
+        //        available.RemoveAt(randomIndex);
+        //    }
+        //    return indices;
+        //}
 
         public bool TryPurchaseItem(ItemSettings itemSettings)
         {
-            if (itemSettings == null || _inventoryManager == null) return false;
+            int playerCredits = _creditsManager.GetCredits();
 
-            int playerCredits = CoreManager.Instance.CreditsManager.GetCredits();
             if (playerCredits < itemSettings.Price) return false;
 
             // Deduct credits
-            CoreManager.Instance.CreditsManager.SetCredits(-itemSettings.Price);
+            _creditsManager.SetCredits(-itemSettings.Price);
 
             // Add item to inventory
             _inventoryManager.AddItem(itemSettings);
 
-            // Mark item as temporarily removed from assortment
-            _shopData.TemporarilyRemovedItems.Add(itemSettings.UniqueId);
+            if (!_currentAssortment.Remove(itemSettings))
+            {
+                Debug.LogWarning($"ShopManager: Item {itemSettings.name} not found in current assortment.");
+            }
 
-            // Refresh assortment to replace purchased item
-            RefreshAssortment();
+            // Synchronize with ShopData (update saved IDs)
+            _shopData.SetCurrentAssortment(_currentAssortment);
+
+            // Notify UI that assortment changed
+            OnDataChanged?.Invoke();
 
             return true;
         }

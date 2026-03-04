@@ -139,7 +139,7 @@ namespace Angry_Girls
             {
                 if (notificationGO != null)
                 {
-                    UnityEngine.Object.Destroy(notificationGO);
+                    Destroy(notificationGO);
                 }
             });
 

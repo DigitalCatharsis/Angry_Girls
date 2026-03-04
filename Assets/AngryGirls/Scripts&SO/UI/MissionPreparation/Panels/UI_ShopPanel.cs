@@ -541,12 +541,15 @@ namespace Angry_Girls
         {
             ColorDebugLog.Log("ShopPanel: OnRefreshButtonClicked called.", System.Drawing.KnownColor.Magenta);
 
-            if (_shopManager != null)
+            if (_creditsManager.CreditsData.Credits <= 500)
             {
-                await _shopManager.RequestManualRefreshAsync();
-                _creditsManager.SetCredits(-_refreshPrice);
-                Refresh();
+                UIManager.Instance.ShowNotification("Not enough credits!", 1f);
+                return;
             }
+
+            await _shopManager.RequestManualRefreshAsync();
+            _creditsManager.SetCredits(-_refreshPrice);
+            Refresh();
         }
 
         private void ClearAllItemSlots()
