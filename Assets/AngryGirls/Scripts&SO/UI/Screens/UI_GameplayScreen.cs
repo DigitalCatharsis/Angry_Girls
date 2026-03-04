@@ -9,12 +9,12 @@ namespace Angry_Girls
     public class UI_GameplayScreen : UI_UIScreen
     {
         [Header("UI Components")]
-        [SerializeField] private ScoreDisplay scoreDisplay;
-        [SerializeField] private UI_GameplayCharactersPanel charactersPanel;
-        [SerializeField] private PauseMenu pauseMenu;
-        [SerializeField] private TutorialSystem tutorialSystem;
-        [SerializeField] private GameResultUI gameResultUI;
-        [SerializeField] private TrajectoryCheatToggle trajectoryCheatToggle;
+        [SerializeField] private ScoreDisplay _scoreDisplay;
+        [SerializeField] private UI_GameplayCharactersPanel _charactersPanel;
+        [SerializeField] private PauseMenu _pauseMenu;
+        [SerializeField] private TutorialSystem _tutorialSystem;
+        [SerializeField] private GameResultUI _gameResultUI;
+        [SerializeField] private TrajectoryCheatToggle _trajectoryCheatToggle;
 
         private bool _isInitialized;
 
@@ -36,16 +36,16 @@ namespace Angry_Girls
 
         private void InitializeComponents()
         {
-            scoreDisplay?.Initialize();
-            charactersPanel?.Initialize();
-            pauseMenu?.Initialize();
-            tutorialSystem?.Initialize();
-            gameResultUI?.Initialize();
-            trajectoryCheatToggle?.Initialize();
+            _scoreDisplay?.Initialize();
+            _charactersPanel?.Initialize();
+            _pauseMenu?.Initialize();
+            _tutorialSystem?.Initialize();
+            _gameResultUI?.Initialize();
+            _trajectoryCheatToggle?.Initialize();
 
             var gameLogic = GameplayCoreManager.Instance.GameLogic;
-            gameLogic.OnGameOver += gameResultUI.ShowGameOver;
-            gameLogic.OnVictory += gameResultUI.ShowVictory;
+            gameLogic.OnGameOver += _gameResultUI.ShowGameOver;
+            gameLogic.OnVictory += _gameResultUI.ShowVictory;
         }
 
         public override void Show()
@@ -53,15 +53,15 @@ namespace Angry_Girls
             base.Show();
             if (_isInitialized)
             {
-                scoreDisplay?.Show();
-                charactersPanel?.Show();
-                pauseMenu?.Show();
-                gameResultUI?.Hide(); 
+                _scoreDisplay?.Show();
+                _charactersPanel?.Show();
+                _pauseMenu?.Show();
+                _gameResultUI?.Hide(); 
             }
         }
 
-        public void UpdateScore(int value) => scoreDisplay?.AddScore(value);
-        public void ShowTutorial() => tutorialSystem?.Show();
-        public void TogglePause() => pauseMenu?.TogglePause();
+        public void UpdateScore(int value) => _scoreDisplay?.AddScore(value);
+        public void ShowTutorial() => _tutorialSystem?.Show();
+        public void TogglePause() => _pauseMenu?.TogglePause();
     }
 }

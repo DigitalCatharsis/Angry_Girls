@@ -39,7 +39,6 @@ namespace Angry_Girls
 
             GameplayCoreManager.Instance.OnInitialized += LateInitialize;
             isInitialized = true;
-
         }
 
         private void LateInitialize()

@@ -4000,6 +4000,7 @@ RectTransform:
   - {fileID: 1502877059}
   - {fileID: 1180102267}
   - {fileID: 1082226627}
+  - {fileID: 460127288}
   m_Father: {fileID: 385996289}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4082,12 +4083,76 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b7a6ceb575758a4e87506fddb97d06f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreDisplay: {fileID: 679417103}
-  charactersPanel: {fileID: 798532502}
-  pauseMenu: {fileID: 1502877060}
-  tutorialSystem: {fileID: 1265070494}
-  gameResultUI: {fileID: 1180102268}
-  trajectoryCheatToggle: {fileID: 1082226628}
+  _scoreDisplay: {fileID: 679417103}
+  _charactersPanel: {fileID: 798532502}
+  _pauseMenu: {fileID: 1502877060}
+  _tutorialSystem: {fileID: 1265070494}
+  _gameResultUI: {fileID: 1180102268}
+  _trajectoryCheatToggle: {fileID: 1082226628}
+--- !u!1 &460127286
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 460127288}
+  - component: {fileID: 460127287}
+  - component: {fileID: 460127289}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &460127287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 460127286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae83931aa52022840b08bd0f416ae7a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  readyTextString: READY
+  startScale: 3
+  popDuration: 0.25
+  holdDuration: 0.8
+  disappearDuration: 0.25
+  shakeDuration: 0
+  shakeStrength: 0.4
+--- !u!4 &460127288
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 460127286}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 459357620}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!225 &460127289
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 460127286}
+  m_Enabled: 0
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &485547021
 GameObject:
   m_ObjectHideFlags: 0
@@ -13560,7 +13625,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1977836296
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14670,12 +14735,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b7a6ceb575758a4e87506fddb97d06f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreDisplay: {fileID: 0}
-  charactersPanel: {fileID: 0}
-  pauseMenu: {fileID: 0}
-  tutorialSystem: {fileID: 0}
-  gameResultUI: {fileID: 0}
-  trajectoryCheatToggle: {fileID: 0}
+  _scoreDisplay: {fileID: 0}
+  _charactersPanel: {fileID: 0}
+  _pauseMenu: {fileID: 0}
+  _tutorialSystem: {fileID: 0}
+  _gameResultUI: {fileID: 0}
+  _trajectoryCheatToggle: {fileID: 0}
 --- !u!114 &3372325976289694934
 MonoBehaviour:
   m_ObjectHideFlags: 0
