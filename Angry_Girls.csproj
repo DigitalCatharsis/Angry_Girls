@@ -115,6 +115,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\Panels\UI_MissionSelectionPanel.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\ProjectileManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\Core\GameStateManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\PlatformSettingsCatalog.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\AttackAbilities\AttackAbilityManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\UI_Slots\UI_EquipmentSlot.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\PauseMenu.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Mission.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\Screens\UI_GameplayScreen.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\PoolManager\PoolObjectLoader.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\UI_SettingsCameraPanel.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\TempClassesOrBadCode\CharacterExtraObjects\ExtraCharacterObject_Sword.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\MaterialChaner\Editor\MaterialChangerEditor.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\TempClassesOrBadCode\CharacterExtraObjects\IExtraCharacterObject.cs" />
@@ -144,6 +146,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LayerAdder\LayerChanger.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\AudioManager\AudioClipData.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\Input\VirtualInput.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\UI_SettingsAudioPanel.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\TrajectoryCheatToggle.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\SaveLoad\SaveLoadManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\Spawn\SpawnFactory\Factories\BaseFactory.cs" />

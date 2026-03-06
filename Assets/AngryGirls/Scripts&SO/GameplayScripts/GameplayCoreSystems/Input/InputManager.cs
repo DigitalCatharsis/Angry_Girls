@@ -13,6 +13,7 @@ namespace Angry_Girls
         public bool IsHeld => _currentInput.IsHeld;
         public bool IsReleased => _currentInput.IsReleased;
         public Vector3 Position => _currentInput.Position;
+        public VirtualInput CurrentInput => _currentInput;
 
         public override void Initialize()
         {

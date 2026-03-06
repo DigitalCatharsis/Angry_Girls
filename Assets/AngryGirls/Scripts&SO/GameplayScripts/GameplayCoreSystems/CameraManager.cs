@@ -8,16 +8,21 @@ namespace Angry_Girls
     {
         [Header("Setup")]
         [SerializeField] private const float startOrthographicCameraSize = 3f;
+
+        [Header("Platform Defaults (Override via SettingsManager)")]
+        [SerializeField] private float _defaultMovementSpeed = 0.5f;
+        [SerializeField] private float _defaultZoomSensitivity = 7.0f;
+
         [SerializeField] private const float _secondsCameraWaitsAfterAttack = 2f;
         [SerializeField] private const float _zoomeCameraValueAfterLaunch = 5f;
 
         [Header("Zoom Settings")]
-        [SerializeField] private float _zoomSensitivity = 7.0f;
+        [SerializeField] private float _zoomSensitivity;
         [SerializeField] private float _minZoom = 1f;
         [SerializeField] private float _maxZoom = 10f;
 
         [Header("Camera Movement Settings")]
-        [SerializeField] private float _movementSpeed = 0.5f;
+        [SerializeField] private float _movementSpeed;
         [SerializeField] private float _minCameraZ = -10f;
         [SerializeField] private float _maxCameraZ = 30f;
         [SerializeField] private float _cameraMoveDuration = 0.5f;
@@ -33,13 +38,47 @@ namespace Angry_Girls
 
         private InputManager _inputManager;
         private Sequence _cameraMoveSequence;
+        private SettingsManager _settingsManager;
 
         public override void Initialize()
         {
             KillCameraTwins();
             _mainCamera = Camera.main;
             _inputManager = GameplayCoreManager.Instance.InputManager;
+            _settingsManager = CoreManager.Instance.SettingsManager;
+
+            ApplySettingsFromManager();
+            SubscribeToSettingsChanges();
+
             isInitialized = true;
+        }
+
+        /// <summary>
+        /// Apply camera settings from SettingsManager
+        /// </summary>
+        private void ApplySettingsFromManager()
+        {
+            if (_settingsManager == null)
+            {
+                _movementSpeed = _defaultMovementSpeed;
+                _zoomSensitivity = _defaultZoomSensitivity;
+                return;
+            }
+
+            var settings = _settingsManager.GetSettings();
+            _movementSpeed = settings.cameraMovementSpeed;
+            _zoomSensitivity = settings.cameraZoomSensitivity;
+        }
+
+        /// <summary>
+        /// Subscribe to settings changes for runtime updates
+        /// </summary>
+        private void SubscribeToSettingsChanges()
+        {
+            if (_settingsManager != null)
+            {
+                _settingsManager.OnSettingsChanged += ApplySettingsFromManager;
+            }
         }
 
         private void Update()
@@ -65,7 +104,7 @@ namespace Angry_Girls
 
         private void HandleZoom()
         {
-            float zoomDelta = _inputManager.GetZoomDelta();
+            var zoomDelta = _inputManager.GetZoomDelta();
             if (zoomDelta != 0)
             {
                 ApplyZoom(zoomDelta * _zoomSensitivity);
@@ -89,7 +128,7 @@ namespace Angry_Girls
         {
             if (_inputManager.IsDragging())
             {
-                Vector2 delta = _inputManager.GetDragDelta();
+                var delta = _inputManager.GetDragDelta();
                 if (!IsPointerOverCharacter(_inputManager.Position))
                 {
                     MoveCamera(delta);
@@ -111,8 +150,8 @@ namespace Angry_Girls
                 _allowCameraFollow = false;
             }
 
-            float speed = _movementSpeed * _mainCamera.orthographicSize * Time.deltaTime;
-            Vector3 newPosition = _mainCamera.transform.position + new Vector3(0, 0, -delta.x * speed);
+            var speed = _movementSpeed * _mainCamera.orthographicSize * Time.deltaTime;
+            var newPosition = _mainCamera.transform.position + new Vector3(0, 0, -delta.x * speed);
             newPosition.z = Mathf.Clamp(newPosition.z, _minCameraZ, _maxCameraZ);
             _mainCamera.transform.position = newPosition;
         }
@@ -225,31 +264,36 @@ namespace Angry_Girls
 
         private void OnDestroy()
         {
+            if (_settingsManager != null)
+            {
+                _settingsManager.OnSettingsChanged -= ApplySettingsFromManager;
+            }
+
             KillCameraTwins();
         }
 
-        #region extraMethod for future while i dont forget how the fuck does dotween works
+        #region extraMethod for future
 
-        public void SmoothZoom(float targetSize, float duration = 0.5f)
-        {
-            KillCameraTwins();
+        //public void SmoothZoom(float targetSize, float duration = 0.5f)
+        //{
+        //    KillCameraTwins();
 
-            _mainCamera.DOOrthoSize(
-                Mathf.Clamp(targetSize, _minZoom, _maxZoom),
-                duration
-            ).SetEase(_cameraMoveEase);
-        }
+        //    _mainCamera.DOOrthoSize(
+        //        Mathf.Clamp(targetSize, _minZoom, _maxZoom),
+        //        duration
+        //    ).SetEase(_cameraMoveEase);
+        //}
 
-        public void SmoothMoveAndZoom(Vector3 targetPosition, float targetSize, float duration = 0.5f)
-        {
-            KillCameraTwins();
+        //public void SmoothMoveAndZoom(Vector3 targetPosition, float targetSize, float duration = 0.5f)
+        //{
+        //    KillCameraTwins();
 
-            _cameraMoveSequence = DOTween.Sequence();
-            _cameraMoveSequence.Append(_mainCamera.transform.DOMove(targetPosition, duration));
-            _cameraMoveSequence.Join(_mainCamera.DOOrthoSize(targetSize, duration));
-            _cameraMoveSequence.SetEase(_cameraMoveEase);
-            _cameraMoveSequence.OnComplete(() => _cameraMoveSequence = null);
-        }
+        //    _cameraMoveSequence = DOTween.Sequence();
+        //    _cameraMoveSequence.Append(_mainCamera.transform.DOMove(targetPosition, duration));
+        //    _cameraMoveSequence.Join(_mainCamera.DOOrthoSize(targetSize, duration));
+        //    _cameraMoveSequence.SetEase(_cameraMoveEase);
+        //    _cameraMoveSequence.OnComplete(() => _cameraMoveSequence = null);
+        //}
 
         #endregion
 

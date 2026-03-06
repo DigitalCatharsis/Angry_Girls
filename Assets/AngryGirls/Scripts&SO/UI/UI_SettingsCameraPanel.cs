@@ -1,0 +1,117 @@
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+namespace Angry_Girls
+{
+    /// <summary>
+    /// Camera settings category panel
+    /// </summary>
+    public class UI_SettingsCameraPanel : MonoBehaviour, ISettingsCategoryPanel
+    {
+        [Header("Camera Controls")]
+        [SerializeField] private Slider _movementSpeedSlider;
+        [SerializeField] private Slider _zoomSensitivitySlider;
+        [SerializeField] private Button _resetButton;
+        [SerializeField] private TextMeshProUGUI _platformLabel;
+
+        private SettingsManager _settingsManager;
+        private PlatformSettingsCatalog _platformCatalog;
+        private bool _isInitializing = false;
+
+        public SettingsCategory Category => SettingsCategory.Camera;
+
+        public void Initialize(SettingsManager settingsManager)
+        {
+            _settingsManager = settingsManager;
+            _platformCatalog = CoreManager.Instance.GetComponentInChildren<PlatformSettingsCatalog>();
+            SetupListeners();
+            UpdatePlatformLabel();
+        }
+
+        private void SetupListeners()
+        {
+            if (_movementSpeedSlider != null)
+                _movementSpeedSlider.onValueChanged.AddListener(OnMovementSpeedChanged);
+
+            if (_zoomSensitivitySlider != null)
+                _zoomSensitivitySlider.onValueChanged.AddListener(OnZoomSensitivityChanged);
+
+            if (_resetButton != null)
+                _resetButton.onClick.AddListener(OnResetPressed);
+        }
+
+        private void UpdatePlatformLabel()
+        {
+            if (_platformLabel != null && _platformCatalog != null)
+            {
+                var profile = _platformCatalog.GetCurrentPlatformProfile();
+                if (profile != null)
+                {
+                    _platformLabel.text = $"Platform: {profile.platform}";
+                }
+            }
+        }
+
+        public void LoadValues()
+        {
+            _isInitializing = true;
+            var settings = _settingsManager.GetSettings();
+
+            if (_movementSpeedSlider != null)
+                _movementSpeedSlider.value = settings.cameraMovementSpeed;
+
+            if (_zoomSensitivitySlider != null)
+                _zoomSensitivitySlider.value = settings.cameraZoomSensitivity;
+
+            _isInitializing = false;
+        }
+
+        public void SaveValues()
+        {
+            _settingsManager.SaveSettings();
+        }
+
+        private void OnMovementSpeedChanged(float value)
+        {
+            if (_isInitializing) return;
+            _settingsManager.SetupCameraMovementSpeed(value);
+        }
+
+        private void OnZoomSensitivityChanged(float value)
+        {
+            if (_isInitializing) return;
+            _settingsManager.SetupCameraZoomSensitivity(value);
+        }
+
+        private void OnResetPressed()
+        {
+            var settings = _settingsManager.GetSettings();
+            settings.useCustomCameraSettings = false;
+
+            if (_platformCatalog != null)
+            {
+                var profile = _platformCatalog.GetCurrentPlatformProfile();
+                if (profile != null)
+                {
+                    settings.cameraMovementSpeed = profile.camera.movementSpeed;
+                    settings.cameraZoomSensitivity = profile.camera.zoomSensitivity;
+                }
+            }
+
+            LoadValues();
+            _settingsManager.OnSettingsChanged?.Invoke();
+            UIManager.Instance?.ShowNotification("Camera settings reset", 0.5f);
+        }
+
+        private void OnDestroy()
+        {
+            if (_movementSpeedSlider != null)
+                _movementSpeedSlider.onValueChanged.RemoveListener(OnMovementSpeedChanged);
+            if (_zoomSensitivitySlider != null)
+                _zoomSensitivitySlider.onValueChanged.RemoveListener(OnZoomSensitivityChanged);
+            if (_resetButton != null)
+                _resetButton.onClick.RemoveListener(OnResetPressed);
+        }
+    }
+}
