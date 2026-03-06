@@ -93,7 +93,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\Spawn\FactoryExtention\FactoryExtention.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\AnimationStateBase.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\DistanceBetweenTwoObjects\DistanceBetweenTwoObjects.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\ReadySequence3.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\GameplayCoreManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\LaunchManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\TurnManager.cs" />
@@ -106,7 +105,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\ShopManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\AnimationTransitioner.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\SaveLoad\ISaveData.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\ReadySequence2.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\InsperctorHierarchyLabel\Editor\HierarchyLabel.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\StageManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\UI_GameplayCharactersPanel.cs" />
@@ -183,7 +181,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\ListExtentions.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\CatalogsRepositoriesDataTemplates\ItemSettingsRepository.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CharactersData.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\ReadySequence.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\CreditsManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterProfile.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\GameplayCharactersManager.cs" />
@@ -201,6 +198,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\Spawn\SpawnFactory\Factories\UIObjectsFactory.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\GameResultUI.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\LevelSettings.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\ReadyBanner.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\UI_Slots\UI_MissionSlot.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\CatalogsRepositoriesDataTemplates\MissionsRepository.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\Settings\PhysicsSettings.cs" />
