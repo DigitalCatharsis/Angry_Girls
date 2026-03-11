@@ -464,7 +464,8 @@ PrefabInstance:
       value: DebugPanel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7642136993304211471, guid: 217906bac97a90646a88f8b84022ae2d, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 217906bac97a90646a88f8b84022ae2d, type: 3}

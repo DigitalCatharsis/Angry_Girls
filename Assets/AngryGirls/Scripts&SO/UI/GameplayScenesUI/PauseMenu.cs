@@ -22,10 +22,6 @@ namespace Angry_Girls
         [SerializeField] private Button _quitGameButton;
         [SerializeField] private Button _closeOptionsButton;
 
-        [Header("Audio Settings")]
-        [SerializeField] private Slider _musicVolumeSlider;
-        [SerializeField] private Slider _soundsVolumeSlider;
-
         private PauseControl _pauseControl;
         private bool _isPaused;
 
@@ -52,9 +48,6 @@ namespace Angry_Girls
             _quitMissionButton.onClick.AddListener(() => OnQuitMissionPressed().Forget());
             _quitGameButton.onClick.AddListener(OnQuitGamePressed);
             _closeOptionsButton.onClick.AddListener(OnCloseOptionsPressed);
-
-            _musicVolumeSlider.onValueChanged.AddListener(OnMusicVolumeChanged);
-            _soundsVolumeSlider.onValueChanged.AddListener(OnSoundsVolumeChanged);
         }
 
         private void Update()
@@ -128,10 +121,6 @@ namespace Angry_Girls
         private void ShowGenericPanel() => _genericPanel.SetActive(true);
         private void HideOptionsPanel() => _optionsPanel.SetActive(false);
         private void HideGenericPanel() => _genericPanel.SetActive(false);
-
-        private void OnMusicVolumeChanged(float value) => CoreManager.Instance.SettingsManager.SetupMusicVolume(value);
-
-        private void OnSoundsVolumeChanged(float value) => CoreManager.Instance.SettingsManager.SetupSoundsVolume(value);
 
         private void OnDestroy()
         {
