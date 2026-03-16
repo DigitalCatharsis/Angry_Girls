@@ -54,8 +54,10 @@ namespace Angry_Girls
         private AudioSource _musicSource;
         private AudioSource _sfxSource;
         private float _minRandomPitchDiff = 0.3f;
-        private float _targetMusicVolume = 1f;
+        private float  _targetMusicVolume = 1f;
         private bool _isMusicInitialized = false;
+        private SettingsManager _settingsManager;
+        private PauseControl _pauseControl;
 
         /// <summary>
         /// Initialize audio manager. Creates internal AudioSources.
@@ -63,15 +65,12 @@ namespace Angry_Girls
         /// </summary>
         public void Init()
         {
-            if (CoreManager.Instance == null)
-            {
-                Debug.LogError("AudioManager: CoreManager not found.");
-                return;
-            }
+            _settingsManager = CoreManager.Instance.SettingsManager;
+            _pauseControl = CoreManager.Instance.PauseControl;
 
             CreateDynamicAudioSources();
             SubscribeToEvents();
-            UpdateVolumesFromSettings();
+            ApplyVolumesFromSettings(SettingsCategory.Audio);
             _isMusicInitialized = true;
         }
 
@@ -102,8 +101,14 @@ namespace Angry_Girls
         /// </summary>
         private void SubscribeToEvents()
         {
-            CoreManager.Instance.SettingsManager.OnSettingsChanged += UpdateVolumesFromSettings;
-            CoreManager.Instance.PauseControl.OnPauseChanged += HandlePauseChanged;
+            _settingsManager.OnSettingsChanged += ApplyVolumesFromSettings;
+            _pauseControl.OnPauseChanged += HandlePauseChanged;
+        }
+
+        private void OnDestroy()
+        {
+            _settingsManager.OnSettingsChanged -= ApplyVolumesFromSettings;
+            _pauseControl.OnPauseChanged -= HandlePauseChanged;
         }
 
         /// <summary>
@@ -127,18 +132,19 @@ namespace Angry_Girls
         /// <summary>
         /// Updates volume for all sources based on SettingsManager data.
         /// </summary>
-        private void UpdateVolumesFromSettings()
+        private void ApplyVolumesFromSettings(SettingsCategory settingsCategory)
         {
-            if (CoreManager.Instance == null || CoreManager.Instance.SettingsManager == null) return;
+            if (settingsCategory == SettingsCategory.Audio || settingsCategory == SettingsCategory.All)
+            {
+                var settings = CoreManager.Instance.SettingsManager.GetCurrentSettings();
 
-            var settings = CoreManager.Instance.SettingsManager.GetSettings();
+                // Store target volume for fade operations
+                _targetMusicVolume = settings.volumeMusic;
+                _musicSource.volume = _targetMusicVolume;
 
-            // Store target volume for fade operations
-            _targetMusicVolume = settings.volumeMusic;
-            _musicSource.volume = _targetMusicVolume;
-
-            // Apply SFX Volume
-            _sfxSource.volume = settings.volumeSounds;
+                // Apply SFX Volume
+                _sfxSource.volume = settings.volumeSounds;
+            }
         }
 
         /// <summary>
@@ -276,50 +282,6 @@ namespace Angry_Girls
             }
         }
 
-        ///// <summary>
-        ///// Plays a specific clip by index from the specified sound library.
-        ///// </summary>
-        //public void PlayCustomSound(AudioSourceType type, int index = 0, bool randomPitch = false)
-        //{
-        //    if (!_soundDataDict.TryGetValue(type, out var soundData))
-        //    {
-        //        Debug.LogWarning($"AudioManager: SoundData not found for type {type}");
-        //        return;
-        //    }
-
-        //    if (soundData.audioClipLibrary == null)
-        //    {
-        //        Debug.LogWarning($"AudioManager: Missing Library for type {type}");
-        //        return;
-        //    }
-
-        //    // Use AudioClipData instead of raw AudioClip
-        //    var clipData = soundData.audioClipLibrary.GetClipByIndex(index);
-        //    PlayClipData(clipData, soundData.category, randomPitch);
-        //}
-
-        ///// <summary>
-        ///// Internal helper to play clip on correct source with correct volume.
-        ///// </summary>
-        //private void PlayClip(AudioClip clip, AudioCategory category, bool randomPitch)
-        //{
-        //    if (clip == null) return;
-
-        //    AudioSource source = GetSourceForCategory(category);
-        //    if (source == null) return;
-
-        //    SetupPitch(source, randomPitch);
-
-        //    if (category == AudioCategory.Music || category == AudioCategory.Ambient)
-        //    {
-        //        source.clip = clip;
-        //        source.Play();
-        //    }
-        //    else
-        //    {
-        //        source.PlayOneShot(clip, 1f);
-        //    }
-        //}
 
         /// <summary>
         /// Returns the correct AudioSource based on category.

@@ -2554,6 +2554,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 380409275}
   m_CullTransparentMesh: 1
+--- !u!1 &380848783
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 380848785}
+  - component: {fileID: 380848784}
+  m_Layer: 0
+  m_Name: ConfirmationManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &380848784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380848783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16cfce91818261d4cbae6ef6c0c22ea0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _confirmationPrefab: {fileID: 4948130289426726221, guid: 2e3408f2dde1e8e4eab18ef6c4cb1587,
+    type: 3}
+  _confirmationContainer: {fileID: 385996289}
+  _referenceResolution: {x: 1280, y: 720}
+--- !u!4 &380848785
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380848783}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &385996287
 GameObject:
   m_ObjectHideFlags: 0
@@ -6316,6 +6364,7 @@ MonoBehaviour:
   _gameplayScreen: {fileID: 459357624}
   _loadingScreen: {fileID: 0}
   _notificationManager: {fileID: 203375498}
+  _confirmationManager: {fileID: 380848784}
   _defaultNotificationDuration: 0.7
 --- !u!4 &936483508
 Transform:
@@ -9976,8 +10025,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32d43dd810e8c4645919e17678288f6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pauseMenuPanel: {fileID: 919207538}
-  _optionsPanel: {fileID: 520818789}
+  _settingsPanel: {fileID: 520818789}
   _genericPanel: {fileID: 919207538}
   _returnButton: {fileID: 447020447}
   _restartButton: {fileID: 521815445}
@@ -13732,7 +13780,8 @@ PrefabInstance:
       value: -389.77
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7933448623251885519, guid: 946836d5639389042b3234c1845de510, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 946836d5639389042b3234c1845de510, type: 3}
@@ -13886,3 +13935,4 @@ SceneRoots:
   - {fileID: 936483508}
   - {fileID: 203375499}
   - {fileID: 352470502}
+  - {fileID: 380848785}

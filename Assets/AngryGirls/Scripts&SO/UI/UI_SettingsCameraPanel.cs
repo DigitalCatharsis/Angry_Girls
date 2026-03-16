@@ -11,7 +11,6 @@ namespace Angry_Girls
     {
         [Header("Camera Controls")]
         [SerializeField] private Slider _movementSpeedSlider;
-        [SerializeField] private Slider _zoomSensitivitySlider;
         [SerializeField] private Button _resetButton;
         [SerializeField] private TextMeshProUGUI _platformLabel;
 
@@ -24,7 +23,8 @@ namespace Angry_Girls
         public void Initialize(SettingsManager settingsManager)
         {
             _settingsManager = settingsManager;
-            _platformCatalog = CoreManager.Instance.GetComponentInChildren<PlatformSettingsCatalog>();
+            _platformCatalog = CoreManager.Instance.PlatformSettingsCatalog;
+            
             SetupListeners();
             UpdatePlatformLabel();
         }
@@ -33,9 +33,6 @@ namespace Angry_Girls
         {
             if (_movementSpeedSlider != null)
                 _movementSpeedSlider.onValueChanged.AddListener(OnMovementSpeedChanged);
-
-            if (_zoomSensitivitySlider != null)
-                _zoomSensitivitySlider.onValueChanged.AddListener(OnZoomSensitivityChanged);
 
             if (_resetButton != null)
                 _resetButton.onClick.AddListener(OnResetPressed);
@@ -56,13 +53,9 @@ namespace Angry_Girls
         public void LoadValues()
         {
             _isInitializing = true;
-            var settings = _settingsManager.GetSettings();
+            var settings = _settingsManager.GetCurrentSettings();
 
-            if (_movementSpeedSlider != null)
-                _movementSpeedSlider.value = settings.cameraMovementSpeed;
-
-            if (_zoomSensitivitySlider != null)
-                _zoomSensitivitySlider.value = settings.cameraZoomSensitivity;
+            _movementSpeedSlider.value = settings.cameraMovementSpeed;
 
             _isInitializing = false;
         }
@@ -78,29 +71,19 @@ namespace Angry_Girls
             _settingsManager.SetupCameraMovementSpeed(value);
         }
 
-        private void OnZoomSensitivityChanged(float value)
-        {
-            if (_isInitializing) return;
-            _settingsManager.SetupCameraZoomSensitivity(value);
-        }
-
         private void OnResetPressed()
         {
-            var settings = _settingsManager.GetSettings();
+            var settings = _settingsManager.GetCurrentSettings();
             settings.useCustomCameraSettings = false;
 
             if (_platformCatalog != null)
             {
                 var profile = _platformCatalog.GetCurrentPlatformProfile();
-                if (profile != null)
-                {
-                    settings.cameraMovementSpeed = profile.camera.movementSpeed;
-                    settings.cameraZoomSensitivity = profile.camera.zoomSensitivity;
-                }
+                settings.cameraMovementSpeed = profile.camera.movementSpeed;
             }
 
+            _settingsManager.ApplyPlatformDefaults(SettingsCategory.Camera);
             LoadValues();
-            _settingsManager.OnSettingsChanged?.Invoke();
             UIManager.Instance?.ShowNotification("Camera settings reset", 0.5f);
         }
 
@@ -108,8 +91,6 @@ namespace Angry_Girls
         {
             if (_movementSpeedSlider != null)
                 _movementSpeedSlider.onValueChanged.RemoveListener(OnMovementSpeedChanged);
-            if (_zoomSensitivitySlider != null)
-                _zoomSensitivitySlider.onValueChanged.RemoveListener(OnZoomSensitivityChanged);
             if (_resetButton != null)
                 _resetButton.onClick.RemoveListener(OnResetPressed);
         }

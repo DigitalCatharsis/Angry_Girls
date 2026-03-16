@@ -11,6 +11,8 @@ namespace Angry_Girls
 
         [SerializeField] private ItemSettingsRepository _itemSettingsRepository;
         [SerializeField] private ShopSettings _shopSettings;
+        [SerializeField] private PlatformSettingsCatalog _platformSettingsCatalog;
+        public PlatformSettingsCatalog PlatformSettingsCatalog => _platformSettingsCatalog;
         public ItemSettingsRepository ItemSettingsRepository => _itemSettingsRepository;
 
         public PoolManager PoolManager { get; private set; }
@@ -44,7 +46,6 @@ namespace Angry_Girls
                 AddressableAssetManager = new AddressableAssetManager();
 
                 SettingsManager = new SettingsManager();
-                SettingsManager.Init();
 
                 HashManager = new HashManager();
 
@@ -72,9 +73,9 @@ namespace Angry_Girls
                 VFXManager.Init();
 
                 SaveLoadManager = new SaveLoadManager();
-                RegisterManagerForSaveLoader();
 
-                SettingsManager.Init();
+                SettingsManager.Init(_platformSettingsCatalog);
+                RegisterManagerForSaveLoader();
             }
             catch (Exception ex)
             {
@@ -113,12 +114,6 @@ namespace Angry_Girls
                 InventoryManager,
                 mgr => mgr.ConvertDataForSave(),
                 (mgr, data) => mgr.ReinitDataFromSaveAsync(data)
-            );
-
-            SaveLoadManager.RegisterManager<SettingsManager, SettingsData>(
-                SettingsManager,
-                mgr => mgr.GetSettings(),
-                (mgr, data) => { mgr.SetupSettings(data); return UniTask.CompletedTask; }
             );
         }
 

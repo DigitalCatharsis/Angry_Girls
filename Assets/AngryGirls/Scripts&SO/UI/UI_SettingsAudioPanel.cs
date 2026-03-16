@@ -39,7 +39,7 @@ namespace Angry_Girls
         public void LoadValues()
         {
             _isInitializing = true;
-            var settings = _settingsManager.GetSettings();
+            var settings = _settingsManager.GetCurrentSettings();
 
             if (_musicVolumeSlider != null)
                 _musicVolumeSlider.value = settings.volumeMusic;

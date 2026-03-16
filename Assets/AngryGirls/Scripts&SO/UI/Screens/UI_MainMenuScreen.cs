@@ -65,10 +65,10 @@ namespace Angry_Girls
             {
                 _settingsPanel.SetActive(false);
 
-                if (_musicVolumeSlider != null)
-                {
-                    _musicVolumeSlider.onValueChanged.AddListener(OnMusicVolumeChanged);
-                }
+                //if (_musicVolumeSlider != null)
+                //{
+                //    _musicVolumeSlider.onValueChanged.AddListener(OnMusicVolumeChanged);
+                //}
 
                 if (_soundsVolumeSlider != null)
                 {
@@ -125,7 +125,7 @@ namespace Angry_Girls
 
         private void LoadSettingsValues()
         {
-            var settings = CoreManager.Instance.SettingsManager.GetSettings();
+            var settings = CoreManager.Instance.SettingsManager.GetCurrentSettings();
 
             if (_musicVolumeSlider != null)
                 _musicVolumeSlider.value = settings.volumeMusic;
@@ -164,11 +164,11 @@ namespace Angry_Girls
 
         #region Settings Handlers
 
-        private void OnMusicVolumeChanged(float value)
-        {
-            Debug.Log($"Music Volume Changed: {value}");
-            CoreManager.Instance.SettingsManager.SetupMusicVolume(value);
-        }
+        //private void OnMusicVolumeChanged(float value)
+        //{
+        //    Debug.Log($"Music Volume Changed: {value}");
+        //    CoreManager.Instance.SettingsManager.SetupMusicVolume(value);
+        //}
 
         private void OnSoundsVolumeChanged(float value)
         {
@@ -259,8 +259,8 @@ namespace Angry_Girls
             if (_exitButton != null)
                 _exitButton.onClick.RemoveListener(OnExitPressed);
 
-            if (_musicVolumeSlider != null)
-                _musicVolumeSlider.onValueChanged.RemoveListener(OnMusicVolumeChanged);
+            //if (_musicVolumeSlider != null)
+            //    _musicVolumeSlider.onValueChanged.RemoveListener(OnMusicVolumeChanged);
 
             if (_soundsVolumeSlider != null)
                 _soundsVolumeSlider.onValueChanged.RemoveListener(OnSoundsVolumeChanged);

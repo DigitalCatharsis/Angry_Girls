@@ -1,44 +1,76 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 
 namespace Angry_Girls
 {
     /// <summary>
-    /// Settings data structure.
+    /// Settings categories for tab navigation
     /// </summary>
-    [Serializable]
-    public class SettingsData
+    public enum SettingsCategory
+    {
+        Audio = 0,
+        Camera = 1,
+        Graphics = 2,
+        Gameplay = 3,
+        Controls = 4,
+        System = 5,
+        All = 99,
+    }
+
+    public class SettingsSaveData
     {
         [Header("Audio")]
-        [Range(0, 1)] public float volumeMusic = 0.5f;
-        [Range(0, 1)] public float volumeSounds = 0.5f;
+        public bool useCustomAudioSettings;
+        [Range(0, 1)] public float volumeMusic;
+        [Range(0, 1)] public float volumeSounds;
 
         [Header("Camera (User Override)")]
         [Tooltip("User can override platform default")]
-        public bool useCustomCameraSettings = false;
-        public float cameraMovementSpeed = 0.5f;
-        public float cameraZoomSensitivity = 7.0f;
+        [Range(0, 1)] public bool useCustomCameraSettings;
+        public float cameraMovementSpeed;
 
-        [Header("Graphics")]
-        public bool useCustomGraphicsSettings = false;
-        public int targetFPS = 60;
-        public int qualityLevel = 3;
-        public bool vfxHighQuality = true;
+        public SettingsSaveData() { }
 
-        [Header("Gameplay")]
-        public bool enableTutorial = true;
-        public bool showDamageNumbers = true;
-        public float turnTimerSeconds = 30f;
+        public SettingsSaveData(bool useCustomAudioSettings, float volumeMusic, float volumeSounds, bool useCustomCameraSettings, float cameraMovementSpeed)
+        {
+            this.useCustomAudioSettings = useCustomAudioSettings;
+            this.volumeMusic = volumeMusic;
+            this.volumeSounds = volumeSounds;
+            this.useCustomCameraSettings = useCustomCameraSettings;
+            this.cameraMovementSpeed = cameraMovementSpeed;
+        }
 
-        [Header("Controls")]
-        public bool useTouchControls = false;
-        public float swipeThreshold = 50f;
-        public float touchDeadzone = 10f;
+        public SettingsData ReinitToSettingsData()
+        {
+            return new SettingsData(useCustomAudioSettings, volumeMusic, volumeSounds, useCustomCameraSettings, cameraMovementSpeed);
+        }
+    }
 
-        [Header("System")]
-        public string languageCode = "en";
-        public TargetPlatform lastKnownPlatform;
-        public string settingsVersion = "1.0";
+    /// <summary>
+    /// Settings data structure.
+    /// </summary>
+    [Serializable]
+    public struct SettingsData
+    {
+        [Header("Audio")]
+        public bool useCustomAudioSettings;
+        [Range(0, 1)] public float volumeMusic;
+        [Range(0, 1)] public float volumeSounds;
+
+        [Header("Camera (User Override)")]
+        [Tooltip("User can override platform default")]
+        public bool useCustomCameraSettings;
+        public float cameraMovementSpeed;
+
+        public SettingsData(bool useCustomAudioSettings, float volumeMusic, float volumeSounds, bool useCustomCameraSettings, float cameraMovementSpeed)
+        {
+            this.useCustomAudioSettings = useCustomAudioSettings;
+            this.volumeMusic = volumeMusic;
+            this.volumeSounds = volumeSounds;
+            this.useCustomCameraSettings = useCustomCameraSettings;
+            this.cameraMovementSpeed = cameraMovementSpeed;
+        }
     }
 
     /// <summary>
@@ -46,97 +78,110 @@ namespace Angry_Girls
     /// </summary>
     public sealed class SettingsManager
     {
-        public Action OnSettingsChanged;
+        public Action<SettingsCategory> OnSettingsChanged;
 
         private SettingsData _currentSettingsData = new();
-        private PlatformSettingsCatalog _platformCatalog;
 
-        public SettingsData GetSettings() => _currentSettingsData;
+        private PlatformSettingsCatalog _platformSettingsCatalog;
+        public SettingsData GetCurrentSettings() => _currentSettingsData;
+
+        private SettingsSaveData _settingsSaveData = new();
+
+        private PlatformProfile _platformProfile;
 
         /// <summary>
         /// Initialize with platform catalog reference
         /// </summary>
-        public void Init(PlatformSettingsCatalog catalog = null)
+        public void Init(PlatformSettingsCatalog catalog)
         {
-            _platformCatalog = catalog;
+            _platformSettingsCatalog = catalog;
+            _platformProfile = _platformSettingsCatalog.GetCurrentPlatformProfile();
 
-            if (Repository.LoadState())
+            Repository.LoadState();
+
+            var savedData = Repository.GetData<SettingsSaveData>();
+            if (savedData != null)
             {
-                var savedData = Repository.GetData<SettingsData>();
-                if (savedData != null)
-                {
-                    SetupSettings(savedData);
-                    Debug.Log("SettingsManager: Loaded settings from Repository.");
-                    return;
-                }
+                SetupSettings(savedData.ReinitToSettingsData());
+                Debug.Log("SettingsManager: Loaded settings from Repository.");
+                return;
             }
 
-            ApplyPlatformDefaults();
+            ApplyPlatformDefaults(SettingsCategory.All);
             Debug.Log("SettingsManager: Using platform defaults.");
         }
 
         /// <summary>
         /// Apply defaults from current platform profile
         /// </summary>
-        private void ApplyPlatformDefaults()
+        public void ApplyPlatformDefaults(SettingsCategory settingsCategory)
         {
-            if (_platformCatalog == null)
+            if (_platformProfile == null)
             {
-                Debug.LogWarning("SettingsManager: PlatformCatalog not assigned, using hardcoded defaults");
-                return;
+                _platformProfile = _platformSettingsCatalog.GetCurrentPlatformProfile();
             }
 
-            var profile = _platformCatalog.GetCurrentPlatformProfile();
-            if (profile == null) return;
-
-            _currentSettingsData.cameraMovementSpeed = profile.camera.movementSpeed;
-            _currentSettingsData.cameraZoomSensitivity = profile.camera.zoomSensitivity;
-            _currentSettingsData.targetFPS = profile.graphics.targetFPS;
-            _currentSettingsData.qualityLevel = profile.graphics.qualityLevel;
-            _currentSettingsData.lastKnownPlatform = profile.platform;
+            switch (settingsCategory)
+            {
+                case SettingsCategory.All:
+                    LoadDefaultCameraValues();
+                    LoadDefaultAudioValues();
+                    break;
+                case SettingsCategory.Audio:
+                    LoadDefaultAudioValues();
+                    break;
+                case SettingsCategory.Camera:
+                    LoadDefaultCameraValues();
+                    break;
+                case SettingsCategory.Graphics:
+                    break;
+                case SettingsCategory.Gameplay:
+                    break;
+                case SettingsCategory.Controls:
+                    break;
+                case SettingsCategory.System:
+                    break;
+                default:
+                    break;
+            }
+            OnSettingsChanged?.Invoke(settingsCategory);
         }
 
-        /// <summary>
-        /// Apply settings to runtime systems
-        /// </summary>
-        public void ApplyRuntimeSettings()
+        private void LoadDefaultCameraValues()
         {
-            // FPS
-            if (!_currentSettingsData.useCustomGraphicsSettings && _platformCatalog != null)
-            {
-                var profile = _platformCatalog.GetCurrentPlatformProfile();
-                if (profile != null)
-                {
-                    Application.targetFrameRate = profile.graphics.targetFPS;
-                    QualitySettings.SetQualityLevel(profile.graphics.qualityLevel);
-                }
-            }
-            else
-            {
-                Application.targetFrameRate = _currentSettingsData.targetFPS;
-                QualitySettings.SetQualityLevel(_currentSettingsData.qualityLevel);
-            }
+            _currentSettingsData.cameraMovementSpeed = _platformProfile.camera.movementSpeed;
+            _currentSettingsData.useCustomCameraSettings = false;
+        }
 
-            // Audio volumes are applied via AudioManager subscription
+        private void LoadDefaultAudioValues()
+        {
+            _currentSettingsData.volumeMusic = _platformProfile.audio.volumeMusic;
+            _currentSettingsData.volumeSounds = _platformProfile.audio.volumeSounds;
+            _currentSettingsData.useCustomAudioSettings = false;
         }
 
         public void SaveSettings()
         {
-            Repository.SetData(_currentSettingsData);
+
+            SetupSaveData(_currentSettingsData);
+            Repository.SetData(_settingsSaveData);
             Repository.SaveState();
             Debug.Log("SettingsManager: Settings saved directly to Repository.");
         }
 
-        /// <summary>
-        /// Apply new settings externally (e.g., from UI sliders or SaveLoadManager).
-        /// </summary>
+        private void SetupSaveData(SettingsData settingsData)
+        {
+            _settingsSaveData.volumeMusic = settingsData.volumeMusic;
+            _settingsSaveData.volumeSounds = settingsData.volumeSounds;
+            _settingsSaveData.useCustomAudioSettings = settingsData.useCustomAudioSettings;
+            _settingsSaveData.cameraMovementSpeed = settingsData.cameraMovementSpeed;
+            _settingsSaveData.useCustomCameraSettings = settingsData.useCustomCameraSettings;
+        }
+
         public void SetupSettings(SettingsData settingsData)
         {
-            if (settingsData != null)
-            {
-                _currentSettingsData = settingsData;
-            }
-            OnSettingsChanged?.Invoke();
+            _currentSettingsData = settingsData;
+            OnSettingsChanged?.Invoke(SettingsCategory.All);
         }
 
         /// <summary>
@@ -145,7 +190,8 @@ namespace Angry_Girls
         public void SetupMusicVolume(float value)
         {
             _currentSettingsData.volumeMusic = Mathf.Clamp01(value);
-            OnSettingsChanged?.Invoke();
+            _currentSettingsData.useCustomAudioSettings = true;
+            OnSettingsChanged?.Invoke(SettingsCategory.Audio);
         }
 
         /// <summary>
@@ -154,32 +200,16 @@ namespace Angry_Girls
         public void SetupSoundsVolume(float value)
         {
             _currentSettingsData.volumeSounds = Mathf.Clamp01(value);
-            OnSettingsChanged?.Invoke();
+            _currentSettingsData.useCustomAudioSettings = true;
+            OnSettingsChanged?.Invoke(SettingsCategory.Audio);
         }
 
         public void SetupCameraMovementSpeed(float value)
         {
-            _currentSettingsData.cameraMovementSpeed = Mathf.Max(0.1f, value);
+            _currentSettingsData.cameraMovementSpeed = Mathf.Clamp01(value);
+            if (_currentSettingsData.cameraMovementSpeed == 0) { _currentSettingsData.cameraMovementSpeed += 0.1f; }
             _currentSettingsData.useCustomCameraSettings = true;
-            OnSettingsChanged?.Invoke();
-        }
-
-        public void SetupCameraZoomSensitivity(float value)
-        {
-            _currentSettingsData.cameraZoomSensitivity = Mathf.Max(1f, value);
-            _currentSettingsData.useCustomCameraSettings = true;
-            OnSettingsChanged?.Invoke();
-        }
-
-        /// <summary>
-        /// Reset to platform defaults
-        /// </summary>
-        public void ResetToPlatformDefaults()
-        {
-            ApplyPlatformDefaults();
-            _currentSettingsData.useCustomCameraSettings = false;
-            _currentSettingsData.useCustomGraphicsSettings = false;
-            OnSettingsChanged?.Invoke();
+            OnSettingsChanged?.Invoke(SettingsCategory.Camera);
         }
     }
 }

@@ -73,6 +73,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\MaterialChaner\MaterialChanger.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\TODO.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\UI_Slots\UI_CharacterSlot.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\ConfirmationPanel.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\UI_GameplayManagersComponent.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\TurnOrderService.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Shop and Inventory\ItemSettings\Editor\ItemSettingsEditor.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterStateBehaviors\AlternateAttack_Behavior_Airboned.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LayerAdder\Editor\LayerAdderEditor.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\LocalRotation.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\ConfirmationManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Shop and Inventory\ItemSettings\ItemSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\Panels\UI_MissionSelectionPanel.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\ProjectileManager.cs" />

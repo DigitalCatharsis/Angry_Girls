@@ -14,50 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _profiles:
   - platform: 0
+    audio:
+      volumeMusic: 0.5
+      volumeSounds: 0.5
     camera:
-      movementSpeed: 0.5
-      zoomSensitivity: 7
-      minZoom: 1
-      maxZoom: 10
-      touchDeadzone: 10
-    input:
-      swipeThreshold: 50
-      longPressDuration: 0.5
-      uiScaleMultiplier: 1
-    graphics:
-      targetFPS: 60
-      qualityLevel: 3
-      maxParticles: 500
-      shadowDistance: 50
-  - platform: 0
+      movementSpeed: 8.14
+  - platform: 2
+    audio:
+      volumeMusic: 0.5
+      volumeSounds: 0.5
     camera:
-      movementSpeed: 0.5
-      zoomSensitivity: 7
-      minZoom: 1
-      maxZoom: 10
-      touchDeadzone: 10
-    input:
-      swipeThreshold: 50
-      longPressDuration: 0.5
-      uiScaleMultiplier: 1
-    graphics:
-      targetFPS: 60
-      qualityLevel: 3
-      maxParticles: 500
-      shadowDistance: 50
-  - platform: 0
+      movementSpeed: 0.25
+  - platform: 1
+    audio:
+      volumeMusic: 0.5
+      volumeSounds: 0.5
     camera:
-      movementSpeed: 0.5
-      zoomSensitivity: 7
-      minZoom: 1
-      maxZoom: 10
-      touchDeadzone: 10
-    input:
-      swipeThreshold: 50
-      longPressDuration: 0.5
-      uiScaleMultiplier: 1
-    graphics:
-      targetFPS: 60
-      qualityLevel: 3
-      maxParticles: 500
-      shadowDistance: 50
+      movementSpeed: 1

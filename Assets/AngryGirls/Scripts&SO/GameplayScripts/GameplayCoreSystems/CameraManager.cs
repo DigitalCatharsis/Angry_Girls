@@ -47,7 +47,7 @@ namespace Angry_Girls
             _inputManager = GameplayCoreManager.Instance.InputManager;
             _settingsManager = CoreManager.Instance.SettingsManager;
 
-            ApplySettingsFromManager();
+            ApplyCameraSettingsFromManager(SettingsCategory.Camera);
             SubscribeToSettingsChanges();
 
             isInitialized = true;
@@ -56,18 +56,14 @@ namespace Angry_Girls
         /// <summary>
         /// Apply camera settings from SettingsManager
         /// </summary>
-        private void ApplySettingsFromManager()
+        private void ApplyCameraSettingsFromManager(SettingsCategory settingsCategory)
         {
-            if (_settingsManager == null)
-            {
-                _movementSpeed = _defaultMovementSpeed;
-                _zoomSensitivity = _defaultZoomSensitivity;
-                return;
-            }
 
-            var settings = _settingsManager.GetSettings();
-            _movementSpeed = settings.cameraMovementSpeed;
-            _zoomSensitivity = settings.cameraZoomSensitivity;
+            if (settingsCategory == SettingsCategory.Camera || settingsCategory == SettingsCategory.All)
+            {
+                var settings = _settingsManager.GetCurrentSettings();
+                _movementSpeed = settings.cameraMovementSpeed;
+            }
         }
 
         /// <summary>
@@ -75,10 +71,7 @@ namespace Angry_Girls
         /// </summary>
         private void SubscribeToSettingsChanges()
         {
-            if (_settingsManager != null)
-            {
-                _settingsManager.OnSettingsChanged += ApplySettingsFromManager;
-            }
+            _settingsManager.OnSettingsChanged += ApplyCameraSettingsFromManager;
         }
 
         private void Update()
@@ -266,7 +259,7 @@ namespace Angry_Girls
         {
             if (_settingsManager != null)
             {
-                _settingsManager.OnSettingsChanged -= ApplySettingsFromManager;
+                _settingsManager.OnSettingsChanged -= ApplyCameraSettingsFromManager;
             }
 
             KillCameraTwins();

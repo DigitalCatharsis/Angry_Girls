@@ -10,8 +10,7 @@ namespace Angry_Girls
     public class PauseMenu : UI_GameplayManagersComponent
     {
         [Header("Menu Panels")]
-        [SerializeField] private GameObject _pauseMenuPanel;
-        [SerializeField] private GameObject _optionsPanel;
+        [SerializeField] private GameObject _settingsPanel;
         [SerializeField] private GameObject _genericPanel;
 
         [Header("Buttons")]
@@ -36,15 +35,15 @@ namespace Angry_Girls
             _pauseControl.OnPauseChanged += OnPauseChanged;
 
             SetupButtons();
-            HideOptionsPanel();
-            //Hide();
+            _settingsPanel.GetComponent<UI_SettingsMenu>().Initialize(_genericPanel);
+            HideSettingsPanel();
         }
 
         private void SetupButtons()
         {
             _returnButton.onClick.AddListener(OnReturnPressed);
             _restartButton.onClick.AddListener(() => OnRestartPressed().Forget());
-            _optionsButton.onClick.AddListener(OnOptionsPressed);
+            _optionsButton.onClick.AddListener(OnSettingsPressed);
             _quitMissionButton.onClick.AddListener(() => OnQuitMissionPressed().Forget());
             _quitGameButton.onClick.AddListener(OnQuitGamePressed);
             _closeOptionsButton.onClick.AddListener(OnCloseOptionsPressed);
@@ -75,7 +74,7 @@ namespace Angry_Girls
         private void OnPauseChanged(bool isPaused)
         {
             _isPaused = isPaused;
-            _pauseMenuPanel.SetActive(isPaused);
+            _genericPanel.SetActive(isPaused);
 
             if (isPaused)
                 Time.timeScale = 0;
@@ -88,10 +87,11 @@ namespace Angry_Girls
         {
             await NavigationManager.NavigateToLastMission();
         }
-        private void OnOptionsPressed()
+        private void OnSettingsPressed()
         {
-            ShowOptionsPanel();
+            ShowSettingsPanel();
             HideGenericPanel();
+            _settingsPanel.GetComponent<UI_SettingsMenu>().LoadCategoryValues();
         }
 
         private async UniTaskVoid OnQuitMissionPressed() => await NavigationManager.NavigateToScene(SceneType.MissionPreparation);
@@ -114,12 +114,12 @@ namespace Angry_Girls
 
         private void OnCloseOptionsPressed()
         {
-            HideOptionsPanel();
+            HideSettingsPanel();
             ShowGenericPanel();
         }
-        private void ShowOptionsPanel() => _optionsPanel.SetActive(true);
+        private void ShowSettingsPanel() => _settingsPanel.SetActive(true);
         private void ShowGenericPanel() => _genericPanel.SetActive(true);
-        private void HideOptionsPanel() => _optionsPanel.SetActive(false);
+        private void HideSettingsPanel() => _settingsPanel.SetActive(false);
         private void HideGenericPanel() => _genericPanel.SetActive(false);
 
         private void OnDestroy()

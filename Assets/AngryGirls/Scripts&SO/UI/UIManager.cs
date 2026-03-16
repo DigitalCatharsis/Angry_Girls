@@ -1,5 +1,8 @@
+using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Angry_Girls
 {
@@ -18,6 +21,7 @@ namespace Angry_Girls
         [Header("Global UI")]
         [SerializeField] private UI_LoadingScreen _loadingScreen;
         [SerializeField] private NotificationManager _notificationManager;
+        [SerializeField] private ConfirmationManager _confirmationManager;
 
         private UI_UIScreen _currentScreen;
         private Stack<UI_UIScreen> _screenHistory = new Stack<UI_UIScreen>();
@@ -148,6 +152,14 @@ namespace Angry_Girls
             }
 
             _notificationManager?.ShowNotification(message, duration);
+        }
+
+        /// <summary>
+        /// Show a notification message.
+        /// </summary>
+        public void ShowConfirmation(string message, UnityAction yesAction, UnityAction noAction)
+        {
+            _confirmationManager?.ShowConfirmationAsync(message, yesAction, noAction).Forget();
         }
 
         /// <summary>

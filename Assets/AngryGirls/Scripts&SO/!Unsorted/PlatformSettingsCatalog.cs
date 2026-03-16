@@ -15,6 +15,13 @@ namespace Angry_Girls
         Default
     }
 
+    [Serializable]
+    public class AudioPlatformSettngs
+    {
+        [Range(0, 1)] public float volumeMusic = 0.5f;
+        [Range(0, 1)] public float volumeSounds = 0.5f;
+    }
+
     /// <summary>
     /// Platform-specific camera configuration
     /// </summary>
@@ -22,54 +29,7 @@ namespace Angry_Girls
     public class CameraPlatformSettings
     {
         [Tooltip("Camera panning speed (units per second)")]
-        public float movementSpeed = 0.5f;
-
-        [Tooltip("Zoom sensitivity multiplier")]
-        public float zoomSensitivity = 7.0f;
-
-        [Tooltip("Minimum orthographic size")]
-        public float minZoom = 1f;
-
-        [Tooltip("Maximum orthographic size")]
-        public float maxZoom = 10f;
-
-        [Tooltip("Touch drag deadzone in pixels")]
-        public float touchDeadzone = 10f;
-    }
-
-    /// <summary>
-    /// Platform-specific input configuration
-    /// </summary>
-    [Serializable]
-    public class InputPlatformSettings
-    {
-        [Tooltip("Swipe detection threshold")]
-        public float swipeThreshold = 50f;
-
-        [Tooltip("Long press duration in seconds")]
-        public float longPressDuration = 0.5f;
-
-        [Tooltip("UI button scale multiplier for touch")]
-        public float uiScaleMultiplier = 1.0f;
-    }
-
-    /// <summary>
-    /// Platform-specific graphics configuration
-    /// </summary>
-    [Serializable]
-    public class GraphicsPlatformSettings
-    {
-        [Tooltip("Target frames per second")]
-        public int targetFPS = 60;
-
-        [Tooltip("Unity quality level index")]
-        public int qualityLevel = 3;
-
-        [Tooltip("Maximum active particles")]
-        public int maxParticles = 500;
-
-        [Tooltip("Shadow distance in units")]
-        public float shadowDistance = 50f;
+        [Range(0, 1)] public float movementSpeed = 0.5f;
     }
 
     /// <summary>
@@ -79,9 +39,8 @@ namespace Angry_Girls
     public class PlatformProfile
     {
         public TargetPlatform platform;
+        public AudioPlatformSettngs audio = new();
         public CameraPlatformSettings camera = new();
-        public InputPlatformSettings input = new();
-        public GraphicsPlatformSettings graphics = new();
     }
 
     /// <summary>

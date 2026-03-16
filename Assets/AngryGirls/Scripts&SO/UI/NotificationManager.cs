@@ -154,10 +154,9 @@ namespace Angry_Girls
 
             try
             {
-                await UniTask.Delay((int)(notification.Duration * 1000),
-                    cancellationToken: notificationTokenSource.Token);
+                await UniTask.Delay((int)(notification.Duration * 1000),cancellationToken: notificationTokenSource.Token, ignoreTimeScale: true);
 
-                // Анимация исчезновения
+                //Dissapiar animation
                 var canvasGroup = notificationGO.GetComponent<CanvasGroup>();
                 if (canvasGroup != null)
                 {
@@ -166,7 +165,7 @@ namespace Angry_Girls
 
                     while (elapsedTime < fadeTime && !notificationTokenSource.Token.IsCancellationRequested)
                     {
-                        elapsedTime += Time.deltaTime;
+                        elapsedTime += Time.unscaledDeltaTime;
                         canvasGroup.alpha = 1f - (elapsedTime / fadeTime);
                         await UniTask.Yield(cancellationToken: notificationTokenSource.Token);
                     }
@@ -182,7 +181,7 @@ namespace Angry_Girls
 
             if (notificationGO != null)
             {
-                UnityEngine.Object.Destroy(notificationGO);
+                Destroy(notificationGO);
             }
         }
 

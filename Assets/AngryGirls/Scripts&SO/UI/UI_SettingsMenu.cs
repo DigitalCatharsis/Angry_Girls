@@ -6,22 +6,9 @@ using UnityEngine.UI;
 namespace Angry_Girls
 {
     /// <summary>
-    /// Settings categories for tab navigation
-    /// </summary>
-    public enum SettingsCategory
-    {
-        Audio = 0,
-        Camera = 1,
-        Graphics = 2,
-        Gameplay = 3,
-        Controls = 4,
-        System = 5
-    }
-
-    /// <summary>
     /// Main settings screen with tabbed navigation
     /// </summary>
-    public class UI_SettingsScreen : UI_UIScreen
+    public class UI_SettingsMenu : UI_UIScreen
     {
         [Header("Tab Buttons")]
         [SerializeField] private Button[] _tabButtons;
@@ -40,14 +27,29 @@ namespace Angry_Girls
         private SettingsManager _settingsManager;
         private Dictionary<SettingsCategory, ISettingsCategoryPanel> _categoryPanelControllers;
 
-        public override void Initialize()
+        private SettingsData _savedSettingsData = new();
+
+        private GameObject _gameobjectToActiveWhenHidden;
+
+        private void OnEnable()
+        {
+            if (_settingsManager == null)
+            {
+                _settingsManager = CoreManager.Instance.SettingsManager;
+            }
+
+            _savedSettingsData = _settingsManager.GetCurrentSettings();
+        }
+
+        public void Initialize(GameObject parentWindow)
         {
             base.Initialize();
+            _gameobjectToActiveWhenHidden = parentWindow;
             _settingsManager = CoreManager.Instance.SettingsManager;
             InitializeCategoryPanels();
             SetupTabButtons();
             SetupNavigationButtons();
-            ShowCategory(SettingsCategory.Audio);
+            ShowCategory(_currentCategory);
         }
 
         private void InitializeCategoryPanels()
@@ -74,13 +76,13 @@ namespace Angry_Girls
         private void SetupNavigationButtons()
         {
             if (_closeButton != null)
-                _closeButton.onClick.AddListener(OnClosePressed);
+                _closeButton.onClick.AddListener(OnReturnPressed);
 
             if (_resetAllButton != null)
                 _resetAllButton.onClick.AddListener(OnResetAllPressed);
 
             if (_saveButton != null)
-                _saveButton.onClick.AddListener(OnSavePressed);
+                _saveButton.onClick.AddListener(OnApplyPressed);
         }
 
         private void OnTabClicked(SettingsCategory category)
@@ -120,7 +122,7 @@ namespace Angry_Girls
             }
         }
 
-        private void LoadCategoryValues()
+        public void LoadCategoryValues()
         {
             if (_categoryPanelControllers.TryGetValue(_currentCategory, out var panel))
             {
@@ -128,21 +130,38 @@ namespace Angry_Girls
             }
         }
 
-        private void OnClosePressed()
+        private void OnReturnPressed()
         {
-            _settingsManager.SaveSettings();
+            var currentSettings = _settingsManager.GetCurrentSettings();
+            if (!_savedSettingsData.Equals(currentSettings))
+            {
+                UIManager.Instance?.ShowConfirmation("Are you sure you want to back? All settings will be unsaved!",
+                    () => //yes
+                    {
+                        _settingsManager.SetupSettings(_savedSettingsData);
+                        _gameobjectToActiveWhenHidden.SetActive(true);
+                        Hide();
+                    },
+                    () => //no
+                    {
+                        return;
+                    });
+                return;
+            }
+            _gameobjectToActiveWhenHidden.SetActive(true);
             Hide();
         }
 
         private void OnResetAllPressed()
         {
-            _settingsManager.ResetToPlatformDefaults();
+            _settingsManager.ApplyPlatformDefaults(SettingsCategory.All);
             LoadCategoryValues();
             UIManager.Instance?.ShowNotification("All settings reset to defaults", 1f);
         }
 
-        private void OnSavePressed()
+        private void OnApplyPressed()
         {
+            _savedSettingsData = _settingsManager.GetCurrentSettings();
             _settingsManager.SaveSettings();
             UIManager.Instance?.ShowNotification("Settings saved", 0.5f);
         }
