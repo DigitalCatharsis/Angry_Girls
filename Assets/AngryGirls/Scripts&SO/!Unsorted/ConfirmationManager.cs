@@ -14,42 +14,19 @@ namespace Angry_Girls
     {
         [Header("Confirmation UI")]
         [SerializeField] private GameObject _confirmationPrefab;
-        [SerializeField] private Transform _confirmationContainer;
         [SerializeField] private Vector2 _referenceResolution = new Vector2(1280, 720);
 
         private Queue<Func<UniTask>> _confirmationQueue = new Queue<Func<UniTask>>();
         private bool _isShowingConfirmation = false;
 
-        private static ConfirmationManager Instance;
-
         private void Awake()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-
             InitializeContainer();
         }
 
         private void InitializeContainer()
         {
-            if (_confirmationContainer == null)
-            {
-                var existingCanvas = FindObjectOfType<Canvas>();
-                if (existingCanvas != null)
-                {
-                    _confirmationContainer = existingCanvas.transform;
-                }
-                else
-                {
-                    CreateDefaultCanvas();
-                }
-            }
+            CreateDefaultCanvas();
         }
 
         private void CreateDefaultCanvas()
@@ -64,8 +41,6 @@ namespace Angry_Girls
             scaler.referenceResolution = _referenceResolution;
 
             canvasGO.AddComponent<GraphicRaycaster>();
-
-            _confirmationContainer = canvas.transform;
         }
 
         /// <summary>
@@ -90,7 +65,7 @@ namespace Angry_Girls
 
                     try
                     {
-                        bool result = await ShowConfirmationInternalAsync(message,  yesAction, noAction, cts.Token);
+                        bool result = await ShowConfirmationInternalAsync(message, yesAction, noAction, cts.Token);
                         completionSource.TrySetResult(result);
                     }
                     catch (OperationCanceledException)
@@ -123,10 +98,11 @@ namespace Angry_Girls
 
         private async UniTask<bool> ShowConfirmationInternalAsync(string message, UnityAction yesAction, UnityAction noAction, CancellationToken cancellationToken)
         {
-            if (_confirmationContainer == null || cancellationToken.IsCancellationRequested)
+            if (cancellationToken.IsCancellationRequested)
                 return false;
 
-            var confirmationGO = Instantiate(_confirmationPrefab, _confirmationContainer);
+            var confirmationGO = Instantiate(_confirmationPrefab);
+            confirmationGO.transform.SetParent(this.gameObject.transform, false);
             confirmationGO.SetActive(true);
 
             var panel = confirmationGO.GetComponentInChildren<ConfirmationPanel>();
@@ -145,7 +121,6 @@ namespace Angry_Girls
             var yesButton = panel.YesButton;
             var noButton = panel.NoButton;
 
-            // Проверяем кнопки до использования
             if (yesButton == null || noButton == null)
             {
                 Debug.LogError("YesButton and NoButton must be assigned in ConfirmationPanel.");
@@ -153,7 +128,6 @@ namespace Angry_Girls
                 return false;
             }
 
-            // Подписываем переданные действия (с защитой от null)
             if (yesAction != null) yesButton.onClick.AddListener(yesAction);
             if (noAction != null) noButton.onClick.AddListener(noAction);
 
@@ -174,7 +148,6 @@ namespace Angry_Girls
             }
             finally
             {
-                // Удаляем все добавленные слушатели
                 yesButton.onClick.RemoveAllListeners();
                 noButton.onClick.RemoveAllListeners();
 

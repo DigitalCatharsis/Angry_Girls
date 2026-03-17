@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 3478853800151037849}
   - component: {fileID: 7867162622558898839}
   m_Layer: 0
-  m_Name: ReadyBaner
+  m_Name: PRE_ReadyBaner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

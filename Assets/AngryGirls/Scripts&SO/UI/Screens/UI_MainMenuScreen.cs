@@ -20,8 +20,6 @@ namespace Angry_Girls
 
         [Header("Settings Panel")]
         [SerializeField] private GameObject _settingsPanel;
-        [SerializeField] private Slider _musicVolumeSlider;
-        [SerializeField] private Slider _soundsVolumeSlider;
         [SerializeField] private Button _closeSettingsButton;
 
         [Header("Confirmation Dialog")]
@@ -42,6 +40,9 @@ namespace Angry_Girls
             SetupConfirmationDialog();
 
             UpdateContinueButtonState();
+
+
+            _settingsPanel.GetComponent<UI_SettingsMenu>().Initialize(this.gameObject);
         }
 
         private void SetupButtons()
@@ -64,16 +65,6 @@ namespace Angry_Girls
             if (_settingsPanel != null)
             {
                 _settingsPanel.SetActive(false);
-
-                //if (_musicVolumeSlider != null)
-                //{
-                //    _musicVolumeSlider.onValueChanged.AddListener(OnMusicVolumeChanged);
-                //}
-
-                if (_soundsVolumeSlider != null)
-                {
-                    _soundsVolumeSlider.onValueChanged.AddListener(OnSoundsVolumeChanged);
-                }
 
                 if (_closeSettingsButton != null)
                 {
@@ -120,18 +111,6 @@ namespace Angry_Girls
         {
             base.Show();
             UpdateContinueButtonState();
-            LoadSettingsValues();
-        }
-
-        private void LoadSettingsValues()
-        {
-            var settings = CoreManager.Instance.SettingsManager.GetCurrentSettings();
-
-            if (_musicVolumeSlider != null)
-                _musicVolumeSlider.value = settings.volumeMusic;
-
-            if (_soundsVolumeSlider != null)
-                _soundsVolumeSlider.value = settings.volumeSounds;
         }
 
         #region Button Handlers
@@ -164,18 +143,6 @@ namespace Angry_Girls
 
         #region Settings Handlers
 
-        //private void OnMusicVolumeChanged(float value)
-        //{
-        //    Debug.Log($"Music Volume Changed: {value}");
-        //    CoreManager.Instance.SettingsManager.SetupMusicVolume(value);
-        //}
-
-        private void OnSoundsVolumeChanged(float value)
-        {
-            Debug.Log($"Sounds Volume Changed: {value}");
-            CoreManager.Instance.SettingsManager.SetupSoundsVolume(value);
-        }
-
         private void ShowSettingsPanel()
         {
             if (_mainMenuPanel != null)
@@ -183,7 +150,6 @@ namespace Angry_Girls
 
             if (_settingsPanel != null)
             {
-                LoadSettingsValues();
                 _settingsPanel.SetActive(true);
             }
         }
@@ -258,12 +224,6 @@ namespace Angry_Girls
 
             if (_exitButton != null)
                 _exitButton.onClick.RemoveListener(OnExitPressed);
-
-            //if (_musicVolumeSlider != null)
-            //    _musicVolumeSlider.onValueChanged.RemoveListener(OnMusicVolumeChanged);
-
-            if (_soundsVolumeSlider != null)
-                _soundsVolumeSlider.onValueChanged.RemoveListener(OnSoundsVolumeChanged);
 
             if (_closeSettingsButton != null)
                 _closeSettingsButton.onClick.RemoveListener(OnCloseSettingsPressed);

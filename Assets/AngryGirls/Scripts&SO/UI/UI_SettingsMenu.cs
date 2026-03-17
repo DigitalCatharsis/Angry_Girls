@@ -139,6 +139,7 @@ namespace Angry_Girls
                     () => //yes
                     {
                         _settingsManager.SetupSettings(_savedSettingsData);
+                        LoadCategoryValues();
                         _gameobjectToActiveWhenHidden.SetActive(true);
                         Hide();
                     },

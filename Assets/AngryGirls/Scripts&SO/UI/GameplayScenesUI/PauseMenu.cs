@@ -91,7 +91,7 @@ namespace Angry_Girls
         {
             ShowSettingsPanel();
             HideGenericPanel();
-            _settingsPanel.GetComponent<UI_SettingsMenu>().LoadCategoryValues();
+            //_settingsPanel.GetComponent<UI_SettingsMenu>().LoadCategoryValues();
         }
 
         private async UniTaskVoid OnQuitMissionPressed() => await NavigationManager.NavigateToScene(SceneType.MissionPreparation);
