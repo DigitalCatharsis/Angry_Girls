@@ -195,7 +195,7 @@ namespace Angry_Girls
 
             while (elapsed < duration)
             {
-                elapsed += Time.deltaTime;
+                elapsed += Time.unscaledDeltaTime;
                 _musicSource.volume = Mathf.Lerp(startVolume, targetVolume, elapsed / duration);
                 await UniTask.Yield();
             }
@@ -215,7 +215,7 @@ namespace Angry_Girls
 
             while (elapsed < duration)
             {
-                elapsed += Time.deltaTime;
+                elapsed += Time.unscaledDeltaTime;
                 _musicSource.volume = Mathf.Lerp(startVolume, 0f, elapsed / duration);
                 await UniTask.Yield();
             }

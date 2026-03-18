@@ -22,6 +22,7 @@ namespace Angry_Girls
         [SerializeField] private Button _armorSlotButton;
         [SerializeField] private Button _accessorySlot1Button;
         [SerializeField] private Button _accessorySlot2Button;
+        [SerializeField] private Sprite _defaultItemSlotSprite;
 
         [Header("Stats Display")]
         [SerializeField] private TextMeshProUGUI _statsText;
@@ -305,8 +306,7 @@ namespace Angry_Girls
                 // Default slot state
                 if (image != null)
                 {
-                    image.sprite = null;
-                    image.enabled = false;
+                    image.sprite = _defaultItemSlotSprite;
                 }
 
                 if (text != null)

@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Angry_Girls
 {
@@ -45,15 +46,15 @@ namespace Angry_Girls
             StartBackgroundMusicAsync().Forget();
         }
 
-        /// <summary>
-        /// Stop music on scene unload.
-        /// </summary>
-        private void OnDisable()
-        {
-            if (!_isMusicPlaying) return;
+        ///// <summary>
+        ///// Stop music on scene unload.
+        ///// </summary>
+        //private void OnDisable()
+        //{
+        //    if (!_isMusicPlaying) return;
 
-            StopBackgroundMusicAsync().Forget();
-        }
+        //    StopBackgroundMusicAsync();
+        //}
 
         /// <summary>
         /// Start background music with optional fade-in.
@@ -82,14 +83,14 @@ namespace Angry_Girls
         /// <summary>
         /// Stop background music with optional fade-out.
         /// </summary>
-        private async UniTaskVoid StopBackgroundMusicAsync()
+        private void StopBackgroundMusicAsync()
         {
             if (_audioManager == null || _levelSettings == null) return;
 
             // Fade out before stopping
             if (_levelSettings.fadeOutDuration > 0f)
             {
-                await _audioManager.FadeOutMusicAsync(_levelSettings.fadeOutDuration);
+                _audioManager.FadeOutMusicAsync(_levelSettings.fadeOutDuration).Forget();
             }
 
             _audioManager.StopMusic();

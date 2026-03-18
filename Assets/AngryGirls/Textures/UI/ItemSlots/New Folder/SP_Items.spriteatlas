@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SP_Items
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 8
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 9c20f5af70bb910469663e680ffa7d81, type: 3}
+    - {fileID: 2800000, guid: b543056e044fc534aa0465dd68ae405b, type: 3}
+    - {fileID: 2800000, guid: dd75b139758df8540a0db5d110b8e341, type: 3}
+    - {fileID: 2800000, guid: 177b966a5f8f455459fdc542ecaf785a, type: 3}
+    - {fileID: 2800000, guid: 469e62f239d3dc749aa5f4fdd22dc4ce, type: 3}
+    - {fileID: 2800000, guid: 21da69b5c8fbf5542b5ee3bf7c52035d, type: 3}
+    - {fileID: 2800000, guid: bef961df60eac3749a9c31a935a6640c, type: 3}
+    - {fileID: 2800000, guid: 8bce913255416ff40ac2058c4c4dcc87, type: 3}
+    - {fileID: 2800000, guid: 1d93e341492358c4a8e62afe25762d3c, type: 3}
+    - {fileID: 2800000, guid: 12bf73fcb98fff3468860be450372d78, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - 1d93e341492358c4a8e62afe25762d3c: 21300000
+    - 8bce913255416ff40ac2058c4c4dcc87: 21300000
+    - 469e62f239d3dc749aa5f4fdd22dc4ce: 21300000
+    - 21da69b5c8fbf5542b5ee3bf7c52035d: 21300000
+    - dd75b139758df8540a0db5d110b8e341: 21300000
+    - 177b966a5f8f455459fdc542ecaf785a: 21300000
+    - 12bf73fcb98fff3468860be450372d78: 21300000
+    - b543056e044fc534aa0465dd68ae405b: 21300000
+    - 9c20f5af70bb910469663e680ffa7d81: 21300000
+    - bef961df60eac3749a9c31a935a6640c: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 1d93e341492358c4a8e62afe25762d3c, type: 3}
+  - {fileID: 21300000, guid: 8bce913255416ff40ac2058c4c4dcc87, type: 3}
+  - {fileID: 21300000, guid: 469e62f239d3dc749aa5f4fdd22dc4ce, type: 3}
+  - {fileID: 21300000, guid: 21da69b5c8fbf5542b5ee3bf7c52035d, type: 3}
+  - {fileID: 21300000, guid: dd75b139758df8540a0db5d110b8e341, type: 3}
+  - {fileID: 21300000, guid: 177b966a5f8f455459fdc542ecaf785a, type: 3}
+  - {fileID: 21300000, guid: 12bf73fcb98fff3468860be450372d78, type: 3}
+  - {fileID: 21300000, guid: b543056e044fc534aa0465dd68ae405b, type: 3}
+  - {fileID: 21300000, guid: 9c20f5af70bb910469663e680ffa7d81, type: 3}
+  - {fileID: 21300000, guid: bef961df60eac3749a9c31a935a6640c, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - T_ItemSlotUI_Weapon_Sword_2
+  - T_ItemSlotUI_Weapon_Sword_1
+  - T_ItemSlotUI_Armor_Helmet_2
+  - T_ItemSlotUI_Armor_Plate_1
+  - T_ItemSlotUI_Accessory_Flower_1
+  - T_ItemSlotUI_Armor_Helmet_1
+  - T_ItemSlotUI_Weapon_Sword_3
+  - T_Item_Unknown
+  - T_Accessory_Bird_1
+  - T_ItemSlotUI_Armor_Plate_2
+  m_RenderDataMap: {}
+  m_Tag: SP_Items
+  m_IsVariant: 0

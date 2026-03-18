@@ -22,11 +22,6 @@ namespace Angry_Girls
         [SerializeField] private GameObject _settingsPanel;
         [SerializeField] private Button _closeSettingsButton;
 
-        [Header("Confirmation Dialog")]
-        [SerializeField] private GameObject _confirmationDialog;
-        [SerializeField] private Button _confirmNewGameButton;
-        [SerializeField] private Button _cancelNewGameButton;
-
         private SettingsManager _settingsManager;
 
         /// <inheritdoc/>
@@ -37,8 +32,6 @@ namespace Angry_Girls
 
             SetupButtons();
             SetupSettingsPanel();
-            SetupConfirmationDialog();
-
             UpdateContinueButtonState();
 
 
@@ -73,24 +66,6 @@ namespace Angry_Girls
             }
         }
 
-        private void SetupConfirmationDialog()
-        {
-            if (_confirmationDialog != null)
-            {
-                _confirmationDialog.SetActive(false);
-
-                if (_confirmNewGameButton != null)
-                {
-                    _confirmNewGameButton.onClick.AddListener(OnConfirmNewGame);
-                }
-
-                if (_cancelNewGameButton != null)
-                {
-                    _cancelNewGameButton.onClick.AddListener(OnCancelNewGame);
-                }
-            }
-        }
-
         public void UpdateContinueButtonState()
         {
             bool hasSaveData = Repository.LoadState();
@@ -105,8 +80,6 @@ namespace Angry_Girls
                 }
             }
         }
-
-        /// <inheritdoc/>
         public override void Show()
         {
             base.Show();
@@ -118,7 +91,19 @@ namespace Angry_Girls
         private void OnNewGamePressed()
         {
             Debug.Log("New Game Button Pressed");
-            ShowConfirmationDialog();
+            if (Repository.LoadState()) 
+            {
+                UIManager.Instance.ShowConfirmation
+                    ("Are you sure? All previous saves will be deleted.", 
+                    yesAction:() => { OnConfirmNewGame(); }, 
+                    noAction: () => { return; }
+                    );
+            }
+            else
+            {
+                OnConfirmNewGame();
+            }
+            
         }
 
         private void OnContinuePressed()
@@ -169,33 +154,13 @@ namespace Angry_Girls
 
         #region Confirmation Dialog Handlers
 
-        private void ShowConfirmationDialog()
-        {
-            if (_mainMenuPanel != null)
-                _mainMenuPanel.SetActive(false);
-
-            if (_confirmationDialog != null)
-                _confirmationDialog.SetActive(true);
-        }
 
         private void OnConfirmNewGame()
         {
-            if (_confirmationDialog != null)
-                _confirmationDialog.SetActive(false);
-
             if (_mainMenuPanel != null)
                 _mainMenuPanel.SetActive(true);
 
-            _ = GameStateManager.Instance.NewGame();
-        }
-
-        private void OnCancelNewGame()
-        {
-            if (_confirmationDialog != null)
-                _confirmationDialog.SetActive(false);
-
-            if (_mainMenuPanel != null)
-                _mainMenuPanel.SetActive(true);
+            GameStateManager.Instance.NewGame().Forget();
         }
 
         #endregion
@@ -227,12 +192,6 @@ namespace Angry_Girls
 
             if (_closeSettingsButton != null)
                 _closeSettingsButton.onClick.RemoveListener(OnCloseSettingsPressed);
-
-            if (_confirmNewGameButton != null)
-                _confirmNewGameButton.onClick.RemoveListener(OnConfirmNewGame);
-
-            if (_cancelNewGameButton != null)
-                _cancelNewGameButton.onClick.RemoveListener(OnCancelNewGame);
         }
     }
 }

@@ -658,6 +658,12 @@ public class ReadyBanner_VertexDeform : MonoBehaviour
                 break;
         }
 
+        seq.OnComplete(() =>
+        {
+            if (GameplayCoreManager.Instance?.CameraManager != null)
+                GameplayCoreManager.Instance.CameraManager.ZoomInAfterReady();
+        });
+
         seq.Play();
     }
 

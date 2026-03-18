@@ -46,11 +46,17 @@ namespace Angry_Girls
         [SerializeField] private Color _defaultButtonColor = Color.white;
 
         private List<IUIPanel> _UIPanels = new();
+        private List<GameObject> _UIPanelGameObjects = new();
         private List<Button> __panelButtons = new();
 
         public override void Initialize()
         {
             if (_isInitialized) return;
+
+            _UIPanelGameObjects.Add(_charactersPanelGameObject);
+            _UIPanelGameObjects.Add(_missionsPanelGameObject);
+            _UIPanelGameObjects.Add(_shopPanelGameObject);
+            _UIPanelGameObjects.Add(_editTeamPanelGameObject);
 
             _UIPanels.Add(_characterSelectionPanel);
             _UIPanels.Add(_missionSelectionPanel);
@@ -91,8 +97,12 @@ namespace Angry_Girls
                 panel.Initialize(CoreManager.Instance);
             }
 
+            foreach (var panel in _UIPanelGameObjects)
+            {
+                panel.SetActive(false);
+            }
             //TODO: show previous or default
-            ShowCharactersTab();
+            ShowMissionsTab();
         }
 
 

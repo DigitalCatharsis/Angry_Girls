@@ -28,6 +28,10 @@ namespace Angry_Girls
         [SerializeField] private float _cameraMoveDuration = 0.5f;
         [SerializeField] private Ease _cameraMoveEase = Ease.InOutCubic;
 
+        [Header("Zoom After Ready")]
+        [SerializeField] private float _zoomInAfterReadyDuration = 1f; 
+        [SerializeField] private float _targetZoomAfterReady = 2.5f; 
+
         public float SecondsCameraWaitsAfterAttack => _secondsCameraWaitsAfterAttack;
 
         [SerializeField] private Rigidbody _characterToFollow;
@@ -289,6 +293,18 @@ namespace Angry_Girls
         //}
 
         #endregion
+        /// <summary>
+        /// Smoothly zooms the camera to the target size over the specified time.
+        /// </summary>
+        public void ZoomInAfterReady()
+        {
+            if (_mainCamera == null) return;
 
+            // Stop previous camera animations to avoid conflicts
+            _mainCamera.DOKill();
+
+            // Start the orthographicSize change animation
+            _mainCamera.DOOrthoSize(_targetZoomAfterReady, _zoomInAfterReadyDuration).SetEase(_cameraMoveEase);
+        }
     }
 }

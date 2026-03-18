@@ -25,14 +25,16 @@ namespace Angry_Girls
         private bool _isPaused;
 
         private SettingsManager _settingsManager;
+        private AudioManager _audioManager;
 
         public override void Initialize()
         {
             base.Initialize();
-
+            
             _settingsManager = CoreManager.Instance.SettingsManager;
             _pauseControl = new PauseControl();
             _pauseControl.OnPauseChanged += OnPauseChanged;
+            _audioManager = CoreManager.Instance.AudioManager;
 
             SetupButtons();
             _settingsPanel.GetComponent<UI_SettingsMenu>().Initialize(_genericPanel);
@@ -94,7 +96,10 @@ namespace Angry_Girls
             //_settingsPanel.GetComponent<UI_SettingsMenu>().LoadCategoryValues();
         }
 
-        private async UniTaskVoid OnQuitMissionPressed() => await NavigationManager.NavigateToScene(SceneType.MissionPreparation);
+        private async UniTaskVoid OnQuitMissionPressed() 
+        {
+            await NavigationManager.NavigateToScene(SceneType.MissionPreparation); 
+        }
         private void OnQuitGamePressed()
         {
             _settingsManager.SaveSettings();
