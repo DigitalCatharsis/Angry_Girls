@@ -148,13 +148,13 @@ namespace Angry_Girls
         }
 
         #region internal methoods for CharactersManager
-        internal void InternalSetSelectedCharacter(int index, CharacterProfile profile)
+        internal void SetSelectedCharacter(int index, CharacterProfile profile)
         {
             if (index >= 0 && index < _selectedCharactersPool.Length)
                 _selectedCharactersPool[index] = profile;
         }
 
-        internal void InternalAddToAvailable(CharacterProfile profile)
+        internal void AddCharacterToAvailable(CharacterProfile profile)
         {
             if (profile != null)
                 _availableCharacterPool.Add(profile);

@@ -32,7 +32,7 @@ namespace Angry_Girls
                 if (settings != null)
                 {
                     var profile = new CharacterProfile(settings);
-                    _charactersData.InternalSetSelectedCharacter(slot, profile);
+                    _charactersData.SetSelectedCharacter(slot, profile);
                     slot++;
                     Debug.Log($"CharactersManager: Added '{settings.name}' to selected slot {slot - 1}");
                 }
@@ -51,7 +51,7 @@ namespace Angry_Girls
                 if (settings != null)
                 {
                     var profile = new CharacterProfile(settings);
-                    _charactersData.InternalAddToAvailable(profile);
+                    _charactersData.AddCharacterToAvailable(profile);
                     Debug.Log($"CharactersManager: Added '{settings.name}' to available pool");
                 }
             }
@@ -79,7 +79,18 @@ namespace Angry_Girls
 
         #region Centralized methods of character management
         /// <summary>
-        /// Add character from available pool to selected pool.
+        /// Add character directly to available pool (for rewards).
+        /// Allows duplicates - each reward creates new profile instance.
+        /// </summary>
+        public void AddCharacterToAvailablePool(CharacterProfile profile)
+        {
+            _charactersData.AddCharacterToAvailable(profile);
+            OnDataChanged?.Invoke();
+            Debug.Log($"CharactersManager: Added character '{profile.CharacterSettings.name}' to available pool (duplicates allowed)");
+        }
+
+        /// <summary>
+        /// Add character from available pool to selected pool. //Mission Preparation UI
         /// Returns true if successful.
         /// </summary>
         public bool AddCharacterToSelected(CharacterProfile character)
@@ -106,7 +117,7 @@ namespace Angry_Girls
                 return false; // Character not in available pool
 
             // Move character
-            _charactersData.InternalSetSelectedCharacter(emptySlotIndex, character);
+            _charactersData.SetSelectedCharacter(emptySlotIndex, character);
 
             // Compact selected pool (shift non-null profiles to the left)
             CompactSelectedPool();
@@ -131,8 +142,8 @@ namespace Angry_Girls
 
             // Move character to available pool
             var character = _charactersData.SelectedCharactersPool[index];
-            _charactersData.InternalAddToAvailable(character);
-            _charactersData.InternalSetSelectedCharacter(index, null);
+            _charactersData.AddCharacterToAvailable(character);
+            _charactersData.SetSelectedCharacter(index, null);
 
             // Compact selected pool (shift non-null profiles to the left)
             CompactSelectedPool();
@@ -159,9 +170,9 @@ namespace Angry_Girls
             for (int i = 0; i < _charactersData.SelectedCharactersPool.Count; i++)
             {
                 if (i < nonNullCharacters.Count)
-                    _charactersData.InternalSetSelectedCharacter(i, nonNullCharacters[i]);
+                    _charactersData.SetSelectedCharacter(i, nonNullCharacters[i]);
                 else
-                    _charactersData.InternalSetSelectedCharacter(i, null);
+                    _charactersData.SetSelectedCharacter(i, null);
             }
         }
         #endregion

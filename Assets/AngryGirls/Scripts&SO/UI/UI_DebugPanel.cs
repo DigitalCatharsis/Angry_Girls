@@ -684,7 +684,7 @@ namespace Angry_Girls
 
             var newProfile = new CharacterProfile();
             newProfile.UpdateCharactersSettingsManually(settings);
-            charactersManager.CharactersData.InternalAddToAvailable(newProfile);
+            charactersManager.CharactersData.AddCharacterToAvailable(newProfile);
 
             UpdateDebugInfo();
 

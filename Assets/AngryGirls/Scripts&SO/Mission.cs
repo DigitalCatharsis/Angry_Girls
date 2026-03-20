@@ -29,16 +29,45 @@ namespace Angry_Girls
         None = 0,
     }
 
+    [Serializable]
+    public class MissionRewardData
+    {
+        public RewardType rewardType;
+
+        // For Credits reward
+        public int creditsAmount = 100;
+
+        // For Item reward
+        public string itemSettingsUniqueId;
+        public int itemQuantity = 1;
+
+        // For Character reward
+        public CharacterType characterType;
+
+        // Validation
+        public bool IsValid()
+        {
+            return rewardType switch
+            {
+                RewardType.Credits => creditsAmount > 0,
+                RewardType.Item => !string.IsNullOrEmpty(itemSettingsUniqueId),
+                RewardType.Character => characterType != CharacterType.NULL,
+                RewardType.None => true,
+                _ => false
+            };
+        }
+    }
+
     /// <summary>
     /// Save data for a single mission state
     /// </summary>
     [Serializable]
     public class MissionSaveData
     {
-        public RewardType reward;
+        public MissionRewardData rewardData;
         public bool isMissionAvailable = false;
         public bool isMissionCompleted = false;
-        public bool isRewardRecived = false; // intentional typo to match existing code
+        public bool isRewardReceived = false; // intentional typo to match existing code
     }
 
     /// <summary>
@@ -57,28 +86,28 @@ namespace Angry_Girls
     [Serializable]
     public class MissionData : ISaveData<MissionData, MissionSaveData>
     {
-        public RewardType reward;
+        public MissionRewardData rewardData;
         public bool isMissionAvailable;
         public bool isMissionCompleted;
-        public bool isRewardRecived;
+        public bool isRewardReceived;
 
         public MissionSaveData ConvertToSaveData()
         {
             return new MissionSaveData
             {
-                reward = this.reward,
+                rewardData = this.rewardData,
                 isMissionAvailable = this.isMissionAvailable,
                 isMissionCompleted = this.isMissionCompleted,
-                isRewardRecived = this.isRewardRecived
+                isRewardReceived = this.isRewardReceived
             };
         }
 
         public void ResetData()
         {
-            this.reward = RewardType.None;
+            this.rewardData = RewardType.None;
             this.isMissionAvailable = false;
             this.isMissionCompleted = false;
-            this.isRewardRecived = false;
+            this.isRewardReceived = false;
         }
 
         public UniTask UpdateFromSaveAsync(MissionSaveData saveData)
@@ -88,10 +117,10 @@ namespace Angry_Girls
                 throw new Exception("MissionsData save is null");
             }
 
-            this.reward = saveData.reward;
+            this.rewardData = saveData.rewardData;
             this.isMissionAvailable = saveData.isMissionAvailable;
             this.isMissionCompleted = saveData.isMissionCompleted;
-            this.isRewardRecived = saveData.isRewardRecived;
+            this.isRewardReceived = saveData.isRewardReceived;
             return UniTask.CompletedTask;
         }
     }
@@ -191,10 +220,10 @@ namespace Angry_Girls
 
             return new MissionData
             {
-                reward = RewardType.Credits,
+                rewardData = RewardType.Credits,
                 isMissionAvailable = false,
                 isMissionCompleted = false,
-                isRewardRecived = false
+                isRewardReceived = false
             };
         }
 

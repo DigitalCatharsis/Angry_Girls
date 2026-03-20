@@ -74,7 +74,7 @@ namespace Angry_Girls
             var missionData = GetMissionData(stageIndex, difficulty) ?? new MissionData();
             missionData.isMissionCompleted = true;
             missionData.isMissionAvailable = false;
-            missionData.isRewardRecived = false; // reward pending
+            missionData.isRewardReceived = false; // reward pending
 
             SetMissionData(stageIndex, difficulty, missionData);
 
@@ -142,7 +142,7 @@ namespace Angry_Girls
                     reward = RewardType.None,
                     isMissionAvailable = false,
                     isMissionCompleted = false,
-                    isRewardRecived = false
+                    isRewardReceived = false
                 };
             }
             Debug.LogWarning($"MissionsManager: Mission index {missionIndex} is out of range.");
@@ -160,7 +160,7 @@ namespace Angry_Girls
             {
                 difficultyDataDict[difficultyStr] = newData;
 
-                if (newData.isMissionCompleted || newData.isRewardRecived)
+                if (newData.isMissionCompleted || newData.isRewardReceived)
                 {
                     OnDataChanged?.Invoke();
                 }
@@ -174,7 +174,7 @@ namespace Angry_Girls
                 };
                 _missionsData.MissionStates[missionIndex] = newDict;
 
-                if (newData.isMissionCompleted || newData.isRewardRecived)
+                if (newData.isMissionCompleted || newData.isRewardReceived)
                 {
                     OnDataChanged?.Invoke();
                 }

@@ -7,6 +7,6 @@ public class ResaveTool
     public static void ReimportAll()
     {
         AssetDatabase.ImportAsset("Assets", ImportAssetOptions.ImportRecursive | ImportAssetOptions.ForceUpdate);
-        Debug.Log("Принудительный переимпорт завершен!");
+        Debug.Log("Forced reimport completed!");
     }
 }

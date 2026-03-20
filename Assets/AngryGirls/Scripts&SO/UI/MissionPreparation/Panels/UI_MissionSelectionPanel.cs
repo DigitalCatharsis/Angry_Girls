@@ -16,7 +16,13 @@ namespace Angry_Girls
         [SerializeField] private GameObject _missionSlotPrefab;
         [SerializeField] private Image _missionPreview;
         [SerializeField] private TextMeshProUGUI _missionDescription;
-        [SerializeField] private TextMeshProUGUI _missionReward;
+
+        [Header("Reward Display")]
+        [SerializeField] private TextMeshProUGUI _rewardNameText;
+        [SerializeField] private Image _rewardIconImage;
+        [SerializeField] private Sprite _defaultCreditsIcon;
+
+        [Header("Difficulty Buttons")]
         [SerializeField] private Button _difficultyEasyButton;
         [SerializeField] private Button _difficultyNormalButton;
         [SerializeField] private Button _difficultyHardButton;
@@ -25,16 +31,18 @@ namespace Angry_Girls
         private Mission _selectedMission;
         private MissionDifficulty _selectedDifficulty = MissionDifficulty.Easy;
         private MissionsManager _missionsManager;
+        private IAssetProvider _assetProvider;
 
         /// <summary>
         /// Initialize the panel.
         /// </summary>
-        public void Initialize(CoreManager coremanger)
+        public void Initialize(CoreManager coreManager)
         {
-            _missionsManager = coremanger.MissionsManager;
+            _missionsManager = coreManager.MissionsManager;
+            _assetProvider = coreManager.AddressableAssetManager;
+
             SetupDifficultyButtons();
             CreateMissionSlots();
-
             Refresh();
         }
 
@@ -44,6 +52,7 @@ namespace Angry_Girls
         public void Refresh()
         {
             SetDefaultPreview();
+            ClearRewardDisplay();
             _selectedMission = default;
             UpdateMissionList();
             UpdateDifficultyButtonsVisual();
@@ -51,13 +60,23 @@ namespace Angry_Girls
 
         private void SetDefaultPreview()
         {
-            if (_missionPreview != null) { _missionPreview.sprite = default; }
-            ;
-            Color tmp = Color.white;
-            tmp.a = 0.25f;
-            _missionPreview.color = tmp;
+            if (_missionPreview != null) { _missionPreview.sprite = default; };
+            _missionPreview.color = new Color(1f, 1f, 1f, 0.25f);
+            //Color tmp = Color.white;
+            //tmp.a = 0.25f;
+            //_missionPreview.color = tmp;
         }
+        private void ClearRewardDisplay()
+        {
+            if (_rewardNameText != null)
+                _rewardNameText.text = "Reward: —";
 
+            if (_rewardIconImage != null)
+            {
+                _rewardIconImage.sprite = null;
+                _rewardIconImage.enabled = false;
+            }
+        }
         private void SetupDifficultyButtons()
         {
             if (_difficultyEasyButton != null)
@@ -100,8 +119,7 @@ namespace Angry_Girls
         private void UpdateMissionList()
         {
             var missions = _missionsManager?.GetMissions();
-            if (missions == null) { return; }
-            ;
+            if (missions == null) { return; };
 
             for (int i = 0; i < _missionSlots.Count && i < missions.Count; i++)
             {
@@ -117,36 +135,28 @@ namespace Angry_Girls
 
         private void UpdateDifficultyButtonsVisual()
         {
-            if (_difficultyEasyButton != null)
-            {
-                var image = _difficultyEasyButton.GetComponent<Image>();
-                if (image != null)
-                    image.color = (_selectedDifficulty == MissionDifficulty.Easy) ? Color.yellow : Color.white;
-            }
-
-            if (_difficultyNormalButton != null)
-            {
-                var image = _difficultyNormalButton.GetComponent<Image>();
-                if (image != null)
-                    image.color = (_selectedDifficulty == MissionDifficulty.Normal) ? Color.yellow : Color.white;
-            }
-
-            if (_difficultyHardButton != null)
-            {
-                var image = _difficultyHardButton.GetComponent<Image>();
-                if (image != null)
-                    image.color = (_selectedDifficulty == MissionDifficulty.Hard) ? Color.yellow : Color.white;
-            }
+            UpdateButtonColor(_difficultyEasyButton, MissionDifficulty.Easy);
+            UpdateButtonColor(_difficultyNormalButton, MissionDifficulty.Normal);
+            UpdateButtonColor(_difficultyHardButton, MissionDifficulty.Hard);
         }
 
+        private void UpdateButtonColor(Button button, MissionDifficulty difficulty)
+        {
+            if (button != null)
+            {
+                var image = button.GetComponent<Image>();
+                if (image != null)
+                    image.color = (_selectedDifficulty == difficulty) ? Color.yellow : Color.white;
+            }
+        }
         private void OnMissionSlotClicked(Mission mission)
         {
             _selectedMission = mission;
             UpdatePreviewWindowContent(_selectedMission).Forget();
-            UpdateMissionDetailsAndPreviewWindows(_selectedMission, _selectedDifficulty);
+            UpdateMissionDetailsAndRewardDisplay(_selectedMission, _selectedDifficulty);
         }
 
-        private void UpdateMissionDetailsAndPreviewWindows(Mission mission, MissionDifficulty difficulty)
+        private void UpdateMissionDetailsAndRewardDisplay(Mission mission, MissionDifficulty difficulty)
         {
             var missionData = mission.GetData(difficulty);
 
@@ -155,9 +165,86 @@ namespace Angry_Girls
                 _missionDescription.text = $"Mission: {mission.missionName}\nDifficulty: {difficulty}";
             }
 
-            if (_missionReward != null)
+            // Update reward display
+            UpdateRewardDisplay(missionData.rewardData, missionData.rewardData);
+        }
+
+        private void UpdateRewardDisplay(MissionRewardData rewardData)
+        {
+            if (_rewardNameText == null || _rewardIconImage == null)
+                return;
+
+            switch (rewardType)
             {
-                _missionReward.text = $"Reward: {missionData.reward}";
+                case RewardType.Credits:
+                    _rewardNameText.text = $"Reward: +{rewardData.creditsAmount} Credits";
+                    LoadRewardIcon(_defaultCreditsIcon);
+                    break;
+
+                case RewardType.Item:
+                    LoadItemRewardAsync(rewardData.itemSettingsUniqueId);
+                    break;
+
+                case RewardType.Character:
+                    LoadCharacterRewardAsync(rewardData.characterType);
+                    break;
+
+                case RewardType.None:
+                default:
+                    _rewardNameText.text = "Reward: —";
+                    _rewardIconImage.enabled = false;
+                    break;
+            }
+        }
+
+        private void LoadRewardIcon(Sprite sprite)
+        {
+            if (sprite != null)
+            {
+                _rewardIconImage.sprite = sprite;
+                _rewardIconImage.enabled = true;
+            }
+            else
+            {
+                _rewardIconImage.enabled = false;
+            }
+        }
+
+        private async void LoadItemRewardAsync(string uniqueId)
+        {
+            var itemSettings = await _assetProvider.LoadScriptableObjectAsync<ItemSettings>(uniqueId);
+            if (itemSettings != null)
+            {
+                _rewardNameText.text = $"Reward: {itemSettings.ItemName}";
+
+                if (itemSettings.IconReference != null && !string.IsNullOrEmpty(itemSettings.IconReference.AssetGUID))
+                {
+                    var sprite = await _assetProvider.LoadSpriteAsync(itemSettings.IconReference);
+                    LoadRewardIcon(sprite);
+                }
+                else
+                {
+                    _rewardIconImage.enabled = false;
+                }
+            }
+        }
+
+        private async void LoadCharacterRewardAsync(CharacterType characterType)
+        {
+            var settings = CoreManager.Instance.CharacterSettingsCatalogSO.GetByType(characterType);
+            if (settings != null)
+            {
+                _rewardNameText.text = $"Reward: {settings.name}";
+
+                if (settings.portrait != null && !string.IsNullOrEmpty(settings.portrait.AssetGUID))
+                {
+                    var sprite = await _assetProvider.LoadSpriteAsync(settings.portrait);
+                    LoadRewardIcon(sprite);
+                }
+                else
+                {
+                    _rewardIconImage.enabled = false;
+                }
             }
         }
 
@@ -165,13 +252,11 @@ namespace Angry_Girls
         {
             try
             {
-                var previewSprite = await CoreManager.Instance.AddressableAssetManager.LoadSpriteAsync(mission.previewReference);
+                var previewSprite = await _assetProvider.LoadSpriteAsync(mission.previewReference);
                 if (previewSprite != null)
                 {
                     _missionPreview.sprite = previewSprite;
-                    Color tmp = Color.white;
-                    tmp.a = 1f;
-                    _missionPreview.color = tmp;
+                    _missionPreview.color = Color.white;
                 }
                 else
                 {
@@ -181,7 +266,7 @@ namespace Angry_Girls
             catch (System.Exception e)
             {
                 Debug.LogError($"MissionSelectionPanel: Failed to load preview for mission {mission.missionName}: {e.Message}");
-                _missionPreview.sprite = default;
+                SetDefaultPreview();
             }
         }
 

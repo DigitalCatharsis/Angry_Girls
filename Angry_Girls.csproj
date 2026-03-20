@@ -83,6 +83,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\PoolManager\PoolManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\Screens\UI_UIScreen.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\CameraManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\RewardService.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\UI_Slots\UI_ItemSlot.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\TempClassesOrBadCode\Mediator\IMediator.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\CharacterSettings\CharacterSettings.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\TempClassesOrBadCode\CharacterExtraObjects\IExtraCharacterObject.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\StatesContainer.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\AttackAbilities\HeadspinAttack.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\UI_RewardPresentation.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LayerAdder\LayerChanger.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\AudioManager\AudioClipData.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\Input\VirtualInput.cs" />
