@@ -103,7 +103,7 @@ namespace Angry_Girls
         {
             // Grant reward BEFORE returning to menu
             var currentStageIndex = _stageManager.CurrentStageIndex;
-            var difficulty = GetCurrentDifficulty(); // Need to track this from MissionSelectionPanel
+            var difficulty = NavigationManager.GetLastDifficulty();
 
             var missionData = _missionsManager.GetMissionData(currentStageIndex, difficulty);
 

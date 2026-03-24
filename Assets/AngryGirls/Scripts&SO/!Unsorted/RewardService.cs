@@ -81,7 +81,7 @@ namespace Angry_Girls
 
         private async UniTask<RewardGrantResult> GrantItemAsync(string uniqueId, int quantity)
         {
-            var itemSettings = await _itemSettingsRepository.GetItemByUniqueIdAsync(uniqueId);
+            var itemSettings = _itemSettingsRepository.GetItemByUniqueId(uniqueId);
             if (itemSettings == null)
             {
                 return new RewardGrantResult { isSuccess = false, errorMessage = "Item not found" };

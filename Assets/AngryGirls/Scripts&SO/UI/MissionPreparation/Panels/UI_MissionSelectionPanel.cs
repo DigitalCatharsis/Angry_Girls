@@ -32,6 +32,7 @@ namespace Angry_Girls
         private MissionDifficulty _selectedDifficulty = MissionDifficulty.Easy;
         private MissionsManager _missionsManager;
         private IAssetProvider _assetProvider;
+        public MissionDifficulty SelectedDifficulty => _selectedDifficulty;
 
         /// <summary>
         /// Initialize the panel.
@@ -166,7 +167,7 @@ namespace Angry_Girls
             }
 
             // Update reward display
-            UpdateRewardDisplay(missionData.rewardData, missionData.rewardData);
+            UpdateRewardDisplay(missionData.rewardData);
         }
 
         private void UpdateRewardDisplay(MissionRewardData rewardData)
@@ -174,7 +175,7 @@ namespace Angry_Girls
             if (_rewardNameText == null || _rewardIconImage == null)
                 return;
 
-            switch (rewardType)
+            switch (rewardData.rewardType)
             {
                 case RewardType.Credits:
                     _rewardNameText.text = $"Reward: +{rewardData.creditsAmount} Credits";

@@ -146,23 +146,20 @@ namespace Angry_Girls
             }
         }
 
-        private async UniTaskVoid PlayRewardAnimation(CancellationToken token)
+        private async UniTask PlayRewardAnimation(CancellationToken token)
         {
             if (_rewardIcon != null)
             {
                 // Icon scale animation
                 _rewardIcon.transform.localScale = Vector3.zero;
-                await _rewardIcon.transform.DOScale(1f, _iconScaleDuration)
-                    .SetEase(Ease.OutBack)
-                    .ToUniTask(cancellationToken: token);
+                await _rewardIcon.transform.DOScale(1f, _iconScaleDuration).SetEase(Ease.OutBack).ToUniTask(cancellationToken: token);
             }
 
             if (_rewardDescription != null)
             {
                 // Text fade in
                 _rewardDescription.alpha = 0;
-                await _rewardDescription.DOFade(1f, _textFadeDuration)
-                    .ToUniTask(cancellationToken: token);
+                await _rewardDescription.DOFade(1f, _textFadeDuration).ToUniTask(cancellationToken: token);
             }
         }
 

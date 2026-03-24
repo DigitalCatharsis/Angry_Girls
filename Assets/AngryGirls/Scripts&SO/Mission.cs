@@ -38,7 +38,7 @@ namespace Angry_Girls
         public int creditsAmount = 100;
 
         // For Item reward
-        public string itemSettingsUniqueId;
+        public AssetReference itemSettingsUniqueId;
         public int itemQuantity = 1;
 
         // For Character reward
@@ -104,7 +104,7 @@ namespace Angry_Girls
 
         public void ResetData()
         {
-            this.rewardData = RewardType.None;
+            this.rewardData = null;
             this.isMissionAvailable = false;
             this.isMissionCompleted = false;
             this.isRewardReceived = false;
@@ -220,7 +220,7 @@ namespace Angry_Girls
 
             return new MissionData
             {
-                rewardData = RewardType.Credits,
+                rewardData = null,
                 isMissionAvailable = false,
                 isMissionCompleted = false,
                 isRewardReceived = false

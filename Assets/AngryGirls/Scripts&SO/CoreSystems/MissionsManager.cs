@@ -77,14 +77,6 @@ namespace Angry_Girls
             missionData.isRewardReceived = false; // reward pending
 
             SetMissionData(stageIndex, difficulty, missionData);
-
-            // Grant reward immediately (simplified logic)
-            if (missionData.reward == RewardType.Credits)
-            {
-                var creditsManager = CoreManager.Instance.CreditsManager;
-                creditsManager?.SetCredits(100);
-            }
-            // TODO: Character and Item rewards require additional logic (not implemented yet)
         }
 
         /// <summary>
@@ -139,7 +131,7 @@ namespace Angry_Girls
 
                 return new MissionData
                 {
-                    reward = RewardType.None,
+                    rewardData = new(),
                     isMissionAvailable = false,
                     isMissionCompleted = false,
                     isRewardReceived = false

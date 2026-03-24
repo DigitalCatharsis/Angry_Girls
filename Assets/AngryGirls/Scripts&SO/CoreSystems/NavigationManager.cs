@@ -34,6 +34,8 @@ namespace Angry_Girls
     public class NavigationManager
     {
         private static SceneType _savedMission;
+        private static MissionDifficulty _savedDifficulty = MissionDifficulty.Easy;
+
         /// <summary>
         /// Navigate to a specific scene.
         /// </summary>
@@ -81,6 +83,16 @@ namespace Angry_Girls
         public static void SetLastMission(SceneType mission)
         {
             _savedMission = mission;
+        }
+
+        public static void SetLastDifficulty(MissionDifficulty difficulty)
+        {
+            _savedDifficulty = difficulty;
+        }
+
+        public static MissionDifficulty GetLastDifficulty()
+        {
+            return _savedDifficulty;
         }
     }
 }

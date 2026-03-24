@@ -241,10 +241,13 @@ namespace Angry_Girls
         private async UniTask StartSelectedMissionAsync()
         {
             var selectedMission = _missionSelectionPanel.GetSelectedMission();
+            var selectedDifficulty = _missionSelectionPanel.SelectedDifficulty;
+
             if (_missionSelectionPanel.IsMissionSelected())
             {
                 CoreManager.Instance.SaveLoadManager.SaveGame();
                 NavigationManager.SetLastMission(selectedMission.missionName);
+                NavigationManager.SetLastDifficulty(selectedDifficulty);
                 await NavigationManager.NavigateToScene(selectedMission.missionName);
             }
         }

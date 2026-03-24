@@ -30,22 +30,37 @@ MonoBehaviour:
       _serializedList:
       - Key: 0
         Value:
-          reward: 1
+          rewardData:
+            rewardType: 2
+            creditsAmount: 100000
+            itemSettingsUniqueId: 
+            itemQuantity: 1
+            characterType: 0
           isMissionAvailable: 1
           isMissionCompleted: 1
-          isRewardRecived: 0
+          isRewardReceived: 0
       - Key: 1
         Value:
-          reward: 0
+          rewardData:
+            rewardType: 1
+            creditsAmount: 100
+            itemSettingsUniqueId: 
+            itemQuantity: 1
+            characterType: 5
           isMissionAvailable: 1
           isMissionCompleted: 0
-          isRewardRecived: 0
+          isRewardReceived: 0
       - Key: 2
         Value:
-          reward: 2
+          rewardData:
+            rewardType: 3
+            creditsAmount: 100
+            itemSettingsUniqueId: 
+            itemQuantity: 1
+            characterType: 0
           isMissionAvailable: 1
           isMissionCompleted: 0
-          isRewardRecived: 0
+          isRewardReceived: 0
   - missionName: 6
     iconReference:
       m_AssetGUID: b545c566630055a4182c519c474e6e3b
@@ -63,19 +78,34 @@ MonoBehaviour:
       _serializedList:
       - Key: 0
         Value:
-          reward: 1
+          rewardData:
+            rewardType: 0
+            creditsAmount: 100
+            itemSettingsUniqueId: 
+            itemQuantity: 1
+            characterType: 0
           isMissionAvailable: 1
           isMissionCompleted: 0
-          isRewardRecived: 0
+          isRewardReceived: 0
       - Key: 1
         Value:
-          reward: 0
+          rewardData:
+            rewardType: 0
+            creditsAmount: 100
+            itemSettingsUniqueId: 
+            itemQuantity: 1
+            characterType: 0
           isMissionAvailable: 0
           isMissionCompleted: 0
-          isRewardRecived: 0
+          isRewardReceived: 0
       - Key: 2
         Value:
-          reward: 2
+          rewardData:
+            rewardType: 0
+            creditsAmount: 100
+            itemSettingsUniqueId: 
+            itemQuantity: 1
+            characterType: 0
           isMissionAvailable: 0
           isMissionCompleted: 0
-          isRewardRecived: 0
+          isRewardReceived: 0
