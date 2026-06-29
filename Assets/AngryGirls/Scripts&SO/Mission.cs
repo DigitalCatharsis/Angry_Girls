@@ -38,7 +38,7 @@ namespace Angry_Girls
         public int creditsAmount = 100;
 
         // For Item reward
-        public AssetReference itemSettingsUniqueId;
+        public AssetReference assetReference;
         public int itemQuantity = 1;
 
         // For Character reward
@@ -50,7 +50,7 @@ namespace Angry_Girls
             return rewardType switch
             {
                 RewardType.Credits => creditsAmount > 0,
-                RewardType.Item => !string.IsNullOrEmpty(itemSettingsUniqueId),
+                RewardType.Item => !string.IsNullOrEmpty(assetReference.AssetGUID),
                 RewardType.Character => characterType != CharacterType.NULL,
                 RewardType.None => true,
                 _ => false

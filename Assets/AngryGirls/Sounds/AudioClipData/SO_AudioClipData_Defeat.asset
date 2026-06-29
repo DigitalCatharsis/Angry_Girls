@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7fa723ddffcb04b41bd863f5db3a3500, type: 3}
-  m_Name: SO_AudioClipData_Music_MissionPreparation
+  m_Name: SO_AudioClipData_Defeat
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: da4512de1e55345448353cd111da04d0, type: 3}
+  clip: {fileID: 8300000, guid: a3f57b14503ae284486f3e20691c86ec, type: 3}
   volumeOverride: 1
   minPitch: 1
   maxPitch: 1

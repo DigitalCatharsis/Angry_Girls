@@ -33,7 +33,12 @@ MonoBehaviour:
           rewardData:
             rewardType: 2
             creditsAmount: 100000
-            itemSettingsUniqueId: 
+            assetReference:
+              m_AssetGUID: 733da013114fba04cb22f13724a7e1a3
+              m_SubObjectName: T_Coin
+              m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+                Culture=neutral, PublicKeyToken=null
+              m_EditorAssetChanged: 1
             itemQuantity: 1
             characterType: 0
           isMissionAvailable: 1
@@ -43,8 +48,13 @@ MonoBehaviour:
         Value:
           rewardData:
             rewardType: 1
-            creditsAmount: 100
-            itemSettingsUniqueId: 
+            creditsAmount: 0
+            assetReference:
+              m_AssetGUID: 1de781d3f5e4c9248a8486217b854727
+              m_SubObjectName: T_Portrait_YBot_Blue
+              m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+                Culture=neutral, PublicKeyToken=null
+              m_EditorAssetChanged: 1
             itemQuantity: 1
             characterType: 5
           isMissionAvailable: 1
@@ -54,8 +64,13 @@ MonoBehaviour:
         Value:
           rewardData:
             rewardType: 3
-            creditsAmount: 100
-            itemSettingsUniqueId: 
+            creditsAmount: 0
+            assetReference:
+              m_AssetGUID: 9c20f5af70bb910469663e680ffa7d81
+              m_SubObjectName: T_Accessory_Bird_1
+              m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+                Culture=neutral, PublicKeyToken=null
+              m_EditorAssetChanged: 1
             itemQuantity: 1
             characterType: 0
           isMissionAvailable: 1
@@ -79,9 +94,14 @@ MonoBehaviour:
       - Key: 0
         Value:
           rewardData:
-            rewardType: 0
-            creditsAmount: 100
-            itemSettingsUniqueId: 
+            rewardType: 3
+            creditsAmount: 0
+            assetReference:
+              m_AssetGUID: f040bace1e9610545960e1aac44f80b3
+              m_SubObjectName: 
+              m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+                Culture=neutral, PublicKeyToken=null
+              m_EditorAssetChanged: 0
             itemQuantity: 1
             characterType: 0
           isMissionAvailable: 1
@@ -90,20 +110,30 @@ MonoBehaviour:
       - Key: 1
         Value:
           rewardData:
-            rewardType: 0
-            creditsAmount: 100
-            itemSettingsUniqueId: 
+            rewardType: 1
+            creditsAmount: 0
+            assetReference:
+              m_AssetGUID: 6ced006bb16f0bd48880a97482788c43
+              m_SubObjectName: T_Portrait_YBot_Red
+              m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+                Culture=neutral, PublicKeyToken=null
+              m_EditorAssetChanged: 1
             itemQuantity: 1
-            characterType: 0
+            characterType: 2
           isMissionAvailable: 0
           isMissionCompleted: 0
           isRewardReceived: 0
       - Key: 2
         Value:
           rewardData:
-            rewardType: 0
-            creditsAmount: 100
-            itemSettingsUniqueId: 
+            rewardType: 3
+            creditsAmount: 0
+            assetReference:
+              m_AssetGUID: 018378a92202e9546b924ff09efa8a5b
+              m_SubObjectName: 
+              m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+                Culture=neutral, PublicKeyToken=null
+              m_EditorAssetChanged: 1
             itemQuantity: 1
             characterType: 0
           isMissionAvailable: 0

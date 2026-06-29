@@ -1,13 +1,15 @@
-using UnityEngine;
-using UnityEngine.UI;
+using Cysharp.Threading.Tasks;
 using System;
 using TMPro;
-using Cysharp.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Angry_Girls
 {
     /// <summary>
-    /// UI slot for displaying a mission.
+    /// UI slot for displaying a mission in the list.
+    /// Only shows mission icon, name, and status (locked/completed).
+    /// Reward display is handled by MissionSelectionPanel.
     /// </summary>
     public class UI_MissionSlot : MonoBehaviour
     {
@@ -28,7 +30,6 @@ namespace Angry_Girls
         {
             _mission = mission;
             _onClickCallback = onClickCallback;
-
             if (_button != null)
                 _button.onClick.AddListener(OnButtonClicked);
         }
@@ -46,6 +47,7 @@ namespace Angry_Girls
 
             var missionData = _mission.GetData(currentDifficulty);
 
+            // Load mission icon
             try
             {
                 var sprite = await CoreManager.Instance.AddressableAssetManager.LoadSpriteAsync(_mission.iconReference);
@@ -57,20 +59,22 @@ namespace Angry_Girls
                 else
                 {
                     _missionIcon.enabled = false;
-                    Debug.LogWarning($"MissionSlot: Loaded sprite is null for AssetReference '{_mission.iconReference.AssetGUID}' in mission {_mission.missionName}");
+                    Debug.LogWarning($"MissionSlot: Loaded sprite is null for AssetReference '{_mission.iconReference.AssetGUID}'");
                 }
             }
             catch (Exception e)
             {
-                Debug.LogError($"MissionSlot: Failed to load icon for mission {_mission.missionName} from AssetReference '{_mission.iconReference?.AssetGUID}' (name: {_mission.iconReference?.SubObjectName}: {e.Message}");
+                Debug.LogError($"MissionSlot: Failed to load icon for mission {_mission.missionName}: {e.Message}");
                 _missionIcon.enabled = false;
             }
 
+            // Set mission name
             if (_missionNameText != null)
             {
                 _missionNameText.text = _mission.missionName.ToString() + "_" + currentDifficulty;
             }
 
+            // Update visual state (locked/completed)
             UpdateVisualState(missionData.isMissionAvailable, missionData.isMissionCompleted);
         }
 
@@ -78,10 +82,8 @@ namespace Angry_Girls
         {
             if (_lockedOverlay != null)
                 _lockedOverlay.gameObject.SetActive(!isAvailable);
-
             if (_completedOverlay != null)
                 _completedOverlay.gameObject.SetActive(isCompleted);
-
             if (_button != null)
                 _button.interactable = isAvailable;
         }

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundMusicData: {fileID: 11400000, guid: b7db115dfbbcb1246b07fb79fd3c0c31,
     type: 2}
-  victoryMusicLibrary: {fileID: 0}
-  defeatMusicLibrary: {fileID: 0}
+  victoryMusicLibrary: {fileID: 11400000, guid: eeeed7b4f9783724e83ad0268a8c1ef7,
+    type: 2}
+  defeatMusicLibrary: {fileID: 11400000, guid: 73a25e41f2fa835429b873b38368869c, type: 2}
   fadeInDuration: 1
   fadeOutDuration: 0.5

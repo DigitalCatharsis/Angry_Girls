@@ -48,7 +48,7 @@ namespace Angry_Girls
                         return GrantCredits(rewardData.creditsAmount);
 
                     case RewardType.Item:
-                        return await GrantItemAsync(rewardData.itemSettingsUniqueId, rewardData.itemQuantity);
+                        return await GrantItemAsync(rewardData.assetReference.AssetGUID, rewardData.itemQuantity);
 
                     case RewardType.Character:
                         return GrantCharacter(rewardData.characterType);

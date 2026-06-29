@@ -16,10 +16,15 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: a39d63712f4f87d4da872ec45fd3f72c
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 733da013114fba04cb22f13724a7e1a3
+    m_Address: Assets/AngryGirls/Textures/UI/T_Coin.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: ecf8e8ff81db5d7448711fa97ee309d2, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 4649fd4363752ec43b30fcb69b4a257f, type: 2}
     - {fileID: 11400000, guid: c878fa1d864f45e4091fa579405585d9, type: 2}
+    - {fileID: 11400000, guid: 4649fd4363752ec43b30fcb69b4a257f, type: 2}

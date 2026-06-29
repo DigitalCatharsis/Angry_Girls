@@ -183,7 +183,7 @@ namespace Angry_Girls
                     break;
 
                 case RewardType.Item:
-                    LoadItemRewardAsync(rewardData.itemSettingsUniqueId);
+                    LoadItemRewardAsync(rewardData.assetReference.AssetGUID);
                     break;
 
                 case RewardType.Character:
@@ -211,9 +211,9 @@ namespace Angry_Girls
             }
         }
 
-        private async void LoadItemRewardAsync(string uniqueId)
+        private async void LoadItemRewardAsync(string assetGuid)
         {
-            var itemSettings = await _assetProvider.LoadScriptableObjectAsync<ItemSettings>(uniqueId);
+            var itemSettings = await _assetProvider.LoadScriptableObjectAsync<ItemSettings>(assetGuid);
             if (itemSettings != null)
             {
                 _rewardNameText.text = $"Reward: {itemSettings.ItemName}";
