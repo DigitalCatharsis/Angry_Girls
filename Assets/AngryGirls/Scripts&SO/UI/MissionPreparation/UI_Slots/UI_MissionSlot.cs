@@ -6,11 +6,6 @@ using UnityEngine.UI;
 
 namespace Angry_Girls
 {
-    /// <summary>
-    /// UI slot for displaying a mission in the list.
-    /// Only shows mission icon, name, and status (locked/completed).
-    /// Reward display is handled by MissionSelectionPanel.
-    /// </summary>
     public class UI_MissionSlot : MonoBehaviour
     {
         [Header("UI Components")]
@@ -21,33 +16,46 @@ namespace Angry_Girls
         [SerializeField] private Image _lockedOverlay;
 
         private Mission _mission;
+        private MissionsManager _missionsManager;
         private Action<Mission> _onClickCallback;
 
-        /// <summary>
-        /// Initialize the slot with mission data and click callback.
-        /// </summary>
-        public void Initialize(Mission mission, Action<Mission> onClickCallback)
+        public void Initialize(Mission mission, MissionsManager missionsManager, Action<Mission> onClickCallback)
         {
             _mission = mission;
+            _missionsManager = missionsManager;
             _onClickCallback = onClickCallback;
+
             if (_button != null)
                 _button.onClick.AddListener(OnButtonClicked);
         }
 
         /// <summary>
-        /// Update the display for the current difficulty.
+        /// Update display using RUNTIME progress data from MissionsManager.
         /// </summary>
         public async UniTaskVoid UpdateDisplay(MissionDifficulty currentDifficulty)
         {
-            if (_mission.missionName == SceneType.None)
+            if (_mission == null || _mission.missionName == SceneType.None)
             {
                 gameObject.SetActive(false);
                 return;
             }
 
-            var missionData = _mission.GetData(currentDifficulty);
+            var progressData = _missionsManager.GetMissionData(_mission.missionName, currentDifficulty);
 
-            // Load mission icon
+            await LoadMissionIconAsync();
+
+            if (_missionNameText != null)
+            {
+                _missionNameText.text = $"{_mission.missionName}_{currentDifficulty}";
+            }
+
+            UpdateVisualState(progressData.isMissionAvailable, progressData.isMissionCompleted);
+        }
+
+        private async UniTask LoadMissionIconAsync()
+        {
+            if (_missionIcon == null) return;
+
             try
             {
                 var sprite = await CoreManager.Instance.AddressableAssetManager.LoadSpriteAsync(_mission.iconReference);
@@ -59,31 +67,23 @@ namespace Angry_Girls
                 else
                 {
                     _missionIcon.enabled = false;
-                    Debug.LogWarning($"MissionSlot: Loaded sprite is null for AssetReference '{_mission.iconReference.AssetGUID}'");
                 }
             }
             catch (Exception e)
             {
-                Debug.LogError($"MissionSlot: Failed to load icon for mission {_mission.missionName}: {e.Message}");
+                Debug.LogError($"UI_MissionSlot: Failed to load icon for {_mission.missionName}: {e.Message}");
                 _missionIcon.enabled = false;
             }
-
-            // Set mission name
-            if (_missionNameText != null)
-            {
-                _missionNameText.text = _mission.missionName.ToString() + "_" + currentDifficulty;
-            }
-
-            // Update visual state (locked/completed)
-            UpdateVisualState(missionData.isMissionAvailable, missionData.isMissionCompleted);
         }
 
         private void UpdateVisualState(bool isAvailable, bool isCompleted)
         {
             if (_lockedOverlay != null)
                 _lockedOverlay.gameObject.SetActive(!isAvailable);
+
             if (_completedOverlay != null)
                 _completedOverlay.gameObject.SetActive(isCompleted);
+
             if (_button != null)
                 _button.interactable = isAvailable;
         }
@@ -93,17 +93,12 @@ namespace Angry_Girls
             _onClickCallback?.Invoke(_mission);
         }
 
-        /// <summary>
-        /// Get the mission associated with this slot.
-        /// </summary>
         public Mission GetMission() => _mission;
 
         private void OnDestroy()
         {
             if (_button != null)
-            {
                 _button.onClick.RemoveListener(OnButtonClicked);
-            }
         }
     }
 }

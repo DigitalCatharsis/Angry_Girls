@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Angry_Girls
 {
@@ -99,13 +98,16 @@ namespace Angry_Girls
             Debug.Log($"LevelMusicController: Stopped background music for '{_levelSettings.name}'");
         }
 
-        /// <summary>
-        /// Play victory music (called on level completion).
-        /// </summary>
-        public void PlayVictoryMusic()
+        private void PlayVictoryMusic()
         {
-            if (_levelSettings?.victoryMusicLibrary == null) return;
-            _audioManager?.PlayMusicAsync(_levelSettings.victoryMusicLibrary, 0).Forget();
+            if (_levelSettings.victoryMusicLibrary == null) return;
+
+            // Play as one-shot sound, NOT looped
+            CoreManager.Instance.AudioManager.PlayClipData(
+                _levelSettings.victoryMusicLibrary,
+                AudioCategory.Music,
+                false  // randomPitch = false
+            );
         }
 
         /// <summary>

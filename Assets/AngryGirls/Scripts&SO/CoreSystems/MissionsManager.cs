@@ -1,21 +1,19 @@
-using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Angry_Girls
 {
-    /// <summary>
-    /// Manages mission states and progression
-    /// </summary>
-    public class MissionsManager : MonoBehaviour, ISaveReinitManager<DefaultSaveTemplate, MissionsSaveData, MissionsData>
+    public class MissionsManager : MonoBehaviour, ISaveReinitManager<DefaultSaveTemplate, MissionsProgressSaveData, MissionProgressData>
     {
-        private MissionsData _missionsData = new();
-        public MissionsData MissionsData => _missionsData;
-
         public event Action OnDataChanged;
 
         private MissionsRepository _missionsRepository;
+        private MissionProgressData _missionProgressData = new();
+
+        public SceneType CurrentMission { get; private set; }
+        public MissionDifficulty CurrentDifficulty { get; private set; } = MissionDifficulty.Normal;
 
         public void Initialize(DefaultSaveTemplate template)
         {
@@ -24,224 +22,117 @@ namespace Angry_Girls
 
         public void ResetManagersData()
         {
-            _missionsData.ResetData();
+            _missionProgressData.ResetData();
+            CurrentMission = SceneType.None;
             OnDataChanged?.Invoke();
         }
 
         public UniTask ReinitDataFromTemplateAsync(DefaultSaveTemplate template)
         {
-            _missionsRepository = template.missionsRepository;
-            _missionsData.ResetData();
+            if (_missionsRepository == null)
+                _missionsRepository = template.missionsRepository;
 
-            int missionCount = _missionsRepository.GetMissionCount();
-            for (int i = 0; i < missionCount; i++)
-            {
-                var mission = _missionsRepository.GetMission(i);
-                var difficultyDataDict = new Dictionary<string, MissionData>();
-
-                if (mission.missionDifficultyDatas != null)
-                {
-                    foreach (var kvp in mission.missionDifficultyDatas)
-                    {
-                        string difficultyStr = kvp.Key.ToString();
-                        difficultyDataDict[difficultyStr] = kvp.Value;
-                    }
-                }
-                _missionsData.MissionStates[i] = difficultyDataDict;
-            }
-
+            _missionProgressData.InitializeFromTemplate(_missionsRepository);
+            CurrentMission = SceneType.None;
             OnDataChanged?.Invoke();
             return UniTask.CompletedTask;
         }
 
-        public async UniTask ReinitDataFromSaveAsync(MissionsSaveData saveData)
+        public async UniTask ReinitDataFromSaveAsync(MissionsProgressSaveData saveData)
         {
-            await _missionsData.UpdateFromSaveAsync(saveData);
+            await _missionProgressData.UpdateFromSaveAsync(saveData);
+            _missionProgressData.RestoreRewardDataFromRepository(_missionsRepository);
+
+            CurrentMission = SceneType.None;
             OnDataChanged?.Invoke();
         }
 
-        public MissionsSaveData ConvertDataForSave()
+        public MissionsProgressSaveData ConvertDataForSave() =>
+            _missionProgressData.ConvertToSaveData();
+
+        public void SetCurrentMission(SceneType missionId, MissionDifficulty difficulty)
         {
-            return _missionsData.ConvertToSaveData();
+            CurrentMission = missionId;
+            CurrentDifficulty = difficulty;
         }
 
-        #region mission stuff itself
-        /// <summary>
-        /// Mark a specific mission as completed
-        /// </summary>
-        public void CompleteMission(int stageIndex, MissionDifficulty difficulty)
+        public void CompleteCurrentMission()
         {
-            var missionData = GetMissionData(stageIndex, difficulty) ?? new MissionData();
-            missionData.isMissionCompleted = true;
-            missionData.isMissionAvailable = false;
-            missionData.isRewardReceived = false; // reward pending
-
-            SetMissionData(stageIndex, difficulty, missionData);
-        }
-
-        /// <summary>
-        /// Get completion percentage for a difficulty level
-        /// </summary>
-        public float GetCompletionPercentageForDifficulty(MissionDifficulty difficulty)
-        {
-            int totalMissionsForDifficulty = 0;
-            int completedMissionsForDifficulty = 0;
-
-            if (_missionsRepository == null) return 0f;
-
-            int missionCount = _missionsRepository.GetMissionCount();
-            string difficultyStr = difficulty.ToString();
-
-            for (int i = 0; i < missionCount; i++)
+            if (CurrentMission == SceneType.None)
             {
-                if (_missionsData.MissionStates.TryGetValue(i, out var difficultyDataDict))
-                {
-                    if (difficultyDataDict.ContainsKey(difficultyStr))
-                    {
-                        totalMissionsForDifficulty++;
-                        if (difficultyDataDict[difficultyStr].isMissionCompleted)
-                        {
-                            completedMissionsForDifficulty++;
-                        }
-                    }
-                }
+                Debug.LogWarning("MissionsManager: Current mission is None. No active mission to complete.");
+                return;
             }
 
-            if (totalMissionsForDifficulty > 0)
-            {
-                return ((float)completedMissionsForDifficulty / totalMissionsForDifficulty) * 100f;
-            }
-            return 0f;
+            CompleteMission(CurrentMission, CurrentDifficulty);
+            CurrentMission = SceneType.None;
         }
 
         /// <summary>
-        /// Get mission data for specific mission and difficulty
+        /// Mark mission as completed and unlock the next mission of the same difficulty.
+        /// Mission stays available for replay; reward can be claimed only once.
         /// </summary>
-        public MissionData GetMissionData(int missionIndex, MissionDifficulty difficulty)
+        public void CompleteMission(SceneType missionId, MissionDifficulty difficulty)
         {
-            string difficultyStr = difficulty.ToString();
+            var data = _missionProgressData.GetMissionData(missionId, difficulty);
+            data.isMissionCompleted = true;
+            data.isRewardReceived = true;
+            _missionProgressData.SetMissionData(missionId, difficulty, data);
 
-            if (_missionsData.MissionStates.TryGetValue(missionIndex, out var difficultyDataDict))
-            {
-                if (difficultyDataDict.TryGetValue(difficultyStr, out var missionData))
-                {
-                    return missionData;
-                }
-                Debug.LogWarning($"MissionsManager: Mission index {missionIndex} does not have data for difficulty {difficulty}.");
+            UnlockNextMission(missionId, difficulty);
 
-                return new MissionData
-                {
-                    rewardData = new(),
-                    isMissionAvailable = false,
-                    isMissionCompleted = false,
-                    isRewardReceived = false
-                };
-            }
-            Debug.LogWarning($"MissionsManager: Mission index {missionIndex} is out of range.");
-            return new MissionData();
+            OnDataChanged?.Invoke();
         }
 
         /// <summary>
-        /// Update mission data for specific mission and difficulty
+        /// Unlocks the next mission in repository order for the given difficulty.
+        /// Does nothing when the completed mission is the last one.
         /// </summary>
-        public void SetMissionData(int missionIndex, MissionDifficulty difficulty, MissionData newData)
+        private void UnlockNextMission(SceneType completedMissionId, MissionDifficulty difficulty)
         {
-            string difficultyStr = difficulty.ToString();
+            if (_missionsRepository == null) return;
 
-            if (_missionsData.MissionStates.TryGetValue(missionIndex, out var difficultyDataDict))
+            var nextMission = _missionsRepository.GetNextMission(completedMissionId);
+            if (nextMission == null) return;
+
+            var nextData = _missionProgressData.GetMissionData(nextMission.missionName, difficulty);
+
+            if (!nextData.isMissionAvailable)
             {
-                difficultyDataDict[difficultyStr] = newData;
-
-                if (newData.isMissionCompleted || newData.isRewardReceived)
-                {
-                    OnDataChanged?.Invoke();
-                }
-            }
-            else
-            {
-                // Create new difficulty dictionary for this mission
-                var newDict = new Dictionary<string, MissionData>
-                {
-                    { difficultyStr, newData }
-                };
-                _missionsData.MissionStates[missionIndex] = newDict;
-
-                if (newData.isMissionCompleted || newData.isRewardReceived)
-                {
-                    OnDataChanged?.Invoke();
-                }
+                nextData.isMissionAvailable = true;
+                _missionProgressData.SetMissionData(nextMission.missionName, difficulty, nextData);
             }
         }
 
-        /// <summary>
-        /// Get total number of missions for a difficulty
-        /// </summary>
-        public int GetTotalMissionsForDifficulty(MissionDifficulty difficulty)
+        public MissionData GetMissionData(SceneType missionId, MissionDifficulty difficulty) =>
+            _missionProgressData.GetMissionData(missionId, difficulty);
+
+        public void SetMissionData(SceneType missionId, MissionDifficulty difficulty, MissionData newData)
         {
-            if (_missionsRepository == null) return 0;
-
-            int count = 0;
-            int missionCount = _missionsRepository.GetMissionCount();
-            string difficultyStr = difficulty.ToString();
-
-            for (int i = 0; i < missionCount; i++)
-            {
-                if (_missionsData.MissionStates.ContainsKey(i) &&
-                    _missionsData.MissionStates[i].ContainsKey(difficultyStr))
-                {
-                    count++;
-                }
-            }
-            return count;
+            _missionProgressData.SetMissionData(missionId, difficulty, newData);
+            OnDataChanged?.Invoke();
         }
 
-        /// <summary>
-        /// Get number of completed missions for a difficulty
-        /// </summary>
-        public int GetCompletedMissionsForDifficulty(MissionDifficulty difficulty)
-        {
-            if (_missionsRepository == null) return 0;
+        public float GetCompletionPercentageForDifficulty(MissionDifficulty difficulty) =>
+            _missionProgressData.GetCompletionPercentageForDifficulty(difficulty, GetMissionCount());
 
-            int count = 0;
-            int missionCount = _missionsRepository.GetMissionCount();
-            string difficultyStr = difficulty.ToString();
+        public int GetTotalMissionsForDifficulty(MissionDifficulty difficulty) =>
+            _missionProgressData.GetTotalMissionsForDifficulty(difficulty);
 
-            for (int i = 0; i < missionCount; i++)
-            {
-                if (_missionsData.MissionStates.TryGetValue(i, out var difficultyDataDict))
-                {
-                    if (difficultyDataDict.ContainsKey(difficultyStr) &&
-                        difficultyDataDict[difficultyStr].isMissionCompleted)
-                    {
-                        count++;
-                    }
-                }
-            }
-            return count;
-        }
+        public int GetCompletedMissionsForDifficulty(MissionDifficulty difficulty) =>
+            _missionProgressData.GetCompletedMissionsForDifficulty(difficulty);
 
-        /// <summary>
-        /// Get total number of missions
-        /// </summary>
-        public int GetMissionCount()
-        {
-            return _missionsRepository?.GetMissionCount() ?? 0;
-        }
+        public int GetMissionCount() =>
+            _missionsRepository?.GetMissionCount() ?? 0;
 
-        /// <summary>
-        /// Reset all mission progress
-        /// </summary>
         public void ResetAllProgress()
         {
-            _missionsData.ResetData();
-            Debug.Log($"MissionsManager: All mission progress reset.");
+            _missionProgressData.ResetData();
+            Debug.Log("MissionsManager: All mission progress reset.");
             OnDataChanged?.Invoke();
         }
 
-        /// <summary>
-        /// Get all missions
-        /// </summary>
-        public IReadOnlyList<Mission> GetMissions() => _missionsRepository?.Missions ?? new List<Mission>();
-        #endregion
+        public IReadOnlyList<Mission> GetMissionsFromRepository() =>
+            _missionsRepository?.Missions;
     }
 }

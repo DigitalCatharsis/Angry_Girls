@@ -58,12 +58,19 @@ namespace Angry_Girls
         }
 
         /// <summary>
-        /// Called when the coin is picked up by a playerz
+        /// Called when coin is collected by player character.
         /// </summary>
         public void OnPickUp()
         {
-            CoreManager.Instance.AudioManager.PlayClipData(_audioClipData, _audioClipData.fallbackCategory, false);
+            // Play sound
+            CoreManager.Instance.AudioManager.PlayClipData(
+                _audioClipData, _audioClipData.fallbackCategory, false);
+
+            // Show coin value VFX
             CoreManager.Instance.VFXManager.ShowCoinsValue(transform.position, _coinValue);
+
+            // Notify gameplay manager about collected coin
+            GameplayCoreManager.Instance.NotifyCoinCollected(_coinValue);
 
             Dispose();
         }

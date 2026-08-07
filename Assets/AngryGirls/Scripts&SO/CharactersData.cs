@@ -35,14 +35,14 @@ namespace Angry_Girls
 
         /// <summary>
         /// READ-ONLY access to selected characters pool.
-        /// DO NOT MODIFY DIRECTLY — use CharactersManager methods instead.
+        /// DO NOT MODIFY DIRECTLY - use CharactersManager methods instead.
         /// Direct modification bypasses OnDataChanged event and breaks UI synchronization.
         /// </summary>
         public IReadOnlyList<CharacterProfile> SelectedCharactersPool => Array.AsReadOnly(_selectedCharactersPool);
 
         /// <summary>
         /// READ-ONLY access to available characters pool.
-        /// DO NOT MODIFY DIRECTLY — use CharactersManager methods instead.
+        /// DO NOT MODIFY DIRECTLY - use CharactersManager methods instead.
         /// </summary>
         public IReadOnlyList<CharacterProfile> AvailableCharacterPool => _availableCharacterPool.AsReadOnly();
 

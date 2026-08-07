@@ -245,6 +245,8 @@ namespace Angry_Girls
 
             if (_missionSelectionPanel.IsMissionSelected())
             {
+                CoreManager.Instance.MissionsManager.SetCurrentMission(selectedMission.missionName, selectedDifficulty);
+
                 CoreManager.Instance.SaveLoadManager.SaveGame();
                 NavigationManager.SetLastMission(selectedMission.missionName);
                 NavigationManager.SetLastDifficulty(selectedDifficulty);

@@ -98,7 +98,7 @@ namespace Angry_Girls
                 (mgr, data) => mgr.ReinitDataFromSaveAsync(data)
             );
 
-            SaveLoadManager.RegisterManager<MissionsManager, MissionsSaveData>(
+            SaveLoadManager.RegisterManager<MissionsManager, MissionsProgressSaveData>(
                 MissionsManager,
                 mgr => mgr.ConvertDataForSave(),
                 (mgr, data) => mgr.ReinitDataFromSaveAsync(data)

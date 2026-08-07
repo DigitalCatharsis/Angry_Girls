@@ -25,7 +25,12 @@ namespace Angry_Girls
         public HealthBarManager HealthBarManager { get; private set; }
 
         public Action OnInitialized;
+        public event Action<int> OnCoinCollected;
 
+        public void NotifyCoinCollected(int value)
+        {
+            OnCoinCollected?.Invoke(value);
+        }
         private void OnEnable()
         {
             if (Instance != null && Instance != this)

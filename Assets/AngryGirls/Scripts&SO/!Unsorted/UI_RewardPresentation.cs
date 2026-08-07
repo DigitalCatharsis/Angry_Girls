@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using System;
-using System.Threading;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,207 +8,321 @@ using UnityEngine.UI;
 namespace Angry_Girls
 {
     /// <summary>
-    /// Reward presentation screen with animations and audio.
-    /// Inherits from UI_UIScreen for consistent lifecycle management.
+    /// Fullscreen reward presentation shown after mission victory.
+    /// Displays reward, character XP progress, and collected coins.
     /// </summary>
     public class UI_RewardPresentation : UI_UIScreen
     {
-        [Header("UI Components")]
+        [Header("Background")]
+        [SerializeField] private CanvasGroup _backgroundGroup;
+        [SerializeField] private float _backgroundFadeDuration = 0.4f;
+
+        [Header("Title")]
+        [SerializeField] private TextMeshProUGUI _titleText;
+        [SerializeField] private string _victoryTitle = "MISSION COMPLETE!";
+
+        [Header("Reward Section")]
         [SerializeField] private Image _rewardIcon;
-        [SerializeField] private TextMeshProUGUI _rewardTitle;
-        [SerializeField] private TextMeshProUGUI _rewardDescription;
+        [SerializeField] private TextMeshProUGUI _rewardNameText;
+        [SerializeField] private GameObject _rewardReceivedCheckmark;
+        [SerializeField] private Sprite _defaultCreditsIcon;
+        [SerializeField] private Sprite _defaultItemIcon;
+
+        [Header("Coins Section")]
+        [SerializeField] private TextMeshProUGUI _coinsCollectedText;
+        [SerializeField] private Image _coinIcon;
+
+        [Header("Characters Section")]
+        [SerializeField] private Transform _charactersContainer;
+        [SerializeField] private GameObject _characterEntryPrefab;
+
+        [Header("Continue Button")]
         [SerializeField] private Button _continueButton;
+        [SerializeField] private float _delayBeforeContinue = 1.5f;
+
+        [Header("Particles")]
         [SerializeField] private ParticleSystem _confettiParticles;
 
-        [Header("Animation Settings")]
-        [SerializeField] private float _iconScaleDuration = 0.5f;
-        [SerializeField] private float _textFadeDuration = 0.3f;
-        [SerializeField] private float _delayBeforeContinue = 1.0f;
-
         [Header("Audio")]
-        [SerializeField] private AudioClipData _rewardMusicData;
-        [SerializeField] private AudioClipData _rewardSfxData;
+        [SerializeField] private AudioClipData _victoryMusicData;
+        [SerializeField] private AudioClipData _rewardSoundData;
+        [SerializeField] private AudioClipData _coinSoundData;
 
-        private CancellationTokenSource _cancellationTokenSource;
-        private bool _isShowing = false;
-        private AudioManager _audioManager;
-        private bool _musicPlaying = false;
+        [Header("Animation Timing")]
+        [SerializeField] private float _elementDelay = 0.3f;
+        [SerializeField] private float _barFillDuration = 0.8f;
+        [SerializeField] private float _rewardPopDuration = 0.5f;
 
-        private void Awake()
+        private IAssetProvider _assetProvider;
+        private Sequence _animationSequence;
+
+        /// <summary>
+        /// Initialize with asset provider for loading icons.
+        /// </summary>
+        public void Initialize(IAssetProvider assetProvider)
         {
-            _audioManager = CoreManager.Instance?.AudioManager;
-
-            if (_continueButton != null)
-                _continueButton.onClick.AddListener(OnContinuePressed);
-
-            Hide();
+            _assetProvider = assetProvider;
         }
 
         /// <summary>
-        /// Show reward presentation with animation and audio.
+        /// Show reward presentation with full animation sequence.
         /// </summary>
-        public async UniTaskVoid ShowRewardAsync(RewardGrantResult rewardResult)
+        public async UniTask ShowRewardAsync(RewardPresentationData data)
         {
-            if (_isShowing) return;
-            _isShowing = true;
+            gameObject.SetActive(true);
+            _continueButton.interactable = false;
 
-            _cancellationTokenSource = new CancellationTokenSource();
-            var token = _cancellationTokenSource.Token;
+            // Reset visuals
+            ResetVisuals();
 
-            try
+            // Play victory music
+            PlayVictoryMusic();
+
+            // Build animation sequence
+            _animationSequence = DOTween.Sequence();
+
+            // 1. Fade in background
+            _animationSequence.Append(
+                _backgroundGroup.DOFade(1f, _backgroundFadeDuration)
+            );
+
+            // 2. Title pop
+            _animationSequence.Append(
+                _titleText.transform.DOScale(1.2f, 0.3f)
+                    .SetEase(Ease.OutBack)
+            ).AppendCallback(() => _titleText.text = _victoryTitle);
+
+            // 3. Coins collected (with count-up animation)
+            _animationSequence.AppendInterval(_elementDelay);
+            _animationSequence.AppendCallback(() =>
             {
-                Show();
-                _continueButton.interactable = false;
+                PlaySound(_coinSoundData);
+                AnimateCoinCount(data.collectedCoinsScore);
+            });
 
-                // Setup content
-                SetupRewardContent(rewardResult);
+            // 4. Reward display
+            _animationSequence.AppendInterval(_elementDelay);
+            _animationSequence.AppendCallback(() =>
+            {
+                PlaySound(_rewardSoundData);
+                ShowReward(data);
+            });
 
-                // Play audio
-                PlayRewardAudio();
+            // 5. Characters XP bars
+            _animationSequence.AppendInterval(_elementDelay);
+            _animationSequence.AppendCallback(() =>
+            {
+                ShowCharacterEntries(data.characterEntries);
+            });
 
-                // Play animation sequence
-                await PlayRewardAnimation(token);
+            // 6. Confetti
+            _animationSequence.AppendCallback(() =>
+            {
+                if (_confettiParticles != null)
+                    _confettiParticles.Play();
+            });
 
-                // Wait before allowing continue
-                await UniTask.Delay((int)(_delayBeforeContinue * 1000), cancellationToken: token);
-
+            // 7. Enable continue button after delay
+            _animationSequence.AppendInterval(_delayBeforeContinue);
+            _animationSequence.AppendCallback(() =>
+            {
                 _continueButton.interactable = true;
+            });
 
-                // Wait for player to press continue
-                await UniTask.WaitUntil(() => !_isShowing, cancellationToken: token);
-            }
-            catch (OperationCanceledException)
-            {
-                // Panel closed externally
-            }
-            finally
-            {
-                _isShowing = false;
-                StopRewardAudio();
-                Hide();
-                _cancellationTokenSource?.Dispose();
-            }
+            _animationSequence.Play();
+
+            // Wait for user to press continue
+            await UniTask.WaitUntil(() => !_continueButton.interactable || !gameObject.activeSelf);
+            await UniTask.WaitUntil(() => !gameObject.activeSelf);
         }
 
-        private void SetupRewardContent(RewardGrantResult result)
+        /// <summary>
+        /// Called when continue button is pressed.
+        /// </summary>
+        public void OnContinuePressed()
         {
-            _rewardTitle.text = result.isDuplicate ? "DUPLICATE!" : "REWARD EARNED!";
-            _rewardTitle.color = result.isDuplicate ? Color.yellow : Color.green;
-
-            _rewardDescription.text = result.message;
-
-            // Load icon based on reward type
-            LoadRewardIcon(result).Forget();
-
-            if (_confettiParticles != null && !result.isDuplicate)
-                _confettiParticles.Play();
-        }
-
-        private async UniTask LoadRewardIcon(RewardGrantResult result)
-        {
-            if (_rewardIcon == null) return;
-
-            Sprite iconSprite = null;
-
-            switch (result.rewardType)
+            if (_animationSequence != null && _animationSequence.IsActive())
             {
-                case RewardType.Credits:
-                    // Load credits icon from resources or assign in inspector
-                    iconSprite = Resources.Load<Sprite>("Icons/CreditsIcon");
-                    break;
-
-                case RewardType.Item:
-                    if (result.itemSettings != null && result.itemSettings.IconReference != null)
-                    {
-                        iconSprite = await CoreManager.Instance.AddressableAssetManager
-                            .LoadSpriteAsync(result.itemSettings.IconReference);
-                    }
-                    break;
-
-                case RewardType.Character:
-                    if (result.characterSettings != null && result.characterSettings.portrait != null)
-                    {
-                        iconSprite = await CoreManager.Instance.AddressableAssetManager
-                            .LoadSpriteAsync(result.characterSettings.portrait);
-                    }
-                    break;
+                _animationSequence.Kill();
             }
 
-            if (iconSprite != null)
-            {
-                _rewardIcon.sprite = iconSprite;
-                _rewardIcon.enabled = true;
-            }
-            else
-            {
-                _rewardIcon.enabled = false;
-            }
-        }
-
-        private async UniTask PlayRewardAnimation(CancellationToken token)
-        {
-            if (_rewardIcon != null)
-            {
-                // Icon scale animation
-                _rewardIcon.transform.localScale = Vector3.zero;
-                await _rewardIcon.transform.DOScale(1f, _iconScaleDuration).SetEase(Ease.OutBack).ToUniTask(cancellationToken: token);
-            }
-
-            if (_rewardDescription != null)
-            {
-                // Text fade in
-                _rewardDescription.alpha = 0;
-                await _rewardDescription.DOFade(1f, _textFadeDuration).ToUniTask(cancellationToken: token);
-            }
-        }
-
-        private void PlayRewardAudio()
-        {
-            if (_audioManager == null) return;
-
-            // Play SFX
-            if (_rewardSfxData != null)
-            {
-                _audioManager.PlayClipData(_rewardSfxData, _rewardSfxData.fallbackCategory, false);
-            }
-
-            // Play music (optional, short fanfare)
-            if (_rewardMusicData != null)
-            {
-                _audioManager.PlayMusicAsync(_rewardMusicData, crossfadeDuration: 0.5f).Forget();
-                _musicPlaying = true;
-            }
-        }
-
-        private void StopRewardAudio()
-        {
-            if (_audioManager == null) return;
-
-            if (_musicPlaying)
-            {
-                _audioManager.StopMusic();
-                _musicPlaying = false;
-            }
-        }
-
-        private void OnContinuePressed()
-        {
-            _isShowing = false;
+            // Fade out and hide
+            _backgroundGroup.DOFade(0f, 0.3f)
+                .OnComplete(() => gameObject.SetActive(false));
         }
 
         public override void Hide()
         {
+            if (_animationSequence != null && _animationSequence.IsActive())
+            {
+                _animationSequence.Kill();
+            }
+            _backgroundGroup.alpha = 0f;
             base.Hide();
+        }
+
+        private void ResetVisuals()
+        {
+            _backgroundGroup.alpha = 0f;
+            _titleText.text = "";
+            _titleText.transform.localScale = Vector3.zero;
+            _coinsCollectedText.text = "Coins: 0";
+            _rewardIcon.sprite = null;
+            _rewardIcon.enabled = false;
+            _rewardNameText.text = "";
+            _rewardReceivedCheckmark?.SetActive(false);
+            _continueButton.interactable = false;
+
+            // Clear character entries
+            foreach (Transform child in _charactersContainer)
+                Destroy(child.gameObject);
 
             if (_confettiParticles != null)
                 _confettiParticles.Stop();
         }
 
+        private void PlayVictoryMusic()
+        {
+            if (_victoryMusicData != null)
+            {
+                CoreManager.Instance.AudioManager.PlayClipData(
+                    _victoryMusicData, AudioCategory.Music, false);
+            }
+        }
+
+        private void PlaySound(AudioClipData data)
+        {
+            if (data != null)
+            {
+                CoreManager.Instance.AudioManager.PlayClipData(data, AudioCategory.SFX, false);
+            }
+        }
+
+        private void AnimateCoinCount(int targetCount)
+        {
+            _coinsCollectedText.text = "Coins: 0";
+            DOTween.To(
+                () => 0,
+                x => _coinsCollectedText.text = $"Coins: {x}",
+                targetCount,
+                0.8f
+            ).SetEase(Ease.OutQuad);
+        }
+
+        private void ShowReward(RewardPresentationData data)
+        {
+            var result = data.rewardResult;
+            if (result == null) return;
+
+            // Show checkmark if reward was already received
+            if (result.isDuplicate || result.rewardType == RewardType.None)
+            {
+                _rewardReceivedCheckmark?.SetActive(true);
+            }
+
+            switch (result.rewardType)
+            {
+                case RewardType.Credits:
+                    _rewardNameText.text = $"+{result.creditsAmount} Credits";
+                    _rewardIcon.sprite = _defaultCreditsIcon;
+                    _rewardIcon.enabled = true;
+                    break;
+
+                case RewardType.Item:
+                    _rewardNameText.text = result.itemSettings?.ItemName ?? "Item";
+                    _rewardIcon.sprite = _defaultItemIcon;
+                    _rewardIcon.enabled = true;
+                    // Load actual icon async
+                    LoadItemIcon(result.itemSettings).Forget();
+                    break;
+
+                case RewardType.Character:
+                    _rewardNameText.text = result.characterSettings?.name ?? "Character";
+                    _rewardIcon.sprite = _defaultItemIcon;
+                    _rewardIcon.enabled = true;
+                    LoadCharacterIcon(result.characterSettings).Forget();
+                    break;
+
+                default:
+                    _rewardNameText.text = "No Reward";
+                    _rewardIcon.enabled = false;
+                    break;
+            }
+
+            // Pop animation for reward icon
+            _rewardIcon.transform.localScale = Vector3.zero;
+            _rewardIcon.transform.DOScale(1f, _rewardPopDuration).SetEase(Ease.OutBack);
+        }
+
+        private async UniTaskVoid LoadItemIcon(ItemSettings settings)
+        {
+            if (settings == null || settings.IconReference == null) return;
+            if (string.IsNullOrEmpty(settings.IconReference.AssetGUID)) return;
+
+            var sprite = await _assetProvider.LoadSpriteAsync(settings.IconReference);
+            if (sprite != null && this != null)
+            {
+                _rewardIcon.sprite = sprite;
+            }
+        }
+
+        private async UniTaskVoid LoadCharacterIcon(CharacterSettings settings)
+        {
+            if (settings == null || settings.portrait == null) return;
+            if (string.IsNullOrEmpty(settings.portrait.AssetGUID)) return;
+
+            var sprite = await _assetProvider.LoadSpriteAsync(settings.portrait);
+            if (sprite != null && this != null)
+            {
+                _rewardIcon.sprite = sprite;
+            }
+        }
+
+        private void ShowCharacterEntries(List<CharacterRewardEntry> entries)
+        {
+            if (_charactersContainer == null)
+            {
+                Debug.LogError("UI_RewardPresentation: _charactersContainer is not assigned!");
+                return;
+            }
+
+            // Clear existing entries
+            foreach (Transform child in _charactersContainer)
+            {
+                Destroy(child.gameObject);
+            }
+
+            if (entries == null || entries.Count == 0)
+            {
+                Debug.LogWarning("UI_RewardPresentation: No character entries to display");
+                return;
+            }
+
+            // Spawn entry for each character
+            foreach (var entry in entries)
+            {
+                if (entry == null || entry.characterSettings == null) continue;
+
+                var entryGO = Instantiate(_characterEntryPrefab, _charactersContainer);
+                var entryComponent = entryGO.GetComponent<UI_CharacterRewardEntry>();
+
+                if (entryComponent != null)
+                {
+                    entryComponent.Setup(entry, _barFillDuration, _elementDelay);
+                }
+                else
+                {
+                    Debug.LogError("UI_RewardPresentation: UI_CharacterRewardEntry component not found on prefab!");
+                }
+            }
+        }
+
         private void OnDestroy()
         {
-            _cancellationTokenSource?.Cancel();
-            _cancellationTokenSource?.Dispose();
-            StopRewardAudio();
+            if (_animationSequence != null && _animationSequence.IsActive())
+            {
+                _animationSequence.Kill();
+            }
         }
     }
 }

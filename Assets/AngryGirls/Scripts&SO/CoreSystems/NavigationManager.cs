@@ -25,6 +25,7 @@ namespace Angry_Girls
         MissionPreparation = 3,
         Loading = 4,
         Level_0 = 5,
+        Level_01 = 7,
         Level_1 = 6
     }
 

@@ -767,7 +767,7 @@ namespace Angry_Girls
             int stageIndex = stageMgr.CurrentStageIndex;
             if (stageIndex < missionsManager.GetMissionCount())
             {
-                missionsManager.CompleteMission(stageIndex, MissionDifficulty.Easy);
+                //missionsManager.CompleteMission(stageIndex, MissionDifficulty.Easy);
                 UIManager.Instance?.ShowNotification($"Mission {stageIndex} completed!", 0.5f);
                 UpdateDebugInfo();
             }

@@ -13,7 +13,54 @@ MonoBehaviour:
   m_Name: SO_MissionsRepository
   m_EditorClassIdentifier: 
   _missions:
-  - missionName: 5
+  - missionName: 7
+    missionDataEasy:
+      missionDifficulty: 0
+      rewardData:
+        rewardType: 2
+        creditsAmount: 70000
+        assetReference:
+          m_AssetGUID: 733da013114fba04cb22f13724a7e1a3
+          m_SubObjectName: T_Coin
+          m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_EditorAssetChanged: 1
+        itemQuantity: 1
+        characterType: 0
+      isMissionAvailable: 1
+      isMissionCompleted: 1
+      isRewardReceived: 1
+    missionDataNormal:
+      missionDifficulty: 1
+      rewardData:
+        rewardType: 1
+        creditsAmount: 0
+        assetReference:
+          m_AssetGUID: 1de781d3f5e4c9248a8486217b854727
+          m_SubObjectName: T_Portrait_YBot_Blue
+          m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_EditorAssetChanged: 1
+        itemQuantity: 1
+        characterType: 5
+      isMissionAvailable: 1
+      isMissionCompleted: 0
+      isRewardReceived: 0
+    missionDataHard:
+      missionDifficulty: 2
+      rewardData:
+        rewardType: 3
+        creditsAmount: 0
+        assetReference:
+          m_AssetGUID: 018378a92202e9546b924ff09efa8a5b
+          m_SubObjectName: 
+          m_SubObjectType: 
+          m_EditorAssetChanged: 0
+        itemQuantity: 1
+        characterType: 0
+      isMissionAvailable: 1
+      isMissionCompleted: 0
+      isRewardReceived: 0
     iconReference:
       m_AssetGUID: ff697dd3e0c9f9a44bb3e47c39eb7682
       m_SubObjectName: T_MissionTemplate_Image_Level_0
@@ -26,57 +73,53 @@ MonoBehaviour:
       m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       m_EditorAssetChanged: 1
-    missionDifficultyDatas:
-      _serializedList:
-      - Key: 0
-        Value:
-          rewardData:
-            rewardType: 2
-            creditsAmount: 100000
-            assetReference:
-              m_AssetGUID: 733da013114fba04cb22f13724a7e1a3
-              m_SubObjectName: T_Coin
-              m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
-                Culture=neutral, PublicKeyToken=null
-              m_EditorAssetChanged: 1
-            itemQuantity: 1
-            characterType: 0
-          isMissionAvailable: 1
-          isMissionCompleted: 1
-          isRewardReceived: 0
-      - Key: 1
-        Value:
-          rewardData:
-            rewardType: 1
-            creditsAmount: 0
-            assetReference:
-              m_AssetGUID: 1de781d3f5e4c9248a8486217b854727
-              m_SubObjectName: T_Portrait_YBot_Blue
-              m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
-                Culture=neutral, PublicKeyToken=null
-              m_EditorAssetChanged: 1
-            itemQuantity: 1
-            characterType: 5
-          isMissionAvailable: 1
-          isMissionCompleted: 0
-          isRewardReceived: 0
-      - Key: 2
-        Value:
-          rewardData:
-            rewardType: 3
-            creditsAmount: 0
-            assetReference:
-              m_AssetGUID: 9c20f5af70bb910469663e680ffa7d81
-              m_SubObjectName: T_Accessory_Bird_1
-              m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
-                Culture=neutral, PublicKeyToken=null
-              m_EditorAssetChanged: 1
-            itemQuantity: 1
-            characterType: 0
-          isMissionAvailable: 1
-          isMissionCompleted: 0
-          isRewardReceived: 0
   - missionName: 6
+    missionDataEasy:
+      missionDifficulty: 0
+      rewardData:
+        rewardType: 1
+        creditsAmount: 0
+        assetReference:
+          m_AssetGUID: 9c65eea8e84dbe24fba68945af3d0e45
+          m_SubObjectName: T_Portrait_YBot_Green
+          m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_EditorAssetChanged: 1
+        itemQuantity: 1
+        characterType: 3
+      isMissionAvailable: 1
+      isMissionCompleted: 0
+      isRewardReceived: 0
+    missionDataNormal:
+      missionDifficulty: 1
+      rewardData:
+        rewardType: 3
+        creditsAmount: 0
+        assetReference:
+          m_AssetGUID: f80405dc380796640850878653b87cd4
+          m_SubObjectName: 
+          m_SubObjectType: 
+          m_EditorAssetChanged: 0
+        itemQuantity: 1
+        characterType: 0
+      isMissionAvailable: 0
+      isMissionCompleted: 0
+      isRewardReceived: 0
+    missionDataHard:
+      missionDifficulty: 2
+      rewardData:
+        rewardType: 0
+        creditsAmount: 100000
+        assetReference:
+          m_AssetGUID: 733da013114fba04cb22f13724a7e1a3
+          m_SubObjectName: 
+          m_SubObjectType: 
+          m_EditorAssetChanged: 1
+        itemQuantity: 1
+        characterType: 0
+      isMissionAvailable: 0
+      isMissionCompleted: 0
+      isRewardReceived: 0
     iconReference:
       m_AssetGUID: b545c566630055a4182c519c474e6e3b
       m_SubObjectName: T_MissionTemplate_Image_Level_1
@@ -89,53 +132,64 @@ MonoBehaviour:
       m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       m_EditorAssetChanged: 1
-    missionDifficultyDatas:
-      _serializedList:
-      - Key: 0
-        Value:
-          rewardData:
-            rewardType: 3
-            creditsAmount: 0
-            assetReference:
-              m_AssetGUID: f040bace1e9610545960e1aac44f80b3
-              m_SubObjectName: 
-              m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
-                Culture=neutral, PublicKeyToken=null
-              m_EditorAssetChanged: 0
-            itemQuantity: 1
-            characterType: 0
-          isMissionAvailable: 1
-          isMissionCompleted: 0
-          isRewardReceived: 0
-      - Key: 1
-        Value:
-          rewardData:
-            rewardType: 1
-            creditsAmount: 0
-            assetReference:
-              m_AssetGUID: 6ced006bb16f0bd48880a97482788c43
-              m_SubObjectName: T_Portrait_YBot_Red
-              m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
-                Culture=neutral, PublicKeyToken=null
-              m_EditorAssetChanged: 1
-            itemQuantity: 1
-            characterType: 2
-          isMissionAvailable: 0
-          isMissionCompleted: 0
-          isRewardReceived: 0
-      - Key: 2
-        Value:
-          rewardData:
-            rewardType: 3
-            creditsAmount: 0
-            assetReference:
-              m_AssetGUID: 018378a92202e9546b924ff09efa8a5b
-              m_SubObjectName: 
-              m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
-                Culture=neutral, PublicKeyToken=null
-              m_EditorAssetChanged: 1
-            itemQuantity: 1
-            characterType: 0
-          isMissionAvailable: 0
-          isMissionCompleted: 0
-          isRewardReceived: 0
+  - missionName: 5
+    missionDataEasy:
+      missionDifficulty: 0
+      rewardData:
+        rewardType: 2
+        creditsAmount: 90000
+        assetReference:
+          m_AssetGUID: 733da013114fba04cb22f13724a7e1a3
+          m_SubObjectName: T_Coin
+          m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_EditorAssetChanged: 1
+        itemQuantity: 1
+        characterType: 0
+      isMissionAvailable: 1
+      isMissionCompleted: 0
+      isRewardReceived: 0
+    missionDataNormal:
+      missionDifficulty: 1
+      rewardData:
+        rewardType: 2
+        creditsAmount: 9999
+        assetReference:
+          m_AssetGUID: 733da013114fba04cb22f13724a7e1a3
+          m_SubObjectName: T_Coin
+          m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_EditorAssetChanged: 1
+        itemQuantity: 1
+        characterType: 0
+      isMissionAvailable: 0
+      isMissionCompleted: 0
+      isRewardReceived: 0
+    missionDataHard:
+      missionDifficulty: 2
+      rewardData:
+        rewardType: 1
+        creditsAmount: 100
+        assetReference:
+          m_AssetGUID: 4b26d043d0f9cdd4c9a628ca190a96e7
+          m_SubObjectName: T_Portrait_YBot_Yellow
+          m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_EditorAssetChanged: 1
+        itemQuantity: 1
+        characterType: 4
+      isMissionAvailable: 0
+      isMissionCompleted: 0
+      isRewardReceived: 0
+    iconReference:
+      m_AssetGUID: c7e3eeb4bca20684b9908e302e228424
+      m_SubObjectName: T_MissionTemplate_Preview_Level_0
+      m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      m_EditorAssetChanged: 0
+    previewReference:
+      m_AssetGUID: d989e2f0ed1cb614c8890fce2cef3285
+      m_SubObjectName: T_MissionTemplate_Preview_Level_1
+      m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      m_EditorAssetChanged: 1

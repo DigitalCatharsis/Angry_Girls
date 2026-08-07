@@ -1,15 +1,14 @@
 ﻿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Angry_Girls
 {
     /// <summary>
-    /// Panel for character selection in mission preparation.
-    /// All character data modifications MUST go through CharactersManager.
-    /// Direct modification of CharactersData pools is prohibited.
+    /// Panel for selecting characters for the team.
+    /// Subscribes to CharactersManager.OnDataChanged and properly unsubscribes on destroy.
     /// </summary>
     public class UI_CharacterSelectionPanel : MonoBehaviour, IUIPanel
     {
@@ -17,46 +16,60 @@ namespace Angry_Girls
         [SerializeField] private Transform _availableCharactersContainer;
         [SerializeField] private Transform _selectedCharactersContainer;
         [SerializeField] private GameObject _characterSlotPrefab;
-        [SerializeField] private GameObject _previewPanel;
-        [SerializeField] private TextMeshProUGUI _characterNameText;
-        [SerializeField] private TextMeshProUGUI _characterStatsText;
-        [SerializeField] private TextMeshProUGUI _creditsText;
+        [SerializeField] private TextMeshProUGUI _statsText;
 
-        [Header("Data")]
+        [Header("Limits")]
         [SerializeField] private int _maxSelectedCharacters = 6;
 
         private List<UI_CharacterSlot> _availableCharacterSlots = new List<UI_CharacterSlot>();
         private List<UI_CharacterSlot> _selectedCharacterSlots = new List<UI_CharacterSlot>();
         private CharactersManager _charactersManager;
+        private IAssetProvider _assetProvider;
+
+        private bool _isDestroyed = false;
 
         /// <summary>
-        /// Initialize the panel and subscribe to data change events.
+        /// Initialize the panel and subscribe to data changes.
         /// </summary>
         public void Initialize(CoreManager coreManager)
         {
             _charactersManager = coreManager.CharactersManager;
+            _assetProvider = coreManager.AddressableAssetManager;
 
-            // Subscribe to data changes for automatic UI updates
-            _charactersManager.OnDataChanged += Refresh;
+            // Subscribe to data changes
+            _charactersManager.OnDataChanged += OnCharactersDataChanged;
 
             CreateSelectedCharacterSlots();
-            UpdateCharacterDisplay();
+            Refresh();
         }
 
         /// <summary>
-        /// Refresh the panel display when character data changes.
+        /// Callback for CharactersManager.OnDataChanged.
+        /// Guards against destroyed state.
+        /// </summary>
+        private void OnCharactersDataChanged()
+        {
+            if (_isDestroyed) return;
+            if (this == null) return;
+
+            Refresh();
+        }
+
+        /// <summary>
+        /// Refresh the panel display.
         /// </summary>
         public void Refresh()
         {
+            if (_isDestroyed) return;
             UpdateCharacterDisplay();
         }
 
         private void CreateSelectedCharacterSlots()
         {
-            // Clean up existing selected slots
-            ClearSlots(_selectedCharacterSlots);
+            // Clear existing selected slots
+            ClearSlotList(_selectedCharacterSlots);
 
-            // Create selected character slots (fixed count = 6)
+            // Create fixed number of selected character slots
             for (int i = 0; i < _maxSelectedCharacters; i++)
             {
                 var slotGO = Instantiate(_characterSlotPrefab, _selectedCharactersContainer);
@@ -68,17 +81,99 @@ namespace Angry_Girls
                 }
             }
         }
-        private void ClearSlots(List<UI_CharacterSlot> slots)
+
+        private void UpdateCharacterDisplay()
         {
-            foreach (var slot in slots)
+            if (_isDestroyed) return;
+            if (_charactersManager == null) return;
+
+            var charactersData = _charactersManager.CharactersData;
+            if (charactersData == null) return;
+
+            UpdateAvailableCharacters(charactersData.AvailableCharacterPool);
+            UpdateSelectedCharacters(charactersData.SelectedCharactersPool);
+        }
+
+        private void UpdateAvailableCharacters(IReadOnlyList<CharacterProfile> availableCharacters)
+        {
+            if (_isDestroyed) return;
+
+            // Remove excess slots
+            while (_availableCharacterSlots.Count > availableCharacters.Count)
             {
-                if (slot != null && slot.gameObject != null)
+                var last = _availableCharacterSlots[_availableCharacterSlots.Count - 1];
+                UnsubscribeSlot(last);
+                if (last != null && last.gameObject != null)
+                    Destroy(last.gameObject);
+                _availableCharacterSlots.RemoveAt(_availableCharacterSlots.Count - 1);
+            }
+
+            // Add missing slots
+            while (_availableCharacterSlots.Count < availableCharacters.Count)
+            {
+                var slotGO = Instantiate(_characterSlotPrefab, _availableCharactersContainer);
+                var slot = slotGO.GetComponent<UI_CharacterSlot>();
+                if (slot != null)
                 {
-                    UnsubscribeSlot(slot);
-                    Destroy(slot.gameObject);
+                    SubscribeSlot(slot);
+                    _availableCharacterSlots.Add(slot);
                 }
             }
-            slots.Clear();
+
+            // Update slot contents with null guards
+            for (int i = 0; i < _availableCharacterSlots.Count; i++)
+            {
+                var slot = _availableCharacterSlots[i];
+                // Guard against destroyed slots
+                if (slot == null || slot.gameObject == null)
+                {
+                    // Recreate destroyed slot
+                    var slotGO = Instantiate(_characterSlotPrefab, _availableCharactersContainer);
+                    slot = slotGO.GetComponent<UI_CharacterSlot>();
+                    if (slot != null)
+                    {
+                        SubscribeSlot(slot);
+                        _availableCharacterSlots[i] = slot;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+
+                if (i < availableCharacters.Count)
+                {
+                    slot.SetCharacter(availableCharacters[i], CharacterSlotType.Available).Forget();
+                }
+                else
+                {
+                    slot.Clear();
+                }
+            }
+        }
+
+        private void UpdateSelectedCharacters(IReadOnlyList<CharacterProfile> selectedCharacters)
+        {
+            if (_isDestroyed) return;
+
+            for (int i = 0; i < _selectedCharacterSlots.Count; i++)
+            {
+                var slot = _selectedCharacterSlots[i];
+                // Guard against destroyed slots
+                if (slot == null || slot.gameObject == null)
+                {
+                    continue;
+                }
+
+                if (i < selectedCharacters.Count)
+                {
+                    slot.SetCharacter(selectedCharacters[i], CharacterSlotType.Selected).Forget();
+                }
+                else
+                {
+                    slot.Clear();
+                }
+            }
         }
 
         private void SubscribeSlot(UI_CharacterSlot slot)
@@ -88,6 +183,7 @@ namespace Angry_Girls
             slot.OnPointerEntered += OnSlotPointerEnter;
             slot.OnPointerExited += OnSlotPointerExit;
         }
+
         private void UnsubscribeSlot(UI_CharacterSlot slot)
         {
             if (slot == null) return;
@@ -96,71 +192,22 @@ namespace Angry_Girls
             slot.OnPointerExited -= OnSlotPointerExit;
         }
 
-        private void UpdateCharacterDisplay()
+        private void ClearSlotList(List<UI_CharacterSlot> slots)
         {
-            if (_charactersManager == null) return;
-
-            var charactersData = _charactersManager.CharactersData;
-            if (charactersData == null) return;
-
-            // Update available characters (dynamic count)
-            UpdateAvailableCharacters(charactersData.AvailableCharacterPool);
-
-            // Update selected characters (compact fill - left-aligned, no gaps)
-            var compactSelected = charactersData.SelectedCharactersPool.Where(p => p != null).ToArray();
-
-            //for (int i = _selectedCharacterSlots.Count - 1; i >=0 ; i--)
-            for (int i = 0; i < _selectedCharacterSlots.Count; i++)
+            foreach (var slot in slots)
             {
-                if (i < compactSelected.Length)
-                    _selectedCharacterSlots[i].SetCharacter(compactSelected[i], CharacterSlotType.Selected).Forget();
-                else
-                    _selectedCharacterSlots[i].Clear();
+                UnsubscribeSlot(slot);
+                if (slot != null && slot.gameObject != null)
+                    Destroy(slot.gameObject);
             }
-        }
-
-        private UI_CharacterSlot CreateSlot(Transform parent)
-        {
-            var slotGO = Instantiate(_characterSlotPrefab, parent);
-            return slotGO.GetComponent<UI_CharacterSlot>();
-        }
-
-        private void UpdateAvailableCharacters(IReadOnlyList<CharacterProfile> availableCharacters)
-        {
-            // Remove excess slots
-            while (_availableCharacterSlots.Count > availableCharacters.Count)
-            {
-                var last = _availableCharacterSlots[_availableCharacterSlots.Count - 1];
-                UnsubscribeSlot(last);
-                Destroy(last.gameObject);
-                _availableCharacterSlots.RemoveAt(_availableCharacterSlots.Count - 1);
-            }
-
-            // Add missing slots
-            while (_availableCharacterSlots.Count < availableCharacters.Count)
-            {
-                var slot = CreateSlot(_availableCharactersContainer);
-                SubscribeSlot(slot);
-                _availableCharacterSlots.Add(slot);
-            }
-
-
-            // Update slot contents
-            for (int i = 0; i < _availableCharacterSlots.Count; i++)
-            {
-                if (i < availableCharacters.Count)
-                {
-                    _availableCharacterSlots[i].SetCharacter(availableCharacters[i], CharacterSlotType.Available).Forget();
-                }
-                else
-                {
-                    _availableCharacterSlots[i].Clear();
-                }
-            }
+            slots.Clear();
         }
 
         private void OnCharacterSlotClicked(UI_CharacterSlot slot)
         {
+            if (_isDestroyed) return;
+            if (slot == null || slot.Character == null) return;
+
             var character = slot.Character;
             var slotType = slot.SlotType;
 
@@ -181,61 +228,72 @@ namespace Angry_Girls
                         UIManager.Instance.ShowNotification("Failed to remove character!", 0.5f);
                     break;
             }
-            
         }
 
         private void OnSlotPointerEnter(UI_CharacterSlot slot)
         {
-            UpdatePreview(slot.Character);
+            if (_isDestroyed || slot == null) return;
+            // Show character preview/stats on hover
+            if (slot.Character != null && _statsText != null)
+            {
+                var baseStats = slot.Character.GetSettingsStats;
+                var itemsStats = slot.Character.GetItemsStats;
+                _statsText.text = CharactersStatsBase.GetColoredText(baseStats, itemsStats);
+            }
         }
-        private void OnSlotPointerExit(UI_CharacterSlot slot) => UpdatePreview(null);
 
-        private void UpdatePreview(CharacterProfile character)
+        private void OnSlotPointerExit(UI_CharacterSlot slot)
         {
-            if (character == null || character.CharacterSettings == null)
+            if (_isDestroyed) return;
+            // Reset stats display
+            if (_statsText != null)
             {
-                _previewPanel?.SetActive(false);
-                if (_characterNameText != null) _characterNameText.text = "";
-                if (_characterStatsText != null) _characterStatsText.text = "";
-                return;
-            }
-
-            _previewPanel?.SetActive(true);
-
-            if (_characterNameText != null)
-            {
-                _characterNameText.text = character.CharacterSettings.name;
-            }
-
-            if (_characterStatsText != null)
-            {
-                if (character.CharacterSettings.characterStats != null)
-                {
-                    _characterStatsText.text = $"HP: {character.CharacterSettings.characterStats.health}\n" +
-                                              $"Attack: {character.CharacterSettings.characterStats.damage}";
-                }
-                else
-                {
-                    _characterStatsText.text = "HP: Unknown\nAttack: Unknown";
-                }
+                _statsText.text = CharactersStatsBase.GetEmptyText();
             }
         }
 
         /// <summary>
-        /// Check if any characters are selected.
+        /// Check if enough characters are selected.
         /// </summary>
         public bool HasSelectedCharacters()
         {
-            return _selectedCharacterSlots.Any(s => s.Character != null);
+            if (_charactersManager == null) return false;
+            var data = _charactersManager.CharactersData;
+            if (data == null) return false;
+
+            int count = 0;
+            foreach (var c in data.SelectedCharactersPool)
+            {
+                if (c != null) count++;
+            }
+            return count > 0;
         }
 
+        /// <summary>
+        /// Properly unsubscribe from all events on destroy.
+        /// </summary>
         private void OnDestroy()
         {
-            if (_charactersManager != null)
-                _charactersManager.OnDataChanged -= Refresh;
+            _isDestroyed = true;
 
-            ClearSlots(_availableCharacterSlots);
-            ClearSlots(_selectedCharacterSlots);
+            // Unsubscribe from CharactersManager events
+            if (_charactersManager != null)
+            {
+                _charactersManager.OnDataChanged -= OnCharactersDataChanged;
+            }
+
+            // Unsubscribe all slots
+            foreach (var slot in _availableCharacterSlots)
+            {
+                UnsubscribeSlot(slot);
+            }
+            foreach (var slot in _selectedCharacterSlots)
+            {
+                UnsubscribeSlot(slot);
+            }
+
+            _availableCharacterSlots.Clear();
+            _selectedCharacterSlots.Clear();
         }
     }
 }

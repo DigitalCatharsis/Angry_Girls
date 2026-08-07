@@ -13,6 +13,10 @@ namespace Angry_Girls
 
         private int _currentScore;
 
+        /// <summary>
+        /// Get current score for conversion to credits.
+        /// </summary>
+        public int GetScore() => _currentScore;
         public override void Initialize()
         {
             base.Initialize();
