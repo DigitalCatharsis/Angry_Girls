@@ -100,7 +100,7 @@ namespace Angry_Girls
                 _missionsManager.CurrentDifficulty);
 
             RewardGrantResult rewardResult = null;
-            bool rewardAlreadyReceived = missionData.isRewardReceived;
+            var rewardAlreadyReceived = missionData.isRewardReceived;
 
             if (!missionData.isRewardReceived)
             {
@@ -125,6 +125,7 @@ namespace Angry_Girls
             if (rewardResult != null && _rewardPresentation != null)
             {
                 HideAllGameplayUI();
+                Hide();
 
                 var presentationData = BuildPresentationData(rewardResult, collectedCoins);
                 await _rewardPresentation.ShowRewardAsync(presentationData);

@@ -186,7 +186,7 @@ namespace Angry_Girls
             if (_victoryMusicData != null)
             {
                 CoreManager.Instance.AudioManager.PlayClipData(
-                    _victoryMusicData, AudioCategory.Music, false);
+                    _victoryMusicData, AudioCategory.SFX, false);
             }
         }
 
@@ -194,7 +194,7 @@ namespace Angry_Girls
         {
             if (data != null)
             {
-                CoreManager.Instance.AudioManager.PlayClipData(data, AudioCategory.SFX, false);
+                CoreManager.Instance.AudioManager.PlayClipData(data, AudioCategory.Music, false);
             }
         }
 

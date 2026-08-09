@@ -119,7 +119,7 @@ namespace Angry_Girls
 
             float elapsedTime = 0f;
             float[] initialValues = {
-                visualEffect.GetFloat("FlamesLifetime"),
+                //visualEffect.GetFloat("FlamesLifetime"),
                 visualEffect.GetFloat("SmokeLifetime"),
                 visualEffect.GetFloat("FlameRate"),
                 visualEffect.GetFloat("SmokeRate")

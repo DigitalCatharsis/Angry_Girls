@@ -79,44 +79,44 @@ namespace Angry_Girls
             Debug.Log($"LevelMusicController: Started background music for '{_levelSettings.name}'");
         }
 
-        /// <summary>
-        /// Stop background music with optional fade-out.
-        /// </summary>
-        private void StopBackgroundMusicAsync()
-        {
-            if (_audioManager == null || _levelSettings == null) return;
+        ///// <summary>
+        ///// Stop background music with optional fade-out.
+        ///// </summary>
+        //private void StopBackgroundMusicAsync()
+        //{
+        //    if (_audioManager == null || _levelSettings == null) return;
 
-            // Fade out before stopping
-            if (_levelSettings.fadeOutDuration > 0f)
-            {
-                _audioManager.FadeOutMusicAsync(_levelSettings.fadeOutDuration).Forget();
-            }
+        //    // Fade out before stopping
+        //    if (_levelSettings.fadeOutDuration > 0f)
+        //    {
+        //        _audioManager.FadeOutMusicAsync(_levelSettings.fadeOutDuration).Forget();
+        //    }
 
-            _audioManager.StopMusic();
-            _isMusicPlaying = false;
+        //    _audioManager.StopMusic();
+        //    _isMusicPlaying = false;
 
-            Debug.Log($"LevelMusicController: Stopped background music for '{_levelSettings.name}'");
-        }
+        //    Debug.Log($"LevelMusicController: Stopped background music for '{_levelSettings.name}'");
+        //}
 
-        private void PlayVictoryMusic()
-        {
-            if (_levelSettings.victoryMusicLibrary == null) return;
+        //private void PlayVictoryMusic()
+        //{
+        //    if (_levelSettings.victoryMusicLibrary == null) return;
 
-            // Play as one-shot sound, NOT looped
-            CoreManager.Instance.AudioManager.PlayClipData(
-                _levelSettings.victoryMusicLibrary,
-                AudioCategory.Music,
-                false  // randomPitch = false
-            );
-        }
+        //    // Play as one-shot sound, NOT looped
+        //    CoreManager.Instance.AudioManager.PlayClipData(
+        //        _levelSettings.victoryMusicLibrary,
+        //        AudioCategory.Music,
+        //        false  // randomPitch = false
+        //    );
+        //}
 
-        /// <summary>
-        /// Play defeat music (called on level failure).
-        /// </summary>
-        public void PlayDefeatMusic()
-        {
-            if (_levelSettings?.defeatMusicLibrary == null) return;
-            _audioManager?.PlayMusicAsync(_levelSettings.defeatMusicLibrary, 0).Forget();
-        }
+        ///// <summary>
+        ///// Play defeat music (called on level failure).
+        ///// </summary>
+        //public void PlayDefeatMusic()
+        //{
+        //    if (_levelSettings?.defeatMusicLibrary == null) return;
+        //    _audioManager?.PlayMusicAsync(_levelSettings.defeatMusicLibrary, 0).Forget();
+        //}
     }
 }
