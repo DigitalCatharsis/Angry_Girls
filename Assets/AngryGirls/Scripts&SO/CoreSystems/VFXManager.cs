@@ -128,10 +128,10 @@ namespace Angry_Girls
             while (elapsedTime < disposeDuration)
             {
                 float progress = elapsedTime / disposeDuration;
-                visualEffect.SetFloat("FlamesLifetime", Mathf.Lerp(initialValues[0], 0, progress));
-                visualEffect.SetFloat("SmokeLifetime", Mathf.Lerp(initialValues[1], 0, progress));
-                visualEffect.SetFloat("FlameRate", Mathf.Lerp(initialValues[2], 0, progress));
-                visualEffect.SetFloat("SmokeRate", Mathf.Lerp(initialValues[3], 0, progress));
+                //visualEffect.SetFloat("FlamesLifetime", Mathf.Lerp(initialValues[0], 0, progress));
+                //visualEffect.SetFloat("SmokeLifetime", Mathf.Lerp(initialValues[1], 0, progress));
+                //visualEffect.SetFloat("FlameRate", Mathf.Lerp(initialValues[2], 0, progress));
+                //visualEffect.SetFloat("SmokeRate", Mathf.Lerp(initialValues[3], 0, progress));
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }

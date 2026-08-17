@@ -127,7 +127,6 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\NotificationManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\AudioManager\AudioClipLibrary.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\CameraSizer.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\ScoreDisplay.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\AnimationPhaseMachine.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\GameObjectExtensions.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\Spawn\DynamicFactotyExtention\Editor\DynamicFactoryExtentionEditor.cs" />

@@ -32,7 +32,7 @@ namespace Angry_Girls
         /// <summary>
         /// Grant reward to player. Returns reward result info.
         /// </summary>
-        public async UniTask<RewardGrantResult> GrantRewardAsync(MissionRewardData rewardData)
+        public async UniTask<RewardGrantResult> GrantRewardAsync(MissionRewardData rewardData, int collectedCoins, bool isObtained)
         {
             if (!rewardData.IsValid())
             {
@@ -42,16 +42,22 @@ namespace Angry_Girls
 
             try
             {
+                // Convert collected coins to credits
+                if (collectedCoins > 0)
+                {
+                    CoreManager.Instance.CreditsManager.SetCredits(collectedCoins);
+                }
+
                 switch (rewardData.rewardType)
                 {
                     case RewardType.Credits:
-                        return GrantCredits(rewardData.creditsAmount);
+                        return GrantCredits(rewardData.creditsAmount, isObtained);
 
                     case RewardType.Item:
-                        return await GrantItemAsync(rewardData.assetReference.AssetGUID, rewardData.itemQuantity);
+                        return GrantItemAsync(rewardData.assetReference.AssetGUID, rewardData.itemQuantity, isObtained);
 
                     case RewardType.Character:
-                        return GrantCharacter(rewardData.characterType);
+                        return GrantCharacter(rewardData.characterType, isObtained);
 
                     case RewardType.None:
                         return new RewardGrantResult { isSuccess = true, rewardType = RewardType.None };
@@ -67,9 +73,11 @@ namespace Angry_Girls
             }
         }
 
-        private RewardGrantResult GrantCredits(int amount)
+        private RewardGrantResult GrantCredits(int amount, bool isObtained)
         {
-            _creditsManager.SetCredits(amount);
+            if (!isObtained)
+                _creditsManager.SetCredits(amount);
+
             return new RewardGrantResult
             {
                 isSuccess = true,
@@ -79,7 +87,7 @@ namespace Angry_Girls
             };
         }
 
-        private async UniTask<RewardGrantResult> GrantItemAsync(string uniqueId, int quantity)
+        private RewardGrantResult GrantItemAsync(string uniqueId, int quantity, bool isObtained)
         {
             var itemSettings = _itemSettingsRepository.GetItemByUniqueId(uniqueId);
             if (itemSettings == null)
@@ -87,7 +95,9 @@ namespace Angry_Girls
                 return new RewardGrantResult { isSuccess = false, errorMessage = "Item not found" };
             }
 
+            if(!isObtained)
             _inventoryManager.AddItem(itemSettings, quantity);
+
             return new RewardGrantResult
             {
                 isSuccess = true,
@@ -98,7 +108,7 @@ namespace Angry_Girls
             };
         }
 
-        private RewardGrantResult GrantCharacter(CharacterType characterType)
+        private RewardGrantResult GrantCharacter(CharacterType characterType, bool isObtained)
         {
             var settings = _characterCatalog.GetByType(characterType);
             if (settings == null)
@@ -106,16 +116,18 @@ namespace Angry_Girls
                 return new RewardGrantResult { isSuccess = false, errorMessage = "Character not found" };
             }
 
-            // Allow duplicates - create new profile
-            var profile = new CharacterProfile(settings);
-            _charactersManager.AddCharacterToAvailablePool(profile);
+            if (!isObtained)
+            {
+                var profile = new CharacterProfile(settings);
+                _charactersManager.AddCharacterToAvailablePool(profile);
+            }
 
             return new RewardGrantResult
             {
                 isSuccess = true,
                 rewardType = RewardType.Character,
                 characterSettings = settings,
-                isDuplicate = false, // Duplicates allowed
+                isDuplicate = false,
                 message = $"New Character: {settings.name}"
             };
         }

@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using UnityEngine;
 
@@ -15,8 +16,13 @@ namespace Angry_Girls
         [SerializeField] private TutorialSystem _tutorialSystem;
         [SerializeField] private GameResultUI _gameResultUI;
         [SerializeField] private TrajectoryCheatToggle _trajectoryCheatToggle;
+        [SerializeField] private UI_RewardPresentation _uiRewardPresentation;
+
+        private UI_GameplayManagersComponent[] _uI_GameplayScreens;
 
         private bool _isInitialized;
+
+        private GameLogic _gameLogic;
 
         public override void Initialize()
         {
@@ -36,16 +42,41 @@ namespace Angry_Girls
 
         private void InitializeComponents()
         {
-            _scoreDisplay?.Initialize();
-            _charactersPanel?.Initialize();
-            _pauseMenu?.Initialize();
-            _tutorialSystem?.Initialize();
-            _gameResultUI?.Initialize();
-            _trajectoryCheatToggle?.Initialize();
+            _uI_GameplayScreens = GetComponentsInChildren<UI_GameplayManagersComponent>();
+            foreach (var screen in _uI_GameplayScreens)
+            {
+                screen.Initialize();
+            }
+            //_scoreDisplay?.Initialize();
+            //_charactersPanel?.Initialize();
+            //_pauseMenu?.Initialize();
+            //_tutorialSystem?.Initialize();
+            //_gameResultUI?.Initialize();
+            //_trajectoryCheatToggle?.Initialize();
+            //_uiRewardPresentation?.Initialize();
 
-            var gameLogic = GameplayCoreManager.Instance.GameLogic;
-            gameLogic.OnGameOver += _gameResultUI.ShowGameOver;
-            gameLogic.OnVictory += _gameResultUI.ShowVictory;
+            _gameLogic = GameplayCoreManager.Instance.GameLogic;
+            _gameLogic.OnGameOver += _gameResultUI.ShowGameOver;
+            _gameLogic.OnVictory += _gameResultUI.ShowVictory;
+            _gameLogic.OnRewardStart += ShowReward;
+        }
+
+        public void ShowReward()
+        {
+            DisableAllUIButOne(_uiRewardPresentation);
+            _uiRewardPresentation.ShowAndGrantRewardAsync(_scoreDisplay.GetScore()).Forget();
+        }
+
+        private void DisableAllUIButOne(UI_GameplayManagersComponent UIScreen)
+        {
+            foreach (var screen in _uI_GameplayScreens)
+            {
+                if (screen != UIScreen)
+                {
+                    screen.gameObject.SetActive(false);
+                    Debug.Log("[UI_GameplayScreen]: Disabling " +  screen.gameObject.name);
+                }
+            }
         }
 
         public override void Show()
@@ -56,12 +87,8 @@ namespace Angry_Girls
                 _scoreDisplay?.Show();
                 _charactersPanel?.Show();
                 _pauseMenu?.Show();
-                _gameResultUI?.Hide(); 
+                _gameResultUI?.Hide();
             }
         }
-
-        public void UpdateScore(int value) => _scoreDisplay?.AddScore(value);
-        public void ShowTutorial() => _tutorialSystem?.Show();
-        public void TogglePause() => _pauseMenu?.TogglePause();
     }
 }

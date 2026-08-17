@@ -5540,15 +5540,16 @@ MonoBehaviour:
       m_Calls: []
   m_text: Victory!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ec03b1bc5e4956240803b2181ced095a, type: 2}
+  m_sharedMaterial: {fileID: 8568970195925416064, guid: ec03b1bc5e4956240803b2181ced095a,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4278249215
+  m_fontColor: {r: 1, g: 0.9011407, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5670,9 +5671,9 @@ MonoBehaviour:
   _rewardIcon: {fileID: 5282093265310375861}
   _rewardNameText: {fileID: 6970660515967644652}
   _rewardReceivedCheckmark: {fileID: 8010668566340125223}
-  _defaultCreditsIcon: {fileID: 21300000, guid: 733da013114fba04cb22f13724a7e1a3,
+  _defaultCreditsIcon: {fileID: 21300000, guid: b543056e044fc534aa0465dd68ae405b,
     type: 3}
-  _defaultItemIcon: {fileID: 21300000, guid: b545c566630055a4182c519c474e6e3b, type: 3}
+  _defaultItemIcon: {fileID: 21300000, guid: b543056e044fc534aa0465dd68ae405b, type: 3}
   _coinsCollectedText: {fileID: 3170506129382979755}
   _coinIcon: {fileID: 4963242469306692895}
   _charactersContainer: {fileID: 1455738154119974199}
@@ -5682,8 +5683,8 @@ MonoBehaviour:
   _delayBeforeContinue: 1.5
   _confettiParticles: {fileID: 6110574490259720729, guid: 84fd3e4299308d74e8a2bf705b21479a,
     type: 3}
-  _victoryMusicData: {fileID: 11400000, guid: e2bf9c7ef6ed2e447b9553482cec7a3a, type: 2}
-  _rewardSoundData: {fileID: 11400000, guid: eeeed7b4f9783724e83ad0268a8c1ef7, type: 2}
+  _rewardSoundData: {fileID: 11400000, guid: e2bf9c7ef6ed2e447b9553482cec7a3a, type: 2}
+  _rewardMusicData: {fileID: 11400000, guid: eeeed7b4f9783724e83ad0268a8c1ef7, type: 2}
   _coinSoundData: {fileID: 11400000, guid: 5dde7c6302a1e1f44842a51a5f38633c, type: 2}
   _elementDelay: 0.3
   _barFillDuration: 0.8

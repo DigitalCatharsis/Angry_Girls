@@ -11,7 +11,7 @@ namespace Angry_Girls
     /// Fullscreen reward presentation shown after mission victory.
     /// Displays reward, character XP progress, and collected coins.
     /// </summary>
-    public class UI_RewardPresentation : UI_UIScreen
+    public class UI_RewardPresentation : UI_GameplayManagersComponent
     {
         [Header("Background")]
         [SerializeField] private CanvasGroup _backgroundGroup;
@@ -44,8 +44,8 @@ namespace Angry_Girls
         [SerializeField] private ParticleSystem _confettiParticles;
 
         [Header("Audio")]
-        [SerializeField] private AudioClipData _victoryMusicData;
         [SerializeField] private AudioClipData _rewardSoundData;
+        [SerializeField] private AudioClipData _rewardMusicData;
         [SerializeField] private AudioClipData _coinSoundData;
 
         [Header("Animation Timing")]
@@ -54,21 +54,54 @@ namespace Angry_Girls
         [SerializeField] private float _rewardPopDuration = 0.5f;
 
         private IAssetProvider _assetProvider;
+        private MissionsManager _missionsManager;
         private Sequence _animationSequence;
+        private RewardService _rewardService;
 
         /// <summary>
         /// Initialize with asset provider for loading icons.
         /// </summary>
-        public void Initialize(IAssetProvider assetProvider)
+        public override void Initialize()
         {
-            _assetProvider = assetProvider;
+            _assetProvider = CoreManager.Instance.AddressableAssetManager;
+            _missionsManager = CoreManager.Instance.MissionsManager;
+
+            if (_rewardService == null)
+            {
+                _rewardService = new RewardService(
+                    CoreManager.Instance.InventoryManager,
+                    CoreManager.Instance.CharactersManager,
+                    CoreManager.Instance.CreditsManager,
+                    CoreManager.Instance.ItemSettingsRepository,
+                    CoreManager.Instance.CharacterSettingsCatalogSO
+                    );
+            }
+
+            _continueButton.onClick.AddListener((() => OnContinuePressed().Forget()));
+
+            base.Initialize();
         }
 
         /// <summary>
         /// Show reward presentation with full animation sequence.
         /// </summary>
-        public async UniTask ShowRewardAsync(RewardPresentationData data)
+        public async UniTask ShowAndGrantRewardAsync(int coins)
         {
+
+            var missionData = _missionsManager.GetMissionData(
+                _missionsManager.CurrentMission,
+                _missionsManager.CurrentDifficulty);
+
+            var rewarddata = missionData.rewardData;
+
+            RewardGrantResult rewardGrantResult = null;
+
+            rewardGrantResult = await _rewardService.GrantRewardAsync(rewarddata, coins, missionData.isRewardReceived);
+
+            _missionsManager.CompleteCurrentMission();
+
+            var presentationData = BuildPresentationData(rewardGrantResult, coins);
+
             gameObject.SetActive(true);
             _continueButton.interactable = false;
 
@@ -82,22 +115,17 @@ namespace Angry_Girls
             _animationSequence = DOTween.Sequence();
 
             // 1. Fade in background
-            _animationSequence.Append(
-                _backgroundGroup.DOFade(1f, _backgroundFadeDuration)
-            );
+            _animationSequence.Append(_backgroundGroup.DOFade(1f, _backgroundFadeDuration));
 
             // 2. Title pop
-            _animationSequence.Append(
-                _titleText.transform.DOScale(1.2f, 0.3f)
-                    .SetEase(Ease.OutBack)
-            ).AppendCallback(() => _titleText.text = _victoryTitle);
+            _animationSequence.Append(_titleText.transform.DOScale(1.2f, 0.3f).SetEase(Ease.OutBack)).AppendCallback(() => _titleText.text = _victoryTitle);
 
             // 3. Coins collected (with count-up animation)
             _animationSequence.AppendInterval(_elementDelay);
             _animationSequence.AppendCallback(() =>
             {
                 PlaySound(_coinSoundData);
-                AnimateCoinCount(data.collectedCoinsScore);
+                AnimateCoinCount(presentationData.collectedCoinsScore);
             });
 
             // 4. Reward display
@@ -105,14 +133,14 @@ namespace Angry_Girls
             _animationSequence.AppendCallback(() =>
             {
                 PlaySound(_rewardSoundData);
-                ShowReward(data);
+                ShowReward(presentationData);
             });
 
             // 5. Characters XP bars
             _animationSequence.AppendInterval(_elementDelay);
             _animationSequence.AppendCallback(() =>
             {
-                ShowCharacterEntries(data.characterEntries);
+                ShowCharacterEntries(presentationData.characterEntries);
             });
 
             // 6. Confetti
@@ -136,19 +164,52 @@ namespace Angry_Girls
             await UniTask.WaitUntil(() => !gameObject.activeSelf);
         }
 
+
+
+
+        /// <summary>
+        /// Builds the data package for reward presentation display.
+        /// Includes reward result, collected coins, and character XP stubs.
+        /// </summary>
+        private RewardPresentationData BuildPresentationData(
+            RewardGrantResult rewardResult, int collectedCoins)
+        {
+            var data = new RewardPresentationData
+            {
+                rewardResult = rewardResult,
+                collectedCoinsScore = collectedCoins,
+                characterEntries = new List<CharacterRewardEntry>()
+            };
+
+            // Get selected characters from CharactersManager
+            var charactersData = CoreManager.Instance.CharactersManager.CharactersData;
+            if (charactersData != null)
+            {
+                foreach (var character in charactersData.SelectedCharactersPool)
+                {
+                    if (character == null || character.CharacterSettings == null) continue;
+
+                    data.characterEntries.Add(new CharacterRewardEntry
+                    {
+                        characterSettings = character.CharacterSettings,
+                        xpGained = UnityEngine.Random.Range(50, 200),
+                        currentLevel = UnityEngine.Random.Range(1, 10),
+                        currentXp = UnityEngine.Random.Range(100, 500),
+                        xpForNextLevel = 1000
+                    });
+                }
+            }
+
+            return data;
+        }
+
+
         /// <summary>
         /// Called when continue button is pressed.
         /// </summary>
-        public void OnContinuePressed()
+        public async UniTaskVoid OnContinuePressed()
         {
-            if (_animationSequence != null && _animationSequence.IsActive())
-            {
-                _animationSequence.Kill();
-            }
-
-            // Fade out and hide
-            _backgroundGroup.DOFade(0f, 0.3f)
-                .OnComplete(() => gameObject.SetActive(false));
+            await GameplayCoreManager.Instance.GameLogic.ExecuteRewardRecieved();
         }
 
         public override void Hide()
@@ -183,10 +244,10 @@ namespace Angry_Girls
 
         private void PlayVictoryMusic()
         {
-            if (_victoryMusicData != null)
+            if (_rewardMusicData != null)
             {
                 CoreManager.Instance.AudioManager.PlayClipData(
-                    _victoryMusicData, AudioCategory.SFX, false);
+                    _rewardMusicData, AudioCategory.Music, false);
             }
         }
 
@@ -194,7 +255,7 @@ namespace Angry_Girls
         {
             if (data != null)
             {
-                CoreManager.Instance.AudioManager.PlayClipData(data, AudioCategory.Music, false);
+                CoreManager.Instance.AudioManager.PlayClipData(data, AudioCategory.SFX, true);
             }
         }
 

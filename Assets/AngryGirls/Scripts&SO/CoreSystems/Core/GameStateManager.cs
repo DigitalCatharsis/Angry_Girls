@@ -84,6 +84,12 @@ namespace Angry_Girls
             shopManager.ResetManagersData();
         }
 
+        public async UniTask ReturnToMissionPreparation()
+        {
+            CoreManager.Instance.SaveLoadManager.SaveGame();
+            await NavigationManager.NavigateToScene(SceneType.MissionPreparation);
+        }
+
         /// <summary>
         /// Continue existing game
         /// </summary>

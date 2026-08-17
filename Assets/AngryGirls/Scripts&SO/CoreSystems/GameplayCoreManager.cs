@@ -31,6 +31,7 @@ namespace Angry_Girls
         {
             OnCoinCollected?.Invoke(value);
         }
+
         private void OnEnable()
         {
             if (Instance != null && Instance != this)
