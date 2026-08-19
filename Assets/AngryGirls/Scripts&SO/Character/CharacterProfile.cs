@@ -16,24 +16,36 @@ namespace Angry_Girls
     }
 
     /// <summary>
-    /// Contains character statistical data
+    /// Contains character statistical data and formatting helpers for UI presentation.
     /// </summary>
     [Serializable]
     public class CharactersStatsBase
     {
-        public CharactersStatsBase() { }
+        public CharactersStatsBase()
+        {
+        }
+
         public CharactersStatsBase(List<InventoryItem> items)
         {
             UpdateFromItemList(items);
         }
 
+        /// <summary>
+        /// Recalculates aggregated equipment bonuses.
+        /// </summary>
         public void UpdateFromItemList(List<InventoryItem> items)
         {
-            health = 0;
-            damage = 0;
+            health = 0f;
+            damage = 0f;
+
+            if (items == null)
+                return;
+
             foreach (var item in items)
             {
-                if (item == null) continue;
+                if (item == null)
+                    continue;
+
                 health += item.GetTotalHealthBonus();
                 damage += item.GetTotalDamageBonus();
             }
@@ -41,49 +53,124 @@ namespace Angry_Girls
 
         public CharactersStatsBase(CharactersStatsBase source)
         {
+            if (source == null)
+                return;
+
             health = source.health;
             damage = source.damage;
         }
 
         public static CharactersStatsBase operator +(CharactersStatsBase counter1, CharactersStatsBase counter2)
         {
-            return new CharactersStatsBase { health = counter1.health + counter2.health, damage = counter1.damage + counter2.damage };
+            if (counter1 == null)
+                return new CharactersStatsBase(counter2);
+
+            if (counter2 == null)
+                return new CharactersStatsBase(counter1);
+
+            return new CharactersStatsBase
+            {
+                health = counter1.health + counter2.health,
+                damage = counter1.damage + counter2.damage
+            };
         }
 
         public float health;
         public float damage;
 
-        public static string GetColoredText(CharactersStatsBase baseStats, CharactersStatsBase itemStats)
+        /// <summary>
+        /// Formats character stats using the legacy default colors.
+        /// Kept for backward compatibility with existing callers.
+        /// </summary>
+        public static string GetColoredText(
+            CharactersStatsBase baseStats,
+            CharactersStatsBase itemStats)
         {
-            string healthText = FormatStat(baseStats.health, itemStats.health, "HP");
-            string damageText = FormatStat(baseStats.damage, itemStats.damage, "Damage");
+            return GetColoredText(
+                baseStats,
+                itemStats,
+                Color.black,
+                Color.grey,
+                Color.green);
+        }
+
+        /// <summary>
+        /// Formats character stats using configurable UI colors.
+        /// </summary>
+        public static string GetColoredText(
+            CharactersStatsBase baseStats,
+            CharactersStatsBase itemStats,
+            Color totalColor,
+            Color baseColor,
+            Color bonusColor)
+        {
+            baseStats ??= new CharactersStatsBase();
+            itemStats ??= new CharactersStatsBase();
+
+            var healthText = FormatStat(
+                baseStats.health,
+                itemStats.health,
+                "HP",
+                totalColor,
+                baseColor,
+                bonusColor);
+
+            var damageText = FormatStat(
+                baseStats.damage,
+                itemStats.damage,
+                "Damage",
+                totalColor,
+                baseColor,
+                bonusColor);
 
             return $"Character Stats:\n\n{healthText}\n{damageText}";
         }
 
-        private static string FormatStat(float baseValue, float bonusValue, string statName)
+        /// <summary>
+        /// Builds a single stat line with total, base and equipment bonus values.
+        /// </summary>
+        private static string FormatStat(
+            float baseValue,
+            float bonusValue,
+            string statName,
+            Color totalColor,
+            Color baseColor,
+            Color bonusColor)
         {
-            float total = baseValue + bonusValue;
-            string totalColored = $"<color=black>{total}</color>";
+            var total = baseValue + bonusValue;
 
-            if (bonusValue > 0)
-            {
-                string baseColored = $"<color=grey>{baseValue}</color>";
-                string bonusColored = $"<color=green>{bonusValue}</color>";
-                return $"{statName}: {totalColored} ({baseColored}+{bonusColored})";
-            }
-            else
-            {
+            var totalColored = Colorize(total, totalColor);
+
+            if (Mathf.Approximately(bonusValue, 0f))
                 return $"{statName}: {totalColored}";
-            }
+
+            var baseColored = Colorize(baseValue, baseColor);
+            var bonusColored = Colorize(bonusValue, bonusColor);
+
+            var sign = bonusValue > 0f ? "+" : string.Empty;
+
+            return $"{statName}: {totalColored} ({baseColored}{sign}{bonusColored})";
         }
 
+
+        /// <summary>
+        /// Converts a Unity Color into a TextMeshPro rich-text color tag.
+        /// </summary>
+        private static string Colorize(float value, Color color)
+        {
+            var htmlColor = ColorUtility.ToHtmlStringRGBA(color);
+            return $"<color=#{htmlColor}>{Mathf.RoundToInt(value)}</color>";
+        }
+
+        /// <summary>
+        /// Returns the empty character stats representation.
+        /// </summary>
         public static string GetEmptyText()
         {
             return
-               $"Character Stats:\n\n" +
-                $"HP: {""}\n" +
-                $"Attack: {""}";
+                "Character Stats:\n\n" +
+                "HP: \n" +
+                "Attack: ";
         }
     }
 

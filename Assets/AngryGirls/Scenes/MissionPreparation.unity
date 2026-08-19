@@ -5459,6 +5459,9 @@ MonoBehaviour:
   _defaultItemSlotSprite: {fileID: 730374256, guid: d713ceedd80b99945966ce9f1073e6c5,
     type: 3}
   _statsText: {fileID: 904758142}
+  _statsTotalColor: {r: 0, g: 0, b: 0, a: 1}
+  _statsBaseColor: {r: 0, g: 0, b: 0, a: 1}
+  _statsBonusColor: {r: 0, g: 0.4433962, b: 0, a: 1}
   _characterSlotPrefab: {fileID: 8593053639481102121, guid: 2016a9ecfa208b5439487901739c205c,
     type: 3}
   _equipmentPopup: {fileID: 9088666879768520265}
@@ -14694,7 +14697,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 0, y: 0}
+  m_Spacing: {x: 5, y: 5}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1 &2138927724
