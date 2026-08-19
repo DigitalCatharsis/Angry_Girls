@@ -119,7 +119,7 @@ namespace Angry_Girls
         {
             var launcher = GameplayCoreManager.Instance.StageManager.CurrentCharacterLauncher;
             _cameraManager.MoveCameraTo(
-                new Vector3(Camera.main.transform.position.x, launcher.transform.position.y, launcher.transform.position.z),
+                new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, launcher.transform.position.z),
                 0.5f,
                 true
             );

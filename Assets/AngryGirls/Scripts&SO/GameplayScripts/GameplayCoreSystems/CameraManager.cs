@@ -14,23 +14,23 @@ namespace Angry_Girls
         [SerializeField] private float _defaultZoomSensitivity = 7.0f;
 
         [SerializeField] private const float _secondsCameraWaitsAfterAttack = 2f;
-        [SerializeField] private const float _zoomeCameraValueAfterLaunch = 5f;
+        [SerializeField] private const float _zoomeCameraValueAfterLaunch = 7.5f;
 
         [Header("Zoom Settings")]
-        [SerializeField] private float _zoomSensitivity;
-        [SerializeField] private float _minZoom = 1f;
-        [SerializeField] private float _maxZoom = 10f;
+        [SerializeField] private float _zoomSensitivity = 1f;
+        [SerializeField] private float _minZoom = 1.55f;
+        [SerializeField] private float _maxZoom = 15f;
 
         [Header("Camera Movement Settings")]
-        [SerializeField] private float _movementSpeed;
+        [SerializeField] private float _movementSpeed = 6.5f;
         [SerializeField] private float _minCameraZ = -10f;
-        [SerializeField] private float _maxCameraZ = 30f;
+        [SerializeField] private float _maxCameraZ = 45f;
         [SerializeField] private float _cameraMoveDuration = 0.5f;
         [SerializeField] private Ease _cameraMoveEase = Ease.InOutCubic;
 
         [Header("Zoom After Ready")]
         [SerializeField] private float _zoomInAfterReadyDuration = 1f; 
-        [SerializeField] private float _targetZoomAfterReady = 2.5f; 
+        [SerializeField] private float _targetZoomAfterReady = 1.55f; 
 
         public float SecondsCameraWaitsAfterAttack => _secondsCameraWaitsAfterAttack;
 
@@ -190,8 +190,7 @@ namespace Angry_Girls
             _cameraMoveSequence = DOTween.Sequence();
 
             _cameraMoveSequence.Append(
-                _mainCamera.transform.DOMove(targetPosition, speed)
-                    .SetEase(_cameraMoveEase)
+                _mainCamera.transform.DOMove(targetPosition, speed).SetEase(_cameraMoveEase)
             );
 
             if (resetZoom)
@@ -203,11 +202,6 @@ namespace Angry_Girls
             }
 
             _cameraMoveSequence.OnComplete(() => _cameraMoveSequence = null);
-        }
-
-        public void MoveCameraTo(Vector3 targetPosition, bool resetZoom = false)
-        {
-            MoveCameraTo(targetPosition, _cameraMoveDuration, resetZoom);
         }
 
         public void ShakeCamera(float shakeDuration = 0.3f, float shakeMagnitude = 0.05f)

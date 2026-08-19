@@ -68,18 +68,23 @@ namespace Angry_Girls
 
         public void UpdateContinueButtonState()
         {
-            bool hasSaveData = Repository.LoadState();
+            bool hasSaveData = Repository.HasGameSave();
 
             if (_continueButton != null)
             {
                 _continueButton.interactable = hasSaveData;
+
                 var textComponent = _continueButton.GetComponentInChildren<TextMeshProUGUI>();
+
                 if (textComponent != null)
                 {
-                    textComponent.text = hasSaveData ? "Continue" : "No Save Data";
+                    textComponent.text = hasSaveData
+                        ? "Continue"
+                        : "No Save Data";
                 }
             }
         }
+
         public override void Show()
         {
             base.Show();
@@ -91,19 +96,19 @@ namespace Angry_Girls
         private void OnNewGamePressed()
         {
             Debug.Log("New Game Button Pressed");
-            if (Repository.LoadState()) 
+
+            if (Repository.HasGameSave())
             {
-                UIManager.Instance.ShowConfirmation
-                    ("Are you sure? All previous saves will be deleted.", 
-                    yesAction:() => { OnConfirmNewGame(); }, 
-                    noAction: () => { return; }
-                    );
+                UIManager.Instance.ShowConfirmation(
+                    "Are you sure? All previous saves will be deleted.",
+                    yesAction: OnConfirmNewGame,
+                    noAction: null
+                );
+
+                return;
             }
-            else
-            {
-                OnConfirmNewGame();
-            }
-            
+
+            OnConfirmNewGame();
         }
 
         private void OnContinuePressed()

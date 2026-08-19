@@ -84,7 +84,7 @@ namespace Angry_Girls
             );
 
             _cameraManager.MoveCameraTo(
-                new Vector3(Camera.main.transform.position.x, _characterLauncher.transform.position.y, _characterLauncher.transform.position.z),
+                new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, _characterLauncher.transform.position.z),
                 1f,
                 false
             );

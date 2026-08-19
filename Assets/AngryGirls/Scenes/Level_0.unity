@@ -10246,7 +10246,7 @@ Transform:
   m_GameObject: {fileID: 1599083947}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 13.25, y: 1.44, z: -0.00999999}
+  m_LocalPosition: {x: 13.25, y: 1.23, z: -0.00999999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13082,7 +13082,7 @@ MonoBehaviour:
   _defaultMovementSpeed: 0.5
   _defaultZoomSensitivity: 7
   _zoomSensitivity: 1
-  _minZoom: 1
+  _minZoom: 1.55
   _maxZoom: 15
   _movementSpeed: 6.5
   _minCameraZ: -10
@@ -13090,7 +13090,7 @@ MonoBehaviour:
   _cameraMoveDuration: 0.5
   _cameraMoveEase: 10
   _zoomInAfterReadyDuration: 1
-  _targetZoomAfterReady: 2.5
+  _targetZoomAfterReady: 1.55
   _characterToFollow: {fileID: 0}
   _allowCameraFollow: 0
   _mainCamera: {fileID: 0}
@@ -13312,6 +13312,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1502877059}
     m_Modifications:
+    - target: {fileID: 2469658491947858860, guid: 946836d5639389042b3234c1845de510,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -364.86996
+      objectReference: {fileID: 0}
     - target: {fileID: 4200275480281978836, guid: 946836d5639389042b3234c1845de510,
         type: 3}
       propertyPath: m_Name
