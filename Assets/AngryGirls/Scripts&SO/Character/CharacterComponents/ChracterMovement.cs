@@ -69,6 +69,8 @@ namespace Angry_Girls
             _control = GetComponent<CControl>();
             _boxCollider = GetComponent<BoxCollider>();
             _rigidbody = GetComponent<Rigidbody>();
+
+            _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
         }
 
         private void Start()

@@ -8,7 +8,6 @@ using Angry_Girls;
 [RequireComponent(typeof(CanvasGroup))]
 public class ReadyBanner_VertexDeform : UI_GameplayManagersComponent
 {
-
     public enum Style
     {
         Style1,
@@ -230,7 +229,6 @@ public class ReadyBanner_VertexDeform : UI_GameplayManagersComponent
 
     private Canvas _canvas;
     private CanvasGroup _group;
-    private Camera _cam;
 
     private Image _flashImage;
     private TextMeshProUGUI _readyText;
@@ -266,7 +264,6 @@ public class ReadyBanner_VertexDeform : UI_GameplayManagersComponent
         }
 
         DOTween.Init();
-        _cam = Camera.main;
 
         _canvas = GetComponentInParent<Canvas>();
         if (_canvas == null)
@@ -684,7 +681,13 @@ public class ReadyBanner_VertexDeform : UI_GameplayManagersComponent
 
         if (enableCameraShake)
         {
-            seq.Join(_cam.transform.DOShakePosition(shakeDuration, shakeStrength, 25, 90, false, true));
+            if (enableCameraShake)
+            {
+                seq.AppendCallback(() =>
+                    GameplayCoreManager.Instance?.CameraManager?.ShakeCamera(
+                        shakeDuration,
+                        shakeStrength));
+            }
         }
 
         seq.Append(_sweepImage.rectTransform
@@ -713,7 +716,13 @@ public class ReadyBanner_VertexDeform : UI_GameplayManagersComponent
 
         if (enableCameraShake)
         {
-            seq.Join(_cam.transform.DOShakePosition(shakeDuration, shakeStrength, 25, 90, false, true));
+            if (enableCameraShake)
+            {
+                seq.AppendCallback(() =>
+                    GameplayCoreManager.Instance?.CameraManager?.ShakeCamera(
+                        shakeDuration,
+                        shakeStrength));
+            }
         }
 
         seq.AppendInterval(holdDuration);
@@ -754,7 +763,13 @@ public class ReadyBanner_VertexDeform : UI_GameplayManagersComponent
         // Camera Shake (optional, parallel to italic return)
         if (enableCameraShake)
         {
-            seq.Join(_cam.transform.DOShakePosition(shakeDuration, shakeStrength, 25, 90, false, true));
+            if (enableCameraShake)
+            {
+                seq.AppendCallback(() =>
+                    GameplayCoreManager.Instance?.CameraManager?.ShakeCamera(
+                        shakeDuration,
+                        shakeStrength));
+            }
         }
 
         // Hold
