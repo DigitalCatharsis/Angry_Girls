@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Angry_Girls
 {
     /// <summary>
-    /// Orchestrates all gameplay UI components
+    /// Orchestrates all gameplay UI components.
     /// </summary>
     public class UI_GameplayScreen : UI_UIScreen
     {
@@ -16,6 +16,7 @@ namespace Angry_Girls
         [SerializeField] private TutorialSystem _tutorialSystem;
         [SerializeField] private GameResultUI _gameResultUI;
         [SerializeField] private TrajectoryCheatToggle _trajectoryCheatToggle;
+        [SerializeField] private LaunchPhaseProgressUI _launchPhaseProgressUI;
         [SerializeField] private UI_RewardPresentation _uiRewardPresentation;
 
         private UI_GameplayManagersComponent[] _uI_GameplayScreens;
@@ -26,9 +27,11 @@ namespace Angry_Girls
 
         public override void Initialize()
         {
-            if (_isInitialized) return;
+            if (_isInitialized)
+                return;
 
-            StartCoroutine(WaitForGameplayCore());
+            StartCoroutine(
+                WaitForGameplayCore());
         }
 
         private IEnumerator WaitForGameplayCore()
@@ -37,58 +40,110 @@ namespace Angry_Girls
                 yield return null;
 
             InitializeComponents();
+
             _isInitialized = true;
         }
 
         private void InitializeComponents()
         {
-            _uI_GameplayScreens = GetComponentsInChildren<UI_GameplayManagersComponent>();
+            _uI_GameplayScreens =
+                GetComponentsInChildren<
+                    UI_GameplayManagersComponent>(
+                    true);
+
             foreach (var screen in _uI_GameplayScreens)
             {
+                if (screen == null)
+                    continue;
+
                 screen.Initialize();
             }
-            //_scoreDisplay?.Initialize();
-            //_charactersPanel?.Initialize();
-            //_pauseMenu?.Initialize();
-            //_tutorialSystem?.Initialize();
-            //_gameResultUI?.Initialize();
-            //_trajectoryCheatToggle?.Initialize();
-            //_uiRewardPresentation?.Initialize();
 
-            _gameLogic = GameplayCoreManager.Instance.GameLogic;
-            _gameLogic.OnGameOver += _gameResultUI.ShowGameOver;
-            _gameLogic.OnVictory += _gameResultUI.ShowVictory;
-            _gameLogic.OnRewardStart += ShowReward;
+            _gameLogic =
+                GameplayCoreManager.Instance.GameLogic;
+
+            if (_gameLogic == null)
+                return;
+
+            if (_gameResultUI != null)
+            {
+                _gameLogic.OnGameOver +=
+                    _gameResultUI.ShowGameOver;
+
+                _gameLogic.OnVictory +=
+                    _gameResultUI.ShowVictory;
+            }
+
+            _gameLogic.OnRewardStart +=
+                ShowReward;
         }
 
         public void ShowReward()
         {
-            DisableAllUIButOne(_uiRewardPresentation);
-            _uiRewardPresentation.ShowAndGrantRewardAsync(_scoreDisplay.GetScore()).Forget();
+            if (_uiRewardPresentation == null)
+                return;
+
+            DisableAllUIButOne(
+                _uiRewardPresentation);
+
+            if (_scoreDisplay != null)
+            {
+                _uiRewardPresentation
+                    .ShowAndGrantRewardAsync(
+                        _scoreDisplay.GetScore())
+                    .Forget();
+            }
         }
 
-        private void DisableAllUIButOne(UI_GameplayManagersComponent UIScreen)
+        private void DisableAllUIButOne(
+            UI_GameplayManagersComponent uiScreen)
         {
+            if (_uI_GameplayScreens == null)
+                return;
+
             foreach (var screen in _uI_GameplayScreens)
             {
-                if (screen != UIScreen)
+                if (screen == null ||
+                    screen == uiScreen)
                 {
-                    screen.gameObject.SetActive(false);
-                    Debug.Log("[UI_GameplayScreen]: Disabling " +  screen.gameObject.name);
+                    continue;
                 }
+
+                screen.gameObject.SetActive(false);
             }
         }
 
         public override void Show()
         {
             base.Show();
-            if (_isInitialized)
+
+            if (!_isInitialized)
+                return;
+
+            _scoreDisplay?.Show();
+            _charactersPanel?.Show();
+            _pauseMenu?.Show();
+            _launchPhaseProgressUI?.Show();
+
+            _gameResultUI?.Hide();
+        }
+
+        private void OnDestroy()
+        {
+            if (_gameLogic == null)
+                return;
+
+            if (_gameResultUI != null)
             {
-                _scoreDisplay?.Show();
-                _charactersPanel?.Show();
-                _pauseMenu?.Show();
-                _gameResultUI?.Hide();
+                _gameLogic.OnGameOver -=
+                    _gameResultUI.ShowGameOver;
+
+                _gameLogic.OnVictory -=
+                    _gameResultUI.ShowVictory;
             }
+
+            _gameLogic.OnRewardStart -=
+                ShowReward;
         }
     }
 }

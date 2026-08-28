@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Angry_Girls
 {
     /// <summary>
-    /// Settings categories for tab navigation
+    /// Settings categories for tab navigation.
     /// </summary>
     public enum SettingsCategory
     {
@@ -17,58 +17,123 @@ namespace Angry_Girls
         All = 99,
     }
 
+    /// <summary>
+    /// Serialized settings data.
+    /// </summary>
     public class SettingsSaveData
     {
         [Header("Audio")]
         public bool useCustomAudioSettings;
-        [Range(0, 1)] public float volumeMusic;
-        [Range(0, 1)] public float volumeSounds;
 
-        [Header("Camera (User Override)")]
-        [Tooltip("User can override platform default")]
-        [Range(0, 1)] public bool useCustomCameraSettings;
+        [Range(0f, 1f)]
+        public float volumeMusic;
+
+        [Range(0f, 1f)]
+        public float volumeSounds;
+
+        [Header("Camera")]
+        public bool useCustomCameraSettings;
         public float cameraMovementSpeed;
 
-        public SettingsSaveData() { }
+        [Header("Gameplay")]
+        public bool? showTurnOrder;
 
-        public SettingsSaveData(bool useCustomAudioSettings, float volumeMusic, float volumeSounds, bool useCustomCameraSettings, float cameraMovementSpeed)
+        public SettingsSaveData()
         {
-            this.useCustomAudioSettings = useCustomAudioSettings;
-            this.volumeMusic = volumeMusic;
-            this.volumeSounds = volumeSounds;
-            this.useCustomCameraSettings = useCustomCameraSettings;
-            this.cameraMovementSpeed = cameraMovementSpeed;
         }
 
+        public SettingsSaveData(
+            bool useCustomAudioSettings,
+            float volumeMusic,
+            float volumeSounds,
+            bool useCustomCameraSettings,
+            float cameraMovementSpeed,
+            bool showTurnOrder = true)
+        {
+            this.useCustomAudioSettings =
+                useCustomAudioSettings;
+
+            this.volumeMusic =
+                volumeMusic;
+
+            this.volumeSounds =
+                volumeSounds;
+
+            this.useCustomCameraSettings =
+                useCustomCameraSettings;
+
+            this.cameraMovementSpeed =
+                cameraMovementSpeed;
+
+            this.showTurnOrder =
+                showTurnOrder;
+        }
+
+        /// <summary>
+        /// Converts serialized settings into runtime settings.
+        /// </summary>
         public SettingsData ReinitToSettingsData()
         {
-            return new SettingsData(useCustomAudioSettings, volumeMusic, volumeSounds, useCustomCameraSettings, cameraMovementSpeed);
+            var resolvedShowTurnOrder =
+                showTurnOrder ?? true;
+
+            return new SettingsData(
+                useCustomAudioSettings,
+                volumeMusic,
+                volumeSounds,
+                useCustomCameraSettings,
+                cameraMovementSpeed,
+                resolvedShowTurnOrder);
         }
     }
 
     /// <summary>
-    /// Settings data structure.
+    /// Runtime settings data.
     /// </summary>
     [Serializable]
     public struct SettingsData
     {
         [Header("Audio")]
         public bool useCustomAudioSettings;
-        [Range(0, 1)] public float volumeMusic;
-        [Range(0, 1)] public float volumeSounds;
 
-        [Header("Camera (User Override)")]
-        [Tooltip("User can override platform default")]
+        [Range(0f, 1f)]
+        public float volumeMusic;
+
+        [Range(0f, 1f)]
+        public float volumeSounds;
+
+        [Header("Camera")]
         public bool useCustomCameraSettings;
         public float cameraMovementSpeed;
 
-        public SettingsData(bool useCustomAudioSettings, float volumeMusic, float volumeSounds, bool useCustomCameraSettings, float cameraMovementSpeed)
+        [Header("Gameplay")]
+        public bool showTurnOrder;
+
+        public SettingsData(
+            bool useCustomAudioSettings,
+            float volumeMusic,
+            float volumeSounds,
+            bool useCustomCameraSettings,
+            float cameraMovementSpeed,
+            bool showTurnOrder = true)
         {
-            this.useCustomAudioSettings = useCustomAudioSettings;
-            this.volumeMusic = volumeMusic;
-            this.volumeSounds = volumeSounds;
-            this.useCustomCameraSettings = useCustomCameraSettings;
-            this.cameraMovementSpeed = cameraMovementSpeed;
+            this.useCustomAudioSettings =
+                useCustomAudioSettings;
+
+            this.volumeMusic =
+                volumeMusic;
+
+            this.volumeSounds =
+                volumeSounds;
+
+            this.useCustomCameraSettings =
+                useCustomCameraSettings;
+
+            this.cameraMovementSpeed =
+                cameraMovementSpeed;
+
+            this.showTurnOrder =
+                showTurnOrder;
         }
     }
 
@@ -79,45 +144,89 @@ namespace Angry_Girls
     {
         public Action<SettingsCategory> OnSettingsChanged;
 
-        private SettingsData _currentSettingsData = new();
+        private SettingsData _currentSettingsData =
+            new SettingsData();
+
+        private SettingsSaveData _settingsSaveData =
+            new SettingsSaveData();
 
         private PlatformSettingsCatalog _platformSettingsCatalog;
-        public SettingsData GetCurrentSettings() => _currentSettingsData;
-
-        private SettingsSaveData _settingsSaveData = new();
-
         private PlatformProfile _platformProfile;
 
         /// <summary>
-        /// Initialize with platform catalog reference
+        /// Gets current runtime settings.
         /// </summary>
-        public void Init(PlatformSettingsCatalog catalog)
+        public SettingsData GetCurrentSettings() =>
+            _currentSettingsData;
+
+        /// <summary>
+        /// Initializes settings from save data or platform defaults.
+        /// </summary>
+        public void Init(
+            PlatformSettingsCatalog catalog)
         {
-            _platformSettingsCatalog = catalog;
-            _platformProfile = _platformSettingsCatalog.GetCurrentPlatformProfile();
-
-            Repository.LoadState();
-
-            var savedData = Repository.GetData<SettingsSaveData>();
-            if (savedData != null)
+            if (catalog == null)
             {
-                SetupSettings(savedData.ReinitToSettingsData());
-                Debug.Log("SettingsManager: Loaded settings from Repository.");
+                Debug.LogError(
+                    "SettingsManager: PlatformSettingsCatalog is null.");
+
                 return;
             }
 
-            ApplyPlatformDefaults(SettingsCategory.All);
-            Debug.Log("SettingsManager: Using platform defaults.");
+            _platformSettingsCatalog = catalog;
+
+            _platformProfile =
+                _platformSettingsCatalog
+                    .GetCurrentPlatformProfile();
+
+            if (_platformProfile == null)
+            {
+                Debug.LogError(
+                    "SettingsManager: Current platform profile is null.");
+
+                return;
+            }
+
+            Repository.LoadState();
+
+            var savedData =
+                Repository.GetData<SettingsSaveData>();
+
+            if (savedData != null)
+            {
+                SetupSettings(
+                    savedData.ReinitToSettingsData());
+
+                Debug.Log(
+                    "SettingsManager: Loaded settings from Repository.");
+
+                return;
+            }
+
+            ApplyPlatformDefaults(
+                SettingsCategory.All);
+
+            Debug.Log(
+                "SettingsManager: Using platform defaults.");
         }
 
         /// <summary>
-        /// Apply defaults from current platform profile
+        /// Applies platform defaults to the selected category.
         /// </summary>
-        public void ApplyPlatformDefaults(SettingsCategory settingsCategory)
+        public void ApplyPlatformDefaults(
+            SettingsCategory settingsCategory)
         {
             if (_platformProfile == null)
             {
-                _platformProfile = _platformSettingsCatalog.GetCurrentPlatformProfile();
+                if (_platformSettingsCatalog == null)
+                    return;
+
+                _platformProfile =
+                    _platformSettingsCatalog
+                        .GetCurrentPlatformProfile();
+
+                if (_platformProfile == null)
+                    return;
             }
 
             switch (settingsCategory)
@@ -125,90 +234,173 @@ namespace Angry_Girls
                 case SettingsCategory.All:
                     LoadDefaultCameraValues();
                     LoadDefaultAudioValues();
+                    LoadDefaultGameplayValues();
                     break;
+
                 case SettingsCategory.Audio:
                     LoadDefaultAudioValues();
                     break;
+
                 case SettingsCategory.Camera:
                     LoadDefaultCameraValues();
                     break;
-                case SettingsCategory.Graphics:
-                    break;
+
                 case SettingsCategory.Gameplay:
+                    LoadDefaultGameplayValues();
                     break;
+
+                case SettingsCategory.Graphics:
                 case SettingsCategory.Controls:
-                    break;
                 case SettingsCategory.System:
-                    break;
                 default:
                     break;
             }
-            OnSettingsChanged?.Invoke(settingsCategory);
+
+            OnSettingsChanged?.Invoke(
+                settingsCategory);
         }
 
         private void LoadDefaultCameraValues()
         {
-            _currentSettingsData.cameraMovementSpeed = _platformProfile.camera.movementSpeed;
-            _currentSettingsData.useCustomCameraSettings = false;
+            _currentSettingsData.cameraMovementSpeed =
+                _platformProfile.camera.movementSpeed;
+
+            _currentSettingsData.useCustomCameraSettings =
+                false;
         }
 
         private void LoadDefaultAudioValues()
         {
-            _currentSettingsData.volumeMusic = _platformProfile.audio.volumeMusic;
-            _currentSettingsData.volumeSounds = _platformProfile.audio.volumeSounds;
-            _currentSettingsData.useCustomAudioSettings = false;
+            _currentSettingsData.volumeMusic =
+                _platformProfile.audio.volumeMusic;
+
+            _currentSettingsData.volumeSounds =
+                _platformProfile.audio.volumeSounds;
+
+            _currentSettingsData.useCustomAudioSettings =
+                false;
         }
 
+        private void LoadDefaultGameplayValues()
+        {
+            _currentSettingsData.showTurnOrder =
+                true;
+        }
+
+        /// <summary>
+        /// Saves current settings to the repository.
+        /// </summary>
         public void SaveSettings()
         {
+            SetupSaveData(
+                _currentSettingsData);
 
-            SetupSaveData(_currentSettingsData);
-            Repository.SetData(_settingsSaveData);
+            Repository.SetData(
+                _settingsSaveData);
+
             Repository.SaveState();
-            Debug.Log("SettingsManager: Settings saved directly to Repository.");
+
+            Debug.Log(
+                "SettingsManager: Settings saved directly to Repository.");
         }
 
-        private void SetupSaveData(SettingsData settingsData)
+        private void SetupSaveData(
+            SettingsData settingsData)
         {
-            _settingsSaveData.volumeMusic = settingsData.volumeMusic;
-            _settingsSaveData.volumeSounds = settingsData.volumeSounds;
-            _settingsSaveData.useCustomAudioSettings = settingsData.useCustomAudioSettings;
-            _settingsSaveData.cameraMovementSpeed = settingsData.cameraMovementSpeed;
-            _settingsSaveData.useCustomCameraSettings = settingsData.useCustomCameraSettings;
-        }
+            _settingsSaveData.volumeMusic =
+                settingsData.volumeMusic;
 
-        public void SetupSettings(SettingsData settingsData)
-        {
-            _currentSettingsData = settingsData;
-            OnSettingsChanged?.Invoke(SettingsCategory.All);
+            _settingsSaveData.volumeSounds =
+                settingsData.volumeSounds;
+
+            _settingsSaveData.useCustomAudioSettings =
+                settingsData.useCustomAudioSettings;
+
+            _settingsSaveData.cameraMovementSpeed =
+                settingsData.cameraMovementSpeed;
+
+            _settingsSaveData.useCustomCameraSettings =
+                settingsData.useCustomCameraSettings;
+
+            _settingsSaveData.showTurnOrder =
+                settingsData.showTurnOrder;
         }
 
         /// <summary>
-        /// Set music volume.
+        /// Applies runtime settings immediately.
         /// </summary>
-        public void SetupMusicVolume(float value)
+        public void SetupSettings(
+            SettingsData settingsData)
         {
-            _currentSettingsData.volumeMusic = Mathf.Clamp01(value);
-            _currentSettingsData.useCustomAudioSettings = true;
-            OnSettingsChanged?.Invoke(SettingsCategory.Audio);
+            _currentSettingsData =
+                settingsData;
+
+            OnSettingsChanged?.Invoke(
+                SettingsCategory.All);
         }
 
         /// <summary>
-        /// Set sounds volume.
+        /// Sets music volume.
         /// </summary>
-        public void SetupSoundsVolume(float value)
+        public void SetupMusicVolume(
+            float value)
         {
-            _currentSettingsData.volumeSounds = Mathf.Clamp01(value);
-            _currentSettingsData.useCustomAudioSettings = true;
-            OnSettingsChanged?.Invoke(SettingsCategory.Audio);
+            _currentSettingsData.volumeMusic =
+                Mathf.Clamp01(value);
+
+            _currentSettingsData.useCustomAudioSettings =
+                true;
+
+            OnSettingsChanged?.Invoke(
+                SettingsCategory.Audio);
         }
 
-        public void SetupCameraMovementSpeed(float value)
+        /// <summary>
+        /// Sets sound volume.
+        /// </summary>
+        public void SetupSoundsVolume(
+            float value)
         {
-            _currentSettingsData.cameraMovementSpeed = Mathf.Clamp01(value);
-            if (_currentSettingsData.cameraMovementSpeed == 0) { _currentSettingsData.cameraMovementSpeed += 0.1f; }
-            _currentSettingsData.useCustomCameraSettings = true;
-            OnSettingsChanged?.Invoke(SettingsCategory.Camera);
+            _currentSettingsData.volumeSounds =
+                Mathf.Clamp01(value);
+
+            _currentSettingsData.useCustomAudioSettings =
+                true;
+
+            OnSettingsChanged?.Invoke(
+                SettingsCategory.Audio);
+        }
+
+        /// <summary>
+        /// Sets camera movement speed.
+        /// </summary>
+        public void SetupCameraMovementSpeed(
+            float value)
+        {
+            _currentSettingsData.cameraMovementSpeed =
+                Mathf.Clamp01(value);
+
+            if (_currentSettingsData.cameraMovementSpeed <= 0f)
+                _currentSettingsData.cameraMovementSpeed = 0.1f;
+
+            _currentSettingsData.useCustomCameraSettings =
+                true;
+
+            OnSettingsChanged?.Invoke(
+                SettingsCategory.Camera);
+        }
+
+        /// <summary>
+        /// Sets turn order visibility.
+        /// </summary>
+        public void SetupShowTurnOrder(
+            bool value)
+        {
+            _currentSettingsData.showTurnOrder =
+                value;
+
+            OnSettingsChanged?.Invoke(
+                SettingsCategory.Gameplay);
         }
     }
 }

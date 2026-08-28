@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Angry_Girls
 {
     /// <summary>
-    /// Manages character launching mechanics and launch phase execution
+    /// Manages character launching mechanics and launch phase execution.
     /// </summary>
     public class LaunchManager : GameplayManagerClass
     {
@@ -20,77 +20,133 @@ namespace Angry_Girls
         private GameplayCharactersManager _gameplayCharactersManager;
 
         private CharacterLauncher _characterLauncher;
-        private bool _canPressAtCharacters = false;
-        private bool _isLaunchAllowed = false;
+        private bool _canPressAtCharacters;
+        private bool _isLaunchAllowed;
         private bool _firstTurn = true;
-        private int _launchCountThisStage = 0;
-        private int _currentStageIndex = 0;
+        private int _launchCountThisStage;
+        private int _currentStageIndex;
 
-        private bool _isTheTurnFinished = false;
+        private bool _isTheTurnFinished;
         private CControl _currentlyLaunchedCharacter;
         private CControl _lastLaunchedUnit;
+
+        /// <summary>
+        /// Gets the character that was launched most recently.
+        /// </summary>
         public CControl LastLaunchedCharacter => _lastLaunchedUnit;
 
-        public CControl GetCandidateToLaunch() 
+        /// <summary>
+        /// Gets whether the current stage is still in its initial launch cycle.
+        /// </summary>
+        public bool IsFirstTurn => _firstTurn;
+
+        /// <summary>
+        /// Gets the number of launches already completed in the current stage launch cycle.
+        /// </summary>
+        public int LaunchCountThisStage => _launchCountThisStage;
+
+        /// <summary>
+        /// Gets the configured number of initial launches before the first Alternate phase.
+        /// </summary>
+        public int LaunchesBeforeFirstAlternate =>
+            Mathf.Max(1, _launchesBeforeFirstAlternate);
+
+        /// <summary>
+        /// Gets the current launch candidate.
+        /// </summary>
+        public CControl GetCandidateToLaunch()
         {
-            var chars =  _gameplayCharactersManager.GetLaunchableCharacters();
-            if (chars.Count != 0)
-            {
-                return chars[0];
-            }
-            return null;
+            var characters =
+                _gameplayCharactersManager.GetLaunchableCharacters();
+
+            return characters.Count > 0
+                ? characters[0]
+                : null;
         }
 
         public override void Initialize()
         {
             isInitialized = true;
-            _cameraManager = GameplayCoreManager.Instance.CameraManager;
-            _inputManager = GameplayCoreManager.Instance.InputManager;
-            _phaseFlowController = GameplayCoreManager.Instance.GamePhaseFlowController;
-            _stageManager = GameplayCoreManager.Instance.StageManager;
-            _gameLogic = GameplayCoreManager.Instance.GameLogic;
-            _gameplayCharactersManager = GameplayCoreManager.Instance.GameplayCharactersManager;
+
+            _cameraManager =
+                GameplayCoreManager.Instance.CameraManager;
+
+            _inputManager =
+                GameplayCoreManager.Instance.InputManager;
+
+            _phaseFlowController =
+                GameplayCoreManager.Instance.GamePhaseFlowController;
+
+            _stageManager =
+                GameplayCoreManager.Instance.StageManager;
+
+            _gameLogic =
+                GameplayCoreManager.Instance.GameLogic;
+
+            _gameplayCharactersManager =
+                GameplayCoreManager.Instance.GameplayCharactersManager;
         }
 
+        /// <summary>
+        /// Starts the launch phase.
+        /// </summary>
         public void BeginLaunchPhase(System.Action onLaunchComplete)
         {
-            StartCoroutine(BeginLaunchPhaseRoutine(onLaunchComplete));
+            StartCoroutine(
+                BeginLaunchPhaseRoutine(onLaunchComplete));
         }
 
-        private IEnumerator BeginLaunchPhaseRoutine(System.Action onLaunchComplete)
+        private IEnumerator BeginLaunchPhaseRoutine(
+            System.Action onLaunchComplete)
         {
-            if (!isInitialized) yield break;
+            if (!isInitialized)
+                yield break;
 
             _isTheTurnFinished = false;
 
             PrepareLaunchPhase();
+
             yield return WaitForLaunchCompletion();
 
-            FinalizeLaunch(_currentlyLaunchedCharacter);
+            FinalizeLaunch(
+                _currentlyLaunchedCharacter);
+
             _launchCountThisStage++;
 
-            yield return HandlePostLaunchTransition(onLaunchComplete);
+            yield return HandlePostLaunchTransition(
+                onLaunchComplete);
         }
 
         private void PrepareLaunchPhase()
         {
-            var characters = _gameplayCharactersManager.GetLaunchableCharacters();
+            var characters =
+                _gameplayCharactersManager
+                    .GetLaunchableCharacters();
 
-            _characterLauncher = _stageManager.CurrentCharacterLauncher;
+            _characterLauncher =
+                _stageManager.CurrentCharacterLauncher;
+
+            if (_characterLauncher == null)
+            {
+                Debug.LogError(
+                    "LaunchManager: Current CharacterLauncher is null.");
+
+                _canPressAtCharacters = false;
+                return;
+            }
+
             PrepareLaunch(
                 _characterLauncher,
                 characters,
-                _characterLauncher.UnitsTransforms
-            );
+                _characterLauncher.UnitsTransforms);
 
             _cameraManager.MoveCameraTo(
                 new Vector3(
-                    Camera.main.transform.position.x, 
-                    Camera.main.transform.position.y, 
+                    Camera.main.transform.position.x,
+                    Camera.main.transform.position.y,
                     _characterLauncher.transform.position.z),
                 1f,
-                false
-            );
+                false);
 
             _canPressAtCharacters = true;
         }
@@ -100,52 +156,78 @@ namespace Angry_Girls
             while (_isLaunchAllowed)
                 yield return null;
 
+            var candidate =
+                GetCandidateToLaunch();
 
-            var can = GetCandidateToLaunch();
-            while (can != null && !_isTheTurnFinished)
+            while (candidate != null &&
+                   !_isTheTurnFinished)
             {
-                if (_currentlyLaunchedCharacter != null) { _isTheTurnFinished = _currentlyLaunchedCharacter.hasFinishedLaunchingTurn; }
+                if (_currentlyLaunchedCharacter != null)
+                {
+                    _isTheTurnFinished =
+                        _currentlyLaunchedCharacter
+                            .hasFinishedLaunchingTurn;
+                }
+
                 yield return null;
             }
-
-            Debug.Log("you are not supposed 2 b here");
-        }
-        private void FinalizeLaunch(CControl character)
-        {
-            GameplayCoreManager.Instance.GameplayCharactersManager.CurrentlyAttackingUnit = character;
         }
 
-        private IEnumerator HandlePostLaunchTransition(System.Action onLaunchComplete)
+        private void FinalizeLaunch(
+            CControl character)
         {
-            _lastLaunchedUnit = _currentlyLaunchedCharacter;
+            GameplayCoreManager.Instance
+                .GameplayCharactersManager
+                .CurrentlyAttackingUnit = character;
+        }
+
+        private IEnumerator HandlePostLaunchTransition(
+            System.Action onLaunchComplete)
+        {
+            _lastLaunchedUnit =
+                _currentlyLaunchedCharacter;
+
             _currentlyLaunchedCharacter = null;
-            yield return new WaitForSeconds(_timeToWaitAfterAttackFinish);
 
-            // First turn special case: allow 2 launches before alternate phase
-            if (_firstTurn && _launchCountThisStage < _launchesBeforeFirstAlternate)
+            yield return new WaitForSeconds(
+                _timeToWaitAfterAttackFinish);
+
+            if (_firstTurn &&
+                _launchCountThisStage <
+                _launchesBeforeFirstAlternate)
             {
-                _phaseFlowController.SwitchState(GamePhaseNames.LaunchPhase);
+                _phaseFlowController.SwitchState(
+                    GamePhaseNames.LaunchPhase);
+
                 yield break;
             }
 
-            // Stage changed during launch
-            if (_currentStageIndex != _stageManager.CurrentStageIndex)
+            if (_currentStageIndex !=
+                _stageManager.CurrentStageIndex)
             {
-                _currentStageIndex = _stageManager.CurrentStageIndex;
-                _phaseFlowController.SwitchState(GamePhaseNames.LaunchPhase);
+                _currentStageIndex =
+                    _stageManager.CurrentStageIndex;
+
+                _phaseFlowController.SwitchState(
+                    GamePhaseNames.LaunchPhase);
+
                 yield break;
             }
 
-            // Normal transition to next phase
             _firstTurn = false;
             _launchCountThisStage = 0;
+
             onLaunchComplete?.Invoke();
         }
 
         private void Update()
         {
-            if (!isInitialized || _gameLogic.GameOver || !_canPressAtCharacters)
+            if (!isInitialized ||
+                _gameLogic.GameOver ||
+                !_canPressAtCharacters)
+            {
                 return;
+            }
 
             HandleCharacterSelection();
             HandleLaunchCancellation();
@@ -154,29 +236,51 @@ namespace Angry_Girls
 
         private void HandleCharacterSelection()
         {
-            if (_inputManager.IsPressed)
+            if (!_inputManager.IsPressed)
+                return;
+
+            var ray =
+                Camera.main.ScreenPointToRay(
+                    _inputManager.Position);
+
+            var layerMask =
+                LayerMask.GetMask("CharacterToLaunch");
+
+            if (!Physics.Raycast(
+                    ray,
+                    out var hit,
+                    Mathf.Infinity,
+                    layerMask))
             {
-                Ray ray = Camera.main.ScreenPointToRay(_inputManager.Position);
-                int layerMask = LayerMask.GetMask("CharacterToLaunch");
-
-                if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
-                {
-                    var clickedCharacter = hit.collider.GetComponent<CControl>();
-                    var availableCharacters = _gameplayCharactersManager.GetLaunchableCharacters();
-
-                    if (clickedCharacter != null && availableCharacters.Contains(clickedCharacter))
-                    {
-                        int index = availableCharacters.IndexOf(clickedCharacter);
-                        //_selectionService.SelectCharacter(index);
-                        _isLaunchAllowed = (index == 0);
-                    }
-                }
+                return;
             }
+
+            var clickedCharacter =
+                hit.collider.GetComponent<CControl>();
+
+            var availableCharacters =
+                _gameplayCharactersManager
+                    .GetLaunchableCharacters();
+
+            if (clickedCharacter == null ||
+                !availableCharacters.Contains(
+                    clickedCharacter))
+            {
+                return;
+            }
+
+            var index =
+                availableCharacters.IndexOf(
+                    clickedCharacter);
+
+            _isLaunchAllowed =
+                index == 0;
         }
 
         private void HandleLaunchCancellation()
         {
-            if (Input.GetMouseButtonDown(1) && _isLaunchAllowed)
+            if (Input.GetMouseButtonDown(1) &&
+                _isLaunchAllowed)
             {
                 _isLaunchAllowed = false;
                 CancelAiming();
@@ -185,29 +289,36 @@ namespace Angry_Girls
 
         private void HandleLaunchExecution()
         {
-            if (!_isLaunchAllowed || GetCandidateToLaunch() == null)
+            if (!_isLaunchAllowed ||
+                GetCandidateToLaunch() == null)
+            {
                 return;
+            }
 
             if (_inputManager.IsHeld)
             {
-                TryStartAiming(GetCandidateToLaunch());
+                TryStartAiming(
+                    GetCandidateToLaunch());
             }
 
-            if (_inputManager.IsReleased)
+            if (!_inputManager.IsReleased)
+                return;
+
+            if (TryExecuteLaunch(
+                    GetCandidateToLaunch()))
             {
-                if (TryExecuteLaunch(GetCandidateToLaunch()))
-                {
-                    LaunchCharacter(GetCandidateToLaunch());
-                }
-                else
-                {
-                    _isLaunchAllowed = false;
-                    CancelAiming();
-                }
+                LaunchCharacter(
+                    GetCandidateToLaunch());
+            }
+            else
+            {
+                _isLaunchAllowed = false;
+                CancelAiming();
             }
         }
 
-        private void LaunchCharacter(CControl character)
+        private void LaunchCharacter(
+            CControl character)
         {
             _currentlyLaunchedCharacter = character;
             _isLaunchAllowed = false;
@@ -216,21 +327,34 @@ namespace Angry_Girls
             character.hasBeenLaunched = true;
             character.canCheckGlobalBehavior = true;
             character.canUseAbility = true;
-            character.gameObject.layer = LayerMask.NameToLayer("Character");
+            character.gameObject.layer =
+                LayerMask.NameToLayer("Character");
 
-            GameplayCoreManager.Instance.GameplayCharactersManager.CurrentlyAttackingUnit = character;
-            GameplayCoreManager.Instance.GameplayCharactersManager.NotifyLaunchableCharactersChanged();
+            GameplayCoreManager.Instance
+                .GameplayCharactersManager
+                .CurrentlyAttackingUnit = character;
 
-            _characterLauncher.LaunchUnit(character);
-            _cameraManager.CameraFollowForRigidBody(character.CharacterMovement.Rigidbody);
+            GameplayCoreManager.Instance
+                .GameplayCharactersManager
+                .NotifyLaunchableCharactersChanged();
+
+            _characterLauncher.LaunchUnit(
+                character);
+
+            _cameraManager.CameraFollowForRigidBody(
+                character.CharacterMovement.Rigidbody);
+
             _cameraManager.ZoomOutCameraAfterLaunch();
 
-            StartCoroutine(ControlUnitLaunch(character));
+            StartCoroutine(
+                ControlUnitLaunch(character));
         }
 
-        private IEnumerator ControlUnitLaunch(CControl control)
+        private IEnumerator ControlUnitLaunch(
+            CControl control)
         {
-            while (control.canUseAbility && !control.hasFinishedLaunchingTurn)
+            while (control.canUseAbility &&
+                   !control.hasFinishedLaunchingTurn)
             {
                 if (_inputManager.IsPressed)
                 {
@@ -238,59 +362,136 @@ namespace Angry_Girls
                     control.hasUsedAbility = true;
                     control.UnitPerformedAttack?.Invoke();
                 }
+
                 yield return null;
             }
         }
 
-        //TODO
-        public void TrySwapCharacterByIndex(int clickedIndex)
+        /// <summary>
+        /// Swaps the selected launchable character with the first character.
+        /// </summary>
+        public void TrySwapCharacterByIndex(
+            int clickedIndex)
         {
-            if (!_canPressAtCharacters || clickedIndex <= 0) return;
+            if (!_canPressAtCharacters ||
+                clickedIndex <= 0)
+            {
+                return;
+            }
 
-            _gameplayCharactersManager.SwapWithFirst(clickedIndex);
+            _gameplayCharactersManager
+                .SwapWithFirst(clickedIndex);
+
             PrepareLaunch(
                 _characterLauncher,
-                _gameplayCharactersManager.LaunchableCharacters,
-            _characterLauncher.UnitsTransforms
-            );
+                _gameplayCharactersManager
+                    .LaunchableCharacters,
+                _characterLauncher.UnitsTransforms);
         }
 
         #region Execution service
-        public void PrepareLaunch(CharacterLauncher launcher, List<CControl> characters, Transform[] positions)
+
+        /// <summary>
+        /// Prepares character launch positions.
+        /// </summary>
+        public void PrepareLaunch(
+            CharacterLauncher launcher,
+            List<CControl> characters,
+            Transform[] positions)
         {
+            if (launcher == null ||
+                characters == null ||
+                positions == null)
+            {
+                return;
+            }
+
             _characterLauncher = launcher;
-            UpdateCharacterPositions(characters, positions);
+
+            UpdateCharacterPositions(
+                characters,
+                positions);
         }
 
-        public bool TryStartAiming(CControl character/*, bool isCurrentSelection*/)
+        /// <summary>
+        /// Starts aiming with the selected character.
+        /// </summary>
+        public bool TryStartAiming(
+            CControl character)
         {
-            //if (!isCurrentSelection) return false;
+            if (character == null ||
+                _characterLauncher == null)
+            {
+                return false;
+            }
 
-            _characterLauncher.AimingTheLaunch(character.gameObject);
-            _cameraManager.CameraFollowForRigidBody(character.CharacterMovement.Rigidbody);
+            _characterLauncher.AimingTheLaunch(
+                character.gameObject);
+
+            _cameraManager.CameraFollowForRigidBody(
+                character.CharacterMovement.Rigidbody);
+
             return true;
         }
 
+        /// <summary>
+        /// Cancels current aiming.
+        /// </summary>
         public void CancelAiming()
         {
-            _characterLauncher.CancelAiming();
+            _characterLauncher?.CancelAiming();
         }
 
-        public bool TryExecuteLaunch(CControl character)
+        /// <summary>
+        /// Executes character launch when minimum distance is reached.
+        /// </summary>
+        public bool TryExecuteLaunch(
+            CControl character)
         {
-            if (!_characterLauncher.IsLaunchDistanceSufficient()) return false;
+            if (character == null ||
+                _characterLauncher == null)
+            {
+                return false;
+            }
 
-            _characterLauncher.LaunchUnit(character);
-            _cameraManager.CameraFollowForRigidBody(character.CharacterMovement.Rigidbody);
+            if (!_characterLauncher
+                    .IsLaunchDistanceSufficient())
+            {
+                return false;
+            }
+
+            _characterLauncher.LaunchUnit(
+                character);
+
+            _cameraManager.CameraFollowForRigidBody(
+                character.CharacterMovement.Rigidbody);
+
             _cameraManager.ZoomOutCameraAfterLaunch();
+
             return true;
         }
 
-        private void UpdateCharacterPositions(List<CControl> characters, Transform[] positions)
+        private void UpdateCharacterPositions(
+            List<CControl> characters,
+            Transform[] positions)
         {
-            for (int i = 0; i < characters.Count && i < positions.Length; i++)
+            var count =
+                Mathf.Min(
+                    characters.Count,
+                    positions.Length);
+
+            for (var i = 0; i < count; i++)
             {
-                characters[i].CharacterMovement.Teleport(positions[i].position);
+                if (characters[i] == null ||
+                    positions[i] == null)
+                {
+                    continue;
+                }
+
+                characters[i]
+                    .CharacterMovement
+                    .Teleport(
+                        positions[i].position);
             }
         }
 

@@ -74,6 +74,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\TODO.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\UI_Slots\UI_CharacterSlot.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\ConfirmationPanel.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\LaunchPhaseProgressUI.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\UI_GameplayManagersComponent.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\TurnOrderService.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Shop and Inventory\ItemSettings\Editor\ItemSettingsEditor.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\SettingsManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\Settings\FrameSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\UI_MissionTemplateData.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\UI_SettingsGameplayPanel.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\SaveLoad\Repository.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\Spawn\FactoryExtention\FactoryExtention.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterAnimationStates\AnimationStateBase.cs" />
@@ -208,6 +210,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\LevelSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\ReadyBanner.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\UI_Slots\UI_MissionSlot.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\TurnOrderSegmentUI.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\CatalogsRepositoriesDataTemplates\MissionsRepository.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\Settings\PhysicsSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\Panels\UI_ShopPanel.cs" />
@@ -601,7 +604,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@f303bc7be9c9\Runtime\Newtonsoft.Json.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.2\Runtime\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.TextureAssets">
