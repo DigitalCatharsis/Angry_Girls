@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Angry_Girls
@@ -8,12 +9,16 @@ namespace Angry_Girls
     /// <summary>
     /// Displays one future character action in the turn order.
     /// </summary>
-    public sealed class TurnOrderSegmentUI : MonoBehaviour
+    public sealed class TurnOrderSegmentUI
+        : MonoBehaviour,
+          IPointerEnterHandler,
+          IPointerExitHandler
     {
         [Header("UI")]
         [SerializeField] private Image _portrait;
         [SerializeField] private TextMeshProUGUI _actionText;
         [SerializeField] private Image _currentHighlight;
+        [SerializeField] private Button _portraitButton;
 
         [Header("End")]
         [SerializeField] private GameObject _endVisual;
@@ -22,7 +27,41 @@ namespace Angry_Girls
         [SerializeField] private Sprite _fallbackPortrait;
 
         private CControl _character;
+        private TurnOrderHoverIndicator _hoverIndicator;
         private int _setupVersion;
+        private bool _isPointerOver;
+
+        /// <summary>
+        /// Gets the character represented by this segment.
+        /// </summary>
+        public CControl Character =>
+            _character;
+
+        private void Awake()
+        {
+            if (_portraitButton != null)
+            {
+                _portraitButton.onClick.AddListener(
+                    OnPortraitClicked);
+            }
+        }
+
+        /// <summary>
+        /// Assigns the shared hover indicator.
+        /// </summary>
+        public void SetHoverIndicator(
+            TurnOrderHoverIndicator hoverIndicator)
+        {
+            _hoverIndicator =
+                hoverIndicator;
+
+            if (_isPointerOver &&
+                _character != null)
+            {
+                _hoverIndicator?.Show(
+                    _character);
+            }
+        }
 
         /// <summary>
         /// Configures the segment to represent a character action.
@@ -41,9 +80,7 @@ namespace Angry_Girls
                 character;
 
             if (_endVisual != null)
-            {
                 _endVisual.SetActive(false);
-            }
 
             if (_portrait != null)
             {
@@ -58,10 +95,16 @@ namespace Angry_Girls
                         : "A";
             }
 
-            SetCurrent(
-                isCurrent);
+            SetCurrent(isCurrent);
 
             ResetPortrait();
+
+            if (_isPointerOver &&
+                _hoverIndicator != null)
+            {
+                _hoverIndicator.Show(
+                    _character);
+            }
 
             if (_character == null)
                 return;
@@ -73,7 +116,7 @@ namespace Angry_Girls
         }
 
         /// <summary>
-        /// Configures the segment to represent the end of the queue.
+        /// Configures the segment as the final END marker.
         /// </summary>
         public void SetupEnd()
         {
@@ -101,11 +144,14 @@ namespace Angry_Girls
             {
                 _endVisual.SetActive(true);
             }
+
+            if (_isPointerOver &&
+                _hoverIndicator != null)
+            {
+                _hoverIndicator.Hide();
+            }
         }
 
-        /// <summary>
-        /// Sets whether this segment is the currently active action.
-        /// </summary>
         public void SetCurrent(
             bool isCurrent)
         {
@@ -114,6 +160,28 @@ namespace Angry_Girls
                 _currentHighlight.enabled =
                     isCurrent;
             }
+        }
+
+        public void OnPointerEnter(
+            PointerEventData eventData)
+        {
+            _isPointerOver =
+                true;
+
+            if (_character == null)
+                return;
+
+            _hoverIndicator?.Show(
+                _character);
+        }
+
+        public void OnPointerExit(
+            PointerEventData eventData)
+        {
+            _isPointerOver =
+                false;
+
+            _hoverIndicator?.Hide();
         }
 
         private void ResetPortrait()
@@ -189,16 +257,16 @@ namespace Angry_Girls
             }
         }
 
+        /// <summary>
+        /// Moves the camera to the character represented by this portrait.
+        /// </summary>
         public void OnPortraitClicked()
         {
             if (_character == null)
                 return;
 
-            if (GameplayCoreManager.Instance == null)
-                return;
-
             var cameraManager =
-                GameplayCoreManager.Instance
+                GameplayCoreManager.Instance?
                     .CameraManager;
 
             if (cameraManager == null)
@@ -208,6 +276,20 @@ namespace Angry_Girls
                 _character.transform.position,
                 0.35f,
                 false);
+        }
+
+        private void OnDestroy()
+        {
+            if (_portraitButton != null)
+            {
+                _portraitButton.onClick.RemoveListener(
+                    OnPortraitClicked);
+            }
+
+            if (_isPointerOver)
+            {
+                _hoverIndicator?.Hide();
+            }
         }
     }
 }

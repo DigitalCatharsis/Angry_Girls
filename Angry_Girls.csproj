@@ -125,6 +125,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\PauseMenu.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponent.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\CharactersManager.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\TurnOrderHoverIndicator.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\LayerAdder\Editor\LayerChangerEditor.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\NotificationManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\AudioManager\AudioClipLibrary.cs" />

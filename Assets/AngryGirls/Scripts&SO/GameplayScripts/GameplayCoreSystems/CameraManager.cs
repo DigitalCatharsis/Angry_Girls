@@ -1,6 +1,7 @@
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Angry_Girls
 {
@@ -41,7 +42,8 @@ namespace Angry_Girls
         [SerializeField] private float _zoomInAfterReadyDuration = 1f;
         [SerializeField] private float _targetZoomAfterReady = 1.55f;
 
-        public float SecondsCameraWaitsAfterAttack => _secondsCameraWaitsAfterAttack;
+        public float SecondsCameraWaitsAfterAttack =>
+            _secondsCameraWaitsAfterAttack;
 
         [SerializeField] private Rigidbody _characterToFollow;
         [SerializeField] private bool _allowCameraFollow;
@@ -57,25 +59,37 @@ namespace Angry_Girls
         private float _fixedCameraY;
         private bool _fixedPositionInitialized;
 
+        private bool _cameraPanBlockedByUI;
+
         /// <summary>
-        /// Initializes the camera manager and locks the camera world X/Y coordinates.
+        /// Initializes the camera manager.
         /// </summary>
         public override void Initialize()
         {
             KillCameraTwins();
 
-            _mainCamera = Camera.main;
+            _mainCamera =
+                Camera.main;
 
             if (_mainCamera == null)
             {
-                Debug.LogError("CameraManager: Main camera was not found.");
+                Debug.LogError(
+                    "CameraManager: Main camera was not found.");
+
                 return;
             }
 
-            _inputManager = GameplayCoreManager.Instance.InputManager;
-            _settingsManager = CoreManager.Instance.SettingsManager;
+            _inputManager =
+                GameplayCoreManager.Instance
+                    .InputManager;
 
-            ApplyCameraSettingsFromManager(SettingsCategory.Camera);
+            _settingsManager =
+                CoreManager.Instance
+                    .SettingsManager;
+
+            ApplyCameraSettingsFromManager(
+                SettingsCategory.Camera);
+
             SubscribeToSettingsChanges();
 
             LockCameraXY();
@@ -87,7 +101,8 @@ namespace Angry_Girls
         /// <summary>
         /// Applies camera settings from SettingsManager.
         /// </summary>
-        private void ApplyCameraSettingsFromManager(SettingsCategory settingsCategory)
+        private void ApplyCameraSettingsFromManager(
+            SettingsCategory settingsCategory)
         {
             if (_settingsManager == null)
                 return;
@@ -98,8 +113,14 @@ namespace Angry_Girls
                 return;
             }
 
-            var settings = _settingsManager.GetCurrentSettings();
-            _movementSpeed = Mathf.Max(0f, settings.cameraMovementSpeed);
+            var settings =
+                _settingsManager
+                    .GetCurrentSettings();
+
+            _movementSpeed =
+                Mathf.Max(
+                    0f,
+                    settings.cameraMovementSpeed);
         }
 
         /// <summary>
@@ -108,13 +129,22 @@ namespace Angry_Girls
         private void SubscribeToSettingsChanges()
         {
             if (_settingsManager != null)
-                _settingsManager.OnSettingsChanged += ApplyCameraSettingsFromManager;
+            {
+                _settingsManager
+                    .OnSettingsChanged +=
+                    ApplyCameraSettingsFromManager;
+            }
         }
 
         private void Update()
         {
-            if (!isInitialized || _mainCamera == null)
+            if (!isInitialized ||
+                _mainCamera == null)
+            {
                 return;
+            }
+
+            UpdateUIPanBlockState();
 
             EnforceCameraXY();
 
@@ -129,52 +159,146 @@ namespace Angry_Girls
 
         private void LateUpdate()
         {
-            if (!isInitialized || _mainCamera == null)
-                return;
-
-            if (_characterToFollow != null && _allowCameraFollow)
+            if (!isInitialized ||
+                _mainCamera == null)
             {
-                CenterCameraAgainst(_characterToFollow);
+                return;
+            }
+
+            if (_characterToFollow != null &&
+                _allowCameraFollow)
+            {
+                CenterCameraAgainst(
+                    _characterToFollow);
             }
 
             EnforceCameraXY();
         }
 
         /// <summary>
-        /// Stores the camera's initial world X/Y coordinates.
+        /// Tracks whether the current drag started over UI.
+        /// Once blocked, camera movement remains disabled until release.
+        /// </summary>
+        private void UpdateUIPanBlockState()
+        {
+            if (Application.isMobilePlatform)
+            {
+                UpdateMobileUIPanBlockState();
+                return;
+            }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                _cameraPanBlockedByUI =
+                    IsPointerOverUI();
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                _cameraPanBlockedByUI = false;
+            }
+        }
+
+        private void UpdateMobileUIPanBlockState()
+        {
+            if (Input.touchCount <= 0)
+                return;
+
+            for (var i = 0;
+                 i < Input.touchCount;
+                 i++)
+            {
+                var touch =
+                    Input.GetTouch(i);
+
+                if (touch.phase ==
+                    TouchPhase.Began)
+                {
+                    _cameraPanBlockedByUI =
+                        IsPointerOverUI(
+                            touch.fingerId);
+                }
+
+                if (touch.phase ==
+                    TouchPhase.Ended ||
+                    touch.phase ==
+                    TouchPhase.Canceled)
+                {
+                    _cameraPanBlockedByUI = false;
+                }
+            }
+        }
+
+        private bool IsPointerOverUI()
+        {
+            if (EventSystem.current == null)
+                return false;
+
+            return EventSystem.current
+                .IsPointerOverGameObject();
+        }
+
+        private bool IsPointerOverUI(
+            int fingerId)
+        {
+            if (EventSystem.current == null)
+                return false;
+
+            return EventSystem.current
+                .IsPointerOverGameObject(
+                    fingerId);
+        }
+
+        /// <summary>
+        /// Stores the immutable camera X/Y coordinates.
         /// </summary>
         private void LockCameraXY()
         {
             if (_mainCamera == null)
                 return;
 
-            var position = _mainCamera.transform.position;
+            var position =
+                _mainCamera.transform.position;
 
-            _fixedCameraX = position.x;
-            _fixedCameraY = position.y;
-            _fixedPositionInitialized = true;
+            _fixedCameraX =
+                position.x;
+
+            _fixedCameraY =
+                position.y;
+
+            _fixedPositionInitialized =
+                true;
         }
 
         /// <summary>
-        /// Restores the immutable camera world X/Y coordinates.
+        /// Restores immutable camera X/Y coordinates.
         /// </summary>
         private void EnforceCameraXY()
         {
-            if (!_fixedPositionInitialized || _mainCamera == null)
-                return;
-
-            var position = _mainCamera.transform.position;
-
-            if (Mathf.Approximately(position.x, _fixedCameraX) &&
-                Mathf.Approximately(position.y, _fixedCameraY))
+            if (!_fixedPositionInitialized ||
+                _mainCamera == null)
             {
                 return;
             }
 
-            _mainCamera.transform.position = new Vector3(
-                _fixedCameraX,
-                _fixedCameraY,
-                position.z);
+            var position =
+                _mainCamera.transform.position;
+
+            if (Mathf.Approximately(
+                    position.x,
+                    _fixedCameraX) &&
+                Mathf.Approximately(
+                    position.y,
+                    _fixedCameraY))
+            {
+                return;
+            }
+
+            _mainCamera.transform.position =
+                new Vector3(
+                    _fixedCameraX,
+                    _fixedCameraY,
+                    position.z);
         }
 
         private void HandleZoom()
@@ -182,75 +306,120 @@ namespace Angry_Girls
             if (_inputManager == null)
                 return;
 
-            var zoomDelta = _inputManager.GetZoomDelta();
+            var zoomDelta =
+                _inputManager.GetZoomDelta();
 
-            if (!Mathf.Approximately(zoomDelta, 0f))
-                ApplyZoom(zoomDelta * _zoomSensitivity);
+            if (!Mathf.Approximately(
+                    zoomDelta,
+                    0f))
+            {
+                ApplyZoom(
+                    zoomDelta *
+                    _zoomSensitivity);
+            }
         }
 
         /// <summary>
-        /// Changes only orthographic size.
+        /// Changes only camera orthographic size.
         /// </summary>
-        private void ApplyZoom(float delta)
+        private void ApplyZoom(
+            float delta)
         {
             if (_mainCamera == null)
                 return;
 
-            if (!Mathf.Approximately(delta, 0f))
-                _allowCameraFollow = false;
+            if (!Mathf.Approximately(
+                    delta,
+                    0f))
+            {
+                _allowCameraFollow =
+                    false;
+            }
 
-            _mainCamera.orthographicSize = Mathf.Clamp(
-                _mainCamera.orthographicSize - delta,
-                _minZoom,
-                _maxZoom);
+            _mainCamera.orthographicSize =
+                Mathf.Clamp(
+                    _mainCamera.orthographicSize -
+                    delta,
+                    _minZoom,
+                    _maxZoom);
 
             EnforceCameraXY();
         }
 
         private void HandleMovement()
         {
-            if (_inputManager == null || !_inputManager.IsDragging())
+            if (_cameraPanBlockedByUI)
                 return;
 
-            var delta = _inputManager.GetDragDelta();
+            if (_inputManager == null ||
+                !_inputManager.IsDragging())
+            {
+                return;
+            }
 
-            if (!IsPointerOverCharacter(_inputManager.Position))
+            var delta =
+                _inputManager.GetDragDelta();
+
+            if (!IsPointerOverCharacter(
+                    _inputManager.Position))
+            {
                 MoveCamera(delta);
+            }
         }
 
-        private bool IsPointerOverCharacter(Vector2 screenPosition)
+        private bool IsPointerOverCharacter(
+            Vector2 screenPosition)
         {
             if (_mainCamera == null)
                 return false;
 
-            var ray = _mainCamera.ScreenPointToRay(screenPosition);
-            var layerMask = 1 << 14;
+            var ray =
+                _mainCamera
+                    .ScreenPointToRay(
+                        screenPosition);
 
-            return Physics.Raycast(ray, Mathf.Infinity, layerMask);
+            var layerMask =
+                1 << 14;
+
+            return Physics.Raycast(
+                ray,
+                Mathf.Infinity,
+                layerMask);
         }
 
         /// <summary>
         /// Moves the camera exclusively along world Z.
         /// </summary>
-        private void MoveCamera(Vector2 delta)
+        private void MoveCamera(
+            Vector2 delta)
         {
-            if (_mainCamera == null || delta.sqrMagnitude <= 0f)
+            if (_mainCamera == null ||
+                delta.sqrMagnitude <= 0f)
+            {
                 return;
+            }
 
-            _allowCameraFollow = false;
+            _allowCameraFollow =
+                false;
 
-            var speed = _movementSpeed *
-                        _mainCamera.orthographicSize *
-                        Time.deltaTime;
+            var speed =
+                _movementSpeed *
+                _mainCamera.orthographicSize *
+                Time.deltaTime;
 
-            var z = _mainCamera.transform.position.z - delta.x * speed;
+            var z =
+                _mainCamera.transform.position.z -
+                delta.x *
+                speed;
+
             SetCameraZ(z);
         }
 
         /// <summary>
-        /// Follows a Rigidbody target and immediately synchronizes the camera Z position.
+        /// Starts following the target Rigidbody.
         /// </summary>
-        public void CameraFollowForRigidBody(Rigidbody characterToFollow)
+        public void CameraFollowForRigidBody(
+            Rigidbody characterToFollow)
         {
             if (characterToFollow == null)
             {
@@ -260,60 +429,72 @@ namespace Angry_Girls
 
             KillCameraMoveSequence();
 
-            _characterToFollow = characterToFollow;
-            _allowCameraFollow = true;
+            _characterToFollow =
+                characterToFollow;
 
-            // Use the interpolated Transform position immediately.
-            // This prevents a one-frame jump when follow starts.
-            CenterCameraAgainst(_characterToFollow);
+            _allowCameraFollow =
+                true;
+
+            CenterCameraAgainst(
+                _characterToFollow);
 
             EnforceCameraXY();
         }
 
         /// <summary>
-        /// Stops following a rigidbody.
+        /// Stops following a Rigidbody.
         /// </summary>
         public void StopCameraFollowForRigidBody()
         {
-            _characterToFollow = null;
-            _allowCameraFollow = false;
+            _characterToFollow =
+                null;
+
+            _allowCameraFollow =
+                false;
         }
 
-        /// <summary>
-        /// Follows the launched character using the Rigidbody's interpolated Transform position.
-        /// Camera X/Y remain immutable; only Z is updated.
-        /// </summary>
-        private void CenterCameraAgainst(Rigidbody target)
+        private void CenterCameraAgainst(
+            Rigidbody target)
         {
-            if (target == null || _mainCamera == null)
+            if (target == null ||
+                _mainCamera == null)
+            {
                 return;
+            }
 
-            var targetZ = target.transform.position.z;
+            var targetZ =
+                target.transform.position.z;
+
             SetCameraZ(targetZ);
         }
 
         /// <summary>
-        /// Applies the post-launch zoom without modifying camera position.
+        /// Applies post-launch zoom.
         /// </summary>
         public void ZoomOutCameraAfterLaunch()
         {
             if (_mainCamera == null)
                 return;
 
-            _mainCamera.orthographicSize = Mathf.Clamp(
-                _mainCamera.orthographicSize -
-                (_mainCamera.orthographicSize / _zoomeCameraValueAfterLaunch),
-                _minZoom,
-                _maxZoom);
+            _mainCamera.orthographicSize =
+                Mathf.Clamp(
+                    _mainCamera.orthographicSize -
+                    (_mainCamera.orthographicSize /
+                     _zoomeCameraValueAfterLaunch),
+                    _minZoom,
+                    _maxZoom);
 
             EnforceCameraXY();
         }
 
         /// <summary>
-        /// Smoothly moves the camera exclusively along world Z.
-        /// The supplied X/Y coordinates are intentionally ignored.
+        /// Smoothly moves camera along world Z.
+        /// X/Y are ignored intentionally.
         /// </summary>
-        public void MoveCameraTo(Vector3 targetPosition, float speed, bool resetZoom = false)
+        public void MoveCameraTo(
+            Vector3 targetPosition,
+            float speed,
+            bool resetZoom = false)
         {
             if (_mainCamera == null)
                 return;
@@ -321,35 +502,52 @@ namespace Angry_Girls
             StopCameraFollowForRigidBody();
             KillCameraMoveSequence();
 
-            var duration = Mathf.Max(0f, speed);
-            var targetZ = Mathf.Clamp(targetPosition.z, _minCameraZ, _maxCameraZ);
+            var duration =
+                Mathf.Max(
+                    0f,
+                    speed);
 
-            _cameraMoveSequence = DOTween.Sequence();
+            var targetZ =
+                Mathf.Clamp(
+                    targetPosition.z,
+                    _minCameraZ,
+                    _maxCameraZ);
+
+            _cameraMoveSequence =
+                DOTween.Sequence();
 
             _cameraMoveSequence.Append(
                 _mainCamera.transform
-                    .DOMoveZ(targetZ, duration)
-                    .SetEase(_cameraMoveEase));
+                    .DOMoveZ(
+                        targetZ,
+                        duration)
+                    .SetEase(
+                        _cameraMoveEase));
 
             if (resetZoom)
             {
                 _cameraMoveSequence.Join(
                     _mainCamera
-                        .DOOrthoSize(startOrthographicCameraSize, duration)
-                        .SetEase(_cameraMoveEase));
+                        .DOOrthoSize(
+                            startOrthographicCameraSize,
+                            duration)
+                        .SetEase(
+                            _cameraMoveEase));
             }
 
-            _cameraMoveSequence.OnUpdate(EnforceCameraXY);
+            _cameraMoveSequence.OnUpdate(
+                EnforceCameraXY);
 
-            _cameraMoveSequence.OnComplete(() =>
-            {
-                EnforceCameraXY();
-                _cameraMoveSequence = null;
-            });
+            _cameraMoveSequence.OnComplete(
+                () =>
+                {
+                    EnforceCameraXY();
+                    _cameraMoveSequence = null;
+                });
         }
 
         /// <summary>
-        /// Shakes the camera exclusively along world Z.
+        /// Shakes camera exclusively along world Z.
         /// </summary>
         public void ShakeCamera(
             float shakeDuration = -1f,
@@ -358,105 +556,147 @@ namespace Angry_Girls
             if (_mainCamera == null)
                 return;
 
-            shakeDuration = shakeDuration > 0f
-                ? shakeDuration
-                : _defaultShakeDuration;
+            shakeDuration =
+                shakeDuration > 0f
+                    ? shakeDuration
+                    : _defaultShakeDuration;
 
-            shakeMagnitude = shakeMagnitude >= 0f
-                ? shakeMagnitude
-                : _defaultShakeMagnitude;
+            shakeMagnitude =
+                shakeMagnitude >= 0f
+                    ? shakeMagnitude
+                    : _defaultShakeMagnitude;
 
-            StartCoroutine(ShakeCoroutine(shakeDuration, shakeMagnitude));
+            StartCoroutine(
+                ShakeCoroutine(
+                    shakeDuration,
+                    shakeMagnitude));
         }
 
-        private IEnumerator ShakeCoroutine(float shakeDuration, float shakeMagnitude)
+        private IEnumerator ShakeCoroutine(
+            float shakeDuration,
+            float shakeMagnitude)
         {
             if (_mainCamera == null)
                 yield break;
 
             KillCameraMoveSequence();
 
-            var originalZ = _mainCamera.transform.position.z;
-            var elapsed = 0f;
+            var originalZ =
+                _mainCamera
+                    .transform
+                    .position
+                    .z;
+
+            var elapsed =
+                0f;
 
             while (elapsed < shakeDuration)
             {
                 if (_mainCamera == null)
                     yield break;
 
-                var shakeZ = Random.Range(-1f, 1f) * shakeMagnitude;
+                var shakeZ =
+                    Random.Range(
+                        -1f,
+                        1f) *
+                    shakeMagnitude;
 
-                SetCameraZ(originalZ + shakeZ);
+                SetCameraZ(
+                    originalZ +
+                    shakeZ);
 
-                elapsed += Time.deltaTime;
+                elapsed +=
+                    Time.deltaTime;
+
                 yield return null;
             }
 
-            SetCameraZ(originalZ);
+            SetCameraZ(
+                originalZ);
         }
 
         /// <summary>
         /// Sets camera world Z while preserving immutable X/Y.
         /// </summary>
-        private void SetCameraZ(float z)
+        private void SetCameraZ(
+            float z)
         {
             if (_mainCamera == null)
                 return;
 
-            z = Mathf.Clamp(z, _minCameraZ, _maxCameraZ);
+            z =
+                Mathf.Clamp(
+                    z,
+                    _minCameraZ,
+                    _maxCameraZ);
 
-            _mainCamera.transform.position = new Vector3(
-                _fixedCameraX,
-                _fixedCameraY,
-                z);
+            _mainCamera.transform.position =
+                new Vector3(
+                    _fixedCameraX,
+                    _fixedCameraY,
+                    z);
         }
 
-        /// <summary>
-        /// Cancels the active camera movement tween.
-        /// </summary>
         private void KillCameraMoveSequence()
         {
             if (_cameraMoveSequence == null)
                 return;
 
             _cameraMoveSequence.Kill();
-            _cameraMoveSequence = null;
+
+            _cameraMoveSequence =
+                null;
 
             EnforceCameraXY();
         }
 
         private void KillCameraTwins()
         {
-            var allCameras = FindObjectsOfType<Camera>();
+            var allCameras =
+                FindObjectsOfType<Camera>();
+
             Camera mainCamera = null;
 
-            foreach (var cam in allCameras)
+            foreach (var camera in allCameras)
             {
-                if (cam != null && cam.CompareTag("MainCamera"))
+                if (camera != null &&
+                    camera.CompareTag(
+                        "MainCamera"))
                 {
-                    mainCamera = cam;
+                    mainCamera =
+                        camera;
+
                     break;
                 }
             }
 
-            foreach (var cam in allCameras)
+            foreach (var camera in allCameras)
             {
-                if (cam != null && cam != mainCamera)
-                    Destroy(cam.gameObject);
+                if (camera != null &&
+                    camera != mainCamera)
+                {
+                    Destroy(
+                        camera.gameObject);
+                }
             }
         }
 
         private void OnDestroy()
         {
             if (_settingsManager != null)
-                _settingsManager.OnSettingsChanged -= ApplyCameraSettingsFromManager;
+            {
+                _settingsManager
+                    .OnSettingsChanged -=
+                    ApplyCameraSettingsFromManager;
+            }
 
             KillCameraMoveSequence();
+
             KillCameraTwins();
         }
 
         /// <summary>
-        /// Smoothly zooms the camera to the target size without moving it.
+        /// Smoothly zooms camera after Ready.
         /// </summary>
         public void ZoomInAfterReady()
         {
@@ -467,10 +707,17 @@ namespace Angry_Girls
 
             _mainCamera
                 .DOOrthoSize(
-                    Mathf.Clamp(_targetZoomAfterReady, _minZoom, _maxZoom),
-                    Mathf.Max(0f, _zoomInAfterReadyDuration))
-                .SetEase(_cameraMoveEase)
-                .OnUpdate(EnforceCameraXY);
+                    Mathf.Clamp(
+                        _targetZoomAfterReady,
+                        _minZoom,
+                        _maxZoom),
+                    Mathf.Max(
+                        0f,
+                        _zoomInAfterReadyDuration))
+                .SetEase(
+                    _cameraMoveEase)
+                .OnUpdate(
+                    EnforceCameraXY);
         }
     }
 }

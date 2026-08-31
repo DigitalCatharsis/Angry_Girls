@@ -18,10 +18,14 @@ namespace Angry_Girls
         [Header("Segment")]
         [SerializeField] private TurnOrderSegmentUI _segmentPrefab;
 
+        [Header("Hover")]
+        [SerializeField] private TurnOrderHoverIndicator _hoverIndicator;
+
         [Header("Behaviour")]
         [SerializeField] private bool _resetScrollAfterRefresh = true;
 
-        private readonly List<TurnOrderSegmentUI> _segmentPool = new();
+        private readonly List<TurnOrderSegmentUI> _segmentPool =
+            new();
 
         private GameplayCharactersManager _charactersManager;
         private LaunchManager _launchManager;
@@ -73,11 +77,25 @@ namespace Angry_Girls
             _queue =
                 new TurnOrderQueue();
 
+            ConfigureScrollRect();
             SubscribeToEvents();
 
-            _initialized = true;
+            _initialized =
+                true;
 
             RefreshVisibility();
+        }
+
+        private void ConfigureScrollRect()
+        {
+            if (_scrollRect == null)
+                return;
+
+            _scrollRect.horizontal =
+                true;
+
+            _scrollRect.vertical =
+                false;
         }
 
         private void SubscribeToEvents()
@@ -143,7 +161,7 @@ namespace Angry_Girls
         }
 
         /// <summary>
-        /// Shows the queue and refreshes it.
+        /// Shows the queue and refreshes its content.
         /// </summary>
         public override void Show()
         {
@@ -156,7 +174,7 @@ namespace Angry_Girls
         }
 
         /// <summary>
-        /// Rebuilds the queue from current gameplay state.
+        /// Rebuilds the current turn order.
         /// </summary>
         public void Refresh()
         {
@@ -167,7 +185,6 @@ namespace Angry_Girls
             }
 
             BuildQueue();
-
             RenderQueue();
         }
 
@@ -186,6 +203,7 @@ namespace Angry_Girls
 
             if (!_showTurnOrder)
             {
+                _hoverIndicator?.Hide();
                 gameObject.SetActive(false);
                 return;
             }
@@ -195,9 +213,6 @@ namespace Angry_Girls
             Refresh();
         }
 
-        /// <summary>
-        /// Builds a fresh linked-list representation of the current future turn sequence.
-        /// </summary>
         private void BuildQueue()
         {
             _queue.Clear();
@@ -255,38 +270,23 @@ namespace Angry_Girls
                 case GamePhaseNames.StageCompletePhase:
                 case GamePhaseNames.VictoryPhase:
                 case GamePhaseNames.DefeatPhase:
-                default:
                     break;
             }
 
             _queue.AddEnd();
         }
 
-        /// <summary>
-        /// Builds the queue before and during LaunchPhase.
-        /// First turn: two launches before the first Alternate.
-        /// Every later launch is followed by an Alternate block.
-        /// </summary>
         private void BuildLaunchPhaseQueue(
             List<CControl> launchablePlayers,
             List<CControl> launchedPlayers,
             List<CControl> aliveEnemies)
         {
-            if (launchablePlayers.Count == 0)
-            {
-                BuildAlternateBlock(
-                    launchedPlayers,
-                    _launchManager.LastLaunchedCharacter,
-                    aliveEnemies);
-
-                return;
-            }
-
             var simulatedLaunched =
                 new List<CControl>(
                     launchedPlayers);
 
-            var launchableIndex = 0;
+            var launchableIndex =
+                0;
 
             var launchesBeforeAlternate =
                 _launchManager.IsFirstTurn
@@ -303,7 +303,7 @@ namespace Angry_Girls
                     launchesBeforeAlternate,
                     launchablePlayers.Count);
 
-            CControl lastSimulatedLaunch =
+            var lastSimulatedLaunch =
                 _launchManager
                     .LastLaunchedCharacter;
 
@@ -311,6 +311,12 @@ namespace Angry_Girls
                  i < launchesBeforeAlternate;
                  i++)
             {
+                if (launchableIndex >=
+                    launchablePlayers.Count)
+                {
+                    break;
+                }
+
                 var character =
                     launchablePlayers[
                         launchableIndex];
@@ -333,10 +339,13 @@ namespace Angry_Girls
                     character;
             }
 
-            BuildAlternateBlock(
-                simulatedLaunched,
-                lastSimulatedLaunch,
-                aliveEnemies);
+            if (launchableIndex > 0)
+            {
+                BuildAlternateBlock(
+                    simulatedLaunched,
+                    lastSimulatedLaunch,
+                    aliveEnemies);
+            }
 
             while (
                 launchableIndex <
@@ -370,22 +379,17 @@ namespace Angry_Girls
             }
         }
 
-        /// <summary>
-        /// Builds the currently executing Alternate phase.
-        /// </summary>
         private void BuildAlternatePhaseQueue(
             List<CControl> launchedPlayers,
             List<CControl> aliveEnemies)
         {
             BuildAlternateBlock(
                 launchedPlayers,
-                _launchManager.LastLaunchedCharacter,
+                _launchManager
+                    .LastLaunchedCharacter,
                 aliveEnemies);
         }
 
-        /// <summary>
-        /// Builds future launch cycles after the current Alternate phase.
-        /// </summary>
         private void BuildFutureLaunchQueue(
             List<CControl> launchablePlayers,
             List<CControl> launchedPlayers,
@@ -416,11 +420,6 @@ namespace Angry_Girls
             }
         }
 
-        /// <summary>
-        /// Adds one Alternate block.
-        /// Players act first, then all alive enemies.
-        /// The most recently launched player is excluded.
-        /// </summary>
         private void BuildAlternateBlock(
             List<CControl> launchedPlayers,
             CControl lastLaunched,
@@ -526,6 +525,9 @@ namespace Angry_Girls
                         _segmentPrefab,
                         _content);
 
+                segment.SetHoverIndicator(
+                    _hoverIndicator);
+
                 segment.gameObject.SetActive(
                     false);
 
@@ -542,10 +544,13 @@ namespace Angry_Girls
                 return;
             }
 
+            _hoverIndicator?.Hide();
+
             EnsureSegmentPool(
                 _queue.Count);
 
-            var index = 0;
+            var index =
+                0;
 
             for (
                 var node = _queue.First;
@@ -560,6 +565,9 @@ namespace Angry_Girls
                     index++;
                     continue;
                 }
+
+                segment.SetHoverIndicator(
+                    _hoverIndicator);
 
                 segment.gameObject.SetActive(
                     true);
@@ -615,7 +623,8 @@ namespace Angry_Girls
                 Canvas.ForceUpdateCanvases();
 
                 _scrollRect
-                    .horizontalNormalizedPosition = 0f;
+                    .horizontalNormalizedPosition =
+                    0f;
             }
         }
 
@@ -650,6 +659,8 @@ namespace Angry_Girls
 
         private void OnDestroy()
         {
+            _hoverIndicator?.Hide();
+
             UnsubscribeFromEvents();
         }
     }
