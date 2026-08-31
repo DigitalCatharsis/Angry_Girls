@@ -16,8 +16,8 @@ MonoBehaviour:
   unitType: 1
   characterType: 9
   portrait:
-    m_AssetGUID: 4b26d043d0f9cdd4c9a628ca190a96e7
-    m_SubObjectName: T_Portrait_YBot_Yellow
+    m_AssetGUID: 06a5288281c53a9499c0a00e9d7e73ca
+    m_SubObjectName: T_Portrait_YBot_Enemy_Yellow
     m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
     m_EditorAssetChanged: 1

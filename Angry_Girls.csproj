@@ -142,6 +142,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\Screens\UI_GameplayScreen.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\PoolManager\PoolObjectLoader.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\UI_SettingsCameraPanel.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\TurnOrderQueue.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\TempClassesOrBadCode\CharacterExtraObjects\ExtraCharacterObject_Sword.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\MaterialChaner\Editor\MaterialChangerEditor.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\TempClassesOrBadCode\CharacterExtraObjects\IExtraCharacterObject.cs" />

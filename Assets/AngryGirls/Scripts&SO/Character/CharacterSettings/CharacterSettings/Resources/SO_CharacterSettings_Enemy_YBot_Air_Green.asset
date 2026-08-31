@@ -16,8 +16,8 @@ MonoBehaviour:
   unitType: 2
   characterType: 6
   portrait:
-    m_AssetGUID: 9c65eea8e84dbe24fba68945af3d0e45
-    m_SubObjectName: T_Portrait_YBot_Green
+    m_AssetGUID: 651e869ff0c74e84b862e5195fdf2a4f
+    m_SubObjectName: T_Portrait_YBot_Enemy_Green
     m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
     m_EditorAssetChanged: 1

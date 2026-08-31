@@ -187,8 +187,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: -4565884009001823619, guid: 81bdd09900078f7489f82cd9b644698d,
-        type: 3}
+      objectReference: {fileID: 2100000, guid: e189f30a65b917e46a9348a1466e7ff0, type: 2}
     - target: {fileID: 2006352958999933863, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_Layer
@@ -232,7 +231,7 @@ PrefabInstance:
     - target: {fileID: 2640689163874789523, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_Name
-      value: Enemy_Air_Variant
+      value: Enemy_YBot_Air_Green
       objectReference: {fileID: 0}
     - target: {fileID: 2640689163874789523, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
@@ -736,6 +735,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 7578795930857353084, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: _maxHealth
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 7582894198519077483, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_Layer
@@ -776,6 +780,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 8173494930913013256, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b2b3cbc5badcd0648be4cb618c6fcef6, type: 2}
     - target: {fileID: 8310388024985671355, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_Layer
@@ -852,13 +861,13 @@ MonoBehaviour:
   - {fileID: 3437451241044822461}
   - {fileID: 2748994494625194772}
   CurrentMaterials:
-  - {fileID: -840037777384891287, guid: 81bdd09900078f7489f82cd9b644698d, type: 3}
-  - {fileID: 2100000, guid: a05bcef27ae342049a51aafdcc9061d1, type: 2}
+  - {fileID: 2100000, guid: b2b3cbc5badcd0648be4cb618c6fcef6, type: 2}
+  - {fileID: 2100000, guid: e189f30a65b917e46a9348a1466e7ff0, type: 2}
   - {fileID: 2100000, guid: 4bc15b09fdc02f946ac009a497e20279, type: 2}
   NewMaterials:
-  - {fileID: -840037777384891287, guid: 81bdd09900078f7489f82cd9b644698d, type: 3}
-  - {fileID: -4565884009001823619, guid: 81bdd09900078f7489f82cd9b644698d, type: 3}
-  - {fileID: 0}
+  - {fileID: 2100000, guid: b2b3cbc5badcd0648be4cb618c6fcef6, type: 2}
+  - {fileID: 2100000, guid: e189f30a65b917e46a9348a1466e7ff0, type: 2}
+  - {fileID: 2100000, guid: 4bc15b09fdc02f946ac009a497e20279, type: 2}
 --- !u!1 &7884461308753453165 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3333332947172867429, guid: c03c7eedb934e76448be7b86074461a4,

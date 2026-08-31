@@ -16,8 +16,8 @@ MonoBehaviour:
   unitType: 1
   characterType: 7
   portrait:
-    m_AssetGUID: 6ced006bb16f0bd48880a97482788c43
-    m_SubObjectName: T_Portrait_YBot_Red
+    m_AssetGUID: c5a411b88ff87434396bbe1dd07958db
+    m_SubObjectName: T_Portrait_YBot_Enemy_Red
     m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
     m_EditorAssetChanged: 1

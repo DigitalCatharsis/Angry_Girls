@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace Angry_Girls
 {
     /// <summary>
-    /// Displays one action in the predicted turn order.
+    /// Displays one future character action in the turn order.
     /// </summary>
     public sealed class TurnOrderSegmentUI : MonoBehaviour
     {
@@ -14,6 +14,8 @@ namespace Angry_Girls
         [SerializeField] private Image _portrait;
         [SerializeField] private TextMeshProUGUI _actionText;
         [SerializeField] private Image _currentHighlight;
+
+        [Header("End")]
         [SerializeField] private GameObject _endVisual;
 
         [Header("Fallback")]
@@ -23,7 +25,7 @@ namespace Angry_Girls
         private int _setupVersion;
 
         /// <summary>
-        /// Configures the segment for a character action.
+        /// Configures the segment to represent a character action.
         /// </summary>
         public void SetupCharacter(
             CControl character,
@@ -32,12 +34,16 @@ namespace Angry_Girls
         {
             _setupVersion++;
 
-            var setupVersion = _setupVersion;
+            var setupVersion =
+                _setupVersion;
 
-            _character = character;
+            _character =
+                character;
 
             if (_endVisual != null)
+            {
                 _endVisual.SetActive(false);
+            }
 
             if (_portrait != null)
             {
@@ -47,10 +53,14 @@ namespace Angry_Girls
             if (_actionText != null)
             {
                 _actionText.text =
-                    isLaunch ? "L" : "A";
+                    isLaunch
+                        ? "L"
+                        : "A";
             }
 
-            SetCurrent(isCurrent);
+            SetCurrent(
+                isCurrent);
+
             ResetPortrait();
 
             if (_character == null)
@@ -63,18 +73,16 @@ namespace Angry_Girls
         }
 
         /// <summary>
-        /// Configures the segment as the final END marker.
+        /// Configures the segment to represent the end of the queue.
         /// </summary>
         public void SetupEnd()
         {
             _setupVersion++;
 
-            _character = null;
+            _character =
+                null;
 
             SetCurrent(false);
-
-            if (_actionText != null)
-                _actionText.text = string.Empty;
 
             if (_portrait != null)
             {
@@ -83,17 +91,29 @@ namespace Angry_Girls
                 _portrait.gameObject.SetActive(false);
             }
 
+            if (_actionText != null)
+            {
+                _actionText.text =
+                    string.Empty;
+            }
+
             if (_endVisual != null)
+            {
                 _endVisual.SetActive(true);
+            }
         }
 
         /// <summary>
-        /// Sets the current action highlight state.
+        /// Sets whether this segment is the currently active action.
         /// </summary>
-        public void SetCurrent(bool isCurrent)
+        public void SetCurrent(
+            bool isCurrent)
         {
             if (_currentHighlight != null)
-                _currentHighlight.enabled = isCurrent;
+            {
+                _currentHighlight.enabled =
+                    isCurrent;
+            }
         }
 
         private void ResetPortrait()
@@ -143,27 +163,51 @@ namespace Angry_Girls
 
                 if (this == null ||
                     _portrait == null ||
-                    setupVersion != _setupVersion ||
-                    _character != character)
+                    _character != character ||
+                    setupVersion != _setupVersion)
                 {
                     return;
                 }
 
                 if (sprite != null)
                 {
-                    _portrait.sprite = sprite;
-                    _portrait.enabled = true;
+                    _portrait.sprite =
+                        sprite;
+
+                    _portrait.enabled =
+                        true;
                 }
             }
-            catch (System.Exception ex)
+            catch (System.Exception exception)
             {
                 if (this != null &&
                     setupVersion == _setupVersion)
                 {
                     Debug.LogWarning(
-                        $"TurnOrderSegmentUI: Failed to load portrait for '{character.name}': {ex.Message}");
+                        $"TurnOrderSegmentUI: Failed to load portrait for '{character.name}': {exception.Message}");
                 }
             }
+        }
+
+        public void OnPortraitClicked()
+        {
+            if (_character == null)
+                return;
+
+            if (GameplayCoreManager.Instance == null)
+                return;
+
+            var cameraManager =
+                GameplayCoreManager.Instance
+                    .CameraManager;
+
+            if (cameraManager == null)
+                return;
+
+            cameraManager.MoveCameraTo(
+                _character.transform.position,
+                0.35f,
+                false);
         }
     }
 }

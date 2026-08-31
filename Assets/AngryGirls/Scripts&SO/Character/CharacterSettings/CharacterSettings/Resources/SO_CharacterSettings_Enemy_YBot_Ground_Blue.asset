@@ -16,8 +16,8 @@ MonoBehaviour:
   unitType: 0
   characterType: 8
   portrait:
-    m_AssetGUID: 1de781d3f5e4c9248a8486217b854727
-    m_SubObjectName: T_Portrait_YBot_Blue
+    m_AssetGUID: ee347c80f9e33d84e848c2320fbad5b0
+    m_SubObjectName: T_Portrait_YBot_Enemy_Blue
     m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
     m_EditorAssetChanged: 1

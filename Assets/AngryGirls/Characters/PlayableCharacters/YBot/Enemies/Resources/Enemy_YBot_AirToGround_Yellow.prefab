@@ -172,8 +172,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: -4565884009001823619, guid: 81bdd09900078f7489f82cd9b644698d,
-        type: 3}
+      objectReference: {fileID: 2100000, guid: 0a53e0589e528ad4b95c845f2fb3d4fd, type: 2}
     - target: {fileID: 2006352958999933863, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_Layer
@@ -217,7 +216,7 @@ PrefabInstance:
     - target: {fileID: 2640689163874789523, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_Name
-      value: Enemyt_AirToGround_Yellow_Variant
+      value: Enemy_YBot_AirToGround_Yellow
       objectReference: {fileID: 0}
     - target: {fileID: 2640689163874789523, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
@@ -730,6 +729,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 8173494930913013256, guid: c03c7eedb934e76448be7b86074461a4,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b2b3cbc5badcd0648be4cb618c6fcef6, type: 2}
     - target: {fileID: 8310388024985671355, guid: c03c7eedb934e76448be7b86074461a4,
         type: 3}
       propertyPath: m_Layer
@@ -788,10 +792,10 @@ MonoBehaviour:
   - {fileID: 8044018217493116844}
   CurrentMaterials:
   - {fileID: -840037777384891287, guid: 81bdd09900078f7489f82cd9b644698d, type: 3}
-  - {fileID: 2100000, guid: 50085a05f93e65a488bb17c839517d7b, type: 2}
-  NewMaterials:
-  - {fileID: -840037777384891287, guid: 81bdd09900078f7489f82cd9b644698d, type: 3}
   - {fileID: -4565884009001823619, guid: 81bdd09900078f7489f82cd9b644698d, type: 3}
+  NewMaterials:
+  - {fileID: 2100000, guid: b2b3cbc5badcd0648be4cb618c6fcef6, type: 2}
+  - {fileID: 2100000, guid: 0a53e0589e528ad4b95c845f2fb3d4fd, type: 2}
 --- !u!1 &3277894347446476412 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3333332947172867429, guid: c03c7eedb934e76448be7b86074461a4,

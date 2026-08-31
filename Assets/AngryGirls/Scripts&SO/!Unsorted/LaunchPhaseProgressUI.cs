@@ -5,54 +5,12 @@ using UnityEngine.UI;
 namespace Angry_Girls
 {
     /// <summary>
-    /// Displays the complete predicted future action sequence.
-    /// One segment represents exactly one future action.
+    /// Displays the complete predicted future turn sequence.
+    /// The queue is rebuilt only when gameplay state changes.
     /// </summary>
     public sealed class LaunchPhaseProgressUI
         : UI_GameplayManagersComponent
     {
-        private enum PlannedActionType
-        {
-            Launch,
-            Alternate,
-            End
-        }
-
-        private sealed class PlannedAction
-        {
-            public PlannedActionType Type;
-            public CControl Character;
-
-            public static PlannedAction CreateLaunch(
-                CControl character)
-            {
-                return new PlannedAction
-                {
-                    Type = PlannedActionType.Launch,
-                    Character = character
-                };
-            }
-
-            public static PlannedAction CreateAlternate(
-                CControl character)
-            {
-                return new PlannedAction
-                {
-                    Type = PlannedActionType.Alternate,
-                    Character = character
-                };
-            }
-
-            public static PlannedAction CreateEnd()
-            {
-                return new PlannedAction
-                {
-                    Type = PlannedActionType.End,
-                    Character = null
-                };
-            }
-        }
-
         [Header("Scroll")]
         [SerializeField] private ScrollRect _scrollRect;
         [SerializeField] private RectTransform _content;
@@ -60,8 +18,8 @@ namespace Angry_Girls
         [Header("Segment")]
         [SerializeField] private TurnOrderSegmentUI _segmentPrefab;
 
-        [Header("Visibility")]
-        [SerializeField] private bool _hideWhenGameIsOver = true;
+        [Header("Behaviour")]
+        [SerializeField] private bool _resetScrollAfterRefresh = true;
 
         private readonly List<TurnOrderSegmentUI> _segmentPool = new();
 
@@ -71,10 +29,10 @@ namespace Angry_Girls
         private StageManager _stageManager;
         private SettingsManager _settingsManager;
 
+        private TurnOrderQueue _queue;
+
         private bool _showTurnOrder;
         private bool _initialized;
-
-        private int _lastStateHash;
 
         public override void Initialize()
         {
@@ -93,52 +51,99 @@ namespace Angry_Girls
             }
 
             _charactersManager =
-                gameplayCore.GameplayCharactersManager;
+                gameplayCore
+                    .GameplayCharactersManager;
 
             _launchManager =
-                gameplayCore.LaunchManager;
+                gameplayCore
+                    .LaunchManager;
 
             _phaseFlowController =
-                gameplayCore.GamePhaseFlowController;
+                gameplayCore
+                    .GamePhaseFlowController;
 
             _stageManager =
-                gameplayCore.StageManager;
+                gameplayCore
+                    .StageManager;
 
             _settingsManager =
-                CoreManager.Instance.SettingsManager;
+                CoreManager.Instance
+                    .SettingsManager;
 
-            if (_charactersManager != null)
-            {
-                _charactersManager
-                    .OnLaunchableCharactersChanged +=
-                    OnGameplayStateChanged;
-            }
+            _queue =
+                new TurnOrderQueue();
 
-            if (_stageManager != null)
-            {
-                _stageManager.TheStageIsSet +=
-                    OnStageChanged;
-            }
-
-            if (_settingsManager != null)
-            {
-                _settingsManager.OnSettingsChanged +=
-                    OnSettingsChanged;
-            }
-
-            if (_scrollRect != null)
-            {
-                _scrollRect.horizontal = true;
-                _scrollRect.vertical = false;
-            }
+            SubscribeToEvents();
 
             _initialized = true;
 
             RefreshVisibility();
         }
 
+        private void SubscribeToEvents()
+        {
+            if (_charactersManager != null)
+            {
+                _charactersManager
+                    .OnLaunchableCharactersChanged +=
+                    HandleGameplayOrderChanged;
+            }
+
+            if (_stageManager != null)
+            {
+                _stageManager
+                    .TheStageIsSet +=
+                    HandleStageChanged;
+            }
+
+            if (_phaseFlowController != null)
+            {
+                _phaseFlowController
+                    .OnPhaseChanged +=
+                    HandlePhaseChanged;
+            }
+
+            if (_settingsManager != null)
+            {
+                _settingsManager
+                    .OnSettingsChanged +=
+                    HandleSettingsChanged;
+            }
+        }
+
+        private void UnsubscribeFromEvents()
+        {
+            if (_charactersManager != null)
+            {
+                _charactersManager
+                    .OnLaunchableCharactersChanged -=
+                    HandleGameplayOrderChanged;
+            }
+
+            if (_stageManager != null)
+            {
+                _stageManager
+                    .TheStageIsSet -=
+                    HandleStageChanged;
+            }
+
+            if (_phaseFlowController != null)
+            {
+                _phaseFlowController
+                    .OnPhaseChanged -=
+                    HandlePhaseChanged;
+            }
+
+            if (_settingsManager != null)
+            {
+                _settingsManager
+                    .OnSettingsChanged -=
+                    HandleSettingsChanged;
+            }
+        }
+
         /// <summary>
-        /// Shows the turn order UI and refreshes its content.
+        /// Shows the queue and refreshes it.
         /// </summary>
         public override void Show()
         {
@@ -150,36 +155,22 @@ namespace Angry_Girls
             RefreshVisibility();
         }
 
-        private void LateUpdate()
+        /// <summary>
+        /// Rebuilds the queue from current gameplay state.
+        /// </summary>
+        public void Refresh()
         {
             if (!_initialized ||
-                !_showTurnOrder ||
-                _phaseFlowController == null)
+                !_showTurnOrder)
             {
                 return;
             }
 
-            if (_hideWhenGameIsOver &&
-                IsGameFinished())
-            {
-                return;
-            }
+            BuildQueue();
 
-            var actions =
-                BuildTurnSequence();
-
-            var stateHash =
-                CalculateStateHash(actions);
-
-            if (stateHash != _lastStateHash)
-            {
-                ApplySequence(actions);
-            }
+            RenderQueue();
         }
 
-        /// <summary>
-        /// Updates UI visibility from gameplay settings.
-        /// </summary>
         private void RefreshVisibility()
         {
             if (!_initialized ||
@@ -199,112 +190,64 @@ namespace Angry_Girls
                 return;
             }
 
-            if (_hideWhenGameIsOver &&
-                IsGameFinished())
-            {
-                gameObject.SetActive(false);
-                return;
-            }
-
             gameObject.SetActive(true);
 
             Refresh();
         }
 
         /// <summary>
-        /// Rebuilds and renders the complete future sequence.
+        /// Builds a fresh linked-list representation of the current future turn sequence.
         /// </summary>
-        public void Refresh()
+        private void BuildQueue()
         {
-            if (!_initialized ||
-                !_showTurnOrder)
-            {
-                return;
-            }
-
-            var actions =
-                BuildTurnSequence();
-
-            ApplySequence(actions);
-        }
-
-        /// <summary>
-        /// Builds the predicted sequence from the explicit player and enemy collections.
-        /// </summary>
-        private List<PlannedAction> BuildTurnSequence()
-        {
-            var result =
-                new List<PlannedAction>();
+            _queue.Clear();
 
             if (_charactersManager == null ||
                 _launchManager == null ||
                 _phaseFlowController == null)
             {
-                result.Add(
-                    PlannedAction.CreateEnd());
-
-                return result;
+                _queue.AddEnd();
+                return;
             }
 
             var alivePlayers =
-                GetAliveCharacters(
-                    _charactersManager.PlayerCharacters);
+                GetAlivePlayers();
 
             var aliveEnemies =
-                GetAliveCharacters(
-                    _charactersManager.EnemyCharacters);
-
-            var launchedPlayers =
-                new List<CControl>();
+                GetAliveEnemies();
 
             var launchablePlayers =
-                new List<CControl>();
+                _charactersManager
+                    .GetLaunchableCharacters();
 
-            foreach (var player in alivePlayers)
-            {
-                if (player.hasBeenLaunched)
-                {
-                    launchedPlayers.Add(player);
-                }
-                else
-                {
-                    launchablePlayers.Add(player);
-                }
-            }
+            var launchedPlayers =
+                GetLaunchedPlayers(
+                    alivePlayers);
 
             switch (
-                _phaseFlowController.CurrentGamePhaseState)
+                _phaseFlowController
+                    .CurrentGamePhaseState)
             {
                 case GamePhaseNames.GameStartPhase:
                 case GamePhaseNames.StageSetupPhase:
-                    BuildInitialLaunchSequence(
-                        result,
-                        launchedPlayers,
-                        launchablePlayers,
-                        aliveEnemies);
-
-                    break;
-
                 case GamePhaseNames.LaunchPhase:
-                    BuildLaunchPhaseSequence(
-                        result,
-                        launchedPlayers,
+
+                    BuildLaunchPhaseQueue(
                         launchablePlayers,
+                        launchedPlayers,
                         aliveEnemies);
 
                     break;
 
                 case GamePhaseNames.AlternatePhase:
-                    BuildAlternatePhaseSequence(
-                        result,
+
+                    BuildAlternatePhaseQueue(
                         launchedPlayers,
-                        _launchManager.LastLaunchedCharacter,
                         aliveEnemies);
 
-                    BuildFutureLaunchSequence(
-                        result,
-                        launchedPlayers,
+                    BuildFutureLaunchQueue(
                         launchablePlayers,
+                        launchedPlayers,
                         aliveEnemies);
 
                     break;
@@ -312,129 +255,67 @@ namespace Angry_Girls
                 case GamePhaseNames.StageCompletePhase:
                 case GamePhaseNames.VictoryPhase:
                 case GamePhaseNames.DefeatPhase:
+                default:
                     break;
             }
 
-            result.Add(
-                PlannedAction.CreateEnd());
-
-            return result;
+            _queue.AddEnd();
         }
 
         /// <summary>
-        /// Builds the initial launch cycle.
-        /// Two launches happen before the first Alternate phase.
+        /// Builds the queue before and during LaunchPhase.
+        /// First turn: two launches before the first Alternate.
+        /// Every later launch is followed by an Alternate block.
         /// </summary>
-        private void BuildInitialLaunchSequence(
-            List<PlannedAction> result,
-            List<CControl> launchedPlayers,
+        private void BuildLaunchPhaseQueue(
             List<CControl> launchablePlayers,
+            List<CControl> launchedPlayers,
             List<CControl> aliveEnemies)
         {
+            if (launchablePlayers.Count == 0)
+            {
+                BuildAlternateBlock(
+                    launchedPlayers,
+                    _launchManager.LastLaunchedCharacter,
+                    aliveEnemies);
+
+                return;
+            }
+
             var simulatedLaunched =
                 new List<CControl>(
                     launchedPlayers);
 
-            var launchCount =
-                Mathf.Min(
-                    2,
-                    launchablePlayers.Count);
+            var launchableIndex = 0;
 
-            for (var i = 0;
-                 i < launchCount;
-                 i++)
-            {
-                var character =
-                    launchablePlayers[i];
-
-                if (character == null ||
-                    character.isDead)
-                {
-                    continue;
-                }
-
-                result.Add(
-                    PlannedAction.CreateLaunch(
-                        character));
-
-                simulatedLaunched.Add(
-                    character);
-            }
-
-            if (launchCount > 0)
-            {
-                var lastLaunch =
-                    launchablePlayers[
-                        launchCount - 1];
-
-                BuildAlternatePhaseSequence(
-                    result,
-                    simulatedLaunched,
-                    lastLaunch,
-                    aliveEnemies);
-            }
-
-            for (var i = launchCount;
-                 i < launchablePlayers.Count;
-                 i++)
-            {
-                var character =
-                    launchablePlayers[i];
-
-                if (character == null ||
-                    character.isDead)
-                {
-                    continue;
-                }
-
-                result.Add(
-                    PlannedAction.CreateLaunch(
-                        character));
-
-                simulatedLaunched.Add(
-                    character);
-
-                BuildAlternatePhaseSequence(
-                    result,
-                    simulatedLaunched,
-                    character,
-                    aliveEnemies);
-            }
-        }
-
-        /// <summary>
-        /// Builds the remaining launch sequence of the current stage.
-        /// </summary>
-        private void BuildLaunchPhaseSequence(
-            List<PlannedAction> result,
-            List<CControl> launchedPlayers,
-            List<CControl> launchablePlayers,
-            List<CControl> aliveEnemies)
-        {
-            var simulatedLaunched =
-                new List<CControl>(
-                    launchedPlayers);
-
-            var lastLaunched =
-                _launchManager.LastLaunchedCharacter;
-
-            var initialLaunchesRemaining =
+            var launchesBeforeAlternate =
                 _launchManager.IsFirstTurn
                     ? Mathf.Max(
-                        0,
+                        1,
                         _launchManager
                             .LaunchesBeforeFirstAlternate
                         - _launchManager
                             .LaunchCountThisStage)
                     : 1;
 
+            launchesBeforeAlternate =
+                Mathf.Min(
+                    launchesBeforeAlternate,
+                    launchablePlayers.Count);
+
+            CControl lastSimulatedLaunch =
+                _launchManager
+                    .LastLaunchedCharacter;
+
             for (var i = 0;
-                 i < initialLaunchesRemaining &&
-                 i < launchablePlayers.Count;
+                 i < launchesBeforeAlternate;
                  i++)
             {
                 var character =
-                    launchablePlayers[i];
+                    launchablePlayers[
+                        launchableIndex];
+
+                launchableIndex++;
 
                 if (character == null ||
                     character.isDead)
@@ -442,38 +323,30 @@ namespace Angry_Girls
                     continue;
                 }
 
-                result.Add(
-                    PlannedAction.CreateLaunch(
-                        character));
+                _queue.AddLaunch(
+                    character);
 
                 simulatedLaunched.Add(
                     character);
 
-                lastLaunched =
+                lastSimulatedLaunch =
                     character;
             }
 
-            if (initialLaunchesRemaining >
-                    0 &&
-                simulatedLaunched.Count >
-                    launchedPlayers.Count)
-            {
-                BuildAlternatePhaseSequence(
-                    result,
-                    simulatedLaunched,
-                    lastLaunched,
-                    aliveEnemies);
-            }
+            BuildAlternateBlock(
+                simulatedLaunched,
+                lastSimulatedLaunch,
+                aliveEnemies);
 
-            var processedCount =
-                initialLaunchesRemaining;
-
-            for (var i = processedCount;
-                 i < launchablePlayers.Count;
-                 i++)
+            while (
+                launchableIndex <
+                launchablePlayers.Count)
             {
                 var character =
-                    launchablePlayers[i];
+                    launchablePlayers[
+                        launchableIndex];
+
+                launchableIndex++;
 
                 if (character == null ||
                     character.isDead)
@@ -481,67 +354,41 @@ namespace Angry_Girls
                     continue;
                 }
 
-                result.Add(
-                    PlannedAction.CreateLaunch(
-                        character));
+                _queue.AddLaunch(
+                    character);
 
                 simulatedLaunched.Add(
                     character);
 
-                BuildAlternatePhaseSequence(
-                    result,
+                lastSimulatedLaunch =
+                    character;
+
+                BuildAlternateBlock(
                     simulatedLaunched,
-                    character,
+                    lastSimulatedLaunch,
                     aliveEnemies);
             }
         }
 
         /// <summary>
-        /// Builds one Alternate block.
-        /// Launched players except the most recently launched player
-        /// are followed by every living enemy.
+        /// Builds the currently executing Alternate phase.
         /// </summary>
-        private void BuildAlternatePhaseSequence(
-            List<PlannedAction> result,
+        private void BuildAlternatePhaseQueue(
             List<CControl> launchedPlayers,
-            CControl lastLaunched,
             List<CControl> aliveEnemies)
         {
-            foreach (var player in launchedPlayers)
-            {
-                if (player == null ||
-                    player.isDead ||
-                    player == lastLaunched)
-                {
-                    continue;
-                }
-
-                result.Add(
-                    PlannedAction.CreateAlternate(
-                        player));
-            }
-
-            foreach (var enemy in aliveEnemies)
-            {
-                if (enemy == null ||
-                    enemy.isDead)
-                {
-                    continue;
-                }
-
-                result.Add(
-                    PlannedAction.CreateAlternate(
-                        enemy));
-            }
+            BuildAlternateBlock(
+                launchedPlayers,
+                _launchManager.LastLaunchedCharacter,
+                aliveEnemies);
         }
 
         /// <summary>
-        /// Adds future launch and Alternate cycles.
+        /// Builds future launch cycles after the current Alternate phase.
         /// </summary>
-        private void BuildFutureLaunchSequence(
-            List<PlannedAction> result,
-            List<CControl> launchedPlayers,
+        private void BuildFutureLaunchQueue(
             List<CControl> launchablePlayers,
+            List<CControl> launchedPlayers,
             List<CControl> aliveEnemies)
         {
             var simulatedLaunched =
@@ -556,31 +403,62 @@ namespace Angry_Girls
                     continue;
                 }
 
-                result.Add(
-                    PlannedAction.CreateLaunch(
-                        character));
+                _queue.AddLaunch(
+                    character);
 
                 simulatedLaunched.Add(
                     character);
 
-                BuildAlternatePhaseSequence(
-                    result,
+                BuildAlternateBlock(
                     simulatedLaunched,
                     character,
                     aliveEnemies);
             }
         }
 
-        private List<CControl> GetAliveCharacters(
-            IEnumerable<CControl> source)
+        /// <summary>
+        /// Adds one Alternate block.
+        /// Players act first, then all alive enemies.
+        /// The most recently launched player is excluded.
+        /// </summary>
+        private void BuildAlternateBlock(
+            List<CControl> launchedPlayers,
+            CControl lastLaunched,
+            List<CControl> aliveEnemies)
+        {
+            foreach (var player in launchedPlayers)
+            {
+                if (player == null ||
+                    player.isDead ||
+                    player == lastLaunched)
+                {
+                    continue;
+                }
+
+                _queue.AddAlternate(
+                    player);
+            }
+
+            foreach (var enemy in aliveEnemies)
+            {
+                if (enemy == null ||
+                    enemy.isDead)
+                {
+                    continue;
+                }
+
+                _queue.AddAlternate(
+                    enemy);
+            }
+        }
+
+        private List<CControl> GetAlivePlayers()
         {
             var result =
                 new List<CControl>();
 
-            if (source == null)
-                return result;
-
-            foreach (var character in source)
+            foreach (var character in
+                     _charactersManager.PlayerCharacters)
             {
                 if (character == null ||
                     character.isDead)
@@ -594,9 +472,43 @@ namespace Angry_Girls
             return result;
         }
 
-        /// <summary>
-        /// Creates enough UI segments for the current sequence.
-        /// </summary>
+        private List<CControl> GetAliveEnemies()
+        {
+            var result =
+                new List<CControl>();
+
+            foreach (var character in
+                     _charactersManager.EnemyCharacters)
+            {
+                if (character == null ||
+                    character.isDead)
+                {
+                    continue;
+                }
+
+                result.Add(character);
+            }
+
+            return result;
+        }
+
+        private List<CControl> GetLaunchedPlayers(
+            List<CControl> alivePlayers)
+        {
+            var result =
+                new List<CControl>();
+
+            foreach (var player in alivePlayers)
+            {
+                if (player.hasBeenLaunched)
+                {
+                    result.Add(player);
+                }
+            }
+
+            return result;
+        }
+
         private void EnsureSegmentPool(
             int requiredCount)
         {
@@ -614,20 +526,15 @@ namespace Angry_Girls
                         _segmentPrefab,
                         _content);
 
-                if (segment != null)
-                    segment.gameObject.SetActive(
-                        false);
+                segment.gameObject.SetActive(
+                    false);
 
                 _segmentPool.Add(
                     segment);
             }
         }
 
-        /// <summary>
-        /// Applies the sequence to the reusable UI segment pool.
-        /// </summary>
-        private void ApplySequence(
-            List<PlannedAction> actions)
+        private void RenderQueue()
         {
             if (_content == null ||
                 _segmentPrefab == null)
@@ -636,47 +543,61 @@ namespace Angry_Girls
             }
 
             EnsureSegmentPool(
-                actions.Count);
+                _queue.Count);
 
-            for (var i = 0;
-                 i < actions.Count;
-                 i++)
+            var index = 0;
+
+            for (
+                var node = _queue.First;
+                node != null;
+                node = node.Next)
             {
                 var segment =
-                    _segmentPool[i];
+                    _segmentPool[index];
 
                 if (segment == null)
+                {
+                    index++;
                     continue;
+                }
 
                 segment.gameObject.SetActive(
                     true);
 
                 var action =
-                    actions[i];
+                    node.Value;
 
-                switch (action.Type)
+                switch (action.ActionType)
                 {
-                    case PlannedActionType.Launch:
+                    case TurnOrderActionType.Launch:
+
                         segment.SetupCharacter(
                             action.Character,
                             true,
-                            i == 0);
+                            index == 0);
+
                         break;
 
-                    case PlannedActionType.Alternate:
+                    case TurnOrderActionType.Alternate:
+
                         segment.SetupCharacter(
                             action.Character,
                             false,
-                            i == 0);
+                            index == 0);
+
                         break;
 
-                    case PlannedActionType.End:
+                    case TurnOrderActionType.End:
+
                         segment.SetupEnd();
+
                         break;
                 }
+
+                index++;
             }
 
-            for (var i = actions.Count;
+            for (var i = index;
                  i < _segmentPool.Count;
                  i++)
             {
@@ -688,112 +609,34 @@ namespace Angry_Girls
                 }
             }
 
-            _lastStateHash =
-                CalculateStateHash(actions);
-
-            NormalizeScrollPosition();
-        }
-
-        private int CalculateStateHash(
-            List<PlannedAction> actions)
-        {
-            unchecked
+            if (_resetScrollAfterRefresh &&
+                _scrollRect != null)
             {
-                var hash = 17;
+                Canvas.ForceUpdateCanvases();
 
-                if (_phaseFlowController != null)
-                {
-                    hash =
-                        hash * 31 +
-                        (int)_phaseFlowController
-                            .CurrentGamePhaseState;
-                }
-
-                if (_launchManager != null)
-                {
-                    hash =
-                        hash * 31 +
-                        (_launchManager.IsFirstTurn
-                            ? 1
-                            : 0);
-
-                    hash =
-                        hash * 31 +
-                        _launchManager
-                            .LaunchCountThisStage;
-
-                    var lastLaunched =
-                        _launchManager
-                            .LastLaunchedCharacter;
-
-                    hash =
-                        hash * 31 +
-                        (lastLaunched != null
-                            ? lastLaunched
-                                .GetInstanceID()
-                            : 0);
-                }
-
-                foreach (var action in actions)
-                {
-                    hash =
-                        hash * 31 +
-                        (int)action.Type;
-
-                    hash =
-                        hash * 31 +
-                        (action.Character != null
-                            ? action.Character
-                                .GetInstanceID()
-                            : 0);
-                }
-
-                return hash;
+                _scrollRect
+                    .horizontalNormalizedPosition = 0f;
             }
         }
 
-        private void NormalizeScrollPosition()
+        private void HandleGameplayOrderChanged()
         {
-            if (_scrollRect == null)
-                return;
-
-            Canvas.ForceUpdateCanvases();
-
-            _scrollRect.horizontalNormalizedPosition =
-                0f;
-        }
-
-        private bool IsGameFinished()
-        {
-            if (GameplayCoreManager.Instance == null ||
-                GameplayCoreManager.Instance.GameLogic == null)
-            {
-                return false;
-            }
-
-            return GameplayCoreManager.Instance
-                .GameLogic
-                .GameOver;
-        }
-
-        private void OnGameplayStateChanged()
-        {
-            if (!_initialized ||
-                !_showTurnOrder)
-            {
-                return;
-            }
-
             Refresh();
         }
 
-        private void OnStageChanged(
+        private void HandleStageChanged(
             int stageIndex)
         {
             RefreshVisibility();
         }
 
-        private void OnSettingsChanged(
+        private void HandlePhaseChanged(
+            GamePhaseNames phase)
+        {
+            RefreshVisibility();
+        }
+
+        private void HandleSettingsChanged(
             SettingsCategory category)
         {
             if (category != SettingsCategory.Gameplay &&
@@ -807,24 +650,7 @@ namespace Angry_Girls
 
         private void OnDestroy()
         {
-            if (_charactersManager != null)
-            {
-                _charactersManager
-                    .OnLaunchableCharactersChanged -=
-                    OnGameplayStateChanged;
-            }
-
-            if (_stageManager != null)
-            {
-                _stageManager.TheStageIsSet -=
-                    OnStageChanged;
-            }
-
-            if (_settingsManager != null)
-            {
-                _settingsManager.OnSettingsChanged -=
-                    OnSettingsChanged;
-            }
+            UnsubscribeFromEvents();
         }
     }
 }
