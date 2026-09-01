@@ -80,6 +80,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Shop and Inventory\ItemSettings\Editor\ItemSettingsEditor.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\GameplayCoreSystems\GameLogic.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\Coin.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\HideSpriteIngame.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\MyExtentions.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\PoolManager\PoolManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\Screens\UI_UIScreen.cs" />
@@ -142,8 +143,8 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\MissionProgressData.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\Screens\UI_GameplayScreen.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\PoolManager\PoolObjectLoader.cs" />
-    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\UI_SettingsCameraPanel.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\TurnOrderQueue.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\UI_SettingsCameraPanel.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\TempClassesOrBadCode\CharacterExtraObjects\ExtraCharacterObject_Sword.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\MaterialChaner\Editor\MaterialChangerEditor.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\TempClassesOrBadCode\CharacterExtraObjects\IExtraCharacterObject.cs" />
@@ -211,8 +212,10 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\GameplayScenesUI\GameResultUI.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\LevelSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\ReadyBanner.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\AimingDirectionIndicator.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\UI_Slots\UI_MissionSlot.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\TurnOrderSegmentUI.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\LaunchPathRenderer.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\CatalogsRepositoriesDataTemplates\MissionsRepository.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\Settings\PhysicsSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\Panels\UI_ShopPanel.cs" />

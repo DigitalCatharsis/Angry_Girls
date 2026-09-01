@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Angry_Girls
 {
     /// <summary>
-    /// Manages character launching mechanics
+    /// Manages character launching mechanics.
     /// </summary>
     public class CharacterLauncher : MonoBehaviour
     {
@@ -11,244 +11,364 @@ namespace Angry_Girls
         [SerializeField] private GameObject _aimingHighlightPrefab;
         private GameObject _currentAimingHighlight;
 
+        [Header("Aiming Direction")]
+        [SerializeField] private AimingDirectionIndicator _aimingDirectionIndicatorPrefab;
+        private AimingDirectionIndicator _currentAimingDirectionIndicator;
+
         [Header("Launch Constraints")]
         [SerializeField] private float _minLaunchDistance = 1f;
 
         public bool IsAiming => _isAiming;
-        private bool _isAiming = false;
+
+        private bool _isAiming;
 
         private Vector3 _offsetEndPostion;
         private Vector3 _offsetStartPoint;
         private Vector3 _directionVector;
-
-        private GameObject[] _trajectoryDots;
+        private Vector3 _launchVelocity;
 
         [Header("Launching Setup")]
         [SerializeField] private GameObject _positionsContainer;
+
         [Space(10)]
         private const float _minZoom = 5.0f;
         private const float _maxZoom = 10.0f;
+
         [SerializeField] private float _maxZoomFactorValue = 6.1f;
-        [SerializeField] private Vector2 _zoomRange = new Vector2(_minZoom, _maxZoom);
+        [SerializeField]
+        private Vector2 _zoomRange =
+            new Vector2(
+                _minZoom,
+                _maxZoom);
+
         [Space(10)]
         [SerializeField] private float _forceFactorUp;
         [SerializeField] private float _forceFactorForward;
 
         [Header("Trajectory")]
         [SerializeField] private Transform _offsetPoint;
-        [SerializeField] private GameObject _trajectoryDotPrefab;
-        [SerializeField] private int _dotsNumber;
+        [SerializeField] private LaunchPathRenderer _launchPathRenderer;
 
         [Header("Zoom")]
         [SerializeField] private float _minDistanceForZoom;
 
-        //[SerializeField] Transform[] points = new Transform[6];
+        [field: SerializeField]
+        public Transform[] UnitsTransforms { get; private set; }
 
-        [field: SerializeField] public Transform[] UnitsTransforms { get; private set; }
-
-        private bool _cheatModeActive = false;
-        private int _originalDotsNumber;
-
+        private bool _cheatModeActive;
         private InputManager _inputManager;
 
         /// <summary>
-        /// Initialize launcher components
+        /// Initializes launcher components.
         /// </summary>
         public void InitLauncher()
         {
-            _inputManager = GameplayCoreManager.Instance.InputManager;
+            _inputManager =
+                GameplayCoreManager.Instance.InputManager;
 
-            //var transforms = new HashSet<Transform>(_positionsContainer.GetComponentsInChildren<Transform>());
-            //transforms.Remove(_positionsContainer.transform);
-            //UnitsTransforms = transforms.ToArray();
-
-            _originalDotsNumber = _dotsNumber;
-            _trajectoryDots = new GameObject[_dotsNumber];
-            SpawnProjectoryDots(UnitsTransforms[0]);
-
-            _offsetStartPoint = new Vector3(UnitsTransforms[0].transform.position.x, UnitsTransforms[0].transform.position.y + 0.4f, UnitsTransforms[0].transform.position.z);
-
-            if (_aimingHighlightPrefab)
+            if (UnitsTransforms == null ||
+                UnitsTransforms.Length == 0 ||
+                UnitsTransforms[0] == null)
             {
-                _currentAimingHighlight = Instantiate(_aimingHighlightPrefab);
+                Debug.LogError(
+                    "CharacterLauncher: Launch position is not configured.",
+                    this);
+
+                return;
+            }
+
+            UpdateLaunchStartPoint(
+                UnitsTransforms[0]);
+
+            if (_aimingHighlightPrefab != null)
+            {
+                _currentAimingHighlight =
+                    Instantiate(
+                        _aimingHighlightPrefab);
+
                 _currentAimingHighlight.SetActive(false);
             }
 
-            _originalDotsNumber = _dotsNumber;
-            _trajectoryDots = new GameObject[_dotsNumber];
-            SpawnProjectoryDots(UnitsTransforms[0]);
+            if (_aimingDirectionIndicatorPrefab != null)
+            {
+                _currentAimingDirectionIndicator =
+                    Instantiate(
+                        _aimingDirectionIndicatorPrefab);
+
+                _currentAimingDirectionIndicator.Hide();
+            }
+
+            if (_launchPathRenderer != null)
+                _launchPathRenderer.Hide();
         }
 
         /// <summary>
-        /// Enable or disable cheat trajectory mode
+        /// Enables or disables cheat trajectory mode.
         /// </summary>
-        public void SetCheatTrajectoryMode(bool enable)
+        public void SetCheatTrajectoryMode(
+            bool enable)
         {
-            if (_cheatModeActive == enable)
-                return;
-
             _cheatModeActive = enable;
 
-            Transform currentTransform = UnitsTransforms.Length > 0 ? UnitsTransforms[0] : null;
+            if (!_isAiming)
+                return;
 
-            if (_trajectoryDots != null)
-            {
-                foreach (var dot in _trajectoryDots)
-                {
-                    if (dot != null)
-                        Destroy(dot);
-                }
-            }
-
-            _dotsNumber = enable ? 100 : _originalDotsNumber;
-
-            _trajectoryDots = new GameObject[_dotsNumber];
-            if (currentTransform != null)
-            {
-                SpawnProjectoryDots(currentTransform);
-            }
+            DrawTrajectory();
         }
 
         /// <summary>
-        /// Launch a character
+        /// Launches the specified character using the calculated launch velocity.
         /// </summary>
-        public void LaunchUnit(CControl characterToLaunch)
+        public void LaunchUnit(
+            CControl characterToLaunch)
         {
+            if (characterToLaunch == null)
+                return;
+
+            CalculateLaunchVelocity();
+
+            var launchVelocity = _launchVelocity;
+
+            if (launchVelocity.z > 0f)
+            {
+                characterToLaunch.CharacterMovement.SetRotation(
+                    Quaternion.Euler(0f, 180f, 0f));
+            }
+            else if (launchVelocity.z < 0f)
+            {
+                characterToLaunch.CharacterMovement.SetRotation(
+                    Quaternion.Euler(0f, 0f, 0f));
+            }
+
             CancelAiming();
 
-            if (_directionVector.z > 0)
-            {
-                characterToLaunch.CharacterMovement.SetRotation(Quaternion.Euler(0, 180, 0));
-            }
-            else if (_directionVector.z < 0)
-            {
-                characterToLaunch.CharacterMovement.SetRotation(Quaternion.Euler(0, 0, 0));
-            }
-            else if (_directionVector.z == 0)
-            {
-                ColorDebugLog.Log("Direction vector = 0", System.Drawing.KnownColor.Red);
-            }
+            characterToLaunch.CharacterMovement.Rigidbody.useGravity =
+                true;
 
-            characterToLaunch.CharacterMovement.Rigidbody.useGravity = true;
-            characterToLaunch.CharacterMovement.SetVelocity(new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward));
+            characterToLaunch.CharacterMovement.SetVelocity(
+                _launchVelocity);
+
             characterToLaunch.UnitHasBeenLaunched?.Invoke();
         }
 
         /// <summary>
-        /// Start aiming with a character
+        /// Starts or updates character aiming.
         /// </summary>
-        public void AimingTheLaunch(GameObject characterToLaunch)
+        public void AimingTheLaunch(
+            GameObject characterToLaunch)
         {
+            if (characterToLaunch == null)
+                return;
+
             _isAiming = true;
 
+            UpdateLaunchStartPoint(
+                characterToLaunch.transform);
+
             CalculateDirection();
-            DrawTraectory();
+            CalculateLaunchVelocity();
+
+            DrawTrajectory();
             AdjustCameraZoom();
 
             ShowAimingHighlight();
+            UpdateAimingDirectionIndicator(
+                characterToLaunch.transform);
+        }
+
+        private void UpdateLaunchStartPoint(
+            Transform characterTransform)
+        {
+            if (characterTransform == null)
+                return;
+
+            _offsetStartPoint =
+                new Vector3(
+                    characterTransform.position.x,
+                    characterTransform.position.y + 0.4f,
+                    characterTransform.position.z);
         }
 
         private void ShowAimingHighlight()
         {
-            if (_currentAimingHighlight != null)
-            {
-                _currentAimingHighlight.transform.position = _offsetStartPoint;
-                _currentAimingHighlight.SetActive(true);
-            }
+            if (_currentAimingHighlight == null)
+                return;
+
+            _currentAimingHighlight.transform.position =
+                _offsetStartPoint;
+
+            _currentAimingHighlight.SetActive(true);
         }
 
         private void HideAimingHighlight()
         {
-            if (_currentAimingHighlight != null)
+            if (_currentAimingHighlight == null)
+                return;
+
+            _currentAimingHighlight.SetActive(false);
+        }
+
+        private void UpdateAimingDirectionIndicator(
+            Transform characterTransform)
+        {
+            if (_currentAimingDirectionIndicator == null ||
+                characterTransform == null)
             {
-                _currentAimingHighlight.SetActive(false);
+                return;
             }
+
+            if (_launchVelocity.sqrMagnitude <= 0.0001f)
+            {
+                _currentAimingDirectionIndicator.Hide();
+                return;
+            }
+
+            _currentAimingDirectionIndicator.Show(
+                characterTransform,
+                _launchVelocity.normalized);
         }
 
         /// <summary>
-        /// Cancel current aiming
+        /// Cancels the current aiming state.
         /// </summary>
         public void CancelAiming()
         {
-            GameplayCoreManager.Instance.CameraManager.StopCameraFollowForRigidBody();
+            GameplayCoreManager.Instance.CameraManager
+                .StopCameraFollowForRigidBody();
+
             _isAiming = false;
-            DisableTrajectoryDots();
+
+            if (_launchPathRenderer != null)
+                _launchPathRenderer.Hide();
+
             HideAimingHighlight();
+
+            if (_currentAimingDirectionIndicator != null)
+                _currentAimingDirectionIndicator.Hide();
         }
 
         /// <summary>
-        /// Check if launch distance is sufficient
+        /// Checks whether the current launch distance is sufficient.
         /// </summary>
         public bool IsLaunchDistanceSufficient()
         {
-            return _directionVector.magnitude >= _minLaunchDistance;
-        }
-
-        private void SpawnProjectoryDots(Transform spawnTransform)
-        {
-            for (int i = 0; i < _dotsNumber; i++)
-            {
-                _trajectoryDots[i] = Instantiate(_trajectoryDotPrefab, spawnTransform);
-            }
+            return _directionVector.magnitude >=
+                   _minLaunchDistance;
         }
 
         private void CalculateDirection()
         {
-            var mainCamera = Camera.main;
-            Vector3 screenPosition = _inputManager.Position;
-            screenPosition.z = mainCamera.nearClipPlane + 1;
-            var pointerPosition = mainCamera.ScreenToWorldPoint(screenPosition);
-            _offsetEndPostion = new Vector3(0, pointerPosition.y, pointerPosition.z);
-            _directionVector = _offsetEndPostion - _offsetStartPoint;
+            if (_inputManager == null)
+                return;
+
+            var mainCamera =
+                Camera.main;
+
+            if (mainCamera == null)
+                return;
+
+            var screenPosition =
+                _inputManager.Position;
+
+            screenPosition.z =
+                mainCamera.nearClipPlane + 1f;
+
+            var pointerPosition =
+                mainCamera.ScreenToWorldPoint(
+                    screenPosition);
+
+            _offsetEndPostion =
+                new Vector3(
+                    _offsetStartPoint.x,
+                    pointerPosition.y,
+                    pointerPosition.z);
+
+            _directionVector =
+                _offsetEndPostion -
+                _offsetStartPoint;
+
+            _directionVector.x = 0f;
         }
 
-        private void DrawTraectory()
+        private void CalculateLaunchVelocity()
         {
-            EnableTrajectoryDots();
-            _offsetPoint.position = _offsetEndPostion;
+            _launchVelocity =
+                new Vector3(
+                    0f,
+                    -_directionVector.y *
+                    _forceFactorUp,
+                    -_directionVector.z *
+                    _forceFactorForward);
 
-            for (var i = 0; i < _dotsNumber; ++i)
-            {
-                _trajectoryDots[i].transform.position = CalculateTraectoryPosition(i * 0.1f);
-            }
+            _launchVelocity.x = 0f;
         }
 
-        private Vector3 CalculateTraectoryPosition(float elapsedTime)
+        private void DrawTrajectory()
         {
-            return new Vector3(0, _offsetStartPoint.y, _offsetStartPoint.z)
-                    + new Vector3(0, -_directionVector.y * _forceFactorUp, -_directionVector.z * _forceFactorForward) * elapsedTime
-                    + 0.5f * Physics.gravity * elapsedTime * elapsedTime;
+            if (_offsetPoint != null)
+                _offsetPoint.position =
+                    _offsetEndPostion;
+
+            if (_launchPathRenderer == null)
+                return;
+
+            var duration =
+                _cheatModeActive
+                    ? 10f
+                    : 1f;
+
+            _launchPathRenderer.Draw(
+                _offsetStartPoint,
+                _launchVelocity,
+                Physics.gravity,
+                duration);
         }
 
-        private void DisableTrajectoryDots()
+        /// <summary>
+        /// Calculates a trajectory position using the same physics
+        /// values as the actual launch.
+        /// </summary>
+        public Vector3 CalculateTrajectoryPosition(
+            float elapsedTime)
         {
-            for (int i = 0; i < _trajectoryDots.Length; i++)
-            {
-                _trajectoryDots[i].SetActive(false);
-            }
-        }
+            var position =
+                _offsetStartPoint +
+                _launchVelocity * elapsedTime +
+                0.5f *
+                Physics.gravity *
+                elapsedTime *
+                elapsedTime;
 
-        private void EnableTrajectoryDots()
-        {
-            for (int i = 0; i < _trajectoryDots.Length; i++)
-            {
-                _trajectoryDots[i].SetActive(true);
-            }
+            position.x =
+                _offsetStartPoint.x;
+
+            return position;
         }
 
         private void AdjustCameraZoom()
         {
-            float distance = Vector3.Distance(_offsetEndPostion, _offsetStartPoint);
-            float zoomFactor = Mathf.Lerp(_zoomRange.x, _zoomRange.y, distance / _minDistanceForZoom);
+            if (Camera.main == null ||
+                _minDistanceForZoom <= 0f)
+            {
+                return;
+            }
 
-            if (zoomFactor >= _maxZoomFactorValue)
-            {
-                Camera.main.orthographicSize = _maxZoomFactorValue;
-            }
-            else
-            {
-                Camera.main.orthographicSize = zoomFactor;
-            }
+            var distance =
+                Vector3.Distance(
+                    _offsetEndPostion,
+                    _offsetStartPoint);
+
+            var zoomFactor =
+                Mathf.Lerp(
+                    _zoomRange.x,
+                    _zoomRange.y,
+                    distance /
+                    _minDistanceForZoom);
+
+            Camera.main.orthographicSize =
+                Mathf.Min(
+                    zoomFactor,
+                    _maxZoomFactorValue);
         }
     }
 }
