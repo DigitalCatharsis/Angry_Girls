@@ -88,6 +88,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\RewardService.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\MissionPreparation\UI_Slots\UI_ItemSlot.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\TempClassesOrBadCode\Mediator\IMediator.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\LaunchFlightTrailRenderer.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterSettings\CharacterSettings\CharacterSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\IPickable.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\SettingsManager.cs" />
@@ -229,6 +230,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\ISaveReinitManager.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\UI\Screens\UI_LoadingScreen.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\ListOfLists\SerializableList.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\!Unsorted\Tilemap3DColliderZY.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Helpers\ShowOnlyAttribute\Editor\ShowOnlyDrawer.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\AttackAbilities\UppercutAttack.cs" />
   </ItemGroup>

@@ -188,8 +188,8 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       m_EditorAssetChanged: 0
     previewReference:
-      m_AssetGUID: d989e2f0ed1cb614c8890fce2cef3285
-      m_SubObjectName: T_MissionTemplate_Preview_Level_1
+      m_AssetGUID: c7e3eeb4bca20684b9908e302e228424
+      m_SubObjectName: T_MissionTemplate_Preview_Level_0
       m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-      m_EditorAssetChanged: 1
+      m_EditorAssetChanged: 0
