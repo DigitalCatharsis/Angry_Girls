@@ -7,11 +7,17 @@ using UnityEngine;
 namespace Angry_Girls
 {
     /// <summary>
-    /// Manages game state including progress and player data
+    /// Manages game state including progress and player data.
     /// </summary>
     public class GameStateManager
     {
         public static GameStateManager Instance { get; private set; }
+
+        /// <summary>
+        /// Indicates that the current runtime session was started through New Game.
+        /// </summary>
+        public bool IsNewGameSession { get; private set; }
+
         public GameStateManager()
         {
             if (Instance != null)
@@ -19,63 +25,112 @@ namespace Angry_Girls
                 Debug.LogWarning("GameStateManager already exists!");
                 return;
             }
+
             Instance = this;
         }
 
+
+
         /// <summary>
-        /// Start a new game
+        /// Marks the current new-game tutorial as consumed.
+        /// </summary>
+        public void ConsumeNewGameTutorial()
+        {
+            IsNewGameSession = false;
+        }
+
+        /// <summary>
+        /// Starts a new game.
         /// </summary>
         public async UniTask NewGame()
         {
             try
             {
-                Debug.Log("GameStateManager: Starting New Game with default template...");
+                IsNewGameSession = true;
 
-                // 1. Get template from CoreManager
-                var template = CoreManager.Instance.DefaultSaveTemplate;
+                Debug.Log(
+                    "GameStateManager: Starting New Game with default template...");
+
+                var template =
+                    CoreManager.Instance.DefaultSaveTemplate;
+
                 if (template == null)
                 {
-                    throw new Exception("GameStateManager: DefaultSaveTemplate is not set in CoreManager!");
+                    throw new Exception(
+                        "GameStateManager: DefaultSaveTemplate is not set in CoreManager!");
                 }
 
-                // 2. Initialize fields (premission managers mostly)
+                var charactersManager =
+                    CoreManager.Instance.CharactersManager;
 
-                var charactersManager = CoreManager.Instance.CharactersManager;
-                var missionManager = CoreManager.Instance.MissionsManager;
-                var creditsManager = CoreManager.Instance.CreditsManager;
-                var inventoryManager = CoreManager.Instance.InventoryManager;
-                var shopManager = CoreManager.Instance.ShopManager;
+                var missionManager =
+                    CoreManager.Instance.MissionsManager;
 
-                // 3. Reset all managers but Settings
-                ResetManagers(charactersManager, missionManager, creditsManager, inventoryManager, shopManager);
+                var creditsManager =
+                    CoreManager.Instance.CreditsManager;
 
-                // 4. Reinit from defaultTemplate
-                var unitasks = new List<UniTask>
-                {
-                    charactersManager.ReinitDataFromTemplateAsync(template),
-                    missionManager.ReinitDataFromTemplateAsync(template),
-                    creditsManager.ReinitDataFromTemplateAsync(template),
-                    inventoryManager.ReinitDataFromTemplateAsync(template),
-                    shopManager.ReinitDataFromTemplateAsync(template)
-                };
+                var inventoryManager =
+                    CoreManager.Instance.InventoryManager;
+
+                var shopManager =
+                    CoreManager.Instance.ShopManager;
+
+                ResetManagers(
+                    charactersManager,
+                    missionManager,
+                    creditsManager,
+                    inventoryManager,
+                    shopManager);
+
+                var unitasks =
+                    new List<UniTask>
+                    {
+                        charactersManager
+                            .ReinitDataFromTemplateAsync(
+                                template),
+
+                        missionManager
+                            .ReinitDataFromTemplateAsync(
+                                template),
+
+                        creditsManager
+                            .ReinitDataFromTemplateAsync(
+                                template),
+
+                        inventoryManager
+                            .ReinitDataFromTemplateAsync(
+                                template),
+
+                        shopManager
+                            .ReinitDataFromTemplateAsync(
+                                template)
+                    };
 
                 await UniTask.WhenAll(unitasks);
 
-                // 5. Save BEFORE entering the scene
-                CoreManager.Instance.SaveLoadManager.SaveGame();
+                CoreManager.Instance
+                    .SaveLoadManager
+                    .SaveGame();
 
-                // 6. Go to scene
-                await NavigationManager.NavigateToScene(SceneType.MissionPreparation);
+                await NavigationManager.NavigateToScene(
+                    SceneType.MissionPreparation);
 
-                Debug.Log("GameStateManager: New game initialized and saved successfully");
+                Debug.Log(
+                    "GameStateManager: New game initialized and saved successfully");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Debug.LogException(ex);
+                IsNewGameSession = false;
+                Debug.LogException(exception);
             }
         }
 
-        private void ResetManagers(CharactersManager charactersManager, MissionsManager missionManager, CreditsManager creditsManager, InventoryManager inventoryManager, ShopManager shopManager)
+        private void ResetManagers(
+            CharactersManager charactersManager,
+            MissionsManager missionManager,
+            CreditsManager creditsManager,
+            InventoryManager inventoryManager,
+            ShopManager shopManager)
         {
             charactersManager.ResetManagersData();
             missionManager.ResetManagersData();
@@ -84,31 +139,62 @@ namespace Angry_Girls
             shopManager.ResetManagersData();
         }
 
+        /// <summary>
+        /// Saves the game and returns to mission preparation.
+        /// </summary>
         public async UniTask ReturnToMissionPreparation()
         {
-            CoreManager.Instance.SaveLoadManager.SaveGame();
-            await NavigationManager.NavigateToScene(SceneType.MissionPreparation);
+            CoreManager.Instance
+                .SaveLoadManager
+                .SaveGame();
+
+            await NavigationManager.NavigateToScene(
+                SceneType.MissionPreparation);
         }
 
         /// <summary>
-        /// Continue existing game
+        /// Continues an existing saved game.
         /// </summary>
         public async UniTask ContinueGame()
         {
-            var charactersManager = CoreManager.Instance.CharactersManager;
-            var missionManager = CoreManager.Instance.MissionsManager;
-            var creditsManager = CoreManager.Instance.CreditsManager;
-            var inventoryManager = CoreManager.Instance.InventoryManager;
-            var shopManager = CoreManager.Instance.ShopManager;
+            IsNewGameSession = false;
 
-            ResetManagers(charactersManager, missionManager, creditsManager, inventoryManager, shopManager);
+            var charactersManager =
+                CoreManager.Instance.CharactersManager;
+
+            var missionManager =
+                CoreManager.Instance.MissionsManager;
+
+            var creditsManager =
+                CoreManager.Instance.CreditsManager;
+
+            var inventoryManager =
+                CoreManager.Instance.InventoryManager;
+
+            var shopManager =
+                CoreManager.Instance.ShopManager;
+
+            ResetManagers(
+                charactersManager,
+                missionManager,
+                creditsManager,
+                inventoryManager,
+                shopManager);
 
             DOTween.KillAll();
-            CoreManager.Instance.PoolManager.ClearAllPools();
+            CoreManager.Instance
+                .PoolManager
+                .ClearAllPools();
 
-            Debug.Log("GameStateManager: Continuing Game...");
-            await CoreManager.Instance.SaveLoadManager.LoadGameAsync();
-            await NavigationManager.NavigateToScene(SceneType.MissionPreparation);
+            Debug.Log(
+                "GameStateManager: Continuing Game...");
+
+            await CoreManager.Instance
+                .SaveLoadManager
+                .LoadGameAsync();
+
+            await NavigationManager.NavigateToScene(
+                SceneType.MissionPreparation);
         }
     }
 }
