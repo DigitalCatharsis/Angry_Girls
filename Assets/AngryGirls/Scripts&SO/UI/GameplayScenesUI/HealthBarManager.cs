@@ -12,7 +12,7 @@ namespace Angry_Girls
     {
         [SerializeField] private GameObject _healthBarPrefab;
         [SerializeField] private float _healthbatUpDelta = 1.21f;
-        [SerializeField] private float _healthJumping—oefficient = 0.005f; //the less - the better
+        [SerializeField] private float _healthJumpingCoefficient = 0.005f; //the less - the better
 
         private Dictionary<CControl, Slider> _healthBars = new();
         private GameplayCharactersManager _charactersManager;
@@ -68,12 +68,12 @@ namespace Angry_Girls
 
                 if (!character.isDead && slider.gameObject.activeSelf)
                 {
-                    float speedY = Mathf.Abs(character.CharacterMovement.Rigidbody.velocity.y);
+                    float speedY = Mathf.Abs(character.CharacterMovement.Rigidbody.linearVelocity.y);
 
                     // Smooth displacement transition: at speeds below healthJumpingCoefficient, coefficient = 1,
                     // at speeds above healthJumpingCoefficient*2, coefficient = 0
-                    float thresholdLow = _healthJumping—oefficient;
-                    float thresholdHigh = _healthJumping—oefficient * 2f;
+                    float thresholdLow = _healthJumpingCoefficient;
+                    float thresholdHigh = _healthJumpingCoefficient * 2f;
                     float t = Mathf.InverseLerp(thresholdHigh, thresholdLow, speedY);
                     t = Mathf.Clamp01(t);
 

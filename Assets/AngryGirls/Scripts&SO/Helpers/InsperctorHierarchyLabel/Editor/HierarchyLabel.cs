@@ -12,14 +12,17 @@ namespace Angry_Girls
     {
         static HierarchyLabel()
         {
-            EditorApplication.hierarchyWindowItemOnGUI += HierarchyWindowItemOnGUI;
+            // Subscribe to the new entity-based hierarchy callback
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI += HierarchyWindowItemByEntityIdOnGUI;
         }
 
-        static void HierarchyWindowItemOnGUI(int instanceID, Rect selectionRect)
+        // Correct signature: EntityId and Rect only
+        static void HierarchyWindowItemByEntityIdOnGUI(EntityId entityId, Rect selectionRect)
         {
-            GameObject obj = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
+            // Use EntityId directly, no obsolete int conversion
+            GameObject obj = EditorUtility.EntityIdToObject(entityId) as GameObject;
 
-            if (obj != null && obj.name.StartsWith("___", System.StringComparison.Ordinal))
+            if (obj != null && obj.name.StartsWith("__", System.StringComparison.Ordinal))
             {
                 EditorGUI.DrawRect(selectionRect, Color.grey);
                 EditorGUI.DropShadowLabel(selectionRect, obj.name.Replace("_", "").ToString());

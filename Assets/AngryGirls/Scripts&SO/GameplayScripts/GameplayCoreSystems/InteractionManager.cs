@@ -369,7 +369,7 @@ namespace Angry_Girls
                     // Reduce velocity on strong impacts
                     if (data.collision.impulse.magnitude > 3f)
                     {
-                        targetRb.velocity *= 0.2f;
+                        targetRb.linearVelocity *= 0.2f;
                     }
                 }
             }

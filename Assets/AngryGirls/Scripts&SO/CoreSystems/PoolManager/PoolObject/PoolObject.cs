@@ -40,7 +40,7 @@ namespace Angry_Girls
             var rigid = gameObject.GetComponent<Rigidbody>();
             if (rigid != null)
             {
-                rigid.velocity = Vector3.zero;
+                rigid.linearVelocity = Vector3.zero;
                 rigid.angularVelocity = Vector3.zero;
                 rigid.transform.position = Vector3.zero;
                 rigid.rotation = Quaternion.identity;

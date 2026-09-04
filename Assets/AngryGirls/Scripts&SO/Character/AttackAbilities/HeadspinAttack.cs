@@ -82,7 +82,7 @@ namespace Angry_Girls
         {
             if (_exited) return;
 
-            float verticalVelocity = control.CharacterMovement.Rigidbody.velocity.y;
+            float verticalVelocity = control.CharacterMovement.Rigidbody.linearVelocity.y;
 
             // Wait for the peak altitude (velocity <= 0) for the first shot
             if (!_firstShotFired && verticalVelocity <= 0f)

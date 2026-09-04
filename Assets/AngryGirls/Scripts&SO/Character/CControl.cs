@@ -69,7 +69,7 @@ namespace Angry_Girls
 
         [SerializeField] public List<GameObject> detectedGroundObject = new();
 
-        [SerializeField] private PhysicMaterial _noBounceMaterial;
+        [SerializeField] private PhysicsMaterial _noBounceMaterial;
 
         private VFXManager _vFXManager;
         private AudioManager _audioManager;
@@ -246,9 +246,9 @@ namespace Angry_Girls
         {
             // 1. Try to get the velocity direction from the Rigidbody
             Rigidbody projectileRb = interactionData.source.GetComponent<Rigidbody>();
-            if (projectileRb != null && projectileRb.velocity.sqrMagnitude > 0.1f)
+            if (projectileRb != null && projectileRb.linearVelocity.sqrMagnitude > 0.1f)
             {
-                return projectileRb.velocity.normalized;
+                return projectileRb.linearVelocity.normalized;
             }
 
             // 2. If there is no Rigidbody, try to determine the direction from rotation

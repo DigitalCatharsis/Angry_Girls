@@ -36,8 +36,8 @@ namespace Angry_Girls
         private void UpdateRigidbodyInfo()
         {
             _rigidbodyWorldPosition = _rb.position.ToString();
-            _speed = _rb.velocity.magnitude.ToString("F2");
-            _velocity = _rb.velocity.ToString();
+            _speed = _rb.linearVelocity.magnitude.ToString("F2");
+            _velocity = _rb.linearVelocity.ToString();
             _angularVelocity = _rb.angularVelocity.ToString();
             _initialTensorRotation = _rb.inertiaTensorRotation.ToString();
             _localCenterOfMass = _rb.centerOfMass.ToString();

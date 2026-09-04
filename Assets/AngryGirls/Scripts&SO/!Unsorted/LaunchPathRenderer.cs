@@ -30,6 +30,10 @@ namespace Angry_Girls
         [Header("Depth")]
         [SerializeField] private float _cameraDepthOffset = -0.05f;
 
+        private static readonly int MainTextureId = Shader.PropertyToID("_MainTex");
+
+        private Vector2 _textureOffset;
+
         private Material _materialInstance;
 
         private Vector3 _startPosition;
@@ -228,26 +232,22 @@ namespace Angry_Girls
 
         private void UpdateTextureAnimation()
         {
-            if (!_animateTexture ||
-                _materialInstance == null)
-            {
-                return;
-            }
-
-            if (!_materialInstance.HasProperty("_MainTex"))
+            if (!_animateTexture || _materialInstance == null)
                 return;
 
-            var offset =
-                _materialInstance.mainTextureOffset;
+            if (!_materialInstance.HasProperty(MainTextureId))
+                return;
 
-            offset.x +=
+            _textureOffset.x +=
                 _textureScrollSpeed *
                 Time.unscaledDeltaTime;
 
-            offset.x %= 1f;
+            _textureOffset.x =
+                Mathf.Repeat(_textureOffset.x, 1f);
 
-            _materialInstance.mainTextureOffset =
-                offset;
+            _materialInstance.SetTextureOffset(
+                MainTextureId,
+                _textureOffset);
         }
 
         private void OnDestroy()

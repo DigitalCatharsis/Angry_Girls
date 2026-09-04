@@ -82,7 +82,7 @@ namespace Angry_Girls
 
         public void ResetVelocity()
         {
-            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.linearVelocity = Vector3.zero;
         }
 
         public void ApplyRigidForce(Vector3 force, ForceMode forceMode = ForceMode.VelocityChange)
@@ -95,7 +95,7 @@ namespace Angry_Girls
         /// </summary>
         public void ApplyKnockbackFromEnemy(GameObject opponent, float knockbackForce)
         {
-            if (_rigidbody.velocity.z != 0) return;
+            if (_rigidbody.linearVelocity.z != 0) return;
 
             var direction = _rigidbody.position - opponent.transform.position;
             direction.z = direction.z < 0 ? -1 : 1;
@@ -129,7 +129,7 @@ namespace Angry_Girls
 
         public void SetVelocity(Vector3 velocity)
         {
-            _rigidbody.velocity = velocity;
+            _rigidbody.linearVelocity = velocity;
         }
 
         public void Teleport(Vector3 position)

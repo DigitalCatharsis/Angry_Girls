@@ -157,7 +157,7 @@ namespace Angry_Girls
             _infoBox = infoObj.AddComponent<TextMeshProUGUI>();
             _infoBox.fontSize = 14;
             _infoBox.color = Color.white;
-            _infoBox.enableWordWrapping = false;
+            _infoBox.textWrappingMode = TextWrappingModes.NoWrap;
             _infoBox.raycastTarget = false;
             infoRect.sizeDelta = new Vector2(_panelSize.x - 20f, 250f);
 
@@ -226,7 +226,7 @@ namespace Angry_Girls
             txt.fontSize = 14;
             txt.color = Color.white;
             txt.alignment = TextAlignmentOptions.Center;
-            txt.enableWordWrapping = false;
+            txt.textWrappingMode = TextWrappingModes.NoWrap;
 
             btn.onClick.AddListener(() =>
             {
@@ -515,7 +515,7 @@ namespace Angry_Girls
                 btnText.fontSize = 14f;
                 btnText.color = textColor;
                 btnText.alignment = TextAlignmentOptions.Left;
-                btnText.enableWordWrapping = false;
+                btnText.textWrappingMode = TextWrappingModes.NoWrap;
                 var textRect = btnText.GetComponent<RectTransform>();
                 textRect.anchorMin = Vector2.zero;
                 textRect.anchorMax = Vector2.one;
