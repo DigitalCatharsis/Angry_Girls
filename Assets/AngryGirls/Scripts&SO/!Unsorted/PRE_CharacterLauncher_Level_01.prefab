@@ -266,15 +266,15 @@ MonoBehaviour:
   _aimingHighlightPrefab: {fileID: 7859062686526815040, guid: 0815a88e43001dd4cb429c77cb327cdf, type: 3}
   _aimingDirectionIndicatorPrefab: {fileID: 5264779001429847929, guid: ae2cb530354349b4d8016b7db89522b0, type: 3}
   _launchFlightTrailRenderer: {fileID: 6957522714921760883}
-  _minLaunchDistance: 1.5
-  _positionsContainer: {fileID: 4823108703855323970}
-  _maxZoomFactorValue: 12
-  _zoomRange: {x: 1.65, y: 13}
+  _minLaunchDistance: 1
+  _maxLaunchDistance: 17
   _forceFactorUp: 2
   _forceFactorForward: 1
   _offsetPoint: {fileID: 5254313315436990269}
   _launchPathRenderer: {fileID: 4283743614967354151}
   _minDistanceForZoom: 20
+  _maxZoomFactorValue: 12
+  _zoomRange: {x: 1.65, y: 13}
   <UnitsTransforms>k__BackingField:
   - {fileID: 7823212060095052354}
   - {fileID: 4811620441973549884}
@@ -766,8 +766,10 @@ MonoBehaviour:
   _lineRenderer: {fileID: 9218265276203406552}
   _width: 0.15
   _widthMultiplier: 1
-  _points: 64
-  _trajectoryDuration: 1
+  _displayedLengthInTiles: 3
+  _tileLengthInWorldUnits: 1
+  _maxTrajectorySearchTime: 10
+  _cheatLengthMultiplier: 20
   _referenceOrthographicSize: 7.5
   _referenceWidthScale: 1
   _animateTexture: 1

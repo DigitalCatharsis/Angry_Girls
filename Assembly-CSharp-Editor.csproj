@@ -1643,6 +1643,7 @@
     <ProjectReference Include="ToonyColorsPro.Demo.Editor.csproj" />
     <ProjectReference Include="KinoBloom.Runtime.csproj" />
     <ProjectReference Include="CFXRRuntime.csproj" />
+    <ProjectReference Include="DOTween.Modules.csproj" />
     <ProjectReference Include="CFXRDemo.csproj" />
     <ProjectReference Include="AYellowpaper.SerializedCollections.Editor.csproj" />
     <ProjectReference Include="CFXR.WelcomeScreen.csproj" />
