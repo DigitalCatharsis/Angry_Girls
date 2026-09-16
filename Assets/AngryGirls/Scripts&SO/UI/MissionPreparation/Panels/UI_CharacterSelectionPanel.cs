@@ -214,17 +214,17 @@ namespace Angry_Girls
             {
                 case CharacterSlotType.Available:
                     if (_charactersManager.AddCharacterToSelected(character))
-                        UIManager.Instance.ShowNotification("Character added to team!", 0.5f);
+                        UI_UIManager.Instance.ShowNotification("Character added to team!", 0.5f);
                     else
-                        UIManager.Instance.ShowNotification("Team is full or character not available!", 0.5f);
+                        UI_UIManager.Instance.ShowNotification("Team is full or character not available!", 0.5f);
                     break;
 
                 case CharacterSlotType.Selected:
                     int selectedIndex = _selectedCharacterSlots.IndexOf(slot);
                     if (selectedIndex >= 0 && _charactersManager.RemoveCharacterFromSelected(selectedIndex))
-                        UIManager.Instance.ShowNotification("Character removed from team!", 0.5f);
+                        UI_UIManager.Instance.ShowNotification("Character removed from team!", 0.5f);
                     else
-                        UIManager.Instance.ShowNotification("Failed to remove character!", 0.5f);
+                        UI_UIManager.Instance.ShowNotification("Failed to remove character!", 0.5f);
                     break;
             }
         }

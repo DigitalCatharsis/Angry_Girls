@@ -99,7 +99,7 @@ namespace Angry_Girls
 
             if (Repository.HasGameSave())
             {
-                UIManager.Instance.ShowConfirmation(
+                UI_UIManager.Instance.ShowConfirmation(
                     "Are you sure? All previous saves will be deleted.",
                     yesAction: OnConfirmNewGame,
                     noAction: null

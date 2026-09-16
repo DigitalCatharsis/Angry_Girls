@@ -219,7 +219,7 @@ namespace Angry_Girls
             }
             else
             {
-                UIManager.Instance.ShowNotification("Please select a mission and characters first!", 0.5f);
+                UI_UIManager.Instance.ShowNotification("Please select a mission and characters first!", 0.5f);
             }
         }
 

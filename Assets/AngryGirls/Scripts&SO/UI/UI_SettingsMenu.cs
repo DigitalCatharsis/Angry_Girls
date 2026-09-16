@@ -134,7 +134,7 @@ namespace Angry_Girls
             var currentSettings = _settingsManager.GetCurrentSettings();
             if (!_savedSettingsData.Equals(currentSettings))
             {
-                UIManager.Instance?.ShowConfirmation("Are you sure you want to back? All settings will be unsaved!",
+                UI_UIManager.Instance?.ShowConfirmation("Are you sure you want to back? All settings will be unsaved!",
                     () => //yes
                     {
                         _settingsManager.SetupSettings(_savedSettingsData);
@@ -156,14 +156,14 @@ namespace Angry_Girls
         {
             _settingsManager.ApplyPlatformDefaults(SettingsCategory.All);
             LoadCategoryValues();
-            UIManager.Instance?.ShowNotification("All settings reset to defaults", 1f);
+            UI_UIManager.Instance?.ShowNotification("All settings reset to defaults", 1f);
         }
 
         private void OnApplyPressed()
         {
             _savedSettingsData = _settingsManager.GetCurrentSettings();
             _settingsManager.SaveSettings();
-            UIManager.Instance?.ShowNotification("Settings saved", 0.5f);
+            UI_UIManager.Instance?.ShowNotification("Settings saved", 0.5f);
         }
 
         public override void Show()

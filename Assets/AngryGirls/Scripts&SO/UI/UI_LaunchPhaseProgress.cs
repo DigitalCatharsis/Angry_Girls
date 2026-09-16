@@ -8,7 +8,7 @@ namespace Angry_Girls
     /// Displays the complete predicted future turn sequence.
     /// The queue is rebuilt only when gameplay state changes.
     /// </summary>
-    public sealed class LaunchPhaseProgressUI
+    public sealed class UI_LaunchPhaseProgress
         : UI_GameplayManagersComponent
     {
         [Header("Scroll")]
@@ -16,7 +16,7 @@ namespace Angry_Girls
         [SerializeField] private RectTransform _content;
 
         [Header("Segment")]
-        [SerializeField] private TurnOrderSegmentUI _segmentPrefab;
+        [SerializeField] private UI_TurnOrderSegment _segmentPrefab;
 
         [Header("Hover")]
         [SerializeField] private TurnOrderHoverIndicator _hoverIndicator;
@@ -24,7 +24,7 @@ namespace Angry_Girls
         [Header("Behaviour")]
         [SerializeField] private bool _resetScrollAfterRefresh = true;
 
-        private readonly List<TurnOrderSegmentUI> _segmentPool =
+        private readonly List<UI_TurnOrderSegment> _segmentPool =
             new();
 
         private GameplayCharactersManager _charactersManager;

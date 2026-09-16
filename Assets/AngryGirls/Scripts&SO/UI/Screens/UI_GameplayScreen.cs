@@ -10,13 +10,13 @@ namespace Angry_Girls
     public class UI_GameplayScreen : UI_UIScreen
     {
         [Header("UI Components")]
-        [SerializeField] private ScoreDisplay _scoreDisplay;
+        [SerializeField] private UI_ScoreDisplay _scoreDisplay;
         [SerializeField] private UI_GameplayCharactersPanel _charactersPanel;
         [SerializeField] private PauseMenu _pauseMenu;
         [SerializeField] private TutorialSystem _tutorialSystem;
         [SerializeField] private GameResultUI _gameResultUI;
         [SerializeField] private TrajectoryCheatToggle _trajectoryCheatToggle;
-        [SerializeField] private LaunchPhaseProgressUI _launchPhaseProgressUI;
+        [SerializeField] private UI_LaunchPhaseProgress _launchPhaseProgressUI;
         [SerializeField] private UI_RewardPresentation _uiRewardPresentation;
 
         private UI_GameplayManagersComponent[] _uI_GameplayScreens;

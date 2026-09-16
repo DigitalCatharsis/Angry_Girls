@@ -543,7 +543,7 @@ namespace Angry_Girls
 
             if (_creditsManager.CreditsData.Credits <= 500)
             {
-                UIManager.Instance.ShowNotification("Not enough credits!", 1f);
+                UI_UIManager.Instance.ShowNotification("Not enough credits!", 1f);
                 return;
             }
 

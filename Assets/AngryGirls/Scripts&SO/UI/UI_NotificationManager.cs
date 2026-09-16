@@ -11,7 +11,7 @@ namespace Angry_Girls
     /// <summary>
     /// Manages display of notifications to the player.
     /// </summary>
-    public class NotificationManager : MonoBehaviour
+    public class UI_NotificationManager : MonoBehaviour
     {
         [Header("Notification UI")]
         [SerializeField] private GameObject _notificationPrefab;

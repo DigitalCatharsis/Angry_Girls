@@ -9,7 +9,7 @@ namespace Angry_Girls
     /// <summary>
     /// Displays one future character action in the turn order.
     /// </summary>
-    public sealed class TurnOrderSegmentUI
+    public sealed class UI_TurnOrderSegment
         : MonoBehaviour,
           IPointerEnterHandler,
           IPointerExitHandler

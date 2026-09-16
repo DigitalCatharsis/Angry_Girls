@@ -8,7 +8,7 @@ namespace Angry_Girls
     /// Component attached to the confirmation panel prefab.
     /// All references must be assigned manually in the prefab inspector.
     /// </summary>
-    public class ConfirmationPanel : MonoBehaviour
+    public class UI_ConfirmationPanel : MonoBehaviour
     {
         [SerializeField] private Button _yesButton;
         [SerializeField] private Button _noButton;

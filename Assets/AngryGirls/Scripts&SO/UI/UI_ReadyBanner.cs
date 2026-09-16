@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using Angry_Girls;
 
 [RequireComponent(typeof(CanvasGroup))]
-public class ReadyBanner_VertexDeform : UI_GameplayManagersComponent
+public class UI_ReadyBanner : UI_GameplayManagersComponent
 {
     public enum Style
     {

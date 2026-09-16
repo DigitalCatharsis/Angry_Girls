@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Displays and updates player score from collected coins.
 /// </summary>
-public class ScoreDisplay : UI_GameplayManagersComponent
+public class UI_ScoreDisplay : UI_GameplayManagersComponent
 {
     [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private string _scoreFormat = "Score: {0}";

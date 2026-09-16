@@ -353,14 +353,14 @@ namespace Angry_Girls
             var catalog = CoreManager.Instance?.CharacterSettingsCatalogSO;
             if (catalog == null)
             {
-                UIManager.Instance?.ShowNotification("CharacterSettingsCatalog not ready", 0.5f);
+                UI_UIManager.Instance?.ShowNotification("CharacterSettingsCatalog not ready", 0.5f);
                 return;
             }
 
             _characterTypesForPopup = catalog.GetAllTypesForDebug().ToList();
             if (_characterTypesForPopup.Count == 0)
             {
-                UIManager.Instance?.ShowNotification("No character types available", 0.5f);
+                UI_UIManager.Instance?.ShowNotification("No character types available", 0.5f);
                 return;
             }
 
@@ -576,12 +576,12 @@ namespace Angry_Girls
             if (GameStateManager.Instance != null)
             {
                 CoreManager.Instance.SaveLoadManager.SaveGame();
-                UIManager.Instance?.ShowNotification("Game saved!", 0.5f);
+                UI_UIManager.Instance?.ShowNotification("Game saved!", 0.5f);
                 UpdateDebugInfo();
             }
             else
             {
-                UIManager.Instance?.ShowNotification("GameStateManager null", 0.5f);
+                UI_UIManager.Instance?.ShowNotification("GameStateManager null", 0.5f);
             }
         }
 
@@ -590,12 +590,12 @@ namespace Angry_Girls
             if (CoreManager.Instance != null && CoreManager.Instance.SaveLoadManager != null)
             {
                 await CoreManager.Instance.SaveLoadManager.LoadGameAsync();
-                UIManager.Instance?.ShowNotification("Save loaded!", 0.5f);
+                UI_UIManager.Instance?.ShowNotification("Save loaded!", 0.5f);
                 UpdateDebugInfo();
             }
             else
             {
-                UIManager.Instance?.ShowNotification("SaveLoadManager unavailable", 0.5f);
+                UI_UIManager.Instance?.ShowNotification("SaveLoadManager unavailable", 0.5f);
             }
         }
 
@@ -607,10 +607,10 @@ namespace Angry_Girls
             if (CoreManager.Instance != null && CoreManager.Instance.SaveLoadManager != null)
                 await CoreManager.Instance.SaveLoadManager.LoadGameAsync();
 
-            var mainMenu = UIManager.Instance?.GetScreen<UI_MainMenuScreen>();
+            var mainMenu = UI_UIManager.Instance?.GetScreen<UI_MainMenuScreen>();
             mainMenu?.UpdateContinueButtonState();
 
-            UIManager.Instance?.ShowNotification("Save reset!", 0.5f);
+            UI_UIManager.Instance?.ShowNotification("Save reset!", 0.5f);
             UpdateDebugInfo();
         }
 
@@ -619,12 +619,12 @@ namespace Angry_Girls
             var moneyStorage = CoreManager.Instance?.CreditsManager;
             if (moneyStorage == null)
             {
-                UIManager.Instance?.ShowNotification("MoneyStorage unavailable", 0.5f);
+                UI_UIManager.Instance?.ShowNotification("MoneyStorage unavailable", 0.5f);
                 return;
             }
 
             moneyStorage.SetCredits(amount);
-            UIManager.Instance?.ShowNotification($"Added {amount} credits", 0.5f);
+            UI_UIManager.Instance?.ShowNotification($"Added {amount} credits", 0.5f);
             UpdateDebugInfo();
 
             var shopPanel = FindObjectOfType<UI_ShopPanel>();
@@ -639,14 +639,14 @@ namespace Angry_Girls
             var moneyStorage = CoreManager.Instance?.CreditsManager;
             if (moneyStorage == null)
             {
-                UIManager.Instance?.ShowNotification("MoneyStorage unavailable", 0.5f);
+                UI_UIManager.Instance?.ShowNotification("MoneyStorage unavailable", 0.5f);
                 return;
             }
 
             int current = moneyStorage.GetCredits();
             int remove = Mathf.Min(amount, current);
             moneyStorage.SetCredits(-remove);
-            UIManager.Instance?.ShowNotification($"Removed {remove} credits", 0.5f);
+            UI_UIManager.Instance?.ShowNotification($"Removed {remove} credits", 0.5f);
             UpdateDebugInfo();
 
             var shopPanel = FindObjectOfType<UI_ShopPanel>();
@@ -663,13 +663,13 @@ namespace Angry_Girls
 
             if (catalog == null || charactersManager == null || charactersManager.CharactersData == null)
             {
-                UIManager.Instance?.ShowNotification("Catalog/Manager not ready", 0.5f);
+                UI_UIManager.Instance?.ShowNotification("Catalog/Manager not ready", 0.5f);
                 return;
             }
 
             if (typeIndex < 0 || typeIndex >= _characterTypesForPopup?.Count)
             {
-                UIManager.Instance?.ShowNotification("Invalid type index", 0.5f);
+                UI_UIManager.Instance?.ShowNotification("Invalid type index", 0.5f);
                 return;
             }
 
@@ -678,7 +678,7 @@ namespace Angry_Girls
 
             if (settings == null)
             {
-                UIManager.Instance?.ShowNotification($"No settings for type {charType}", 0.5f);
+                UI_UIManager.Instance?.ShowNotification($"No settings for type {charType}", 0.5f);
                 return;
             }
 
@@ -694,7 +694,7 @@ namespace Angry_Girls
                 charPanel.Refresh();
             }
 
-            UIManager.Instance?.ShowNotification($"Spawned: {settings.name}", 0.5f);
+            UI_UIManager.Instance?.ShowNotification($"Spawned: {settings.name}", 0.5f);
         }
 
         public void UnlockAllShopCollections()
@@ -702,7 +702,7 @@ namespace Angry_Girls
             var shopManager = CoreManager.Instance?.ShopManager;
             if (shopManager == null)
             {
-                UIManager.Instance?.ShowNotification("ShopManager unavailable", 0.5f);
+                UI_UIManager.Instance?.ShowNotification("ShopManager unavailable", 0.5f);
                 return;
             }
 
@@ -713,7 +713,7 @@ namespace Angry_Girls
                 foreach (var key in new[] { ShopAvailability.Easy, ShopAvailability.Normal, ShopAvailability.Hard })
                     if (dict.ContainsKey(key)) dict[key] = true;
 
-                UIManager.Instance?.ShowNotification("All shops unlocked!", 0.5f);
+                UI_UIManager.Instance?.ShowNotification("All shops unlocked!", 0.5f);
                 UpdateDebugInfo();
 
                 var shopPanel = FindObjectOfType<UI_ShopPanel>();
@@ -724,7 +724,7 @@ namespace Angry_Girls
             }
             else
             {
-                UIManager.Instance?.ShowNotification("Collection field not found", 0.5f);
+                UI_UIManager.Instance?.ShowNotification("Collection field not found", 0.5f);
             }
         }
 
@@ -733,7 +733,7 @@ namespace Angry_Girls
             var shopManager = CoreManager.Instance?.ShopManager;
             if (shopManager == null)
             {
-                UIManager.Instance?.ShowNotification("ShopManager unavailable", 0.5f);
+                UI_UIManager.Instance?.ShowNotification("ShopManager unavailable", 0.5f);
                 return;
             }
 
@@ -749,7 +749,7 @@ namespace Angry_Girls
                 shopPanel.Refresh();
             }
 
-            UIManager.Instance?.ShowNotification("Shop refreshed (free)!", 0.5f);
+            UI_UIManager.Instance?.ShowNotification("Shop refreshed (free)!", 0.5f);
             UpdateDebugInfo();
         }
 
@@ -760,7 +760,7 @@ namespace Angry_Girls
 
             if (stageMgr == null || missionsManager == null)
             {
-                UIManager.Instance?.ShowNotification("Stage/Mission manager null", 0.5f);
+                UI_UIManager.Instance?.ShowNotification("Stage/Mission manager null", 0.5f);
                 return;
             }
 
@@ -768,12 +768,12 @@ namespace Angry_Girls
             if (stageIndex < missionsManager.GetMissionCount())
             {
                 //missionsManager.CompleteMission(stageIndex, MissionDifficulty.Easy);
-                UIManager.Instance?.ShowNotification($"Mission {stageIndex} completed!", 0.5f);
+                UI_UIManager.Instance?.ShowNotification($"Mission {stageIndex} completed!", 0.5f);
                 UpdateDebugInfo();
             }
             else
             {
-                UIManager.Instance?.ShowNotification("No mission to complete", 0.5f);
+                UI_UIManager.Instance?.ShowNotification("No mission to complete", 0.5f);
             }
         }
 

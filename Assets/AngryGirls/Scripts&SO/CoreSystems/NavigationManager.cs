@@ -42,7 +42,7 @@ namespace Angry_Girls
         /// </summary>
         public static async UniTask NavigateToScene(SceneType sceneType)
         {
-            UIManager.Instance.ShowLoadingScreen(true);
+            UI_UIManager.Instance.ShowLoadingScreen(true);
 
             //clear garbage from previous Scene
             DOTween.KillAll();
@@ -58,7 +58,7 @@ namespace Angry_Girls
 
             await InitializeSceneUI(sceneType);
 
-            UIManager.Instance.ShowLoadingScreen(false);
+            UI_UIManager.Instance.ShowLoadingScreen(false);
         }
 
         private static async UniTask InitializeSceneUI(SceneType sceneType)
@@ -66,10 +66,10 @@ namespace Angry_Girls
             switch (sceneType)
             {
                 case SceneType.MainMenuScene:
-                    UIManager.Instance.ShowScreen<UI_MainMenuScreen>(false);
+                    UI_UIManager.Instance.ShowScreen<UI_MainMenuScreen>(false);
                     break;
                 case SceneType.MissionPreparation:
-                    UIManager.Instance.ShowScreen<UI_MissionPreparationScreen>(false);
+                    UI_UIManager.Instance.ShowScreen<UI_MissionPreparationScreen>(false);
                     break;
             }
             await UniTask.CompletedTask;

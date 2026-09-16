@@ -84,7 +84,7 @@ namespace Angry_Girls
 
             _settingsManager.ApplyPlatformDefaults(SettingsCategory.Camera);
             LoadValues();
-            UIManager.Instance?.ShowNotification("Camera settings reset", 0.5f);
+            UI_UIManager.Instance?.ShowNotification("Camera settings reset", 0.5f);
         }
 
         private void OnDestroy()

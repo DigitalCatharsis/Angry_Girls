@@ -8,9 +8,9 @@ namespace Angry_Girls
     /// <summary>
     /// Main UI manager that controls screen navigation and notifications.
     /// </summary>
-    public class UIManager : MonoBehaviour
+    public class UI_UIManager : MonoBehaviour
     {
-        public static UIManager Instance { get; private set; }
+        public static UI_UIManager Instance { get; private set; }
 
         [Header("UI Screens")]
         [SerializeField] private UI_MainMenuScreen _mainMenuScreen;
@@ -19,8 +19,8 @@ namespace Angry_Girls
 
         [Header("Global UI")]
         [SerializeField] private UI_LoadingScreen _loadingScreen;
-        [SerializeField] private NotificationManager _notificationManager;
-        [SerializeField] private ConfirmationManager _confirmationManager;
+        [SerializeField] private UI_NotificationManager _notificationManager;
+        [SerializeField] private UI_ConfirmationManager _confirmationManager;
 
         private UI_UIScreen _currentScreen;
         private Stack<UI_UIScreen> _screenHistory = new Stack<UI_UIScreen>();

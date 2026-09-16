@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Angry_Girls
 {
-    public class ConfirmationManager : MonoBehaviour
+    public class UI_ConfirmationManager : MonoBehaviour
     {
         [Header("Confirmation UI")]
         [SerializeField] private GameObject _confirmationPrefab;
@@ -104,7 +104,7 @@ namespace Angry_Girls
             confirmationGO.transform.SetParent(this.gameObject.transform, false);
             confirmationGO.SetActive(true);
 
-            var panel = confirmationGO.GetComponentInChildren<ConfirmationPanel>();
+            var panel = confirmationGO.GetComponentInChildren<UI_ConfirmationPanel>();
             if (panel == null)
             {
                 Debug.LogError("Confirmation prefab must have a ConfirmationPanel component.");
