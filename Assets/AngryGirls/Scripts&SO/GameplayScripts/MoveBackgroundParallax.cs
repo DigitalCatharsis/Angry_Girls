@@ -14,14 +14,14 @@ namespace Angry_Girls
         void Start()
         {
             _startPosition = transform.position;
-            _offset = GetComponent<SpriteRenderer>().bounds.size.z / 4;
+            _offset = GetComponent<SpriteRenderer>().bounds.size.x / 4;
         }
 
         void Update()
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + speed * Time.deltaTime);
+            transform.position = new Vector3(transform.position.x + speed * Time.deltaTime, transform.position.y, transform.position.z);
 
-            if (transform.position.z < _startPosition.z - _offset)
+            if (transform.position.x < _startPosition.x - _offset)
             {
                 transform.position = _startPosition;
             }

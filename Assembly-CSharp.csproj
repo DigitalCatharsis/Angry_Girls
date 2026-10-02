@@ -57,6 +57,7 @@
     <Compile Include="Assets\Free Pixel Art Forest\Demo\MoveBackground.cs" />
     <Compile Include="Assets\FST\DemoScripts\DemoAnimationSelector.cs" />
     <Compile Include="Assets\Suggo Creations\RETROWAVE SKIES Lite\Readme Assets\Scripts\ReadmeLite.cs" />
+    <Compile Include="Assets\TODO.cs" />
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
   </ItemGroup>
   <ItemGroup>
