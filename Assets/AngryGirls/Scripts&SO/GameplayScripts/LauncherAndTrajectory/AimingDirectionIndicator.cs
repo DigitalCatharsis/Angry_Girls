@@ -5,7 +5,7 @@ namespace Angry_Girls
     /// <summary>
     /// Displays an animated launch direction arrow near the aimed character.
     /// The position is anchored to the bottom of the character collider,
-    /// while the X offset moves the indicator closer to the camera.
+    /// while the Z offset moves the indicator closer to the camera.
     /// </summary>
     public sealed class AimingDirectionIndicator : MonoBehaviour
     {
@@ -43,10 +43,7 @@ namespace Angry_Girls
 
             if (_spriteRenderer == null)
             {
-                Debug.LogError(
-                    "AimingDirectionIndicator requires a SpriteRenderer.",
-                    this);
-
+                Debug.LogError("AimingDirectionIndicator requires a SpriteRenderer.", this);
                 enabled = false;
                 return;
             }
@@ -69,9 +66,7 @@ namespace Angry_Girls
         /// <summary>
         /// Shows the indicator for the specified character.
         /// </summary>
-        public void Show(
-            Transform target,
-            Vector3 launchDirection)
+        public void Show(Transform target, Vector3 launchDirection)
         {
             if (target == null)
             {
@@ -79,7 +74,7 @@ namespace Angry_Girls
                 return;
             }
 
-            launchDirection.x = 0f;
+            launchDirection.z = 0f;
 
             if (launchDirection.sqrMagnitude <= 0.0001f)
             {
@@ -87,8 +82,7 @@ namespace Angry_Girls
                 return;
             }
 
-            var collider =
-                target.GetComponentInChildren<Collider>();
+            var collider = target.GetComponentInChildren<Collider>();
 
             if (collider == null)
             {
@@ -114,16 +108,14 @@ namespace Angry_Girls
         /// <summary>
         /// Updates the launch direction.
         /// </summary>
-        public void SetDirection(
-            Vector3 launchDirection)
+        public void SetDirection(Vector3 launchDirection)
         {
-            launchDirection.x = 0f;
+            launchDirection.z = 0f;
 
             if (launchDirection.sqrMagnitude <= 0.0001f)
                 return;
 
-            _launchDirection =
-                launchDirection.normalized;
+            _launchDirection = launchDirection.normalized;
         }
 
         /// <summary>
@@ -147,41 +139,19 @@ namespace Angry_Girls
             if (_targetCollider == null)
                 return;
 
-            var bounds =
-                _targetCollider.bounds;
+            var bounds = _targetCollider.bounds;
+            var position = bounds.center;
 
-            var position =
-                bounds.center;
+            position.x = bounds.center.x;
+            position.y = bounds.min.y + _heightOffset;
+            position.z = bounds.center.z + _cameraOffset;
 
-            position.x =
-                bounds.center.x + _cameraOffset;
-
-            position.y =
-                bounds.min.y + _heightOffset;
-
-            position.z =
-                bounds.center.z;
-
-            transform.position =
-                position;
+            transform.position = position;
         }
 
         private void UpdateRotation()
         {
-            var angle =
-                Mathf.Atan2(
-                    _launchDirection.z,
-                    _launchDirection.y) *
-                Mathf.Rad2Deg;
-
-            transform.rotation =
-                Quaternion.AngleAxis(
-                    angle,
-                    Vector3.right) *
-                Quaternion.Euler(
-                    0f,
-                    90f,
-                    0f);
+            transform.rotation = Quaternion.LookRotation(Vector3.forward, _launchDirection);
         }
 
         private void UpdateScale()
@@ -189,66 +159,40 @@ namespace Angry_Girls
             if (_camera == null)
                 _camera = Camera.main;
 
-            if (_camera == null ||
-                !_camera.orthographic)
+            if (_camera == null || !_camera.orthographic)
             {
-                transform.localScale =
-                    Vector3.one *
-                    _referenceScale;
-
+                transform.localScale = Vector3.one * _referenceScale;
                 return;
             }
 
-            var scaleFactor =
-                _camera.orthographicSize /
-                Mathf.Max(
-                    0.01f,
-                    _referenceOrthographicSize);
-
-            transform.localScale =
-                Vector3.one *
-                (_referenceScale *
-                 scaleFactor);
+            var scaleFactor = _camera.orthographicSize / Mathf.Max(0.01f, _referenceOrthographicSize);
+            transform.localScale = Vector3.one * (_referenceScale * scaleFactor);
         }
 
         private void UpdateAnimation()
         {
-            if (_spriteRenderer == null ||
-                _frames == null ||
-                _frames.Length == 0)
-            {
+            if (_spriteRenderer == null || _frames == null || _frames.Length == 0)
                 return;
-            }
 
             _spriteRenderer.enabled = true;
 
             if (_frames.Length == 1)
             {
-                _spriteRenderer.sprite =
-                    _frames[0];
-
+                _spriteRenderer.sprite = _frames[0];
                 return;
             }
 
-            _animationTimer +=
-                Time.unscaledDeltaTime;
+            _animationTimer += Time.unscaledDeltaTime;
 
-            var frameDuration =
-                1f /
-                Mathf.Max(
-                    0.01f,
-                    _framesPerSecond);
+            var frameDuration = 1f / Mathf.Max(0.01f, _framesPerSecond);
 
             while (_animationTimer >= frameDuration)
             {
                 _animationTimer -= frameDuration;
-                _currentFrame =
-                    (_currentFrame + 1) %
-                    _frames.Length;
+                _currentFrame = (_currentFrame + 1) % _frames.Length;
             }
 
-            _spriteRenderer.sprite =
-                _frames[_currentFrame];
+            _spriteRenderer.sprite = _frames[_currentFrame];
         }
 
         private void ResetAnimation()
@@ -256,16 +200,10 @@ namespace Angry_Girls
             _currentFrame = 0;
             _animationTimer = 0f;
 
-            if (_spriteRenderer == null ||
-                _frames == null ||
-                _frames.Length == 0)
-            {
+            if (_spriteRenderer == null || _frames == null || _frames.Length == 0)
                 return;
-            }
 
-            _spriteRenderer.sprite =
-                _frames[0];
-
+            _spriteRenderer.sprite = _frames[0];
             _spriteRenderer.enabled = true;
         }
     }

@@ -4,7 +4,7 @@ namespace Angry_Girls
 {
     /// <summary>
     /// Renders the launch trajectory as a fixed-length 2D world-space curve.
-    /// The trajectory is constrained to the gameplay Y/Z plane.
+    /// The trajectory is constrained to the gameplay XY plane.
     /// </summary>
     [RequireComponent(typeof(LineRenderer))]
     public sealed class LaunchPathRenderer : MonoBehaviour
@@ -54,7 +54,7 @@ namespace Angry_Girls
         [SerializeField] private float _textureScrollSpeed = -3.5f;
 
         [Header("Depth")]
-        [Tooltip("World X offset used to place the trajectory relative to the camera.")]
+        [Tooltip("World Z offset used to place the trajectory relative to the camera.")]
         [SerializeField] private float _cameraDepthOffset = -0.05f;
 
         private Material _lineMaterial;
@@ -78,50 +78,23 @@ namespace Angry_Girls
 
             if (_lineRenderer == null)
             {
-                Debug.LogError(
-                    $"{nameof(LaunchPathRenderer)} requires a LineRenderer.",
-                    this);
-
+                Debug.LogError($"{nameof(LaunchPathRenderer)} requires a LineRenderer.", this);
                 enabled = false;
                 return;
             }
 
-            _displayedLengthInTiles =
-                Mathf.Max(
-                    0.1f,
-                    _displayedLengthInTiles);
+            _displayedLengthInTiles = Mathf.Max(0.1f, _displayedLengthInTiles);
+            _tileLengthInWorldUnits = Mathf.Max(0.01f, _tileLengthInWorldUnits);
+            _maxTrajectorySearchTime = Mathf.Max(0.1f, _maxTrajectorySearchTime);
+            _cheatLengthMultiplier = Mathf.Max(1f, _cheatLengthMultiplier);
 
-            _tileLengthInWorldUnits =
-                Mathf.Max(
-                    0.01f,
-                    _tileLengthInWorldUnits);
-
-            _maxTrajectorySearchTime =
-                Mathf.Max(
-                    0.1f,
-                    _maxTrajectorySearchTime);
-
-            _cheatLengthMultiplier =
-                Mathf.Max(
-                    1f,
-                    _cheatLengthMultiplier);
-
-            transform.localPosition =
-                Vector3.zero;
-
-            transform.localRotation =
-                Quaternion.identity;
-
-            transform.localScale =
-                Vector3.one;
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
+            transform.localScale = Vector3.one;
 
             ConfigureLineRenderer();
-
-            _lineMaterial =
-                _lineRenderer.material;
-
+            _lineMaterial = _lineRenderer.material;
             ResetTextureAnimation();
-
             Hide();
         }
 
@@ -138,57 +111,32 @@ namespace Angry_Girls
         /// Draws or updates the trajectory.
         /// The visual length is independent from launch force.
         /// </summary>
-        public void Draw(
-            Vector3 startPosition,
-            Vector3 velocity,
-            Vector3 gravity,
-            float duration)
+        public void Draw(Vector3 startPosition, Vector3 velocity, Vector3 gravity, float duration)
         {
             if (_lineRenderer == null)
                 return;
 
-            var wasVisible =
-                _isVisible;
+            var wasVisible = _isVisible;
 
-            _startPosition =
-                startPosition;
+            _startPosition = startPosition;
+            _startPosition.z += _cameraDepthOffset;
 
-            _startPosition.x +=
-                _cameraDepthOffset;
+            _launchVelocity = velocity;
+            _launchVelocity.z = 0f;
 
-            _launchVelocity =
-                velocity;
+            _gravity = gravity;
+            _gravity.z = 0f;
 
-            _launchVelocity.x = 0f;
+            var visualLengthMultiplier = duration > 5f ? _cheatLengthMultiplier : 1f;
 
-            _gravity =
-                gravity;
-
-            _gravity.x = 0f;
-
-            var visualLengthMultiplier =
-                duration > 5f
-                    ? _cheatLengthMultiplier
-                    : 1f;
-
-            _displayedLength =
-                _displayedLengthInTiles *
-                _tileLengthInWorldUnits *
-                visualLengthMultiplier;
-
-            _duration =
-                FindTimeForDistance(
-                    _displayedLength);
-
-            _isVisible =
-                true;
+            _displayedLength = _displayedLengthInTiles * _tileLengthInWorldUnits * visualLengthMultiplier;
+            _duration = FindTimeForDistance(_displayedLength);
+            _isVisible = true;
 
             if (!wasVisible)
                 ResetTextureAnimation();
 
-            gameObject.SetActive(
-                true);
-
+            gameObject.SetActive(true);
             RebuildTrajectory();
             UpdateCameraRelativeWidth();
         }
@@ -198,62 +146,40 @@ namespace Angry_Girls
         /// </summary>
         public void Hide()
         {
-            _isVisible =
-                false;
+            _isVisible = false;
 
             if (_lineRenderer != null)
-            {
-                _lineRenderer.positionCount =
-                    0;
-            }
+                _lineRenderer.positionCount = 0;
 
             ResetTextureAnimation();
-
-            gameObject.SetActive(
-                false);
+            gameObject.SetActive(false);
         }
 
         private void ConfigureLineRenderer()
         {
-            _lineRenderer.useWorldSpace =
-                true;
-
-            _lineRenderer.alignment =
-                LineAlignment.View;
-
-            _lineRenderer.textureMode =
-                LineTextureMode.Tile;
-
-            _lineRenderer.positionCount =
-                0;
+            _lineRenderer.useWorldSpace = true;
+            _lineRenderer.alignment = LineAlignment.View;
+            _lineRenderer.textureMode = LineTextureMode.Tile;
+            _lineRenderer.positionCount = 0;
         }
 
-        private float FindTimeForDistance(
-            float targetDistance)
+        private float FindTimeForDistance(float targetDistance)
         {
             if (targetDistance <= 0.001f)
                 return 0.01f;
 
-            var availableDistance =
-                CalculateArcLength(
-                    _maxTrajectorySearchTime);
+            var availableDistance = CalculateArcLength(_maxTrajectorySearchTime);
 
             if (availableDistance <= targetDistance)
                 return _maxTrajectorySearchTime;
 
             var lowerTime = 0f;
-            var upperTime =
-                _maxTrajectorySearchTime;
+            var upperTime = _maxTrajectorySearchTime;
 
             for (var i = 0; i < 12; i++)
             {
-                var middleTime =
-                    (lowerTime + upperTime) *
-                    0.5f;
-
-                var distance =
-                    CalculateArcLength(
-                        middleTime);
+                var middleTime = (lowerTime + upperTime) * 0.5f;
+                var distance = CalculateArcLength(middleTime);
 
                 if (distance < targetDistance)
                     lowerTime = middleTime;
@@ -264,37 +190,20 @@ namespace Angry_Girls
             return upperTime;
         }
 
-        private float CalculateArcLength(
-            float duration)
+        private float CalculateArcLength(float duration)
         {
             const int sampleCount = 64;
 
             var totalDistance = 0f;
+            var previousPosition = CalculatePosition(0f);
 
-            var previousPosition =
-                CalculatePosition(
-                    0f);
-
-            for (var i = 1;
-                 i <= sampleCount;
-                 i++)
+            for (var i = 1; i <= sampleCount; i++)
             {
-                var time =
-                    duration *
-                    i /
-                    sampleCount;
+                var time = duration * i / sampleCount;
+                var currentPosition = CalculatePosition(time);
 
-                var currentPosition =
-                    CalculatePosition(
-                        time);
-
-                totalDistance +=
-                    Vector3.Distance(
-                        previousPosition,
-                        currentPosition);
-
-                previousPosition =
-                    currentPosition;
+                totalDistance += Vector3.Distance(previousPosition, currentPosition);
+                previousPosition = currentPosition;
             }
 
             return totalDistance;
@@ -302,52 +211,25 @@ namespace Angry_Girls
 
         private void RebuildTrajectory()
         {
-            var pointCount =
-                64;
+            var pointCount = 64;
 
-            _lineRenderer.positionCount =
-                pointCount;
+            _lineRenderer.positionCount = pointCount;
 
-            for (var i = 0;
-                 i < pointCount;
-                 i++)
+            for (var i = 0; i < pointCount; i++)
             {
-                var normalizedTime =
-                    i /
-                    (float)(pointCount - 1);
+                var normalizedTime = i / (float)(pointCount - 1);
+                var time = normalizedTime * _duration;
+                var position = CalculatePosition(time);
 
-                var time =
-                    normalizedTime *
-                    _duration;
-
-                var position =
-                    CalculatePosition(
-                        time);
-
-                position.x =
-                    _startPosition.x;
-
-                _lineRenderer.SetPosition(
-                    i,
-                    position);
+                position.z = _startPosition.z;
+                _lineRenderer.SetPosition(i, position);
             }
         }
 
-        private Vector3 CalculatePosition(
-            float time)
+        private Vector3 CalculatePosition(float time)
         {
-            var position =
-                _startPosition +
-                _launchVelocity *
-                time +
-                0.5f *
-                _gravity *
-                time *
-                time;
-
-            position.x =
-                _startPosition.x;
-
+            var position = _startPosition + _launchVelocity * time + 0.5f * _gravity * time * time;
+            position.z = _startPosition.z;
             return position;
         }
 
@@ -356,37 +238,21 @@ namespace Angry_Girls
             if (_lineRenderer == null)
                 return;
 
-            var camera =
-                Camera.main;
+            var camera = Camera.main;
 
-            if (camera == null ||
-                !camera.orthographic)
+            if (camera == null || !camera.orthographic)
             {
-                _lineRenderer.widthMultiplier =
-                    _width *
-                    _widthMultiplier;
-
+                _lineRenderer.widthMultiplier = _width * _widthMultiplier;
                 return;
             }
 
-            var scale =
-                camera.orthographicSize /
-                Mathf.Max(
-                    0.01f,
-                    _referenceOrthographicSize);
-
-            _lineRenderer.widthMultiplier =
-                _width *
-                _widthMultiplier *
-                scale *
-                _referenceWidthScale;
+            var scale = camera.orthographicSize / Mathf.Max(0.01f, _referenceOrthographicSize);
+            _lineRenderer.widthMultiplier = _width * _widthMultiplier * scale * _referenceWidthScale;
         }
 
         private void ResetTextureAnimation()
         {
-            _textureOffset =
-                Vector2.zero;
-
+            _textureOffset = Vector2.zero;
             ApplyTextureOffset();
         }
 
@@ -395,15 +261,8 @@ namespace Angry_Girls
             if (!_animateTexture)
                 return;
 
-            _textureOffset.x +=
-                _textureScrollSpeed *
-                Time.unscaledDeltaTime;
-
-            _textureOffset.x =
-                Mathf.Repeat(
-                    _textureOffset.x,
-                    1f);
-
+            _textureOffset.x += _textureScrollSpeed * Time.unscaledDeltaTime;
+            _textureOffset.x = Mathf.Repeat(_textureOffset.x, 1f);
             ApplyTextureOffset();
         }
 
@@ -414,26 +273,18 @@ namespace Angry_Girls
 
             if (_lineMaterial.HasProperty("_BaseMap"))
             {
-                _lineMaterial.SetTextureOffset(
-                    "_BaseMap",
-                    _textureOffset);
-
+                _lineMaterial.SetTextureOffset("_BaseMap", _textureOffset);
                 return;
             }
 
             if (_lineMaterial.HasProperty("_MainTex"))
-            {
-                _lineMaterial.SetTextureOffset(
-                    "_MainTex",
-                    _textureOffset);
-            }
+                _lineMaterial.SetTextureOffset("_MainTex", _textureOffset);
         }
 
         private void OnDestroy()
         {
             if (_lineMaterial != null)
-                Destroy(
-                    _lineMaterial);
+                Destroy(_lineMaterial);
         }
     }
 }

@@ -2,13 +2,14 @@ using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 
 namespace Angry_Girls
 {
     /// <summary>
-    /// Manages gameplay camera movement and zoom.
-    /// Camera world X and Y coordinates are immutable during gameplay.
-    /// Only world Z position and orthographic size may change.
+    /// Manages gameplay camera movement and zoom for the XY gameplay plane.
+    /// World Z is the immutable camera depth axis.
+    /// Camera movement and character following operate on world X/Y.
     /// </summary>
     public class CameraManager : GameplayManagerClass
     {
@@ -29,8 +30,16 @@ namespace Angry_Girls
 
         [Header("Camera Movement Settings")]
         [SerializeField] private float _movementSpeed = 6.5f;
-        [SerializeField] private float _minCameraZ = -10f;
-        [SerializeField] private float _maxCameraZ = 45f;
+
+        [FormerlySerializedAs("_minCameraZ")]
+        [SerializeField] private float _minCameraX = -10f;
+
+        [FormerlySerializedAs("_maxCameraZ")]
+        [SerializeField] private float _maxCameraX = 45f;
+
+        [SerializeField] private float _minCameraY = -10f;
+        [SerializeField] private float _maxCameraY = 45f;
+
         [SerializeField] private float _cameraMoveDuration = 0.5f;
         [SerializeField] private Ease _cameraMoveEase = Ease.InOutCubic;
 
@@ -45,6 +54,7 @@ namespace Angry_Girls
         public float SecondsCameraWaitsAfterAttack =>
             _secondsCameraWaitsAfterAttack;
 
+        [Header("Follow")]
         [SerializeField] private Rigidbody _characterToFollow;
         [SerializeField] private bool _allowCameraFollow;
 
@@ -55,11 +65,13 @@ namespace Angry_Girls
         private Sequence _cameraMoveSequence;
         private SettingsManager _settingsManager;
 
-        private float _fixedCameraX;
-        private float _fixedCameraY;
+        private float _fixedCameraZ;
         private bool _fixedPositionInitialized;
 
         private bool _cameraPanBlockedByUI;
+
+        private Vector3 _cameraShakeOffset;
+        private Coroutine _cameraShakeRoutine;
 
         /// <summary>
         /// Initializes the camera manager.
@@ -68,8 +80,7 @@ namespace Angry_Girls
         {
             KillCameraTwins();
 
-            _mainCamera =
-                Camera.main;
+            _mainCamera = Camera.main;
 
             if (_mainCamera == null)
             {
@@ -92,8 +103,10 @@ namespace Angry_Girls
 
             SubscribeToSettingsChanges();
 
-            LockCameraXY();
-            EnforceCameraXY();
+            NormalizeCameraBounds();
+
+            LockCameraZ();
+            EnforceCameraPosition();
 
             isInitialized = true;
         }
@@ -136,6 +149,25 @@ namespace Angry_Girls
             }
         }
 
+        private void NormalizeCameraBounds()
+        {
+            if (_minCameraX > _maxCameraX)
+            {
+                var minX = _minCameraX;
+
+                _minCameraX = _maxCameraX;
+                _maxCameraX = minX;
+            }
+
+            if (_minCameraY > _maxCameraY)
+            {
+                var minY = _minCameraY;
+
+                _minCameraY = _maxCameraY;
+                _maxCameraY = minY;
+            }
+        }
+
         private void Update()
         {
             if (!isInitialized ||
@@ -146,7 +178,7 @@ namespace Angry_Girls
 
             UpdateUIPanBlockState();
 
-            EnforceCameraXY();
+            EnforceCameraPosition();
 
             if (!_allowCameraFollow)
             {
@@ -154,7 +186,7 @@ namespace Angry_Girls
                 HandleMovement();
             }
 
-            EnforceCameraXY();
+            EnforceCameraPosition();
         }
 
         private void LateUpdate()
@@ -172,7 +204,8 @@ namespace Angry_Girls
                     _characterToFollow);
             }
 
-            EnforceCameraXY();
+            EnforceCameraPosition();
+            ApplyCameraShakeOffset();
         }
 
         /// <summary>
@@ -250,30 +283,26 @@ namespace Angry_Girls
         }
 
         /// <summary>
-        /// Stores the immutable camera X/Y coordinates.
+        /// Stores the immutable camera Z coordinate.
         /// </summary>
-        private void LockCameraXY()
+        private void LockCameraZ()
         {
             if (_mainCamera == null)
                 return;
 
-            var position =
-                _mainCamera.transform.position;
+            _fixedCameraZ =
+                _mainCamera
+                    .transform
+                    .position
+                    .z;
 
-            _fixedCameraX =
-                position.x;
-
-            _fixedCameraY =
-                position.y;
-
-            _fixedPositionInitialized =
-                true;
+            _fixedPositionInitialized = true;
         }
 
         /// <summary>
-        /// Restores immutable camera X/Y coordinates.
+        /// Restores immutable camera Z while keeping X/Y.
         /// </summary>
-        private void EnforceCameraXY()
+        private void EnforceCameraPosition()
         {
             if (!_fixedPositionInitialized ||
                 _mainCamera == null)
@@ -282,23 +311,36 @@ namespace Angry_Girls
             }
 
             var position =
-                _mainCamera.transform.position;
+                _mainCamera
+                    .transform
+                    .position;
 
-            if (Mathf.Approximately(
+            var x =
+                Mathf.Clamp(
                     position.x,
-                    _fixedCameraX) &&
-                Mathf.Approximately(
+                    _minCameraX,
+                    _maxCameraX);
+
+            var y =
+                Mathf.Clamp(
                     position.y,
-                    _fixedCameraY))
+                    _minCameraY,
+                    _maxCameraY);
+
+            var targetPosition =
+                new Vector3(
+                    x,
+                    y,
+                    _fixedCameraZ);
+
+            if ((position - targetPosition)
+                .sqrMagnitude <= 0.0000001f)
             {
                 return;
             }
 
             _mainCamera.transform.position =
-                new Vector3(
-                    _fixedCameraX,
-                    _fixedCameraY,
-                    position.z);
+                targetPosition;
         }
 
         private void HandleZoom()
@@ -332,8 +374,7 @@ namespace Angry_Girls
                     delta,
                     0f))
             {
-                _allowCameraFollow =
-                    false;
+                _allowCameraFollow = false;
             }
 
             _mainCamera.orthographicSize =
@@ -343,7 +384,7 @@ namespace Angry_Girls
                     _minZoom,
                     _maxZoom);
 
-            EnforceCameraXY();
+            EnforceCameraPosition();
         }
 
         private void HandleMovement()
@@ -388,7 +429,8 @@ namespace Angry_Girls
         }
 
         /// <summary>
-        /// Moves the camera exclusively along world Z.
+        /// Moves the camera across the XY gameplay plane.
+        /// Dragging the world moves the camera in the opposite direction.
         /// </summary>
         private void MoveCamera(
             Vector2 delta)
@@ -399,20 +441,31 @@ namespace Angry_Girls
                 return;
             }
 
-            _allowCameraFollow =
-                false;
+            _allowCameraFollow = false;
 
             var speed =
                 _movementSpeed *
                 _mainCamera.orthographicSize *
                 Time.deltaTime;
 
-            var z =
-                _mainCamera.transform.position.z -
+            var currentPosition =
+                _mainCamera
+                    .transform
+                    .position;
+
+            var x =
+                currentPosition.x -
                 delta.x *
                 speed;
 
-            SetCameraZ(z);
+            var y =
+                currentPosition.y -
+                delta.y *
+                speed;
+
+            SetCameraPosition(
+                x,
+                y);
         }
 
         /// <summary>
@@ -432,13 +485,12 @@ namespace Angry_Girls
             _characterToFollow =
                 characterToFollow;
 
-            _allowCameraFollow =
-                true;
+            _allowCameraFollow = true;
 
             CenterCameraAgainst(
                 _characterToFollow);
 
-            EnforceCameraXY();
+            EnforceCameraPosition();
         }
 
         /// <summary>
@@ -446,11 +498,8 @@ namespace Angry_Girls
         /// </summary>
         public void StopCameraFollowForRigidBody()
         {
-            _characterToFollow =
-                null;
-
-            _allowCameraFollow =
-                false;
+            _characterToFollow = null;
+            _allowCameraFollow = false;
         }
 
         private void CenterCameraAgainst(
@@ -462,10 +511,12 @@ namespace Angry_Girls
                 return;
             }
 
-            var targetZ =
-                target.transform.position.z;
+            var targetPosition =
+                target.transform.position;
 
-            SetCameraZ(targetZ);
+            SetCameraPosition(
+                targetPosition.x,
+                targetPosition.y);
         }
 
         /// <summary>
@@ -484,12 +535,12 @@ namespace Angry_Girls
                     _minZoom,
                     _maxZoom);
 
-            EnforceCameraXY();
+            EnforceCameraPosition();
         }
 
         /// <summary>
-        /// Smoothly moves camera along world Z.
-        /// X/Y are ignored intentionally.
+        /// Smoothly moves camera across the XY gameplay plane.
+        /// Z remains immutable.
         /// </summary>
         public void MoveCameraTo(
             Vector3 targetPosition,
@@ -507,19 +558,31 @@ namespace Angry_Girls
                     0f,
                     speed);
 
-            var targetZ =
+            var targetX =
                 Mathf.Clamp(
-                    targetPosition.z,
-                    _minCameraZ,
-                    _maxCameraZ);
+                    targetPosition.x,
+                    _minCameraX,
+                    _maxCameraX);
+
+            var targetY =
+                Mathf.Clamp(
+                    targetPosition.y,
+                    _minCameraY,
+                    _maxCameraY);
+
+            var cameraTarget =
+                new Vector3(
+                    targetX,
+                    targetY,
+                    _fixedCameraZ);
 
             _cameraMoveSequence =
                 DOTween.Sequence();
 
             _cameraMoveSequence.Append(
                 _mainCamera.transform
-                    .DOMoveZ(
-                        targetZ,
+                    .DOMove(
+                        cameraTarget,
                         duration)
                     .SetEase(
                         _cameraMoveEase));
@@ -536,18 +599,18 @@ namespace Angry_Girls
             }
 
             _cameraMoveSequence.OnUpdate(
-                EnforceCameraXY);
+                EnforceCameraPosition);
 
             _cameraMoveSequence.OnComplete(
                 () =>
                 {
-                    EnforceCameraXY();
+                    EnforceCameraPosition();
                     _cameraMoveSequence = null;
                 });
         }
 
         /// <summary>
-        /// Shakes camera exclusively along world Z.
+        /// Shakes the camera across the XY gameplay plane.
         /// </summary>
         public void ShakeCamera(
             float shakeDuration = -1f,
@@ -566,44 +629,39 @@ namespace Angry_Girls
                     ? shakeMagnitude
                     : _defaultShakeMagnitude;
 
-            StartCoroutine(
-                ShakeCoroutine(
-                    shakeDuration,
-                    shakeMagnitude));
+            StopCameraShake();
+
+            KillCameraMoveSequence();
+
+            _cameraShakeRoutine =
+                StartCoroutine(
+                    ShakeCoroutine(
+                        shakeDuration,
+                        shakeMagnitude));
         }
 
         private IEnumerator ShakeCoroutine(
             float shakeDuration,
             float shakeMagnitude)
         {
-            if (_mainCamera == null)
-                yield break;
-
-            KillCameraMoveSequence();
-
-            var originalZ =
-                _mainCamera
-                    .transform
-                    .position
-                    .z;
-
-            var elapsed =
-                0f;
+            var elapsed = 0f;
 
             while (elapsed < shakeDuration)
             {
                 if (_mainCamera == null)
                     yield break;
 
-                var shakeZ =
-                    Random.Range(
-                        -1f,
-                        1f) *
-                    shakeMagnitude;
-
-                SetCameraZ(
-                    originalZ +
-                    shakeZ);
+                _cameraShakeOffset =
+                    new Vector3(
+                        Random.Range(
+                            -1f,
+                            1f) *
+                        shakeMagnitude,
+                        Random.Range(
+                            -1f,
+                            1f) *
+                        shakeMagnitude,
+                        0f);
 
                 elapsed +=
                     Time.deltaTime;
@@ -611,30 +669,63 @@ namespace Angry_Girls
                 yield return null;
             }
 
-            SetCameraZ(
-                originalZ);
+            _cameraShakeOffset = Vector3.zero;
+            _cameraShakeRoutine = null;
+        }
+
+        private void ApplyCameraShakeOffset()
+        {
+            if (_mainCamera == null ||
+                _cameraShakeOffset.sqrMagnitude <= 0f)
+            {
+                return;
+            }
+
+            _mainCamera.transform.position +=
+                _cameraShakeOffset;
+        }
+
+        private void StopCameraShake()
+        {
+            if (_cameraShakeRoutine != null)
+            {
+                StopCoroutine(
+                    _cameraShakeRoutine);
+
+                _cameraShakeRoutine = null;
+            }
+
+            _cameraShakeOffset =
+                Vector3.zero;
         }
 
         /// <summary>
-        /// Sets camera world Z while preserving immutable X/Y.
+        /// Sets camera world X/Y while preserving immutable Z.
         /// </summary>
-        private void SetCameraZ(
-            float z)
+        private void SetCameraPosition(
+            float x,
+            float y)
         {
             if (_mainCamera == null)
                 return;
 
-            z =
+            x =
                 Mathf.Clamp(
-                    z,
-                    _minCameraZ,
-                    _maxCameraZ);
+                    x,
+                    _minCameraX,
+                    _maxCameraX);
+
+            y =
+                Mathf.Clamp(
+                    y,
+                    _minCameraY,
+                    _maxCameraY);
 
             _mainCamera.transform.position =
                 new Vector3(
-                    _fixedCameraX,
-                    _fixedCameraY,
-                    z);
+                    x,
+                    y,
+                    _fixedCameraZ);
         }
 
         private void KillCameraMoveSequence()
@@ -644,10 +735,9 @@ namespace Angry_Girls
 
             _cameraMoveSequence.Kill();
 
-            _cameraMoveSequence =
-                null;
+            _cameraMoveSequence = null;
 
-            EnforceCameraXY();
+            EnforceCameraPosition();
         }
 
         private void KillCameraTwins()
@@ -663,9 +753,7 @@ namespace Angry_Girls
                     camera.CompareTag(
                         "MainCamera"))
                 {
-                    mainCamera =
-                        camera;
-
+                    mainCamera = camera;
                     break;
                 }
             }
@@ -690,6 +778,7 @@ namespace Angry_Girls
                     ApplyCameraSettingsFromManager;
             }
 
+            StopCameraShake();
             KillCameraMoveSequence();
 
             KillCameraTwins();
@@ -702,6 +791,8 @@ namespace Angry_Girls
         {
             if (_mainCamera == null)
                 return;
+
+            KillCameraMoveSequence();
 
             _mainCamera.DOKill();
 
@@ -717,7 +808,7 @@ namespace Angry_Girls
                 .SetEase(
                     _cameraMoveEase)
                 .OnUpdate(
-                    EnforceCameraXY);
+                    EnforceCameraPosition);
         }
     }
 }

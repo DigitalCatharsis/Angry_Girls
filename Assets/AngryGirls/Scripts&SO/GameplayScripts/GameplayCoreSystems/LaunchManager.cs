@@ -140,13 +140,7 @@ namespace Angry_Girls
                 characters,
                 _characterLauncher.UnitsTransforms);
 
-            _cameraManager.MoveCameraTo(
-                new Vector3(
-                    Camera.main.transform.position.x,
-                    Camera.main.transform.position.y,
-                    _characterLauncher.transform.position.z),
-                1f,
-                false);
+            _cameraManager.MoveCameraTo(_characterLauncher.transform.position, 1f, false);
 
             _canPressAtCharacters = true;
         }
@@ -382,11 +376,7 @@ namespace Angry_Girls
             _gameplayCharactersManager
                 .SwapWithFirst(clickedIndex);
 
-            PrepareLaunch(
-                _characterLauncher,
-                _gameplayCharactersManager
-                    .LaunchableCharacters,
-                _characterLauncher.UnitsTransforms);
+            PrepareLaunch(_characterLauncher, _gameplayCharactersManager.LaunchableCharacters, _characterLauncher.UnitsTransforms);
         }
 
         #region Execution service

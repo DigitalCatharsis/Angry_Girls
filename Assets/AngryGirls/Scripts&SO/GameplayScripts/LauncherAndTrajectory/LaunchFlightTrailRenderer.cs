@@ -44,10 +44,7 @@ namespace Angry_Girls
 
             if (_lineRenderer == null)
             {
-                Debug.LogError(
-                    $"{nameof(LaunchFlightTrailRenderer)} requires a LineRenderer.",
-                    this);
-
+                Debug.LogError($"{nameof(LaunchFlightTrailRenderer)} requires a LineRenderer.", this);
                 enabled = false;
                 return;
             }
@@ -76,7 +73,6 @@ namespace Angry_Girls
             _hasLastPoint = false;
 
             gameObject.SetActive(true);
-
             AddPoint(startPosition);
         }
 
@@ -85,34 +81,21 @@ namespace Angry_Girls
         /// </summary>
         public void AddPoint(Vector3 worldPosition)
         {
-            if (!_isDrawing ||
-                _lineRenderer == null)
-            {
+            if (!_isDrawing || _lineRenderer == null)
                 return;
-            }
 
-            worldPosition.x += _cameraDepthOffset;
+            worldPosition.z += _cameraDepthOffset;
 
-            if (_hasLastPoint &&
-                Vector3.Distance(
-                    _lastPoint,
-                    worldPosition) < _minPointDistance)
-            {
+            if (_hasLastPoint && Vector3.Distance(_lastPoint, worldPosition) < _minPointDistance)
                 return;
-            }
 
             if (_lineRenderer.positionCount >= _maxPoints)
                 RemoveOldestPoint();
 
-            var pointIndex =
-                _lineRenderer.positionCount;
+            var pointIndex = _lineRenderer.positionCount;
 
-            _lineRenderer.positionCount =
-                pointIndex + 1;
-
-            _lineRenderer.SetPosition(
-                pointIndex,
-                worldPosition);
+            _lineRenderer.positionCount = pointIndex + 1;
+            _lineRenderer.SetPosition(pointIndex, worldPosition);
 
             _lastPoint = worldPosition;
             _hasLastPoint = true;
@@ -121,29 +104,24 @@ namespace Angry_Girls
         /// <summary>
         /// Ends recording of the current trail and keeps it visible.
         /// </summary>
-        public void EndTrail(
-            Vector3 endPosition)
+        public void EndTrail(Vector3 endPosition)
         {
             if (!_isDrawing)
                 return;
 
             AddPoint(endPosition);
-
             _isDrawing = false;
         }
 
         /// <summary>
         /// Marks the ability usage position and keeps the completed trail visible.
         /// </summary>
-        public void MarkAbilityUsed(
-            Vector3 abilityPosition)
+        public void MarkAbilityUsed(Vector3 abilityPosition)
         {
             if (_isDrawing)
                 AddPoint(abilityPosition);
 
-            SpawnAbilityMarker(
-                abilityPosition);
-
+            SpawnAbilityMarker(abilityPosition);
             _isDrawing = false;
         }
 
@@ -159,7 +137,6 @@ namespace Angry_Girls
                 _lineRenderer.positionCount = 0;
 
             DestroyAbilityMarker();
-
             gameObject.SetActive(false);
         }
 
@@ -185,18 +162,13 @@ namespace Angry_Girls
             if (_lineRenderer.sharedMaterial == null)
                 return;
 
-            _materialInstance =
-                new Material(
-                    _lineRenderer.sharedMaterial);
-
-            _lineRenderer.material =
-                _materialInstance;
+            _materialInstance = new Material(_lineRenderer.sharedMaterial);
+            _lineRenderer.material = _materialInstance;
         }
 
         private void RemoveOldestPoint()
         {
-            var count =
-                _lineRenderer.positionCount;
+            var count = _lineRenderer.positionCount;
 
             if (count <= 1)
             {
@@ -205,43 +177,29 @@ namespace Angry_Girls
                 return;
             }
 
-            var positions =
-                new Vector3[count];
-
-            _lineRenderer.GetPositions(
-                positions);
+            var positions = new Vector3[count];
+            _lineRenderer.GetPositions(positions);
 
             for (var i = 1; i < count; i++)
                 positions[i - 1] = positions[i];
 
-            _lineRenderer.positionCount =
-                count - 1;
+            _lineRenderer.positionCount = count - 1;
 
             for (var i = 0; i < count - 1; i++)
-                _lineRenderer.SetPosition(
-                    i,
-                    positions[i]);
+                _lineRenderer.SetPosition(i, positions[i]);
         }
 
-        private void SpawnAbilityMarker(
-            Vector3 position)
+        private void SpawnAbilityMarker(Vector3 position)
         {
             DestroyAbilityMarker();
 
             if (_abilityMarkerPrefab == null)
                 return;
 
-            position.x +=
-                _abilityMarkerDepthOffset;
+            position.z += _abilityMarkerDepthOffset;
 
-            _abilityMarker =
-                Instantiate(
-                    _abilityMarkerPrefab,
-                    position,
-                    Quaternion.identity);
-
-            _abilityMarker.name =
-                "LaunchAbilityMarker";
+            _abilityMarker = Instantiate(_abilityMarkerPrefab, position, Quaternion.identity);
+            _abilityMarker.name = "LaunchAbilityMarker";
         }
 
         private void DestroyAbilityMarker()
@@ -249,43 +207,25 @@ namespace Angry_Girls
             if (_abilityMarker == null)
                 return;
 
-            Destroy(
-                _abilityMarker);
-
+            Destroy(_abilityMarker);
             _abilityMarker = null;
         }
 
         private void UpdateCameraRelativeWidth()
         {
-            if (!_scaleWithOrthographicCamera ||
-                _lineRenderer == null)
+            if (!_scaleWithOrthographicCamera || _lineRenderer == null)
+                return;
+
+            var camera = Camera.main;
+
+            if (camera == null || !camera.orthographic)
             {
+                _lineRenderer.widthMultiplier = _width * _referenceWidthScale;
                 return;
             }
 
-            var camera =
-                Camera.main;
-
-            if (camera == null ||
-                !camera.orthographic)
-            {
-                _lineRenderer.widthMultiplier =
-                    _width *
-                    _referenceWidthScale;
-
-                return;
-            }
-
-            var scale =
-                camera.orthographicSize /
-                Mathf.Max(
-                    0.01f,
-                    _referenceOrthographicSize);
-
-            _lineRenderer.widthMultiplier =
-                _width *
-                _referenceWidthScale *
-                scale;
+            var scale = camera.orthographicSize / Mathf.Max(0.01f, _referenceOrthographicSize);
+            _lineRenderer.widthMultiplier = _width * _referenceWidthScale * scale;
         }
 
         private void OnDestroy()
