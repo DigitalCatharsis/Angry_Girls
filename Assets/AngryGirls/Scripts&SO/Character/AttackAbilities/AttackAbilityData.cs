@@ -56,5 +56,35 @@ namespace Angry_Girls
         [Header("SFX")]
         public AudioClipData[] spawnAudioData;
         public AudioClipData[] destroyAudioData;
+
+        /// <summary>
+        /// Reads character movement force on the XY gameplay plane.
+        /// Z is accepted as a legacy horizontal value for existing ScriptableObject assets.
+        /// </summary>
+        public Vector3 GetAttackMovementForceXY(Transform characterTransform)
+        {
+            float horizontalForce = Mathf.Abs(attackMovementForce.x) > 0.0001f
+                ? attackMovementForce.x
+                : attackMovementForce.z;
+
+            float facingX = characterTransform != null ? characterTransform.forward.x : 1f;
+            if (Mathf.Abs(facingX) <= 0.001f)
+                facingX = 1f;
+
+            return new Vector3(
+                horizontalForce * Mathf.Sign(facingX),
+                attackMovementForce.y,
+                0f);
+        }
+
+        /// <summary>
+        /// Reads horizontal projectile speed, supporting legacy assets that store it in Z.
+        /// </summary>
+        public float GetProjectileHorizontalSpeed()
+        {
+            return Mathf.Abs(projectileMovementSpeed.x) > 0.0001f
+                ? projectileMovementSpeed.x
+                : projectileMovementSpeed.z;
+        }
     }
 }

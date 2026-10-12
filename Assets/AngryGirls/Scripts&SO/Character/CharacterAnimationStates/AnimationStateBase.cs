@@ -115,40 +115,46 @@ namespace Angry_Girls
 
         public override bool CanTransitionTo(IAnimationPhase nextState)
         {
-            if (_control.CharacterSettings.unitType == UnitType.Air && _control.hasBeenLaunched)
-            {
-                return nextState is not AnimationPhase_Landing && nextState is not AnimationPhase_Airboned;
-            }
-
+            // Idle must be allowed to transition to Airboned after a launch.
+            // Landing remains controlled by the landing/grounded flow.
             return nextState is not AnimationPhase_Landing;
         }
 
         private void TurnToTheClosestEnemy(PlayerOrAi typeOfUnitToTurn)
         {
-            float closestDistance = 9999f;
-            var collection = new List<CControl>();
+            var enemies = _charactersManager.GetAliveCharacters(typeOfUnitToTurn);
+            if (enemies == null || enemies.Count == 0)
+                return;
 
-            collection = _charactersManager.GetAliveCharacters(typeOfUnitToTurn);
+            Vector3 ownPosition = _control.CharacterMovement.Rigidbody.position;
+            CControl closestEnemy = null;
+            float closestSqrDistance = float.PositiveInfinity;
 
-            foreach (var character in collection)
+            foreach (var enemy in enemies)
             {
-                var distance = _control.CharacterMovement.Rigidbody.position.z -
-                               character.CharacterMovement.Rigidbody.position.z;
+                if (enemy == null || enemy.CharacterMovement == null)
+                    continue;
 
-                if (Math.Abs(closestDistance) > Math.Abs(distance))
+                Vector3 delta = enemy.CharacterMovement.Rigidbody.position - ownPosition;
+                delta.z = 0f;
+                float sqrDistance = delta.sqrMagnitude;
+
+                if (sqrDistance < closestSqrDistance)
                 {
-                    closestDistance = distance;
+                    closestSqrDistance = sqrDistance;
+                    closestEnemy = enemy;
                 }
             }
 
-            if (closestDistance > 0)
-            {
-                _control.CharacterMovement.SetRotation(Quaternion.Euler(0, 180, 0));
-            }
-            else if (closestDistance < 0)
-            {
-                _control.CharacterMovement.SetRotation(Quaternion.Euler(0, 0, 0));
-            }
+            if (closestEnemy == null)
+                return;
+
+            float horizontalDelta = closestEnemy.CharacterMovement.Rigidbody.position.x - ownPosition.x;
+            if (Mathf.Abs(horizontalDelta) <= 0.001f)
+                return;
+
+            float targetYRotation = horizontalDelta > 0f ? 90f : -90f;
+            _control.CharacterMovement.SetRotation(Quaternion.Euler(0f, targetYRotation, 0f));
         }
     }
 
@@ -158,6 +164,11 @@ namespace Angry_Girls
 
         public override void OnEnter()
         {
+            // In this project a lethal hit activates the ragdoll and disables the animated model.
+            // Keep Death as a terminal phase without trying to play an animation on the disabled model.
+            if (_control.isDead)
+                return;
+
             var randomDeathAnimation = _settings.GetRandomState(_settings.death_States).animation;
             AnimationTransitioner.ChangeAnimationState(
                 _control.animator,
@@ -247,7 +258,9 @@ namespace Angry_Girls
             }
 
             _control.CharacterMovement.ResetVelocity();
-            _control.CharacterMovement.ApplyRigidForce(new Vector3(0, _abilityData.attackMovementForce.y, _abilityData.attackMovementForce.z * _control.transform.forward.z), ForceMode.VelocityChange);
+            _control.CharacterMovement.ApplyRigidForce(
+                _abilityData.GetAttackMovementForceXY(_control.transform),
+                ForceMode.VelocityChange);
 
             //process animation
             AnimationTransitioner.ChangeAnimationStateCrossFade(
@@ -348,7 +361,10 @@ namespace Angry_Girls
         {
             if (_control.CharacterSettings.unitType == UnitType.Air)
             {
-                return nextState is AnimationPhase_HitReaction || nextState is AnimationPhase_Death || nextState is AnimationPhase_Idle;
+                return nextState is AnimationPhase_HitReaction ||
+                       nextState is AnimationPhase_Death ||
+                       nextState is AnimationPhase_Idle ||
+                       (_control.hasBeenLaunched && nextState is AnimationPhase_Airboned);
             }
 
             return nextState is not AnimationPhase_Landing;

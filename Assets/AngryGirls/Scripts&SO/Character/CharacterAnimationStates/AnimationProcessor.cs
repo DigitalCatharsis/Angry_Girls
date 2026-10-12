@@ -1,3 +1,5 @@
+
+
 using Cysharp.Threading.Tasks;
 
 namespace Angry_Girls
@@ -22,6 +24,8 @@ namespace Angry_Girls
             control.UnitHasFinishedLanding += ProcessIdle;
             control.UnitGotHit += ProcessHitReacton;
             control.UnitHasFinishedHitReaction += ProcessIdleOrAirboned;
+            control.UnitGotKilled += ProcessKilled;
+            control.UnitHasTouchedDeathZone += ProcessDeathByDeathZone;
 
             _gamePhaseFlowController = GameplayCoreManager.Instance.GamePhaseFlowController;
 
@@ -38,6 +42,8 @@ namespace Angry_Girls
             control.UnitHasFinishedLanding -= ProcessIdle;
             control.UnitGotHit -= ProcessHitReacton;
             control.UnitHasFinishedHitReaction -= ProcessIdleOrAirboned;
+            control.UnitGotKilled -= ProcessKilled;
+            control.UnitHasTouchedDeathZone -= ProcessDeathByDeathZone;
         }
 
         private void InitializeStateMachine()
@@ -64,11 +70,45 @@ namespace Angry_Girls
 
         private void ProcessHitReacton(ProjectileConfig pro, InteractionData intdata)
         {
+            // Fatal damage is handled by the ragdoll system; do not override death with HitReaction.
+            if (control.isDead)
+            {
+                EnterDeathPhase();
+                return;
+            }
+
             _phaseMachine.ChangeAnimationPhase<AnimationPhase_HitReaction>(control.gameObject);
+        }
+
+        private void ProcessKilled(ProjectileConfig projectileConfig, InteractionData interactionData)
+        {
+            EnterDeathPhase();
+        }
+
+        private void ProcessDeathByDeathZone()
+        {
+            EnterDeathPhase();
+        }
+
+        private void EnterDeathPhase()
+        {
+            if (_phaseMachine == null)
+                return;
+
+            _phaseMachine.ChangeAnimationPhase<AnimationPhase_Death>(control.gameObject);
         }
 
         private void PerformAirboned()
         {
+            if (control.isDead)
+                return;
+
+            // Air units hover in Idle until the player launches them.
+            if (control.CharacterSettings.unitType == UnitType.Air && !control.hasBeenLaunched)
+            {
+                return;
+            }
+
             if (control.IsAttacking)
             {
                 return;
@@ -89,6 +129,9 @@ namespace Angry_Girls
 
         private void PerformLandingOrIdle()
         {
+            if (control.isDead)
+                return;
+
             if (control.GetCurrentLayerName() == "CharacterToLaunch")
             {
                 return;
@@ -116,10 +159,13 @@ namespace Angry_Girls
 
         private void ProcessIdleOrAirboned()
         {
-            if (control.CharacterSettings.unitType == UnitType.Air)
+            if (control.isDead)
+                return;
+
+            // Unlaunched Air units use their hovering idle animation even when not touching ground.
+            if (control.CharacterSettings.unitType == UnitType.Air && !control.hasBeenLaunched)
             {
                 _phaseMachine.ChangeAnimationPhase<AnimationPhase_Idle>(control.gameObject);
-
                 return;
             }
 
@@ -128,20 +174,23 @@ namespace Angry_Girls
                 _phaseMachine.ChangeAnimationPhase<AnimationPhase_Idle>(control.gameObject);
                 return;
             }
-            else
-            {
-                _phaseMachine.ChangeAnimationPhase<AnimationPhase_Airboned>(control.gameObject);
-                return;
-            }
+
+            _phaseMachine.ChangeAnimationPhase<AnimationPhase_Airboned>(control.gameObject);
         }
 
         private void ProcessLaunch()
         {
+            if (control.isDead)
+                return;
+
             _phaseMachine.ChangeAnimationPhase<AnimationPhase_Airboned>(control.gameObject);
         }
 
         private void ProcessIdle()
         {
+            if (control.isDead)
+                return;
+
             _phaseMachine.ChangeAnimationPhase<AnimationPhase_Idle>(control.gameObject);
 
             if (_gamePhaseFlowController.CurrentGamePhaseState == GamePhaseNames.LaunchPhase 
@@ -160,7 +209,19 @@ namespace Angry_Girls
 
         private void CalculatePhaseAfterAttack()
         {
-            if (control.CharacterSettings.unitType == UnitType.Air || control.CharacterSettings.unitType == UnitType.Ground)
+            if (control.isDead)
+                return;
+
+            // Air units must return to their hovering Idle phase after their attack,
+            // even if they are not grounded. Do not fall through to Airboned below.
+            if (control.CharacterSettings.unitType == UnitType.Air)
+            {
+                _phaseMachine.ChangeAnimationPhase<AnimationPhase_Idle>(control.gameObject);
+                control.FinishTurn();
+                return;
+            }
+
+            if (control.CharacterSettings.unitType == UnitType.Ground)
             {
                 _phaseMachine.ChangeAnimationPhase<AnimationPhase_Idle>(control.gameObject);
                 control.FinishTurn();
@@ -178,6 +239,9 @@ namespace Angry_Girls
 
         private void ProcessAttack()
         {
+            if (control.isDead)
+                return;
+
             _phaseMachine.ChangeAnimationPhase<AnimationPhase_Attack>(control.gameObject);
         }
 
@@ -414,3 +478,4 @@ namespace Angry_Girls
         public override void OnAwake() { }
     }
 }
+

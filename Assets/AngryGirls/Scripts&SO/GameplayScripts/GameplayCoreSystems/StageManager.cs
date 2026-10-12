@@ -68,10 +68,18 @@ namespace Angry_Girls
         {
             foreach (var enemyData in stage.enemies)
             {
-                var CharData = new CharacterProfile(enemyData.CharacterSettings);
-                CharData.ModifyBonusStats(enemyData.BonusStats);
-                var character = _charactersManager.SpawnEnemy(CharData, enemyData.spawnTransform.position);
-                UnitSpawned?.Invoke(character);
+                if (enemyData == null || enemyData.CharacterSettings == null || enemyData.spawnTransform == null)
+                {
+                    Debug.LogWarning("StageManager: Skipping enemy with missing settings or spawn transform.", this);
+                    continue;
+                }
+
+                var characterProfile = new CharacterProfile(enemyData.CharacterSettings);
+                characterProfile.ModifyBonusStats(enemyData.BonusStats);
+
+                var character = _charactersManager.SpawnEnemy(characterProfile, enemyData.spawnTransform);
+                if (character != null)
+                    UnitSpawned?.Invoke(character);
             }
         }
 

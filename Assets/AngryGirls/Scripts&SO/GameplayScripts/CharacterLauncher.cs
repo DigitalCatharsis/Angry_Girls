@@ -35,10 +35,10 @@ namespace Angry_Girls
         [SerializeField] private float _maxLaunchDistance = 17f;
 
         [Header("Launch Forces")]
-        [Tooltip("Multiplier applied to the vertical launch component.")]
+        [Tooltip("Multiplier applied to the vertical launch component along Y.")]
         [SerializeField] private float _forceFactorUp;
 
-        [Tooltip("Multiplier applied to the horizontal gameplay-plane launch component.")]
+        [Tooltip("Multiplier applied to the horizontal launch component along X.")]
         [SerializeField] private float _forceFactorForward;
 
         [Header("Trajectory Preview")]
@@ -131,19 +131,23 @@ namespace Angry_Girls
         /// </summary>
         public void LaunchUnit(CControl characterToLaunch)
         {
-            if (characterToLaunch == null)
+            if (characterToLaunch == null || characterToLaunch.CharacterMovement == null)
                 return;
-
-            CalculateLaunchVelocity();
-            ApplyLaunchRotation(characterToLaunch);
-            CancelAiming();
 
             var rigidbody = characterToLaunch.CharacterMovement.Rigidbody;
 
             if (rigidbody == null)
                 return;
 
-            rigidbody.constraints = (rigidbody.constraints & ~RigidbodyConstraints.FreezePositionX) | RigidbodyConstraints.FreezePositionZ;
+            CalculateLaunchVelocity();
+            ApplyLaunchRotation(characterToLaunch);
+            CancelAiming();
+
+            rigidbody.constraints =
+                (rigidbody.constraints &
+                 ~(RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY)) |
+                RigidbodyConstraints.FreezePositionZ;
+
             rigidbody.useGravity = true;
 
             characterToLaunch.CharacterMovement.SetVelocity(_launchVelocity);
@@ -152,16 +156,21 @@ namespace Angry_Girls
             StartFlightTrail(characterToLaunch);
         }
 
-        private void ApplyLaunchRotation(CControl characterToLaunch)
+        /// <summary>
+        /// Rotates the character to face the horizontal launch direction.
+        /// </summary>
+        private void ApplyLaunchRotation(CControl character)
         {
-            if (_launchVelocity.x > 0.001f)
-            {
-                characterToLaunch.CharacterMovement.SetRotation(Quaternion.Euler(0f, 0f, 0f));
-            }
-            else if (_launchVelocity.x < -0.001f)
-            {
-                characterToLaunch.CharacterMovement.SetRotation(Quaternion.Euler(0f, 0f, 180f));
-            }
+            if (character == null || character.CharacterMovement == null)
+                return;
+
+            if (Mathf.Abs(_launchVelocity.x) <= 0.001f)
+                return;
+
+            float targetYRotation = _launchVelocity.x > 0f ? 90f : -90f;
+
+            character.CharacterMovement.SetRotation(
+                Quaternion.Euler(0f, targetYRotation, 0f));
         }
 
         /// <summary>
@@ -258,25 +267,41 @@ namespace Angry_Girls
             return _launchVelocity.normalized;
         }
 
+        /// <summary>
+        /// Calculates the drag direction on the XY gameplay plane.
+        /// </summary>
         private void CalculateDirection()
         {
             if (_inputManager == null)
+            {
+                ResetLaunchDirection();
                 return;
+            }
 
             var mainCamera = Camera.main;
 
             if (mainCamera == null)
+            {
+                ResetLaunchDirection();
                 return;
+            }
 
             var ray = mainCamera.ScreenPointToRay(_inputManager.Position);
             var gameplayPlane = new Plane(Vector3.forward, _offsetStartPoint);
 
             if (!gameplayPlane.Raycast(ray, out var enter))
+            {
+                ResetLaunchDirection();
                 return;
+            }
 
             var pointerPosition = ray.GetPoint(enter);
 
-            _offsetEndPostion = new Vector3(pointerPosition.x, pointerPosition.y, _offsetStartPoint.z);
+            _offsetEndPostion = new Vector3(
+                pointerPosition.x,
+                pointerPosition.y,
+                _offsetStartPoint.z);
+
             _directionVector = _offsetEndPostion - _offsetStartPoint;
             _directionVector.z = 0f;
 
@@ -286,21 +311,35 @@ namespace Angry_Girls
                 return;
 
             if (distance <= 0.0001f)
+            {
+                ResetLaunchDirection();
                 return;
+            }
 
             _directionVector = _directionVector.normalized * _maxLaunchDistance;
             _offsetEndPostion = _offsetStartPoint + _directionVector;
             _offsetEndPostion.z = _offsetStartPoint.z;
         }
 
+        /// <summary>
+        /// Clears stale aiming data when the pointer cannot be projected onto the gameplay plane.
+        /// </summary>
+        private void ResetLaunchDirection()
+        {
+            _directionVector = Vector3.zero;
+            _launchVelocity = Vector3.zero;
+            _offsetEndPostion = _offsetStartPoint;
+        }
+
+        /// <summary>
+        /// Converts the drag vector into launch velocity on the XY plane.
+        /// </summary>
         private void CalculateLaunchVelocity()
         {
             _launchVelocity = new Vector3(
                 -_directionVector.x * _forceFactorForward,
                 -_directionVector.y * _forceFactorUp,
                 0f);
-
-            _launchVelocity.z = 0f;
         }
 
         private void DrawTrajectory()
@@ -320,8 +359,12 @@ namespace Angry_Girls
         /// </summary>
         public Vector3 CalculateTrajectoryPosition(float elapsedTime)
         {
-            var position = _offsetStartPoint + _launchVelocity * elapsedTime + 0.5f * Physics.gravity * elapsedTime * elapsedTime;
+            var position = _offsetStartPoint +
+                           _launchVelocity * elapsedTime +
+                           0.5f * Physics.gravity * elapsedTime * elapsedTime;
+
             position.z = _offsetStartPoint.z;
+
             return position;
         }
 
@@ -340,14 +383,18 @@ namespace Angry_Girls
         {
             StopFlightTrail();
 
-            if (_launchFlightTrailRenderer == null || character == null || character.CharacterMovement == null || character.CharacterMovement.Rigidbody == null)
+            if (_launchFlightTrailRenderer == null ||
+                character == null ||
+                character.CharacterMovement == null ||
+                character.CharacterMovement.Rigidbody == null)
+            {
                 return;
+            }
 
             _trackedLaunchCharacter = character;
             character.UnitPerformedAttack += HandleLaunchCharacterAbilityUsed;
 
             _launchFlightTrailRenderer.BeginTrail(character.CharacterMovement.Rigidbody.position);
-
             _flightTrailRoutine = StartCoroutine(TrackFlightTrail(character));
         }
 

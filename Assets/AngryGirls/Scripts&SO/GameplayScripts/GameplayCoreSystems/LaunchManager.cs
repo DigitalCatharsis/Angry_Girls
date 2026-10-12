@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -298,13 +298,7 @@ namespace Angry_Girls
             if (!_inputManager.IsReleased)
                 return;
 
-            if (TryExecuteLaunch(
-                    GetCandidateToLaunch()))
-            {
-                LaunchCharacter(
-                    GetCandidateToLaunch());
-            }
-            else
+            if (!TryExecuteLaunch(GetCandidateToLaunch()))
             {
                 _isLaunchAllowed = false;
                 CancelAiming();
@@ -439,25 +433,14 @@ namespace Angry_Girls
             CControl character)
         {
             if (character == null ||
-                _characterLauncher == null)
+                _characterLauncher == null ||
+                !_characterLauncher.IsLaunchDistanceSufficient())
             {
                 return false;
             }
 
-            if (!_characterLauncher
-                    .IsLaunchDistanceSufficient())
-            {
-                return false;
-            }
-
-            _characterLauncher.LaunchUnit(
-                character);
-
-            _cameraManager.CameraFollowForRigidBody(
-                character.CharacterMovement.Rigidbody);
-
-            _cameraManager.ZoomOutCameraAfterLaunch();
-
+            // LaunchCharacter performs the physics launch and updates turn/camera state once.
+            LaunchCharacter(character);
             return true;
         }
 

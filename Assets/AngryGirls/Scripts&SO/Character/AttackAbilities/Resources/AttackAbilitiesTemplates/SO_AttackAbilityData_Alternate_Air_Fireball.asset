@@ -19,13 +19,13 @@ MonoBehaviour:
     transitionDuration: 0
   attackTimeDuration: 3
   enemyKnockbackValue: 1
-  attackMovementForce: {x: 0, y: 0, z: -0.2}
+  attackMovementForce: {x: -0.2, y: 0, z: 0}
   vfxType: 2
   vfxColor: {r: 0.10924828, g: 1, b: 0, a: 1}
   connectToOwner: 0
   teamfire: 0
   timeToLive: 7
-  projectileMovementSpeed: {x: 0, y: 0, z: 10}
+  projectileMovementSpeed: {x: 10, y: 0, z: 0}
   destroyOnCollision: 1
   destroyOnCharacterCollision: 0
   deadbodyForceMode: 2

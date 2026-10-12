@@ -1,3 +1,5 @@
+
+
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -78,7 +80,7 @@ namespace Angry_Girls
                     t = Mathf.Clamp01(t);
 
                     // Base displacement (sinusoidal)
-                    float verticalOffset = Mathf.Sin(character.transform.position.z * 2f) * 0.2f;
+                    float verticalOffset = Mathf.Sin(character.transform.position.x * 2f) * 0.2f;
                     // Apply the coefficient
                     verticalOffset *= t;
 
@@ -94,3 +96,4 @@ namespace Angry_Girls
         }
     }
 }
+

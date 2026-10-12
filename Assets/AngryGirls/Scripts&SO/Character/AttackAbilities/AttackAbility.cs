@@ -35,9 +35,17 @@ namespace Angry_Girls
         // Alternate Prep
         public virtual void OnAlternatePrepEnter(CControl control)
         {
-            //control.isAttacking = true;
+            if (control == null || control.CharacterMovement == null)
+                return;
+
             control.CharacterMovement.ResetVelocity();
-            control.CharacterMovement.ApplyRigidForce(new Vector3(0, LaunchPrepData.attackMovementForce.y, LaunchPrepData.attackMovementForce.z * control.transform.forward.z), ForceMode.VelocityChange);
+
+            if (AlternatePrepData != null)
+            {
+                control.CharacterMovement.ApplyRigidForce(
+                    AlternatePrepData.GetAttackMovementForceXY(control.transform),
+                    ForceMode.VelocityChange);
+            }
         }
         public virtual void OnAlternatePrepUpdate(CControl control) { }
         public virtual void OnAlternatePrepExit(CControl control) { }

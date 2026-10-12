@@ -166,8 +166,8 @@ namespace Angry_Girls
 
         private void CheckAndApplyIncomingDamage(ProjectileConfig projectileConfig, InteractionData interactionData)
         {
-            if (projectileConfig.damage == 0) { return; }
-            ;
+            if (isDead || projectileConfig == null || projectileConfig.damage == 0)
+                return;
 
             Health.ApplyDamage(projectileConfig.damage);
 
@@ -177,7 +177,8 @@ namespace Angry_Girls
 
             if (Health.CurrentHealth <= 0)
             {
-                ApplyDeath(projectileConfig, interactionData);
+                // Use the existing death event so the animation state machine can enter its terminal phase.
+                UnitGotKilled?.Invoke(projectileConfig, interactionData);
             }
         }
         private void ApplyKnockback(ProjectileConfig projectileConfig, InteractionData interactionData)
@@ -199,24 +200,30 @@ namespace Angry_Girls
 
         private void ApplyDeath(ProjectileConfig projectileConfig, InteractionData interactionData)
         {
+            if (isDead)
+                return;
+
             SetDeathParams();
 
-            _cameraManager.StopCameraFollowForRigidBody();
+            _cameraManager?.StopCameraFollowForRigidBody();
 
             ApplyKnockback(projectileConfig, interactionData);
         }
 
         private void ApplyDeathByDeadZone()
         {
+            if (isDead)
+                return;
+
             Health.ApplyDamage(Health.CurrentHealth);
-            _cameraManager.StopCameraFollowForRigidBody();
+            _cameraManager?.StopCameraFollowForRigidBody();
 
             SetDeathParams();
 
             Ragdoll.ProcessRagdoll(
                 rigidbody: CharacterMovement.Rigidbody,
-                forceValue: Vector3.one * 10,
-                forceApplyPosition: transform.forward,
+                forceValue: new Vector3(10f, 10f, 0f),
+                forceApplyPosition: CharacterMovement.Rigidbody.worldCenterOfMass,
                 forceMode: ForceMode.VelocityChange);
         }
 
@@ -228,44 +235,63 @@ namespace Angry_Girls
             isDead = true;
             FinishTurn();
 
-            CharacterMovement.Rigidbody.constraints = RigidbodyConstraints.None;
+            CharacterMovement.Rigidbody.constraints =
+                (CharacterMovement.Rigidbody.constraints &
+                 ~(RigidbodyConstraints.FreezePositionX |
+                   RigidbodyConstraints.FreezePositionY |
+                   RigidbodyConstraints.FreezeRotationZ)) |
+                RigidbodyConstraints.FreezePositionZ |
+                RigidbodyConstraints.FreezeRotationX |
+                RigidbodyConstraints.FreezeRotationY;
             CharacterMovement.Rigidbody.useGravity = true;
             CharacterMovement.Rigidbody.isKinematic = false;
             CharacterMovement.Rigidbody.interpolation = RigidbodyInterpolation.None;
             CharacterMovement.Rigidbody.detectCollisions = false;
             boxCollider.enabled = false;
 
-            //TODO: temp
-            var animator = wingsTransform.GetComponentInChildren<Animator>();
-            if (animator != null) animator.enabled = false;
+            // Some character prefabs do not have a wingsTransform assigned.
+            // Death processing must continue so the ragdoll can still be activated.
+            if (wingsTransform != null)
+            {
+                var wingsAnimator = wingsTransform.GetComponentInChildren<Animator>();
+                if (wingsAnimator != null)
+                    wingsAnimator.enabled = false;
+            }
 
             gameObject.layer = LayerMask.NameToLayer("DeadBody");
         }
 
         private Vector3 GetProjectileForceDirection(InteractionData interactionData)
         {
-            // 1. Try to get the velocity direction from the Rigidbody
+            // 1. Prefer actual projectile velocity, projected onto the XY gameplay plane.
             Rigidbody projectileRb = interactionData.source.GetComponent<Rigidbody>();
             if (projectileRb != null && projectileRb.linearVelocity.sqrMagnitude > 0.1f)
             {
-                return projectileRb.linearVelocity.normalized;
+                Vector3 direction = projectileRb.linearVelocity;
+                direction.z = 0f;
+
+                if (direction.sqrMagnitude > 0.1f)
+                    return direction.normalized;
             }
 
-            // 2. If there is no Rigidbody, try to determine the direction from rotation
-            if (interactionData.source.transform.up.sqrMagnitude > 0.1f)
-            {
-                return interactionData.source.transform.up;
-            }
+            // 2. If there is no planar velocity, use the projectile's up direction.
+            Vector3 sourceUp = interactionData.source.transform.up;
+            sourceUp.z = 0f;
+            if (sourceUp.sqrMagnitude > 0.1f)
+                return sourceUp.normalized;
 
-            // 3. Fallback: direction from the projectile to the target
-            Vector3 projectileToTarget = interactionData.target.transform.position - interactionData.source.transform.position;
+            // 3. Fallback: direction from the projectile to the target on XY.
+            Vector3 projectileToTarget =
+                interactionData.target.transform.position - interactionData.source.transform.position;
+            projectileToTarget.z = 0f;
+
             if (projectileToTarget.sqrMagnitude > 0.1f)
-            {
                 return projectileToTarget.normalized;
-            }
 
-            // 4. Ultimate fallback: up with a small random 
-            return (Vector3.up + UnityEngine.Random.insideUnitSphere * 0.3f).normalized;
+            // 4. Ultimate fallback: upward force with no depth component.
+            Vector3 fallback = Vector3.up + UnityEngine.Random.insideUnitSphere * 0.3f;
+            fallback.z = 0f;
+            return fallback.normalized;
         }
 
         private Vector3 GetHitPoint(InteractionData interactionData)

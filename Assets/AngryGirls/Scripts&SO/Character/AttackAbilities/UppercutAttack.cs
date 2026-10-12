@@ -166,7 +166,7 @@ namespace Angry_Girls
                 boxCenter,
                 boxHalfExtents,
                 Vector3.down,
-                control.transform.rotation,
+                Quaternion.identity,
                 0.13f,
                 _targetLayer);
 

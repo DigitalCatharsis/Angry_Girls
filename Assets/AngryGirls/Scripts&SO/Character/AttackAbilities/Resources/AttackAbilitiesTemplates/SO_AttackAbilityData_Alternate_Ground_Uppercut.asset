@@ -19,7 +19,7 @@ MonoBehaviour:
     transitionDuration: 0.1
   attackTimeDuration: 3
   enemyKnockbackValue: 1
-  attackMovementForce: {x: 0, y: 10, z: 2}
+  attackMovementForce: {x: 1, y: 1, z: 0}
   vfxType: 3
   vfxColor: {r: 1, g: 1, b: 1, a: 1}
   connectToOwner: 1
@@ -29,7 +29,7 @@ MonoBehaviour:
   destroyOnCollision: 0
   destroyOnCharacterCollision: 0
   deadbodyForceMode: 2
-  deadbodyForceMultiplier: 10
+  deadbodyForceMultiplier: 20
   enableCollider: 0
   enableTrigger: 1
   spawnAudioData:

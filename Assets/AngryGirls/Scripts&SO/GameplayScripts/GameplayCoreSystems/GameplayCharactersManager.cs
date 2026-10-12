@@ -50,15 +50,27 @@ namespace Angry_Girls
 
         public void SpawnInitialPlayerCharacters(Transform[] spawnPositions)
         {
+            if (spawnPositions == null)
+            {
+                Debug.LogError("GameplayCharactersManager: Player spawn positions are not configured.");
+                return;
+            }
+
             for (int i = 0; i < _initialCharactersProfiles.Length && i < spawnPositions.Length; i++)
             {
-                if (_initialCharactersProfiles[i] == null) continue;
+                if (_initialCharactersProfiles[i] == null || spawnPositions[i] == null)
+                    continue;
+
+                var spawnTransform = spawnPositions[i];
+                var spawnRotation = GetXYSpawnRotation(spawnTransform, PlayerOrAi.Player);
 
                 var poolObject = _poolManager.GetObject(
                     _initialCharactersProfiles[i].CharacterSettings.characterType,
-                    spawnPositions[i].position,
-                    Quaternion.identity
-                );
+                    spawnTransform.position,
+                    spawnRotation);
+
+                if (poolObject == null)
+                    continue;
 
                 var character = poolObject.GetComponent<CControl>();
                 character.playerOrAi = PlayerOrAi.Player;
@@ -71,11 +83,37 @@ namespace Angry_Girls
 
         public CControl SpawnEnemy(CharacterProfile profile, Vector3 position)
         {
+            return SpawnEnemyInternal(profile, position, GetXYSpawnRotation(null, PlayerOrAi.Bot));
+        }
+
+        public CControl SpawnEnemy(CharacterProfile profile, Transform spawnTransform)
+        {
+            if (profile == null || profile.CharacterSettings == null)
+            {
+                Debug.LogError("GameplayCharactersManager: Cannot spawn an enemy with an invalid profile.");
+                return null;
+            }
+
+            Vector3 position = spawnTransform != null ? spawnTransform.position : Vector3.zero;
+            Quaternion rotation = GetXYSpawnRotation(spawnTransform, PlayerOrAi.Bot);
+            return SpawnEnemyInternal(profile, position, rotation);
+        }
+
+        private CControl SpawnEnemyInternal(CharacterProfile profile, Vector3 position, Quaternion rotation)
+        {
+            if (profile == null || profile.CharacterSettings == null)
+            {
+                Debug.LogError("GameplayCharactersManager: Cannot spawn an enemy with an invalid profile.");
+                return null;
+            }
+
             var poolObject = _poolManager.GetObject(
                 profile.CharacterSettings.characterType,
                 position,
-                Quaternion.identity
-            );
+                rotation);
+
+            if (poolObject == null)
+                return null;
 
             var character = poolObject.GetComponent<CControl>();
             character.playerOrAi = PlayerOrAi.Bot;
@@ -84,6 +122,18 @@ namespace Angry_Girls
             RegisterCharacter(character, PlayerOrAi.Bot);
             character.InitializeCharacter();
             return character;
+        }
+
+        private static Quaternion GetXYSpawnRotation(Transform spawnTransform, PlayerOrAi team)
+        {
+            // A spawn point can explicitly face left or right by its forward direction on world X.
+            // Legacy spawn points facing world Z fall back to the team's default XY orientation.
+            float forwardX = spawnTransform != null ? spawnTransform.forward.x : 0f;
+
+            if (Mathf.Abs(forwardX) < 0.5f)
+                forwardX = team == PlayerOrAi.Player ? 1f : -1f;
+
+            return Quaternion.Euler(0f, forwardX > 0f ? 90f : -90f, 0f);
         }
 
         public void RegisterCharacter(CControl character, PlayerOrAi team)
@@ -134,7 +184,7 @@ namespace Angry_Girls
                 if (character.profile.CharacterSettings.unitType == UnitType.Air)
                     character.CharacterMovement.Rigidbody.isKinematic = false;
 
-                character.CharacterMovement.Rigidbody.rotation = Quaternion.identity;
+                character.CharacterMovement.Rigidbody.rotation = Quaternion.Euler(0f, 90f, 0f);
                 character.gameObject.layer = LayerMask.NameToLayer("CharacterToLaunch");
                 character.isBehaviorAlternate = false;
                 character.hasBeenLaunched = false;

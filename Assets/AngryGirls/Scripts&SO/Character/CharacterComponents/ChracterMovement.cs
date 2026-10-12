@@ -69,8 +69,28 @@ namespace Angry_Girls
             _control = GetComponent<CControl>();
             _boxCollider = GetComponent<BoxCollider>();
             _rigidbody = GetComponent<Rigidbody>();
-
             _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+
+            ConfigureXYConstraints();
+        }
+
+        private void OnEnable()
+        {
+            ConfigureXYConstraints();
+        }
+
+        private void ConfigureXYConstraints()
+        {
+            if (_rigidbody == null)
+                _rigidbody = GetComponent<Rigidbody>();
+
+            if (_rigidbody == null)
+                return;
+
+            _rigidbody.constraints =
+                (_rigidbody.constraints &
+                 ~(RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY)) |
+                RigidbodyConstraints.FreezePositionZ;
         }
 
         private void Start()
@@ -95,11 +115,15 @@ namespace Angry_Girls
         /// </summary>
         public void ApplyKnockbackFromEnemy(GameObject opponent, float knockbackForce)
         {
-            if (_rigidbody.linearVelocity.z != 0) return;
+            if (opponent == null || Mathf.Abs(_rigidbody.linearVelocity.x) > 0.001f)
+                return;
 
-            var direction = _rigidbody.position - opponent.transform.position;
-            direction.z = direction.z < 0 ? -1 : 1;
-            _rigidbody.AddForce(new Vector3(0, 0, direction.z * knockbackForce), ForceMode.VelocityChange);
+            float directionX = _rigidbody.position.x - opponent.transform.position.x;
+            float directionSign = directionX < 0f ? -1f : 1f;
+
+            _rigidbody.AddForce(
+                new Vector3(directionSign * knockbackForce, 0f, 0f),
+                ForceMode.VelocityChange);
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -142,12 +166,15 @@ namespace Angry_Girls
         /// </summary>
         public void HandleRepel(CharacterMovement target)
         {
-            float zDiff = Rigidbody.position.z - target.Rigidbody.position.z;
-            Vector3 repelDirection = zDiff switch
+            if (target == null)
+                return;
+
+            float xDiff = Rigidbody.position.x - target.Rigidbody.position.x;
+            Vector3 repelDirection = xDiff switch
             {
-                > 0 => Vector3.forward,
-                < 0 => Vector3.back,
-                _ => UnityEngine.Random.Range(0, 2) == 0 ? Vector3.back : Vector3.forward
+                > 0f => Vector3.right,
+                < 0f => Vector3.left,
+                _ => UnityEngine.Random.Range(0, 2) == 0 ? Vector3.left : Vector3.right
             };
 
             Teleport(Rigidbody.position + repelDirection * (_repelValue * Time.fixedDeltaTime));
@@ -168,7 +195,7 @@ namespace Angry_Girls
             var boxCenter = bottomPoint + Vector3.up * 0.13f;
 
             // BoxCast size (slightly larger than collider)
-            var boxSize = new Vector3(_boxCollider.size.x, 0.1f, _boxCollider.size.z);
+            var boxSize = new Vector3(_boxCollider.bounds.size.x, 0.1f, _boxCollider.bounds.size.z);
             float rayLength = 0.13f;
 
 
@@ -220,7 +247,7 @@ namespace Angry_Girls
 
             var bottomPoint = new Vector3(_boxCollider.bounds.center.x, _boxCollider.bounds.min.y, _boxCollider.bounds.center.z);
             var boxCenter = bottomPoint + Vector3.up * 0.13f;
-            var boxSize = new Vector3(_boxCollider.size.x, 0.1f, _boxCollider.size.z);
+            var boxSize = new Vector3(_boxCollider.bounds.size.x, 0.1f, _boxCollider.bounds.size.z);
 
             Gizmos.color = CheckIfGrounded() ? Color.green : Color.red;
             Gizmos.DrawWireCube(boxCenter, boxSize);

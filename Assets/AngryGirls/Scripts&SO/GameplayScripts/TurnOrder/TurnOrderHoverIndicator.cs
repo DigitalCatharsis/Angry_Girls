@@ -1,3 +1,5 @@
+
+
 using UnityEngine;
 
 namespace Angry_Girls
@@ -20,6 +22,7 @@ namespace Angry_Girls
 
         private CControl _target;
         private Collider _targetCollider;
+        private Camera _mainCamera;
 
         private int _currentFrame;
         private float _animationTimer;
@@ -41,6 +44,7 @@ namespace Angry_Girls
                 return;
             }
 
+            _mainCamera = Camera.main;
             gameObject.SetActive(false);
         }
 
@@ -53,6 +57,7 @@ namespace Angry_Girls
             }
 
             UpdatePosition();
+            UpdateRotation();
             UpdateAnimation();
         }
 
@@ -85,6 +90,7 @@ namespace Angry_Girls
             gameObject.SetActive(true);
 
             UpdatePosition();
+            UpdateRotation();
             UpdateScale();
         }
 
@@ -109,6 +115,28 @@ namespace Angry_Girls
                 return;
 
             transform.position = _targetCollider.bounds.center + _offset;
+        }
+
+        private void UpdateRotation()
+        {
+            if (_spriteRenderer == null)
+                return;
+
+            if (_mainCamera == null)
+                _mainCamera = Camera.main;
+
+            // The gameplay plane is XY. Keep the sprite upright in that plane
+            // and facing the current camera instead of retaining a legacy YZ rotation.
+            Vector3 facing = _mainCamera != null ? -_mainCamera.transform.forward : Vector3.forward;
+            Vector3 up = _mainCamera != null ? _mainCamera.transform.up : Vector3.up;
+
+            if (facing.sqrMagnitude <= 0.0001f)
+                facing = Vector3.forward;
+
+            if (Vector3.Cross(up, facing).sqrMagnitude <= 0.0001f)
+                up = Vector3.up;
+
+            _spriteRenderer.transform.rotation = Quaternion.LookRotation(facing.normalized, up.normalized);
         }
 
         private void UpdateScale()
@@ -156,3 +184,4 @@ namespace Angry_Girls
         }
     }
 }
+

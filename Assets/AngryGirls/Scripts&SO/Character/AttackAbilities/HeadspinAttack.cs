@@ -72,8 +72,10 @@ namespace Angry_Girls
         #region Private Methods 
         private void EnterPrep(CControl control, AttackAbilityData data)
         {
-            // Toss the character 
-            control.CharacterMovement.ApplyRigidForce(data.attackMovementForce, ForceMode.VelocityChange);
+            // Toss the character on the XY gameplay plane.
+            control.CharacterMovement.ApplyRigidForce(
+                data.GetAttackMovementForceXY(control.transform),
+                ForceMode.VelocityChange);
             _firstShotFired = false;
             _exited = false;
         }

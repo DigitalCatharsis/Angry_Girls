@@ -63,10 +63,8 @@ namespace Angry_Girls
         {
             _timeInCurrentLoop += Time.deltaTime;
 
-            // Determine the target rotation along the X and Y axes
-            var targetEuler = control.CharacterMovement.Rigidbody.transform.forward.z > 0
-            ? new Vector3(45, 0, 0) // Rotate downwards
-            : new Vector3(45, 180, 0); // Rotate upward
+            // Projectile pitch is now measured in the XY gameplay plane.
+            var targetEuler = new Vector3(45f, 0f, 0f);
 
             var stateInfo = control.GetAnimatorStateInfo();
             // Check for 40% in the CURRENT animation loop

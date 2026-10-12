@@ -117,6 +117,10 @@ namespace Angry_Girls
         {
             if (projectile == null) return;
 
+            var alignment = projectile.GetComponent<XYProjectileFlightAlignment>();
+            if (alignment != null)
+                alignment.Stop();
+
             var proj = projectile.GetComponent<Projectile>();
             if (proj != null)
             {
@@ -140,80 +144,130 @@ namespace Angry_Girls
         /// red
         public void ProcessFireballs_HeadSpin(CControl control, Vector3[] angles, AttackAbilityData attackAbilityData, float moveDuration = 1.5f)
         {
-            var _impulseY = 7f;
-            var _impulseZ = 5f;
-            var _finalProjectileRotation = new Vector3(75f, 0, 0);
+            const float impulseY = 7f;
+            const float impulseHorizontal = 5f;
 
-            for (var i = 0; i < angles.Length; i++)
+            if (control == null || control.projectileSpawnTransform == null || angles == null || attackAbilityData == null)
+                return;
+
+            for (int i = 0; i < angles.Length; i++)
             {
                 var projectile = SpawnByProjectileAbilityData(control, attackAbilityData);
-                if (projectile == null) continue;
+                if (projectile == null)
+                    continue;
 
-                projectile.transform.position = control.projectileSpawnTransform.position;
-                projectile.transform.rotation = Quaternion.Euler(angles[i]);
+                // Existing serialized angle presets were authored in the legacy YZ plane.
+                // Convert their forward vector once into the XY gameplay plane.
+                Vector3 legacyDirection = Quaternion.Euler(angles[i]) * Vector3.forward;
+                Vector3 direction = new Vector3(legacyDirection.z, legacyDirection.y, 0f).normalized;
 
-                var finalRotationDegree = _finalProjectileRotation;
-                if (Mathf.Sign(projectile.transform.forward.z) < 0)
+                if (direction.sqrMagnitude <= 0.0001f)
                 {
-                    finalRotationDegree.y += 180f;
+                    DisposeProjectile(projectile);
+                    continue;
                 }
 
-                var impulse = new Vector3(
-                    0,
-                    _impulseY * projectile.transform.forward.y,
-                    _impulseZ * projectile.transform.forward.z
-                );
+                var rigidbody = projectile.GetComponent<Rigidbody>();
+                if (rigidbody == null)
+                {
+                    DisposeProjectile(projectile);
+                    continue;
+                }
 
-                projectile.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);
-                projectile.transform.DORotate(
-                    endValue: new Vector3(finalRotationDegree.x, finalRotationDegree.y, finalRotationDegree.y * projectile.transform.forward.z),
-                    duration: moveDuration,
-                    mode: RotateMode.Fast
-                );
+                projectile.transform.DOKill();
+                projectile.transform.position = control.projectileSpawnTransform.position;
+                projectile.transform.rotation = Quaternion.LookRotation(direction, Vector3.forward);
+
+                ConfigureXYProjectileRigidbody(rigidbody);
+                rigidbody.useGravity = true;
+
+                var impulse = new Vector3(
+                    impulseHorizontal * direction.x,
+                    impulseY * direction.y,
+                    0f);
+
+                rigidbody.AddForce(impulse, ForceMode.VelocityChange);
+
+                var alignment = projectile.GetComponent<XYProjectileFlightAlignment>();
+                if (alignment == null)
+                    alignment = projectile.AddComponent<XYProjectileFlightAlignment>();
+
+                alignment.Begin(rigidbody, direction);
             }
         }
 
-        //green
+        /// <summary>
+        /// Launches a fireball forward on the XY gameplay plane.
+        /// Projectile speed can come from current X data or legacy Z data.
+        /// </summary>
         public void SendFireballFront(CControl control, Vector3 startPoint, Vector3 targetEuler, float attackAngleChangeValue, AttackAbilityData attackAbilityData, float rotationDuration = 1.5f)
         {
-            // Spawn fireball
-            var projectile = SpawnByProjectileAbilityData(control, attackAbilityData);
+            if (control == null || attackAbilityData == null)
+                return;
 
-            // Set the initial position
+            var projectile = SpawnByProjectileAbilityData(control, attackAbilityData);
+            if (projectile == null)
+                return;
+
+            var rigidbody = projectile.GetComponent<Rigidbody>();
+            if (rigidbody == null)
+            {
+                DisposeProjectile(projectile);
+                return;
+            }
+
             projectile.transform.position = startPoint;
 
-            // Determine the initial rotation based on the control direction
-            float initialYRotation = control.CharacterMovement.Rigidbody.transform.forward.z > 0 ? 0f : 180f;
-            var initialRotation = Quaternion.Euler(
-            attackAngleChangeValue * 4, // X-axis tilt
-            initialYRotation, // Y-axis direction (0 or 180)
-            0 // Z-axis tilt (not used)
-            );
+            float facingX = control.CharacterMovement.Rigidbody.transform.forward.x;
+            if (Mathf.Abs(facingX) <= 0.001f)
+                facingX = control.playerOrAi == PlayerOrAi.Player ? 1f : -1f;
 
-            // Set the initial direction taking into account the correction
-            projectile.transform.rotation = initialRotation;
+            float facingSign = Mathf.Sign(facingX);
+            float initialAngle = attackAngleChangeValue * 4f;
+            Vector3 initialDirection = new Vector3(
+                facingSign * Mathf.Cos(initialAngle * Mathf.Deg2Rad),
+                -Mathf.Sin(initialAngle * Mathf.Deg2Rad),
+                0f).normalized;
 
-            // Define the target rotation angle only along the X axis
-            var targetEulerAngles = new Vector3(
-            targetEuler.x, // Final angle along the X axis
-            initialYRotation, // Leave Y unchanged
-            0 // Leave Z unchanged
-            );
+            projectile.transform.DOKill();
+            projectile.transform.rotation = Quaternion.LookRotation(initialDirection, Vector3.forward);
 
-            // Apply rotation using DOTween (only on the X axis)
-            projectile.transform.DORotate(targetEulerAngles, rotationDuration, RotateMode.Fast);
+            ConfigureXYProjectileRigidbody(rigidbody);
 
-            // Set the impulse
+            float targetAngle = targetEuler.x;
+            Vector3 targetDirection = new Vector3(
+                facingSign * Mathf.Cos(targetAngle * Mathf.Deg2Rad),
+                -Mathf.Sin(targetAngle * Mathf.Deg2Rad),
+                0f).normalized;
+
+            Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.forward);
+            projectile.transform.DORotateQuaternion(targetRotation, rotationDuration).SetEase(Ease.Linear);
+
             var impulse = new Vector3(
-            0,
-            attackAbilityData.projectileMovementSpeed.y * projectile.transform.forward.y - attackAngleChangeValue,
-            attackAbilityData.projectileMovementSpeed.z * projectile.transform.forward.z
-            );
+                attackAbilityData.GetProjectileHorizontalSpeed() * initialDirection.x,
+                attackAbilityData.projectileMovementSpeed.y * initialDirection.y - attackAngleChangeValue,
+                0f);
 
-            projectile.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.VelocityChange);
+            rigidbody.AddForce(impulse, ForceMode.VelocityChange);
 
-            // Apply force to control.rigidBody 
-            control.CharacterMovement.ApplyRigidForce(attackAbilityData.attackMovementForce * control.CharacterMovement.Rigidbody.transform.forward.z, ForceMode.VelocityChange);
+            // Apply the configured character recoil on XY rather than along the old Z axis.
+            control.CharacterMovement.ApplyRigidForce(
+                attackAbilityData.GetAttackMovementForceXY(control.transform),
+                ForceMode.VelocityChange);
+        }
+
+        private static void ConfigureXYProjectileRigidbody(Rigidbody rigidbody)
+        {
+            if (rigidbody == null)
+                return;
+
+            rigidbody.constraints =
+                (rigidbody.constraints &
+                 ~(RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY)) |
+                RigidbodyConstraints.FreezePositionZ;
+
+            rigidbody.linearVelocity = Vector3.zero;
+            rigidbody.angularVelocity = Vector3.zero;
         }
 
         public GameObject SpawnDownSmash(CControl control, AttackAbilityData data ,float enemyKnockBackValue)
