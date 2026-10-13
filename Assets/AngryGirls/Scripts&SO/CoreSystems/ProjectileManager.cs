@@ -42,7 +42,9 @@ namespace Angry_Girls
                 spawnSound = ability.spawnAudioData,
                 destroySound = ability.destroyAudioData,
                 deadbodyForceMultiplier = ability.deadbodyForceMultiplier,
-                deadbodyForceMode = ability.deadbodyForceMode
+                deadbodyForceMode = ability.deadbodyForceMode,
+                deadbodyDirectionMode = ability.deadbodyDirectionMode,
+                deadbodyVerticalBias = ability.deadbodyVerticalBias
             };
 
             var vfxGameobject = CoreManager.Instance.VFXManager.SpawnVFX(projectileConfig.VFXConfig);

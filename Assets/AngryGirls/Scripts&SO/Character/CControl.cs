@@ -181,15 +181,9 @@ namespace Angry_Girls
                 UnitGotKilled?.Invoke(projectileConfig, interactionData);
             }
         }
-        private void ApplyKnockback(ProjectileConfig projectileConfig, InteractionData interactionData)
+private void ApplyKnockback(ProjectileConfig projectileConfig, Vector3 forceDirection, Vector3 hitPoint)
         {
-
-            var hitPoint = GetHitPoint(interactionData);
-            var forceDirection = GetProjectileForceDirection(interactionData);
-            var force = forceDirection * Mathf.Abs(projectileConfig.deadbodyForceMultiplier);
-
-            if (projectileConfig.deadbodyForceMultiplier < 0)
-                force = -force;
+            var force = forceDirection * projectileConfig.deadbodyForceMultiplier;
 
             Ragdoll.ProcessRagdoll(
                 rigidbody: CharacterMovement.Rigidbody,
@@ -198,16 +192,20 @@ namespace Angry_Girls
                 forceMode: projectileConfig.deadbodyForceMode);
         }
 
-        private void ApplyDeath(ProjectileConfig projectileConfig, InteractionData interactionData)
+private void ApplyDeath(ProjectileConfig projectileConfig, InteractionData interactionData)
         {
             if (isDead)
                 return;
+
+            // Resolve hit data BEFORE SetDeathParams: it disables the body collider used by hit queries
+            var hitPoint = GetHitPoint(interactionData);
+            var forceDirection = GetProjectileForceDirection(projectileConfig, interactionData);
 
             SetDeathParams();
 
             _cameraManager?.StopCameraFollowForRigidBody();
 
-            ApplyKnockback(projectileConfig, interactionData);
+            ApplyKnockback(projectileConfig, forceDirection, hitPoint);
         }
 
         private void ApplyDeathByDeadZone()
@@ -261,57 +259,59 @@ namespace Angry_Girls
             gameObject.layer = LayerMask.NameToLayer("DeadBody");
         }
 
-        private Vector3 GetProjectileForceDirection(InteractionData interactionData)
+private Vector3 GetProjectileForceDirection(ProjectileConfig projectileConfig, InteractionData interactionData)
         {
-            // 1. Prefer actual projectile velocity, projected onto the XY gameplay plane.
-            Rigidbody projectileRb = interactionData.source.GetComponent<Rigidbody>();
-            if (projectileRb != null && projectileRb.linearVelocity.sqrMagnitude > 0.1f)
-            {
-                Vector3 direction = projectileRb.linearVelocity;
-                direction.z = 0f;
+            var impact = interactionData.impact;
 
-                if (direction.sqrMagnitude > 0.1f)
-                    return direction.normalized;
+            // Hit sources that did not capture an impact: read the projectile directly while it is still alive
+            if (!impact.IsValid
+                && interactionData.source != null
+                && interactionData.source.activeInHierarchy
+                && interactionData.source.TryGetComponent<Projectile>(out var projectile))
+            {
+                impact = projectile.CaptureImpact();
             }
 
-            // 2. If there is no planar velocity, use the projectile's up direction.
-            Vector3 sourceUp = interactionData.source.transform.up;
-            sourceUp.z = 0f;
-            if (sourceUp.sqrMagnitude > 0.1f)
-                return sourceUp.normalized;
+            var bodyCenter = GetBodyCenter();
+            var originator = projectileConfig.VFXConfig?.originator;
+            var originatorPosition = originator != null ? originator.transform.position : bodyCenter - Vector3.right;
 
-            // 3. Fallback: direction from the projectile to the target on XY.
-            Vector3 projectileToTarget =
-                interactionData.target.transform.position - interactionData.source.transform.position;
-            projectileToTarget.z = 0f;
-
-            if (projectileToTarget.sqrMagnitude > 0.1f)
-                return projectileToTarget.normalized;
-
-            // 4. Ultimate fallback: upward force with no depth component.
-            Vector3 fallback = Vector3.up + UnityEngine.Random.insideUnitSphere * 0.3f;
-            fallback.z = 0f;
-            return fallback.normalized;
+            return DeadbodyForceCalculator.CalculateDirection(
+                in impact,
+                bodyCenter,
+                originatorPosition,
+                projectileConfig.deadbodyDirectionMode,
+                projectileConfig.deadbodyVerticalBias);
         }
 
-        private Vector3 GetHitPoint(InteractionData interactionData)
+private Vector3 GetHitPoint(InteractionData interactionData)
         {
-            // If there was a collision, take the point from contacts[0]
-            if (interactionData.physicType == InteractionPhysicType.Collision && interactionData.collision != null)
+            var bodyCenter = GetBodyCenter();
+            Vector3 point;
+
+            if (interactionData.collision != null && interactionData.collision.contactCount > 0)
             {
-                return interactionData.collision.contacts[0].point;
+                point = interactionData.collision.GetContact(0).point;
             }
-            // If there was a trigger, use the closest point on the target collider
-            else if (interactionData.targetCollider != null)
+            else if (interactionData.impact.IsValid && interactionData.targetCollider != null)
             {
-                return interactionData.targetCollider.ClosestPoint(interactionData.source.transform.position);
+                point = interactionData.targetCollider.ClosestPoint(interactionData.impact.Position);
             }
-            // Fallback: if there is no data, use the object's center
             else
             {
-                return interactionData.target.transform.position;
+                point = bodyCenter;
             }
+
+            // Keep the hit point on the gameplay plane of the body
+            point.z = bodyCenter.z;
+            return point;
         }
+
+private Vector3 GetBodyCenter()
+        {
+            return boxCollider != null ? boxCollider.bounds.center : transform.position;
+        }
+
 
 
 

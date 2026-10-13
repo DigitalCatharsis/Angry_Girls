@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -40,6 +40,13 @@ namespace Angry_Girls
         /// <param name="forceValue">Force vector to apply</param>
         /// <param name="forceApplyPosition">World position to apply force</param>
         /// <param name="forceMode">Physics force mode</param>
+/// <summary>
+        /// Activates ragdoll physics with applied force at specific position
+        /// </summary>
+        /// <param name="rigidbody">Reference rigidbody (unused, kept for compatibility)</param>
+        /// <param name="forceValue">Force vector to apply</param>
+        /// <param name="forceApplyPosition">World position to apply force</param>
+        /// <param name="forceMode">Physics force mode</param>
         public void ProcessRagdoll(Rigidbody rigidbody, Vector3 forceValue, Vector3 forceApplyPosition, ForceMode forceMode)
         {
             CopyTransformData(_animatedModel.transform, _ragdoll.transform);
@@ -54,12 +61,27 @@ namespace Angry_Girls
                 }
             }
 
-            Rigidbody[] ragdollRigidbodies = _ragdoll.GetComponentsInChildren<Rigidbody>();
-            foreach (Rigidbody bone in ragdollRigidbodies)
+            if (!IsFinite(forceValue) || !IsFinite(forceApplyPosition))
             {
-                float distanceFactor = 1f / (1f + Vector3.Distance(bone.position, forceApplyPosition));
-                bone.AddForceAtPosition(forceValue * distanceFactor, forceApplyPosition, forceMode);
+                Debug.LogWarning("[Ragdoll] Non-finite force or apply position, skipping force.");
+                return;
             }
+
+            var ragdollRigidbodies = _ragdoll.GetComponentsInChildren<Rigidbody>();
+            foreach (var bone in ragdollRigidbodies)
+            {
+                // Flatten the apply point to the bone plane so torque stays around Z only
+                var bonePosition = bone.position;
+                var planarApplyPosition = new Vector3(forceApplyPosition.x, forceApplyPosition.y, bonePosition.z);
+
+                var distanceFactor = 1f / (1f + Vector3.Distance(bonePosition, planarApplyPosition));
+                bone.AddForceAtPosition(forceValue * distanceFactor, planarApplyPosition, forceMode);
+            }
+        }
+
+        private static bool IsFinite(Vector3 value)
+        {
+            return float.IsFinite(value.x) && float.IsFinite(value.y) && float.IsFinite(value.z);
         }
 
         private void CopyMaterialsFromModelToRagdoll()

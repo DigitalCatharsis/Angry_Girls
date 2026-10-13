@@ -46,6 +46,12 @@ namespace Angry_Girls
         public bool destroyOnCharacterCollision = false;
         public ForceMode deadbodyForceMode;
         public float deadbodyForceMultiplier;
+        [Tooltip("ProjectileVelocity: push along projectile flight direction. AwayFromProjectile: push from projectile center to body center.")]
+        public DeadbodyForceDirectionMode deadbodyDirectionMode = DeadbodyForceDirectionMode.ProjectileVelocity;
+        [Tooltip("Optional extra lift added to the push direction (0 = push exactly relative to the projectile).")]
+        [Range(-1f, 1f)]
+        public float deadbodyVerticalBias = 0f;
+
 
         [Space(5)]
         [Header("Projectile Colliders")]

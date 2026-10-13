@@ -109,6 +109,7 @@
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\SubComponents\SubComponentMediator.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\TurnOrder\TurnOrderHoverIndicator.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\CoreSystems\PoolManager\PoolObject\PoolObject.cs" />
+    <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\DeadbodyForceCalculator.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Shop and Inventory\ShopSettings.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\Character\CharacterProfileInfo.cs" />
     <Compile Include="Assets\AngryGirls\Scripts&amp;SO\GameplayScripts\CharacterLauncher.cs" />
@@ -1490,12 +1491,12 @@
       <HintPath>Library\ScriptAssemblies\Unity.Settings.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

@@ -22,6 +22,9 @@ namespace Angry_Girls
         public AudioClipData[] destroySound;
         public float deadbodyForceMultiplier = 1f;
         public ForceMode deadbodyForceMode;
+        public DeadbodyForceDirectionMode deadbodyDirectionMode = DeadbodyForceDirectionMode.ProjectileVelocity;
+        public float deadbodyVerticalBias;
+
     }
 
     /// <summary>
@@ -30,6 +33,8 @@ namespace Angry_Girls
     public class Projectile : MonoBehaviour
     {
         private ProjectileConfig _projectileConfig;
+        private Rigidbody _rigidbody;
+
 
         /// <summary>
         /// Cleanup when projectile is disposed
@@ -43,9 +48,13 @@ namespace Angry_Girls
         /// <summary>
         /// Initialize projectile with configuration
         /// </summary>
+/// <summary>
+        /// Initialize projectile with configuration
+        /// </summary>
         public void InitProjectile(ProjectileConfig config)
         {
             _projectileConfig = config;
+            TryGetComponent(out _rigidbody);
 
             GameplayCoreManager.Instance.InteractionManager.Register(this.gameObject, new InteractionConfig
             {
@@ -57,6 +66,18 @@ namespace Angry_Girls
             SetupColliders(config.enableCollider, config.enableTrigger);
             PlaySound(config.spawnSound?[0]);
         }
+
+/// <summary>
+        /// Takes a snapshot of the current position and velocity.
+        /// Must be called before the projectile is disposed, because pool disposal resets both.
+        /// </summary>
+        /// <returns>Impact snapshot</returns>
+        public ProjectileImpact CaptureImpact()
+        {
+            var velocity = _rigidbody != null ? _rigidbody.linearVelocity : Vector3.zero;
+            return new ProjectileImpact(transform.position, velocity);
+        }
+
 
         private void OnTriggerEnter(Collider other)
         {

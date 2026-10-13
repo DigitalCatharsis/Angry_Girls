@@ -29,7 +29,9 @@ MonoBehaviour:
   destroyOnCollision: 1
   destroyOnCharacterCollision: 0
   deadbodyForceMode: 2
-  deadbodyForceMultiplier: 5
+  deadbodyForceMultiplier: 2
+  deadbodyDirectionMode: 0
+  deadbodyVerticalBias: 0
   enableCollider: 1
   enableTrigger: 1
   spawnAudioData:

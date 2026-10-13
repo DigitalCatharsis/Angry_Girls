@@ -37,6 +37,9 @@ namespace Angry_Girls
         public InteractionPhysicType physicType;
         public Collider targetCollider;
         public Collision collision;
+        /// <summary>Projectile snapshot taken before disposal. Invalid when the source is not a projectile.</summary>
+        public ProjectileImpact impact;
+
     }
 
     /// <summary>
@@ -242,7 +245,7 @@ namespace Angry_Girls
                    data.target.GetComponentInParent<CControl>() != null;
         }
 
-        public void Handle(InteractionData data, InteractionConfig config)
+public void Handle(InteractionData data, InteractionConfig config)
         {
             var projectile = data.source.GetComponent<Projectile>();
             var targetControl = data.target.GetComponentInParent<CControl>();
@@ -257,10 +260,16 @@ namespace Angry_Girls
                 return;
             }
 
+            // Snapshot BEFORE disposal: pool disposal resets projectile velocity and position
+            if (projectile != null)
+            {
+                data.impact = projectile.CaptureImpact();
+            }
+
             // Destroy projectile if configured
             if (config.projectileConfig.destroyOnCharacterTrigger)
             {
-                GameplayCoreManager.Instance.ProjectileManager.DisposeProjectile(projectile.gameObject);
+                GameplayCoreManager.Instance.ProjectileManager.DisposeProjectile(data.source);
             }
 
             // Apply damage to character
