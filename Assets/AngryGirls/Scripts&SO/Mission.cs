@@ -34,6 +34,13 @@ namespace Angry_Girls
         [Header("General")]
         public SceneType missionName;
 
+        [Tooltip("Human readable name shown in the mission UI. Falls back to the scene name when empty.")]
+        public string displayName;
+
+        [TextArea(2, 5)]
+        [Tooltip("Short briefing shown in the mission details panel.")]
+        public string description;
+
         public MissionData missionDataEasy;
         public MissionData missionDataNormal;
         public MissionData missionDataHard;
@@ -47,6 +54,14 @@ namespace Angry_Girls
             missionDataEasy?.ResetData();
             missionDataNormal?.ResetData();
             missionDataHard?.ResetData();
+        }
+
+        /// <summary>
+        /// Returns the display name, or the scene name when no display name is configured.
+        /// </summary>
+        public string GetDisplayName()
+        {
+            return string.IsNullOrWhiteSpace(displayName) ? missionName.ToString() : displayName;
         }
 
         public MissionData GetData(MissionDifficulty diff)

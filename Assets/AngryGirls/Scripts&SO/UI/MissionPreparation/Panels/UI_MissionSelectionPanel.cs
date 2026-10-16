@@ -229,8 +229,9 @@ namespace Angry_Girls
 
             if (_missionDescription != null)
             {
+                var briefing = string.IsNullOrWhiteSpace(mission.description) ? string.Empty : $"\n\n{mission.description}";
                 _missionDescription.text =
-                    $"Mission: {mission.missionName}\nDifficulty: {difficulty}";
+                    $"Mission: {mission.GetDisplayName()}\nDifficulty: {difficulty}{briefing}";
             }
 
             // Show checkmark if reward was already claimed
@@ -380,6 +381,17 @@ namespace Angry_Girls
         public Mission GetSelectedMission()
         {
             return _selectedMission;
+        }
+
+        /// <summary>
+        /// True when a mission is selected and it is unlocked for the currently selected difficulty.
+        /// </summary>
+        public bool IsSelectedMissionAvailable()
+        {
+            if (!IsMissionSelected() || _missionsManager == null)
+                return false;
+
+            return _missionsManager.GetMissionData(_selectedMission.missionName, _selectedDifficulty).isMissionAvailable;
         }
 
         /// <summary>

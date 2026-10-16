@@ -91,6 +91,44 @@ namespace Angry_Girls
                     }
                 }
             }
+
+            AddMissingEntriesFromTemplate(repository);
+        }
+
+        /// <summary>
+        /// Adds missions (or difficulties) that exist in the repository but are absent from the loaded save,
+        /// for example missions added by a game update. Availability and reward come from the repository template,
+        /// progress flags always start cleared.
+        /// </summary>
+        private void AddMissingEntriesFromTemplate(MissionsRepository repository)
+        {
+            var difficulties = (MissionDifficulty[])Enum.GetValues(typeof(MissionDifficulty));
+
+            foreach (var mission in repository.Missions)
+            {
+                if (mission == null || mission.missionName == SceneType.None) continue;
+
+                if (!_progressData.TryGetValue(mission.missionName, out var dict))
+                {
+                    dict = new Dictionary<MissionDifficulty, MissionData>();
+                    _progressData[mission.missionName] = dict;
+                }
+
+                foreach (var diff in difficulties)
+                {
+                    if (dict.ContainsKey(diff)) continue;
+
+                    var templateData = mission.GetData(diff);
+                    dict[diff] = new MissionData
+                    {
+                        missionDifficulty = diff,
+                        isMissionAvailable = templateData?.isMissionAvailable ?? false,
+                        isMissionCompleted = false,
+                        isRewardReceived = false,
+                        rewardData = templateData?.rewardData
+                    };
+                }
+            }
         }
 
         public MissionsProgressSaveData ConvertToSaveData()

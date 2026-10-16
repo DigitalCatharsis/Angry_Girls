@@ -26,7 +26,10 @@ namespace Angry_Girls
         Loading = 4,
         Level_0 = 5,
         Level_01 = 7,
-        Level_1 = 6
+        Level_1 = 6,
+        Level_2 = 8,
+        Level_3 = 9,
+        Level_4 = 10
     }
 
     /// <summary>

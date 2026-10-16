@@ -46,7 +46,9 @@ namespace Angry_Girls
 
             if (_missionNameText != null)
             {
-                _missionNameText.text = $"{_mission.missionName}_{currentDifficulty}";
+                _missionNameText.text = string.IsNullOrWhiteSpace(_mission.displayName)
+                    ? $"{_mission.missionName}_{currentDifficulty}"
+                    : _mission.displayName;
             }
 
             UpdateVisualState(progressData.isMissionAvailable, progressData.isMissionCompleted);

@@ -13,18 +13,40 @@ MonoBehaviour:
   m_Name: MissionTextures
   m_EditorClassIdentifier: 
   m_GroupName: MissionTextures
-  m_Data:
-    m_SerializedData: []
   m_GUID: 6c4f4a0652af8124cb3ba6344a8c711d
   m_SerializeEntries:
-  - m_GUID: d989e2f0ed1cb614c8890fce2cef3285
-    m_Address: T_MissionTemplate_Preview_Level_1
+  - m_GUID: 19034736f6575f84daf35131dd1132f6
+    m_Address: T_MissionTemplate_Preview_Level_4
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sprites
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c7e3eeb4bca20684b9908e302e228424
-    m_Address: T_MissionTemplate_Preview_Level_0
+  - m_GUID: 1b4aca50b1cc5a64e88cba8e9cf3aea8
+    m_Address: T_MissionTemplate_Image_Level_2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 39ec0be99293ba04189c3ef3c8b1fdb5
+    m_Address: T_MissionTemplate_Preview_Level_2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 56d8f8bd114da594890b4fc00b03348b
+    m_Address: T_MissionTemplate_Preview_Level_3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e792aa8425427f4390b870b83fbc0df
+    m_Address: T_MissionTemplate_Image_Level_3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a66a59b83633965418a2a83c3cd6d9c8
+    m_Address: T_MissionTemplate
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sprites
@@ -35,14 +57,26 @@ MonoBehaviour:
     m_SerializedLabels:
     - Sprites
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ff697dd3e0c9f9a44bb3e47c39eb7682
-    m_Address: T_MissionTemplate_Image_Level_0
+  - m_GUID: c7e3eeb4bca20684b9908e302e228424
+    m_Address: T_MissionTemplate_Preview_Level_0
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sprites
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a66a59b83633965418a2a83c3cd6d9c8
-    m_Address: T_MissionTemplate
+  - m_GUID: d989e2f0ed1cb614c8890fce2cef3285
+    m_Address: T_MissionTemplate_Preview_Level_1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e336febe1290dde4da0f117d67c41bd7
+    m_Address: T_MissionTemplate_Image_Level_4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprites
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ff697dd3e0c9f9a44bb3e47c39eb7682
+    m_Address: T_MissionTemplate_Image_Level_0
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sprites

@@ -213,6 +213,12 @@ namespace Angry_Girls
 
         private async void OnStartMissionPressed()
         {
+            if (_missionSelectionPanel.IsMissionSelected() && !_missionSelectionPanel.IsSelectedMissionAvailable())
+            {
+                UI_UIManager.Instance.ShowNotification("This mission is locked on the selected difficulty!", 0.5f);
+                return;
+            }
+
             if (CanStartMission())
             {
                 await StartSelectedMissionAsync();
