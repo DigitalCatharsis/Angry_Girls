@@ -6,6 +6,7 @@ namespace Angry_Girls
 {
     /// <summary>
     /// Simple UI slot for equipment popup (not pooled, not shop-related).
+    /// Shows one slot per item type with the amount available in the inventory.
     /// </summary>
     public class UI_EquipmentSlot : MonoBehaviour
     {
@@ -13,6 +14,7 @@ namespace Angry_Girls
         [SerializeField] private Image _iconImage;
         [SerializeField] private TextMeshProUGUI _nameText;
         [SerializeField] private TextMeshProUGUI _statsText;
+        [SerializeField] private TextMeshProUGUI _quantityText;
         [SerializeField] private Button _button;
 
         public InventoryItem Item { get; private set; }
@@ -33,7 +35,7 @@ namespace Angry_Girls
         /// <summary>
         /// Set item to display.
         /// </summary>
-        public async void SetItem(InventoryItem item)
+        public void SetItem(InventoryItem item)
         {
             Item = item;
             if (item == null)
@@ -51,15 +53,12 @@ namespace Angry_Girls
             if (item.ItemSettings.HealthBonus != 0) stats += $"\nHP: +{item.ItemSettings.HealthBonus}";
             _statsText.text = stats.TrimStart('\n');
 
-            // Load icon
-            if (!string.IsNullOrEmpty(item.ItemSettings.IconReference?.AssetGUID))
+            SetQuantity(item.Quantity);
+
+            if (_iconImage != null)
             {
-                var sprite = await CoreManager.Instance.AddressableAssetManager.LoadSpriteAsync(item.ItemSettings.IconReference.AssetGUID);
-                if (sprite != null && _iconImage != null)
-                {
-                    _iconImage.sprite = sprite;
-                    _iconImage.enabled = true;
-                }
+                _iconImage.sprite = item.ItemSettings.Icon;
+                _iconImage.enabled = item.ItemSettings.Icon != null;
             }
         }
 
@@ -71,13 +70,23 @@ namespace Angry_Girls
             _nameText.text = label;
             _nameText.color = Color.gray;
             _statsText.text = "";
+            if (_quantityText != null) _quantityText.gameObject.SetActive(false);
             if (_iconImage != null) _iconImage.enabled = false;
+        }
+
+        private void SetQuantity(int quantity)
+        {
+            if (_quantityText == null) return;
+
+            _quantityText.text = $"x{quantity}";
+            _quantityText.gameObject.SetActive(true);
         }
 
         private void Clear()
         {
             _nameText.text = "";
             _statsText.text = "";
+            if (_quantityText != null) _quantityText.gameObject.SetActive(false);
             if (_iconImage != null) _iconImage.enabled = false;
         }
 

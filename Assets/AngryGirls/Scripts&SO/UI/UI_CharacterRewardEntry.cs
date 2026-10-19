@@ -30,7 +30,7 @@ namespace Angry_Girls
             _levelText.text = $"Lv. {data.currentLevel}";
             _xpText.text = $"{data.currentXp} / {data.xpForNextLevel} XP";
 
-            LoadPortraitAsync(data).Forget();
+            ApplyPortrait(data);
 
             // Set bar fill to 0 initially
             _xpBarFill.fillAmount = 0f;
@@ -50,22 +50,13 @@ namespace Angry_Girls
             _animationSequence.Play();
         }
 
-        private async UniTaskVoid LoadPortraitAsync (CharacterRewardEntry data)
+        private void ApplyPortrait(CharacterRewardEntry data)
         {
-            try
-            {
-                var sprite = await CoreManager.Instance.AddressableAssetManager.LoadSpriteAsync(data.characterSettings.portrait);
+            var sprite = data.characterSettings != null ? data.characterSettings.portrait : null;
+            if (sprite == null || _portraitImage == null) return;
 
-                if (sprite != null)
-                {
-                    _portraitImage.sprite = sprite;
-                    _portraitImage.enabled = true;
-                }
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogWarning($"UI_CharacterRewardEntry: Failed to load sprite: { ex.Message}");
-            }
+            _portraitImage.sprite = sprite;
+            _portraitImage.enabled = true;
         }
 
         private void OnDestroy()

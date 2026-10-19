@@ -19,15 +19,10 @@ MonoBehaviour:
   _healthBonus: 0
   _damageBonus: 55
   _shopAvailability: 1
-  _uniqueId: ee7cd0e9-c83f-4d33-bce7-7b9ccf1474e6
+  _uniqueId: 43c10d9ba89810d4fad4b082777b3c8c
   _isUpgradable: 1
   _maxUpgradeLevel: 5
   _baseUpgradeCost: 100
   _healthBonusPerLevel: 0
   _damageBonusPerLevel: 1
-  _iconReference:
-    m_AssetGUID: 8bce913255416ff40ac2058c4c4dcc87
-    m_SubObjectName: T_ItemSlotUI_Weapon_Sword_1
-    m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-    m_EditorAssetChanged: 1
+  _icon: {fileID: 21300000, guid: 8bce913255416ff40ac2058c4c4dcc87, type: 3}

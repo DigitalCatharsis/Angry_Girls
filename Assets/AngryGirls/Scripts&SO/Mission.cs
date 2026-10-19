@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace Angry_Girls
 {
@@ -46,8 +45,8 @@ namespace Angry_Girls
         public MissionData missionDataHard;
 
         [Header("Resources")]
-        public AssetReferenceT<Sprite> iconReference;
-        public AssetReferenceT<Sprite> previewReference;
+        public Sprite icon;
+        public Sprite preview;
 
         public void ResetData()
         {

@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -23,7 +23,6 @@ namespace Angry_Girls
         private List<UI_CharacterSlot> _availableCharacterSlots = new List<UI_CharacterSlot>();
         private List<UI_CharacterSlot> _selectedCharacterSlots = new List<UI_CharacterSlot>();
         private CharactersManager _charactersManager;
-        private IAssetProvider _assetProvider;
 
         private bool _isDestroyed = false;
 
@@ -33,7 +32,6 @@ namespace Angry_Girls
         public void Initialize(CoreManager coreManager)
         {
             _charactersManager = coreManager.CharactersManager;
-            _assetProvider = coreManager.AddressableAssetManager;
 
             // Subscribe to data changes
             _charactersManager.OnDataChanged += OnCharactersDataChanged;

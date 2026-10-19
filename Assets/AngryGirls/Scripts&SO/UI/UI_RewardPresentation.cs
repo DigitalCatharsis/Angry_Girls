@@ -57,17 +57,15 @@ namespace Angry_Girls
         [SerializeField] private float _barFillDuration = 0.8f;
         [SerializeField] private float _barDelay = 0.3f;
 
-        private IAssetProvider _assetProvider;
         private MissionsManager _missionsManager;
         private Sequence _animationSequence;
         private RewardService _rewardService;
 
         /// <summary>
-        /// Initialize with asset provider for loading icons.
+        /// Initialize with the required managers.
         /// </summary>
         public override void Initialize()
         {
-            _assetProvider = CoreManager.Instance.AddressableAssetManager;
             _missionsManager = CoreManager.Instance.MissionsManager;
 
             if (_rewardService == null)
@@ -76,7 +74,6 @@ namespace Angry_Girls
                     CoreManager.Instance.InventoryManager,
                     CoreManager.Instance.CharactersManager,
                     CoreManager.Instance.CreditsManager,
-                    CoreManager.Instance.ItemSettingsRepository,
                     CoreManager.Instance.CharacterSettingsCatalogSO
                 );
             }
@@ -333,14 +330,14 @@ namespace Angry_Girls
                     _rewardNameText.text = result.itemSettings?.ItemName ?? "Item";
                     _rewardIcon.sprite = _defaultItemIcon;
                     _rewardIcon.enabled = true;
-                    LoadItemIcon(result.itemSettings).Forget();
+                    SetRewardIcon(result.itemSettings != null ? result.itemSettings.Icon : null);
                     break;
 
                 case RewardType.Character:
                     _rewardNameText.text = result.characterSettings?.name ?? "Character";
                     _rewardIcon.sprite = _defaultItemIcon;
                     _rewardIcon.enabled = true;
-                    LoadCharacterIcon(result.characterSettings).Forget();
+                    SetRewardIcon(result.characterSettings != null ? result.characterSettings.portrait : null);
                     break;
 
                 default:
@@ -395,38 +392,10 @@ namespace Angry_Girls
                 _rewardReceivedBackground.enabled = true;
         }
 
-        private async UniTaskVoid LoadItemIcon(ItemSettings settings)
+        private void SetRewardIcon(Sprite sprite)
         {
-            if (settings?.IconReference == null) return;
-            if (string.IsNullOrEmpty(settings.IconReference.AssetGUID)) return;
-
-            try
-            {
-                var sprite = await _assetProvider.LoadSpriteAsync(settings.IconReference);
-                if (sprite != null && this != null && _rewardIcon != null)
-                    _rewardIcon.sprite = sprite;
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogWarning($"UI_RewardPresentation: Failed to load item icon: {ex.Message}");
-            }
-        }
-
-        private async UniTaskVoid LoadCharacterIcon(CharacterSettings settings)
-        {
-            if (settings?.portrait == null) return;
-            if (string.IsNullOrEmpty(settings.portrait.AssetGUID)) return;
-
-            try
-            {
-                var sprite = await _assetProvider.LoadSpriteAsync(settings.portrait);
-                if (sprite != null && this != null && _rewardIcon != null)
-                    _rewardIcon.sprite = sprite;
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogWarning($"UI_RewardPresentation: Failed to load character icon: {ex.Message}");
-            }
+            if (sprite != null && _rewardIcon != null)
+                _rewardIcon.sprite = sprite;
         }
 
         private void ShowCharacterEntries(List<CharacterRewardEntry> entries)

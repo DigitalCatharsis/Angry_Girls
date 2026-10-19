@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -27,7 +27,6 @@ namespace Angry_Girls
         public SettingsManager SettingsManager { get; private set; }
         public CharactersManager CharactersManager { get; private set; }
         public ShopManager ShopManager { get; private set; }
-        public AddressableAssetManager AddressableAssetManager { get; private set; }
         public InventoryManager InventoryManager { get; private set; }
         public ShopSettings ShopSettings => _shopSettings;
 
@@ -39,19 +38,17 @@ namespace Angry_Girls
         [SerializeField] private CharacterSettingsCatalogSO _characterSettingsCatalogSO;
         public CharacterSettingsCatalogSO CharacterSettingsCatalogSO => _characterSettingsCatalogSO;
 
-        public async UniTask InitializeSystemsAsync()
+        public UniTask InitializeSystemsAsync()
         {
             try
             {
-                AddressableAssetManager = new AddressableAssetManager();
-
                 SettingsManager = new SettingsManager();
 
                 HashManager = new HashManager();
 
                 PoolManager = new PoolManager();
                 CreditsManager = new CreditsManager();
-                await ItemSettingsRepository.InitializeAsync(AddressableAssetManager);
+                ItemSettingsRepository.Initialize();
 
                 MissionsManager = GetComponentInChildren<MissionsManager>();
                 this.MissionsManager.Initialize(_defaultSaveTemplate);
@@ -76,6 +73,8 @@ namespace Angry_Girls
 
                 SettingsManager.Init(_platformSettingsCatalog);
                 RegisterManagerForSaveLoader();
+
+                return UniTask.CompletedTask;
             }
             catch (Exception ex)
             {

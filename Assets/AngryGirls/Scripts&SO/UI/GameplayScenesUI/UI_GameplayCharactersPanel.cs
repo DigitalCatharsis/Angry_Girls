@@ -15,7 +15,6 @@ namespace Angry_Girls
         
         private LaunchManager _launchManager;
         private GameplayCharactersManager _charactersManager;
-        private IAssetProvider _assetProvider;
         private readonly List<GameObject> _activeButtons = new();
 
         public override void Initialize()
@@ -24,7 +23,6 @@ namespace Angry_Girls
 
             _launchManager = GameplayCoreManager.Instance.LaunchManager;
             _charactersManager = GameplayCoreManager.Instance.GameplayCharactersManager;
-            _assetProvider = CoreManager.Instance.AddressableAssetManager;
 
             _charactersManager.OnLaunchableCharactersChanged += UpdatePortraits;
 
@@ -52,7 +50,7 @@ namespace Angry_Girls
                 }
                 
                 var character = launchableCharacters[i];
-                LoadAndSetPortraitAsync(character, image);
+                SetPortraitImage(image, character.CharacterSettings?.portrait ?? _fallbackPortrait);
                 
                 int logicalIndex = i;
                 button.onClick.AddListener(() => OnPortraitClicked(logicalIndex));
@@ -74,31 +72,6 @@ namespace Angry_Girls
                 }
             }
             _activeButtons.Clear();
-        }
-
-        private async void LoadAndSetPortraitAsync(CControl character, Image image)
-        {
-            if (this == null || image == null) return;
-            
-            if (character.CharacterSettings?.portrait == null || 
-                string.IsNullOrEmpty(character.CharacterSettings.portrait.AssetGUID))
-            {
-                SetPortraitImage(image, _fallbackPortrait);
-                return;
-            }
-            
-            try
-            {
-                var sprite = await _assetProvider.LoadSpriteAsync(character.CharacterSettings.portrait);
-                if (this != null && image != null)
-                    SetPortraitImage(image, sprite);
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogWarning($"Failed to load portrait for {character.name}: {ex.Message}");
-                if (this != null && image != null)
-                    SetPortraitImage(image, _fallbackPortrait);
-            }
         }
 
         private void SetPortraitImage(Image image, Sprite sprite)

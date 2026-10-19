@@ -32,7 +32,7 @@ namespace Angry_Girls
         /// <summary>
         /// Update display using RUNTIME progress data from MissionsManager.
         /// </summary>
-        public async UniTaskVoid UpdateDisplay(MissionDifficulty currentDifficulty)
+        public void UpdateDisplay(MissionDifficulty currentDifficulty)
         {
             if (_mission == null || _mission.missionName == SceneType.None)
             {
@@ -42,7 +42,7 @@ namespace Angry_Girls
 
             var progressData = _missionsManager.GetMissionData(_mission.missionName, currentDifficulty);
 
-            await LoadMissionIconAsync();
+            ApplyMissionIcon();
 
             if (_missionNameText != null)
             {
@@ -54,28 +54,13 @@ namespace Angry_Girls
             UpdateVisualState(progressData.isMissionAvailable, progressData.isMissionCompleted);
         }
 
-        private async UniTask LoadMissionIconAsync()
+        private void ApplyMissionIcon()
         {
             if (_missionIcon == null) return;
 
-            try
-            {
-                var sprite = await CoreManager.Instance.AddressableAssetManager.LoadSpriteAsync(_mission.iconReference);
-                if (sprite != null)
-                {
-                    _missionIcon.sprite = sprite;
-                    _missionIcon.enabled = true;
-                }
-                else
-                {
-                    _missionIcon.enabled = false;
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"UI_MissionSlot: Failed to load icon for {_mission.missionName}: {e.Message}");
-                _missionIcon.enabled = false;
-            }
+            var sprite = _mission != null ? _mission.icon : null;
+            _missionIcon.sprite = sprite;
+            _missionIcon.enabled = sprite != null;
         }
 
         private void UpdateVisualState(bool isAvailable, bool isCompleted)

@@ -15,18 +15,12 @@ MonoBehaviour:
   attackType: 2
   unitType: 2
   characterType: 3
-  portrait:
-    m_AssetGUID: 9c65eea8e84dbe24fba68945af3d0e45
-    m_SubObjectName: T_Portrait_YBot_Green
-    m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-    m_EditorAssetChanged: 1
+  portrait: {fileID: 21300000, guid: 9c65eea8e84dbe24fba68945af3d0e45, type: 3}
   characterStats:
     health: 100
     damage: 40
   landingMovementSpeed: {x: 0, y: 0, z: 0}
-  boxcolliderContainer: {fileID: 11400000, guid: 31d3e3ccbf8befe47bc1a131bc653cce,
-    type: 2}
+  boxcolliderContainer: {fileID: 11400000, guid: 31d3e3ccbf8befe47bc1a131bc653cce, type: 2}
   idle_States:
   - animation: 3
     transitionDuration: 0.25

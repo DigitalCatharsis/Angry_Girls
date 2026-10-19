@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace Angry_Girls
 {
@@ -24,7 +23,7 @@ namespace Angry_Girls
         [Header("Unit type")]
         public UnitType unitType;
         public CharacterType characterType;
-        public AssetReferenceT<Sprite> portrait;
+        public Sprite portrait;
         public CharactersStatsBase characterStats;
 
         [Space(5)]

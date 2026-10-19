@@ -19,15 +19,10 @@ MonoBehaviour:
   _healthBonus: 200
   _damageBonus: 0
   _shopAvailability: 1
-  _uniqueId: 6f287a69-46fb-4327-ab9d-3e86cf2c0dfb
+  _uniqueId: 9ac9c6780a4a1f2489897ec33b0f6c40
   _isUpgradable: 1
   _maxUpgradeLevel: 5
   _baseUpgradeCost: 100
   _healthBonusPerLevel: 5
   _damageBonusPerLevel: 0
-  _iconReference:
-    m_AssetGUID: bef961df60eac3749a9c31a935a6640c
-    m_SubObjectName: T_ItemSlotUI_Armor_Plate_2
-    m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-    m_EditorAssetChanged: 1
+  _icon: {fileID: 21300000, guid: bef961df60eac3749a9c31a935a6640c, type: 3}

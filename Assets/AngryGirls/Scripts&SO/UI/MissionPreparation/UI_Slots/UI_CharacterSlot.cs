@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -45,7 +45,7 @@ namespace Angry_Girls
         /// <summary>
         /// Sets character data and updates the slot visuals.
         /// </summary>
-        public async UniTask SetCharacter(CharacterProfile character, CharacterSlotType slotType)
+        public UniTask SetCharacter(CharacterProfile character, CharacterSlotType slotType)
         {
             Character = character;
             SlotType = slotType;
@@ -55,23 +55,19 @@ namespace Angry_Girls
             if (character == null)
             {
                 Clear();
-                return;
+                return UniTask.CompletedTask;
             }
 
-            var settings = character.CharacterSettings;
+            var portrait = character.CharacterSettings != null ? character.CharacterSettings.portrait : null;
 
-            if (settings != null && _characterPortrait != null)
+            if (_characterPortrait != null)
             {
-                var sprite = await CoreManager.Instance.AddressableAssetManager.LoadSpriteAsync(settings.portrait);
-
-                if (this == null || _characterPortrait == null)
-                    return;
-
-                _characterPortrait.sprite = sprite;
-                _characterPortrait.enabled = sprite != null;
+                _characterPortrait.sprite = portrait;
+                _characterPortrait.enabled = portrait != null;
             }
 
             UpdateSlotVisual();
+            return UniTask.CompletedTask;
         }
 
         /// <summary>

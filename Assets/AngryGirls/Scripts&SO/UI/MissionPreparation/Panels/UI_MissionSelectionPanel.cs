@@ -39,7 +39,6 @@ namespace Angry_Girls
         private Mission _selectedMission;
         private MissionDifficulty _selectedDifficulty = MissionDifficulty.Easy;
         private MissionsManager _missionsManager;
-        private IAssetProvider _assetProvider;
 
         /// <summary>
         /// Flag to guard against callbacks after destruction.
@@ -54,7 +53,6 @@ namespace Angry_Girls
         public void Initialize(CoreManager coreManager)
         {
             _missionsManager = coreManager.MissionsManager;
-            _assetProvider = coreManager.AddressableAssetManager;
 
             // Restore last selected difficulty from previous session
             _selectedDifficulty = NavigationManager.GetLastDifficulty();
@@ -172,7 +170,7 @@ namespace Angry_Girls
 
             for (int i = 0; i < _missionSlots.Count && i < missions.Count; i++)
             {
-                _missionSlots[i].UpdateDisplay(_selectedDifficulty).Forget();
+                _missionSlots[i].UpdateDisplay(_selectedDifficulty);
             }
         }
 
@@ -215,7 +213,7 @@ namespace Angry_Girls
         private void OnMissionSlotClicked(Mission mission)
         {
             _selectedMission = mission;
-            UpdatePreviewWindowContent(_selectedMission).Forget();
+            UpdatePreviewWindowContent(_selectedMission);
             UpdateMissionDetailsAndRewardDisplay(_selectedMission, _selectedDifficulty);
         }
 
@@ -266,11 +264,11 @@ namespace Angry_Girls
                     break;
 
                 case RewardType.Item:
-                    LoadItemRewardAsync(rewardData.assetReference.AssetGUID);
+                    ShowItemReward(rewardData);
                     break;
 
                 case RewardType.Character:
-                    LoadCharacterRewardAsync(rewardData.characterType);
+                    ShowCharacterReward(rewardData.characterType);
                     break;
 
                 case RewardType.None:
@@ -294,75 +292,42 @@ namespace Angry_Girls
             }
         }
 
-        private async void LoadItemRewardAsync(string assetGuid)
+        private void ShowItemReward(MissionRewardData rewardData)
         {
-            if (_isDestroyed) return;
+            var itemSettings = rewardData.itemSettings;
 
-            var itemSettings = await _assetProvider.LoadScriptableObjectAsync<ItemSettings>(assetGuid);
-            if (_isDestroyed) return;
-
-            if (itemSettings != null)
+            if (itemSettings == null)
             {
-                _rewardNameText.text = $"Reward: {itemSettings.ItemName}";
-
-                if (itemSettings.IconReference != null && !string.IsNullOrEmpty(itemSettings.IconReference.AssetGUID))
-                {
-                    var sprite = await _assetProvider.LoadSpriteAsync(itemSettings.IconReference);
-                    if (_isDestroyed) return;
-                    LoadRewardIcon(sprite);
-                }
-                else
-                {
-                    _rewardIconImage.enabled = false;
-                }
+                _rewardNameText.text = "Reward: -";
+                _rewardIconImage.enabled = false;
+                return;
             }
+
+            var quantity = rewardData.itemQuantity > 1 ? $" x{rewardData.itemQuantity}" : string.Empty;
+            _rewardNameText.text = $"Reward: {itemSettings.ItemName}{quantity}";
+            LoadRewardIcon(itemSettings.Icon);
         }
 
-        private async void LoadCharacterRewardAsync(CharacterType characterType)
+        private void ShowCharacterReward(CharacterType characterType)
         {
-            if (_isDestroyed) return;
-
             var settings = CoreManager.Instance.CharacterSettingsCatalogSO.GetByType(characterType);
-            if (settings != null)
-            {
-                _rewardNameText.text = $"Reward: {settings.name}";
+            if (settings == null) return;
 
-                if (settings.portrait != null && !string.IsNullOrEmpty(settings.portrait.AssetGUID))
-                {
-                    var sprite = await _assetProvider.LoadSpriteAsync(settings.portrait);
-                    if (_isDestroyed) return;
-                    LoadRewardIcon(sprite);
-                }
-                else
-                {
-                    _rewardIconImage.enabled = false;
-                }
-            }
+            _rewardNameText.text = $"Reward: {settings.name}";
+            LoadRewardIcon(settings.portrait);
         }
 
-        private async UniTask UpdatePreviewWindowContent(Mission mission)
+        private void UpdatePreviewWindowContent(Mission mission)
         {
-            if (_isDestroyed) return;
+            if (_isDestroyed || _missionPreview == null) return;
 
-            try
+            if (mission != null && mission.preview != null)
             {
-                var previewSprite = await _assetProvider.LoadSpriteAsync(mission.previewReference);
-                if (_isDestroyed) return;
-
-                if (previewSprite != null)
-                {
-                    _missionPreview.sprite = previewSprite;
-                    _missionPreview.color = Color.white;
-                }
-                else
-                {
-                    SetDefaultPreview();
-                }
+                _missionPreview.sprite = mission.preview;
+                _missionPreview.color = Color.white;
             }
-            catch (System.Exception e)
+            else
             {
-                if (_isDestroyed) return;
-                Debug.LogError($"UI_MissionSelectionPanel: Failed to load preview for mission {mission.missionName}: {e.Message}");
                 SetDefaultPreview();
             }
         }

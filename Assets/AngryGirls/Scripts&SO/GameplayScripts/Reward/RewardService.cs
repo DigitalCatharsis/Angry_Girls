@@ -12,20 +12,17 @@ namespace Angry_Girls
         private readonly InventoryManager _inventoryManager;
         private readonly CharactersManager _charactersManager;
         private readonly CreditsManager _creditsManager;
-        private readonly ItemSettingsRepository _itemSettingsRepository;
         private readonly CharacterSettingsCatalogSO _characterCatalog;
 
         public RewardService(
             InventoryManager inventoryManager,
             CharactersManager charactersManager,
             CreditsManager creditsManager,
-            ItemSettingsRepository itemSettingsRepository,
             CharacterSettingsCatalogSO characterCatalog)
         {
             _inventoryManager = inventoryManager;
             _charactersManager = charactersManager;
             _creditsManager = creditsManager;
-            _itemSettingsRepository = itemSettingsRepository;
             _characterCatalog = characterCatalog;
         }
 
@@ -54,7 +51,7 @@ namespace Angry_Girls
                         return GrantCredits(rewardData.creditsAmount, isObtained);
 
                     case RewardType.Item:
-                        return GrantItemAsync(rewardData.assetReference.AssetGUID, rewardData.itemQuantity, isObtained);
+                        return GrantItem(rewardData.itemSettings, rewardData.itemQuantity, isObtained);
 
                     case RewardType.Character:
                         return GrantCharacter(rewardData.characterType, isObtained);
@@ -87,16 +84,17 @@ namespace Angry_Girls
             };
         }
 
-        private RewardGrantResult GrantItemAsync(string uniqueId, int quantity, bool isObtained)
+        private RewardGrantResult GrantItem(ItemSettings itemSettings, int quantity, bool isObtained)
         {
-            var itemSettings = _itemSettingsRepository.GetItemByUniqueId(uniqueId);
             if (itemSettings == null)
             {
                 return new RewardGrantResult { isSuccess = false, errorMessage = "Item not found" };
             }
 
-            if(!isObtained)
-            _inventoryManager.AddItem(itemSettings, quantity);
+            if (!isObtained)
+            {
+                _inventoryManager.AddItem(itemSettings, quantity);
+            }
 
             return new RewardGrantResult
             {

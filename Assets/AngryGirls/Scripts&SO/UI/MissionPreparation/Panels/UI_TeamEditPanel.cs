@@ -1,4 +1,4 @@
-﻿// ===== UI_TeamEditPanel.cs =====
+// ===== UI_TeamEditPanel.cs =====
 
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
@@ -428,42 +428,18 @@ namespace Angry_Girls
             });
         }
 
-        private async void UpdateEquipmentSlotButtons()
+        private void UpdateEquipmentSlotButtons()
         {
             if (_selectedCharacter == null || _isDestroyed)
                 return;
 
-            await UpdateSlotButton(
-                _weaponSlotButton,
-                _selectedCharacter.Weapon,
-                "Weapon");
-
-            if (_isDestroyed)
-                return;
-
-            await UpdateSlotButton(
-                _armorSlotButton,
-                _selectedCharacter.Armor,
-                "Armor");
-
-            if (_isDestroyed)
-                return;
-
-            await UpdateSlotButton(
-                _accessorySlot1Button,
-                _selectedCharacter.Accessory1,
-                "Accessory 1");
-
-            if (_isDestroyed)
-                return;
-
-            await UpdateSlotButton(
-                _accessorySlot2Button,
-                _selectedCharacter.Accessory2,
-                "Accessory 2");
+            UpdateSlotButton(_weaponSlotButton, _selectedCharacter.Weapon, "Weapon");
+            UpdateSlotButton(_armorSlotButton, _selectedCharacter.Armor, "Armor");
+            UpdateSlotButton(_accessorySlot1Button, _selectedCharacter.Accessory1, "Accessory 1");
+            UpdateSlotButton(_accessorySlot2Button, _selectedCharacter.Accessory2, "Accessory 2");
         }
 
-        private async UniTask UpdateSlotButton(
+        private void UpdateSlotButton(
             Button button,
             InventoryItem item,
             string defaultName)
@@ -476,20 +452,10 @@ namespace Angry_Girls
 
             if (item != null && item.ItemSettings != null)
             {
-                if (image != null &&
-                    !string.IsNullOrEmpty(item.ItemSettings.IconReference?.AssetGUID))
+                if (image != null && item.ItemSettings.Icon != null)
                 {
-                    var sprite = await CoreManager.Instance.AddressableAssetManager
-                        .LoadSpriteAsync(item.ItemSettings.IconReference.AssetGUID);
-
-                    if (_isDestroyed)
-                        return;
-
-                    if (sprite != null)
-                    {
-                        image.sprite = sprite;
-                        image.enabled = true;
-                    }
+                    image.sprite = item.ItemSettings.Icon;
+                    image.enabled = true;
                 }
 
                 if (text != null)

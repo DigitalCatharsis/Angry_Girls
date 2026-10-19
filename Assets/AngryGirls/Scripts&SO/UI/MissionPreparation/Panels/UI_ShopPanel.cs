@@ -43,7 +43,6 @@ namespace Angry_Girls
         [SerializeField] private Button _purchaseButton;
         [SerializeField] private Button _refreshButton;
 
-        private IAssetProvider _assetProvider;
         private ShopManager _shopManager;
         private InventoryManager _inventoryManager;
         private CreditsManager _creditsManager;
@@ -72,7 +71,6 @@ namespace Angry_Girls
         /// </summary>
         public void Initialize(CoreManager coreManager)
         {
-            _assetProvider = coreManager.AddressableAssetManager;
             _shopManager = coreManager.ShopManager;
             _inventoryManager = coreManager.InventoryManager;
             _creditsManager = coreManager.CreditsManager;
@@ -271,8 +269,9 @@ namespace Angry_Girls
 
             if (_currentPurchaseMode == PurchaseMode.Shopping)
             {
-                foreach (var itemSettings in itemsToDisplay)
+                foreach (var stockEntry in GroupStock(itemsToDisplay))
                 {
+                    var itemSettings = stockEntry.Item;
                     var slotObject = CoreManager.Instance.PoolManager.GetObject<UIObjectType>(UIObjectType.PRE_ItemSlot, Vector3.zero, Quaternion.identity);
                     if (slotObject == null)
                     {
@@ -294,9 +293,8 @@ namespace Angry_Girls
                     slotInstance.transform.localPosition = localPos;
                     slotInstance.transform.localRotation = Quaternion.identity;
 
-                    slotInstance.Initialize(_assetProvider);
                     slotInstance.OnBuyRequested = (settings) => OnItemSlotClicked(settings, null);
-                    slotInstance.SetupForShop(itemSettings);
+                    slotInstance.SetupForShop(itemSettings, stockEntry.Quantity);
 
                     _activeItemSlots.Add(slotObject);
                     ColorDebugLog.Log($"ShopPanel: Spawned ItemSlotUI for item '{itemSettings.ItemName}'. Active slots now: {_activeItemSlots.Count}", System.Drawing.KnownColor.Goldenrod);
@@ -327,7 +325,6 @@ namespace Angry_Girls
                     slotInstance.transform.localPosition = localPos;
                     slotInstance.transform.localRotation = Quaternion.identity;
 
-                    slotInstance.Initialize(_assetProvider);
                     slotInstance.OnSellRequested = (item) => OnItemSlotClicked(null, item);
                     slotInstance.SetupForInventory(inventoryItem);
 
@@ -335,6 +332,53 @@ namespace Angry_Girls
                     ColorDebugLog.Log($"ShopPanel: Spawned ItemSlotUI for inventory item '{inventoryItem.ItemSettings.ItemName}'. Active slots now: {_activeItemSlots.Count}", System.Drawing.KnownColor.Goldenrod);
                 }
             }
+        }
+
+        /// <summary>
+        /// One shop line: an item and how many identical units are in stock.
+        /// </summary>
+        private readonly struct ShopStockEntry
+        {
+            public readonly ItemSettings Item;
+            public readonly int Quantity;
+
+            public ShopStockEntry(ItemSettings item, int quantity)
+            {
+                Item = item;
+                Quantity = quantity;
+            }
+        }
+
+        /// <summary>
+        /// Groups identical shop items into one entry with a quantity, keeping the original order.
+        /// </summary>
+        private static List<ShopStockEntry> GroupStock(IEnumerable<ItemSettings> items)
+        {
+            var counts = new Dictionary<ItemSettings, int>();
+            var order = new List<ItemSettings>();
+
+            foreach (var item in items)
+            {
+                if (item == null) continue;
+
+                if (counts.TryGetValue(item, out var count))
+                {
+                    counts[item] = count + 1;
+                }
+                else
+                {
+                    counts[item] = 1;
+                    order.Add(item);
+                }
+            }
+
+            return order.Select(item => new ShopStockEntry(item, counts[item])).ToList();
+        }
+
+        private int GetStockQuantity(ItemSettings itemSettings)
+        {
+            var assortment = _shopManager.GetCurrentAssortment();
+            return assortment == null ? 0 : assortment.Count(item => item == itemSettings);
         }
 
         private void OnItemSlotClicked(ItemSettings itemSettings, InventoryItem inventoryItem)
@@ -380,11 +424,13 @@ namespace Angry_Girls
                 return;
             }
 
-            LoadAndDisplayIcon(itemSettings);
+            DisplayIcon(itemSettings);
 
             if (_selectedItemNameText != null)
             {
-                _selectedItemNameText.text = $"Name: {itemSettings.ItemName}";
+                var quantity = inventoryItem != null ? inventoryItem.Quantity : GetStockQuantity(itemSettings);
+                var quantityText = quantity > 1 ? $" x{quantity}" : string.Empty;
+                _selectedItemNameText.text = $"Name: {itemSettings.ItemName}{quantityText}";
             }
 
             if (_selectedItemRarityText != null)
@@ -427,47 +473,22 @@ namespace Angry_Girls
 
             if (_selectedItemPriceText != null)
             {
-                int price = itemSettings.Price;
-                if (_currentPurchaseMode == PurchaseMode.Selling)
-                {
-                    price = Mathf.RoundToInt(price * 0.5f);
-                    if (inventoryItem != null)
-                    {
-                        price *= inventoryItem.Quantity;
-                    }
-                }
+                // Selling is done one unit at a time, so the price is for a single unit.
+                int price = _currentPurchaseMode == PurchaseMode.Selling
+                    ? InventoryManager.GetSellPrice(itemSettings)
+                    : itemSettings.Price;
                 _selectedItemPriceText.text = $"Item price: {price}";
             }
 
             UpdatePurchaseButtonText();
         }
 
-        private async void LoadAndDisplayIcon(ItemSettings itemSettings)
+        private void DisplayIcon(ItemSettings itemSettings)
         {
-            ColorDebugLog.Log($"ShopPanel: LoadAndDisplayIcon called for item '{itemSettings.ItemName}'", System.Drawing.KnownColor.Goldenrod);
+            if (_selectedItemIcon == null) return;
 
-            if (_selectedItemIcon == null || _assetProvider == null || string.IsNullOrEmpty(itemSettings.IconReference?.AssetGUID))
-            {
-                if (_selectedItemIcon != null)
-                {
-                    _selectedItemIcon.enabled = false;
-                }
-                ColorDebugLog.Log($"ShopPanel: LoadAndDisplayIcon - conditions not met for item '{itemSettings.ItemName}'. Icon disabled.", System.Drawing.KnownColor.Goldenrod);
-                return;
-            }
-
-            var sprite = await _assetProvider.LoadSpriteAsync(itemSettings.IconReference.AssetGUID);
-            if (sprite != null)
-            {
-                _selectedItemIcon.sprite = sprite;
-                _selectedItemIcon.enabled = true;
-                ColorDebugLog.Log($"ShopPanel: LoadAndDisplayIcon - loaded sprite for item '{itemSettings.ItemName}'.", System.Drawing.KnownColor.Goldenrod);
-            }
-            else
-            {
-                ColorDebugLog.Log($"ShopPanel: LoadAndDisplayIcon - could not load sprite for item '{itemSettings.ItemName}' using GUID '{itemSettings.IconReference.AssetGUID}'.", System.Drawing.KnownColor.Orange);
-                _selectedItemIcon.enabled = false;
-            }
+            _selectedItemIcon.sprite = itemSettings.Icon;
+            _selectedItemIcon.enabled = itemSettings.Icon != null;
         }
 
         private void ClearSelectedItemDetails()
@@ -509,10 +530,17 @@ namespace Angry_Girls
                 if (_selectedItemSettings != null)
                 {
                     ColorDebugLog.Log($"ShopPanel: Attempting to buy item '{_selectedItemSettings.ItemName}'.", System.Drawing.KnownColor.Goldenrod);
-                    _shopManager.TryPurchaseItem(_selectedItemSettings);
+                    var purchasedSettings = _selectedItemSettings;
+                    _shopManager.TryPurchaseItem(purchasedSettings);
                     _selectedItemSettings = null;
                     ClearItemHighlights();
                     Refresh();
+
+                    // Keep the item selected while units are still in stock, so several units can be bought in a row.
+                    if (GetStockQuantity(purchasedSettings) > 0)
+                    {
+                        OnItemSlotClicked(purchasedSettings, null);
+                    }
                 }
                 else
                 {
@@ -524,10 +552,18 @@ namespace Angry_Girls
                 if (_selectedInventoryItem != null)
                 {
                     ColorDebugLog.Log($"ShopPanel: Attempting to sell item '{_selectedInventoryItem.ItemSettings.ItemName}'.", System.Drawing.KnownColor.Goldenrod);
+                    var soldSettings = _selectedInventoryItem.ItemSettings;
                     _inventoryManager.SellItem(_selectedInventoryItem);
                     _selectedInventoryItem = null;
                     ClearItemHighlights();
                     Refresh();
+
+                    // Keep the stack selected while units remain, so several units can be sold in a row.
+                    var remainingStack = _inventoryManager.GetAllItems().FirstOrDefault(item => item.ItemSettings == soldSettings);
+                    if (remainingStack != null && (_currentFilter == ItemType.None || soldSettings.ItemType == _currentFilter))
+                    {
+                        OnItemSlotClicked(null, remainingStack);
+                    }
                 }
                 else
                 {

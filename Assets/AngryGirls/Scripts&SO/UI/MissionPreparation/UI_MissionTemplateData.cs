@@ -25,7 +25,7 @@ namespace Angry_Girls
         /// <summary>
         /// Update the display with mission data for a specific difficulty.
         /// </summary>
-        public async UniTaskVoid UpdateValues(Mission mission, MissionDifficulty difficulty)
+        public void UpdateValues(Mission mission, MissionDifficulty difficulty)
         {
             _mission = mission;
             _missionData = _mission.GetData(difficulty);
@@ -35,43 +35,20 @@ namespace Angry_Girls
                 _missionNameText.text = _mission.missionName.ToString();
             }
 
-            await LoadAndSetIconAsync();
+            ApplyIcon();
 
             UpdateMissionStatusVisual(_missionData.isMissionAvailable, _missionData.isMissionCompleted);
 
             name = _mission.missionName.ToString();
         }
 
-        private async UniTask LoadAndSetIconAsync()
+        private void ApplyIcon()
         {
-            if (_missionIcon != null && _mission.iconReference != null && !string.IsNullOrEmpty(_mission.iconReference.AssetGUID))
-            {
-                try
-                {
-                    var iconSprite = await CoreManager.Instance.AddressableAssetManager.LoadSpriteAsync(_mission.iconReference);
+            if (_missionIcon == null) return;
 
-                    if (iconSprite != null && _missionIcon != null)
-                    {
-                        _missionIcon.sprite = iconSprite;
-                        _missionIcon.enabled = true;
-                    }
-                    else
-                    {
-                        _missionIcon.enabled = false;
-                        if (iconSprite == null)
-                            Debug.LogWarning($"MissionTemplateData: Loaded icon sprite is null for AssetReference GUID '{_mission.iconReference.AssetGUID}' in mission {_mission.missionName}.");
-                    }
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogError($"MissionTemplateData: Failed to load icon for mission {_mission.missionName} from AssetReference '{_mission.iconReference?.AssetGUID}': {e.Message}");
-                    if (_missionIcon != null) _missionIcon.enabled = false;
-                }
-            }
-            else
-            {
-                if (_missionIcon != null) _missionIcon.enabled = false;
-            }
+            var sprite = _mission != null ? _mission.icon : null;
+            _missionIcon.sprite = sprite;
+            _missionIcon.enabled = sprite != null;
         }
 
         private void UpdateMissionStatusVisual(bool isAvailable, bool isCompleted)

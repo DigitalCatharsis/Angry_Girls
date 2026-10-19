@@ -230,7 +230,7 @@ namespace Angry_Girls
             {
                 ItemType.Weapon => _targetCharacter.Weapon,
                 ItemType.Armor => _targetCharacter.Armor,
-                ItemType.Accessory => _targetCharacter.Accessory1 ?? _targetCharacter.Accessory2,
+                ItemType.Accessory => _targetAccessorySlotIndex == 0 ? _targetCharacter.Accessory1 : _targetCharacter.Accessory2,
                 _ => null
             };
         }

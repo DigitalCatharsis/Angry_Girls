@@ -6,19 +6,31 @@ using UnityEngine;
 
 namespace Angry_Girls
 {
+    /// <summary>
+    /// Persistent representation of a single inventory stack (or an equipped item).
+    /// </summary>
     [Serializable]
     public class InventoryItemSaveData
     {
         public string itemSettingsUniqueId = "";
 
+        /// <summary>
+        /// Stack size. Defaults to 1 so saves created before quantities were persisted still load correctly.
+        /// </summary>
+        public int quantity = 1;
+
         public InventoryItemSaveData() { }
 
-        public InventoryItemSaveData(string uniqueId)
+        public InventoryItemSaveData(string uniqueId, int quantity = 1)
         {
             itemSettingsUniqueId = uniqueId;
+            this.quantity = quantity;
         }
     }
 
+    /// <summary>
+    /// A stack of identical items in the inventory (or a single equipped item).
+    /// </summary>
     public class InventoryItem
     {
         public ItemSettings ItemSettings { get; }
@@ -29,6 +41,7 @@ namespace Angry_Girls
         public InventoryItem(ItemSettings settings, int quantity = 1)
         {
             ItemSettings = settings;
+            Quantity = Mathf.Max(1, quantity);
         }
 
         public float GetTotalHealthBonus() => ItemSettings.HealthBonus;
@@ -45,7 +58,7 @@ namespace Angry_Girls
     }
 
     /// <summary>
-    /// Container for player's inventory items
+    /// Container for player's inventory items. Identical items are always kept as a single stack.
     /// </summary>
     [Serializable]
     public class InventoryData : ISaveData<InventoryData, InventorySaveData>
@@ -59,7 +72,36 @@ namespace Angry_Girls
             _items.Clear();
         }
 
-        public async UniTask UpdateFromSaveAsync(InventorySaveData saveData)
+        /// <summary>
+        /// Finds the stack that holds the given item, or null.
+        /// </summary>
+        public InventoryItem FindByUniqueId(string uniqueId)
+        {
+            if (string.IsNullOrEmpty(uniqueId)) return null;
+
+            return _items.FirstOrDefault(i => i?.ItemSettings != null && i.ItemSettings.UniqueId == uniqueId);
+        }
+
+        /// <summary>
+        /// Adds the given amount to the existing stack or creates a new one. Returns the resulting stack.
+        /// </summary>
+        public InventoryItem AddOrStack(ItemSettings itemSettings, int quantity)
+        {
+            if (itemSettings == null || quantity <= 0) return null;
+
+            var existing = FindByUniqueId(itemSettings.UniqueId);
+            if (existing != null)
+            {
+                existing.Quantity += quantity;
+                return existing;
+            }
+
+            var created = new InventoryItem(itemSettings, quantity);
+            _items.Add(created);
+            return created;
+        }
+
+        public UniTask UpdateFromSaveAsync(InventorySaveData saveData)
         {
             if (saveData == null)
             {
@@ -68,25 +110,27 @@ namespace Angry_Girls
 
             _items.Clear();
 
-            if (saveData?.items == null) return;
+            if (saveData.items == null) return UniTask.CompletedTask;
+
+            var repository = CoreManager.Instance.ItemSettingsRepository;
 
             foreach (var itemSaveData in saveData.items)
             {
-                if (string.IsNullOrEmpty(itemSaveData.itemSettingsUniqueId)) continue;
+                if (itemSaveData == null || string.IsNullOrEmpty(itemSaveData.itemSettingsUniqueId)) continue;
 
-                var itemSettings = await CoreManager.Instance.AddressableAssetManager
-                    .LoadScriptableObjectAsync<ItemSettings>(itemSaveData.itemSettingsUniqueId);
+                var itemSettings = repository.GetItemByUniqueId(itemSaveData.itemSettingsUniqueId);
 
-                if (itemSettings != null)
+                if (itemSettings == null)
                 {
-                    var inventoryItem = new InventoryItem(itemSettings);
-                    _items.Add(inventoryItem);
+                    Debug.LogWarning($"InventoryData.UpdateFromSave: ItemSettings not found for id {itemSaveData.itemSettingsUniqueId}");
+                    continue;
                 }
-                else
-                {
-                    Debug.LogWarning($"InventoryData.UpdateFromSave: Failed to load ItemSettings for GUID {itemSaveData.itemSettingsUniqueId}");
-                }
+
+                // Merging also repairs saves that contain several entries of the same item.
+                AddOrStack(itemSettings, Mathf.Max(1, itemSaveData.quantity));
             }
+
+            return UniTask.CompletedTask;
         }
 
         public InventorySaveData ConvertToSaveData()
@@ -95,13 +139,9 @@ namespace Angry_Girls
 
             foreach (var item in _items)
             {
-                if (item?.ItemSettings != null)
-                {
-                    saveData.items.Add(new InventoryItemSaveData
-                    {
-                        itemSettingsUniqueId = CoreManager.Instance.AddressableAssetManager.GetAssetGuid(item.ItemSettings),
-                    });
-                }
+                if (item?.ItemSettings == null || item.Quantity <= 0) continue;
+
+                saveData.items.Add(new InventoryItemSaveData(item.ItemSettings.UniqueId, item.Quantity));
             }
 
             return saveData;
@@ -113,10 +153,23 @@ namespace Angry_Girls
     /// </summary>
     public class InventoryManager : ISaveReinitManager<DefaultSaveTemplate, InventorySaveData, InventoryData>
     {
+        /// <summary>
+        /// Fraction of the purchase price paid when selling an item to the shop.
+        /// </summary>
+        private const float SellPriceFactor = 0.5f;
+
         private InventoryData _inventoryData = new();
         public InventoryData InventoryData => _inventoryData;
 
         public event Action OnDataChanged;
+
+        /// <summary>
+        /// Credits received for selling a single unit of the item.
+        /// </summary>
+        public static int GetSellPrice(ItemSettings itemSettings)
+        {
+            return itemSettings == null ? 0 : Mathf.RoundToInt(itemSettings.Price * SellPriceFactor);
+        }
 
         public void ResetManagersData()
         {
@@ -124,31 +177,24 @@ namespace Angry_Girls
             OnDataChanged?.Invoke();
         }
 
-        public async UniTask ReinitDataFromTemplateAsync(DefaultSaveTemplate template)
+        public UniTask ReinitDataFromTemplateAsync(DefaultSaveTemplate template)
         {
             _inventoryData.ResetData();
 
-            if (template?.startingInventory == null) return;
-
-            foreach (var itemTemplate in template.startingInventory)
+            if (template?.startingInventory != null)
             {
-                if (itemTemplate?.itemSettingsReference == null) continue;
-
-                var itemSettings = await CoreManager.Instance.AddressableAssetManager.LoadScriptableObjectAsync(itemTemplate.itemSettingsReference);
-
-                if (itemSettings != null)
+                foreach (var itemTemplate in template.startingInventory)
                 {
-                    var inventoryItem = new InventoryItem(itemSettings, itemTemplate.quantity);
-                    _inventoryData.Items.Add(inventoryItem);
-                    Debug.Log($"InventoryManager: Added {itemTemplate.quantity}x '{itemSettings.ItemName}' to starting inventory");
-                }
-                else
-                {
-                    Debug.LogWarning($"InventoryManager: Failed to load ItemSettings for starting inventory item");
+                    if (itemTemplate?.itemSettings == null) continue;
+
+                    var quantity = Mathf.Max(1, itemTemplate.quantity);
+                    _inventoryData.AddOrStack(itemTemplate.itemSettings, quantity);
+                    Debug.Log($"InventoryManager: Added {quantity}x '{itemTemplate.itemSettings.ItemName}' to starting inventory");
                 }
             }
 
             OnDataChanged?.Invoke();
+            return UniTask.CompletedTask;
         }
 
         public async UniTask ReinitDataFromSaveAsync(InventorySaveData saveData)
@@ -162,77 +208,64 @@ namespace Angry_Girls
             return _inventoryData.ConvertToSaveData();
         }
 
-
-        #region Existing inventory logic (preserved)
+        #region Inventory logic
 
         /// <summary>
-        /// Add item by ItemSettings. If item already exists, increase quantity.
+        /// Add items by ItemSettings. If the item already exists, the stack quantity is increased.
         /// </summary>
         public void AddItem(ItemSettings itemSettings, int quantity = 1)
         {
-            if (itemSettings == null) return;
+            if (itemSettings == null || quantity <= 0) return;
 
-            var existingItem = _inventoryData.Items.FirstOrDefault(i =>
-                i.ItemSettings.UniqueId == itemSettings.UniqueId);
-
-            if (existingItem != null)
-            {
-                existingItem.Quantity += quantity;
-            }
-            else
-            {
-                _inventoryData.Items.Add(new InventoryItem(itemSettings, quantity));
-            }
-
+            _inventoryData.AddOrStack(itemSettings, quantity);
             OnDataChanged?.Invoke();
         }
 
         /// <summary>
-        /// Remove item from inventory. Returns true if item was removed.
+        /// Remove the given amount (default one unit) from the stack that contains this item.
+        /// Returns true when the requested amount was removed.
         /// </summary>
-        public bool RemoveItem(InventoryItem item)
+        public bool RemoveItem(InventoryItem item, int quantity = 1)
         {
-            if (item == null) return false;
-
-            var existingItem = _inventoryData.Items.FirstOrDefault(i =>
-                i.ItemSettings.UniqueId == item.ItemSettings.UniqueId);
-
-            if (existingItem != null)
-            {
-                existingItem.Quantity -= item.Quantity;
-                if (existingItem.Quantity <= 0)
-                {
-                    _inventoryData.Items.Remove(existingItem);
-                }
-                OnDataChanged?.Invoke();
-                return true;
-            }
-
-            return false;
+            return item != null && RemoveItem(item.ItemSettings, quantity);
         }
 
         /// <summary>
-        /// Sell item to shop for credits. Returns amount of credits received.
+        /// Remove the given amount (default one unit) of an item. The stack disappears when it reaches zero.
         /// </summary>
-        public int SellItem(InventoryItem item)
+        public bool RemoveItem(ItemSettings itemSettings, int quantity = 1)
         {
-            if (item == null || item.ItemSettings == null) return 0;
+            if (itemSettings == null || quantity <= 0) return false;
 
-            // Calculate sell price (50% of buy price)
-            int sellPrice = Mathf.RoundToInt(item.ItemSettings.Price * 0.5f);
+            var existingItem = _inventoryData.FindByUniqueId(itemSettings.UniqueId);
+            if (existingItem == null || existingItem.Quantity < quantity) return false;
 
-            // Remove item from inventory
-            if (RemoveItem(item))
+            existingItem.Quantity -= quantity;
+            if (existingItem.Quantity <= 0)
             {
-                // Add credits to player
-                var creditsManager = CoreManager.Instance.CreditsManager;
-                creditsManager?.SetCredits(sellPrice);
-
-                Debug.Log($"InventoryManager: Sold '{item.ItemSettings.ItemName}' for {sellPrice} credits");
-                return sellPrice;
+                _inventoryData.Items.Remove(existingItem);
             }
 
-            return 0;
+            OnDataChanged?.Invoke();
+            return true;
+        }
+
+        /// <summary>
+        /// Sell items to the shop for credits (default one unit). Returns the amount of credits received.
+        /// </summary>
+        public int SellItem(InventoryItem item, int quantity = 1)
+        {
+            if (item?.ItemSettings == null || quantity <= 0) return 0;
+
+            var itemSettings = item.ItemSettings;
+            var totalPrice = GetSellPrice(itemSettings) * quantity;
+
+            if (!RemoveItem(itemSettings, quantity)) return 0;
+
+            CoreManager.Instance.CreditsManager?.SetCredits(totalPrice);
+
+            Debug.Log($"InventoryManager: Sold {quantity}x '{itemSettings.ItemName}' for {totalPrice} credits");
+            return totalPrice;
         }
 
         /// <summary>
@@ -258,7 +291,7 @@ namespace Angry_Girls
         /// </summary>
         public bool ContainsItem(string uniqueId)
         {
-            return _inventoryData.Items.Any(item => item.ItemSettings.UniqueId == uniqueId);
+            return _inventoryData.FindByUniqueId(uniqueId) != null;
         }
 
         /// <summary>
@@ -266,8 +299,7 @@ namespace Angry_Girls
         /// </summary>
         public int GetQuantity(string uniqueId)
         {
-            var item = _inventoryData.Items.FirstOrDefault(i => i.ItemSettings.UniqueId == uniqueId);
-            return item?.Quantity ?? 0;
+            return _inventoryData.FindByUniqueId(uniqueId)?.Quantity ?? 0;
         }
         #endregion
     }

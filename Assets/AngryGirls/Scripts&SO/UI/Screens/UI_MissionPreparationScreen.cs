@@ -86,7 +86,6 @@ namespace Angry_Girls
 
 
             //init values
-            var assetProvider = CoreManager.Instance.AddressableAssetManager;
             var shopManager = CoreManager.Instance.ShopManager;
             var inventoryManager = CoreManager.Instance.InventoryManager;
             var moneyStorage = CoreManager.Instance.CreditsManager;

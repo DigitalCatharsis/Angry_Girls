@@ -1,15 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace Angry_Girls
 {
     [System.Serializable]
     public class InventoryItemTemplate
     {
-        public AssetReferenceT<ItemSettings> itemSettingsReference;
-        //TODO: implement
-        public int quantity = 1;
+        public ItemSettings itemSettings;
+        [Min(1)] public int quantity = 1;
     }
 
     [CreateAssetMenu(fileName = "DefaultSaveTemplate", menuName = "Angry_Girls/DefaultSaveTemplate")]

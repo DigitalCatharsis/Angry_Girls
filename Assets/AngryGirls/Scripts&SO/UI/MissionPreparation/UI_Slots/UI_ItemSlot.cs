@@ -15,6 +15,7 @@ namespace Angry_Girls
 
     /// <summary>
     /// UI slot for displaying and interacting with items in shop or inventory.
+    /// Identical items are shown as a single slot with a quantity label.
     /// </summary>
     public class UI_ItemSlot : PoolObject
     {
@@ -29,7 +30,7 @@ namespace Angry_Girls
         private ItemSettings _itemSettings;
         private InventoryItem _inventoryItem;
         private ItemSlotMode _mode;
-        private IAssetProvider _assetProvider;
+        private int _shopQuantity = 1;
 
         public Action<ItemSettings> OnBuyRequested;
         public Action<InventoryItem> OnUseRequested;
@@ -40,38 +41,26 @@ namespace Angry_Girls
         public Button ActionButton => _actionButton;
 
         /// <summary>
-        /// Initialize the slot with an asset provider.
+        /// Set up the slot for shop mode. Quantity is the amount of identical items in stock.
         /// </summary>
-        public void Initialize(IAssetProvider assetProvider)
-        {
-            _assetProvider = assetProvider;
-        }
-
-        /// <summary>
-        /// Set up the slot for shop mode.
-        /// </summary>
-        public void SetupForShop(ItemSettings itemSettings)
+        public void SetupForShop(ItemSettings itemSettings, int quantity = 1)
         {
             _itemSettings = itemSettings;
             _inventoryItem = null;
+            _shopQuantity = Mathf.Max(1, quantity);
             _mode = ItemSlotMode.Shop;
-
-            Debug.Log($"ItemSlotUI: SetupForShop called for item '{itemSettings?.ItemName ?? "NULL"}'. ActionButton interactable: {_actionButton?.interactable ?? false}");
 
             UpdateUI();
         }
 
         /// <summary>
-        /// Set up the slot for inventory mode.
+        /// Set up the slot for inventory mode. The quantity is read from the inventory stack.
         /// </summary>
         public void SetupForInventory(InventoryItem inventoryItem)
         {
             _inventoryItem = inventoryItem;
             _itemSettings = inventoryItem?.ItemSettings;
-            _quantityText.text = inventoryItem?.Quantity.ToString() ?? "0";
             _mode = ItemSlotMode.Inventory;
-
-            Debug.Log($"ItemSlotUI: SetupForInventory called for item '{inventoryItem?.ItemSettings.ItemName ?? "NULL"}'. ActionButton interactable: {_actionButton?.interactable ?? false}");
 
             UpdateUI();
         }
@@ -111,7 +100,7 @@ namespace Angry_Girls
         /// <summary>
         /// Update the UI based on current mode and item data.
         /// </summary>
-        private async void UpdateUI()
+        private void UpdateUI()
         {
             if (_itemSettings == null)
             {
@@ -119,86 +108,61 @@ namespace Angry_Girls
                 return;
             }
 
-            if (_assetProvider != null && !string.IsNullOrEmpty(_itemSettings.IconReference?.AssetGUID))
+            if (_iconImage != null)
             {
-                var sprite = await _assetProvider.LoadSpriteAsync(_itemSettings.IconReference.AssetGUID);
-
-                if (this == null)
-                {
-                    Debug.LogWarning($"ItemSlotUI: GameObject for item '{_itemSettings.ItemName}' was destroyed/returned to pool during sprite loading. Aborting UI update.");
-                    return;
-                }
-
-                if (sprite != null)
-                {
-                    _iconImage.sprite = sprite;
-                    _iconImage.enabled = true;
-                }
-                else
-                {
-                    Debug.LogWarning($"ItemSlotUI: Could not load sprite for item '{_itemSettings.ItemName}' using GUID '{_itemSettings.IconReference.AssetGUID}'.");
-                    _iconImage.enabled = false;
-                }
-            }
-            else
-            {
-                if (this != null && _iconImage != null)
-                {
-                    _iconImage.enabled = false;
-                }
+                _iconImage.sprite = _itemSettings.Icon;
+                _iconImage.enabled = _itemSettings.Icon != null;
             }
 
-            if (this != null && _itemNameText != null)
+            if (_itemNameText != null)
             {
                 _itemNameText.text = _itemSettings.ItemName;
             }
 
-            if (this != null)
+            switch (_mode)
             {
-                switch (_mode)
-                {
-                    case ItemSlotMode.Shop:
-                        if (_priceText != null)
-                        {
-                            _priceText.text = _itemSettings.Price.ToString();
-                            _priceText.gameObject.SetActive(true);
-                        }
-                        if (_quantityText != null)
-                        {
-                            _quantityText.gameObject.SetActive(false);
-                        }
-                        if (_actionButton != null && _actionButtonText != null)
-                        {
-                            _actionButtonText.text = "Buy";
-                            _actionButton.onClick.RemoveAllListeners();
-                            _actionButton.onClick.AddListener(() => OnBuyRequested?.Invoke(_itemSettings));
-                            _actionButton.gameObject.SetActive(true);
-                            _actionButton.interactable = true;
-                        }
-                        break;
+                case ItemSlotMode.Shop:
+                    if (_priceText != null)
+                    {
+                        _priceText.text = _itemSettings.Price.ToString();
+                        _priceText.gameObject.SetActive(true);
+                    }
+                    SetQuantityLabel(_shopQuantity);
+                    if (_actionButton != null && _actionButtonText != null)
+                    {
+                        _actionButtonText.text = "Buy";
+                        _actionButton.onClick.RemoveAllListeners();
+                        _actionButton.onClick.AddListener(() => OnBuyRequested?.Invoke(_itemSettings));
+                        _actionButton.gameObject.SetActive(true);
+                        _actionButton.interactable = true;
+                    }
+                    break;
 
-                    case ItemSlotMode.Inventory:
-                        if (_priceText != null)
-                        {
-                            int sellPrice = Mathf.RoundToInt(_itemSettings.Price * 0.5f);
-                            _priceText.text = $"Sell: {sellPrice}";
-                            _priceText.gameObject.SetActive(true);
-                        }
-                        if (_quantityText != null)
-                        {
-                            _quantityText.gameObject.SetActive(true);
-                        }
-                        if (_actionButton != null && _actionButtonText != null)
-                        {
-                            _actionButtonText.text = "Sell";
-                            _actionButton.onClick.RemoveAllListeners();
-                            _actionButton.onClick.AddListener(() => OnSellRequested?.Invoke(_inventoryItem));
-                            _actionButton.gameObject.SetActive(true);
-                            _actionButton.interactable = true;
-                        }
-                        break;
-                }
+                case ItemSlotMode.Inventory:
+                    if (_priceText != null)
+                    {
+                        _priceText.text = $"Sell: {InventoryManager.GetSellPrice(_itemSettings)}";
+                        _priceText.gameObject.SetActive(true);
+                    }
+                    SetQuantityLabel(_inventoryItem != null ? _inventoryItem.Quantity : 0);
+                    if (_actionButton != null && _actionButtonText != null)
+                    {
+                        _actionButtonText.text = "Sell";
+                        _actionButton.onClick.RemoveAllListeners();
+                        _actionButton.onClick.AddListener(() => OnSellRequested?.Invoke(_inventoryItem));
+                        _actionButton.gameObject.SetActive(true);
+                        _actionButton.interactable = true;
+                    }
+                    break;
             }
+        }
+
+        private void SetQuantityLabel(int quantity)
+        {
+            if (_quantityText == null) return;
+
+            _quantityText.text = $"x{quantity}";
+            _quantityText.gameObject.SetActive(true);
         }
 
         /// <summary>
@@ -208,6 +172,7 @@ namespace Angry_Girls
         {
             _itemSettings = null;
             _inventoryItem = null;
+            _shopQuantity = 1;
             _mode = ItemSlotMode.Shop;
 
             OnBuyRequested = null;
@@ -221,8 +186,6 @@ namespace Angry_Girls
                 _actionButton.onClick.RemoveAllListeners();
                 _actionButton.interactable = false;
             }
-
-            Debug.Log($"ItemSlotUI: Returned to pool and disposed. GameObject: {gameObject.name}, Active: {gameObject.activeSelf}");
         }
 
         /// <summary>

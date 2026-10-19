@@ -109,10 +109,7 @@ namespace Angry_Girls
             if (_character == null)
                 return;
 
-            LoadPortraitAsync(
-                _character,
-                setupVersion)
-                .Forget();
+            ApplyPortrait(_character);
         }
 
         /// <summary>
@@ -198,63 +195,14 @@ namespace Angry_Girls
                 _fallbackPortrait != null;
         }
 
-        private async UniTaskVoid LoadPortraitAsync(
-            CControl character,
-            int setupVersion)
+        private void ApplyPortrait(CControl character)
         {
-            if (character == null ||
-                character.profile == null ||
-                character.profile.CharacterSettings == null)
-            {
+            var sprite = character?.profile?.CharacterSettings?.portrait;
+            if (sprite == null || _portrait == null)
                 return;
-            }
 
-            var portraitReference =
-                character
-                    .profile
-                    .CharacterSettings
-                    .portrait;
-
-            if (portraitReference == null ||
-                !portraitReference.RuntimeKeyIsValid())
-            {
-                return;
-            }
-
-            try
-            {
-                var sprite =
-                    await CoreManager.Instance
-                        .AddressableAssetManager
-                        .LoadSpriteAsync(
-                            portraitReference);
-
-                if (this == null ||
-                    _portrait == null ||
-                    _character != character ||
-                    setupVersion != _setupVersion)
-                {
-                    return;
-                }
-
-                if (sprite != null)
-                {
-                    _portrait.sprite =
-                        sprite;
-
-                    _portrait.enabled =
-                        true;
-                }
-            }
-            catch (System.Exception exception)
-            {
-                if (this != null &&
-                    setupVersion == _setupVersion)
-                {
-                    Debug.LogWarning(
-                        $"TurnOrderSegmentUI: Failed to load portrait for '{character.name}': {exception.Message}");
-                }
-            }
+            _portrait.sprite = sprite;
+            _portrait.enabled = true;
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -294,43 +294,36 @@ namespace Angry_Girls
                 Debug.LogWarning($"CharacterProfile.UpdateFromSaveAsync: Failed to load settings for type {saveData.characterType}");
             }
 
-            await LoadEquipmentFromSaveAsync(saveData);
+            LoadEquipmentFromSave(saveData);
 
             await UniTask.CompletedTask;
         }
 
-        private async UniTask LoadEquipmentFromSaveAsync(CharacterProfileSaveData saveData)
+        private void LoadEquipmentFromSave(CharacterProfileSaveData saveData)
         {
-            Weapon = null;
-            Armor = null;
-            Accessory1 = null;
-            Accessory2 = null;
+            Weapon = CreateEquippedItem(saveData.weaponInventoryItemSaveData);
+            Armor = CreateEquippedItem(saveData.armorInventoryItemSaveData);
+            Accessory1 = CreateEquippedItem(saveData.accessory1InventoryItemSaveData);
+            Accessory2 = CreateEquippedItem(saveData.accessory2InventoryItemSaveData);
 
-            if (saveData.weaponInventoryItemSaveData != null)
-            {
-                var itemSettings = await CoreManager.Instance.AddressableAssetManager.LoadScriptableObjectAsync<ItemSettings>(saveData.weaponInventoryItemSaveData.itemSettingsUniqueId);
-                Weapon = new InventoryItem(settings: itemSettings, 1);
-            }
-
-            if (saveData.armorInventoryItemSaveData != null)
-            {
-                var itemSettings = await CoreManager.Instance.AddressableAssetManager.LoadScriptableObjectAsync<ItemSettings>(saveData.armorInventoryItemSaveData.itemSettingsUniqueId);
-                Armor = new InventoryItem(settings: itemSettings, 1);
-            }
-
-            if (saveData.accessory1InventoryItemSaveData != null)
-            {
-                var itemSettings = await CoreManager.Instance.AddressableAssetManager.LoadScriptableObjectAsync<ItemSettings>(saveData.accessory1InventoryItemSaveData.itemSettingsUniqueId);
-                Accessory1 = new InventoryItem(settings: itemSettings, 1);
-            }
-
-            if (saveData.accessory2InventoryItemSaveData != null)
-            {
-                var itemSettings = await CoreManager.Instance.AddressableAssetManager.LoadScriptableObjectAsync<ItemSettings>(saveData.accessory2InventoryItemSaveData.itemSettingsUniqueId);
-                Accessory2 = new InventoryItem(settings: itemSettings, 1);
-            }
             UpdateItemsList();
+        }
 
+        /// <summary>
+        /// Resolves a saved equipment entry into a single equipped item, or null when it cannot be resolved.
+        /// </summary>
+        private static InventoryItem CreateEquippedItem(InventoryItemSaveData saveData)
+        {
+            if (saveData == null || string.IsNullOrEmpty(saveData.itemSettingsUniqueId)) return null;
+
+            var itemSettings = CoreManager.Instance.ItemSettingsRepository.GetItemByUniqueId(saveData.itemSettingsUniqueId);
+            if (itemSettings == null)
+            {
+                Debug.LogWarning($"CharacterProfile: Equipped ItemSettings not found for id {saveData.itemSettingsUniqueId}");
+                return null;
+            }
+
+            return new InventoryItem(itemSettings, 1) { IsEquipped = true };
         }
         public void ResetData()
         {
@@ -344,34 +337,59 @@ namespace Angry_Girls
 
 
 
+        /// <summary>
+        /// Equips exactly one unit of the given inventory stack into the slot.
+        /// The previously equipped item returns to the inventory as a single unit.
+        /// </summary>
         public bool EquipItem(InventoryItem item, ItemType slotType, int accessorySlotIndex = 0)
         {
-            if (item == null || !IsCompatible(item.ItemSettings.ItemType, slotType))
+            if (item?.ItemSettings == null || !IsCompatible(item.ItemSettings.ItemType, slotType))
+                return false;
+
+            if (slotType == ItemType.Accessory && accessorySlotIndex != 0 && accessorySlotIndex != 1)
+                return false;
+
+            if (slotType != ItemType.Weapon && slotType != ItemType.Armor && slotType != ItemType.Accessory)
+                return false;
+
+            var inventory = CoreManager.Instance.InventoryManager;
+            var itemSettings = item.ItemSettings;
+
+            // Validate before touching the slot so a failed equip never leaves the character half-changed.
+            if (inventory.GetQuantity(itemSettings.UniqueId) < 1)
                 return false;
 
             UnequipItem(slotType, accessorySlotIndex);
 
+            // Take exactly one unit out of the stack, the rest of the stack stays in the inventory.
+            if (!inventory.RemoveItem(itemSettings, 1))
+            {
+                UpdateItemsList();
+                return false;
+            }
+
+            var equippedItem = new InventoryItem(itemSettings, 1)
+            {
+                IsEquipped = true,
+                UpgradeLevel = item.UpgradeLevel
+            };
+
             switch (slotType)
             {
                 case ItemType.Weapon:
-                    Weapon = item;
+                    Weapon = equippedItem;
                     break;
                 case ItemType.Armor:
-                    Armor = item;
+                    Armor = equippedItem;
                     break;
                 case ItemType.Accessory:
                     if (accessorySlotIndex == 0)
-                        Accessory1 = item;
-                    else if (accessorySlotIndex == 1)
-                        Accessory2 = item;
+                        Accessory1 = equippedItem;
                     else
-                        return false;
+                        Accessory2 = equippedItem;
                     break;
-                default:
-                    return false;
             }
 
-            CoreManager.Instance.InventoryManager.RemoveItem(item);
             UpdateItemsList();
             return true;
         }

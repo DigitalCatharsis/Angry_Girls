@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace Angry_Girls
 {
@@ -69,7 +68,10 @@ namespace Angry_Girls
         public ShopAvailability ShopAvailability => _shopAvailability;
         public bool IsAvailableInShop => _shopAvailability != ShopAvailability.None;
 
-        public string UniqueId { get; set; }
+        [Header("Identity")]
+        [Tooltip("Stable identifier used by save files and repositories. Assigned automatically from the asset GUID in the editor.")]
+        [SerializeField] private string _uniqueId;
+        public string UniqueId => _uniqueId;
 
         [Header("Upgrades")]
         [SerializeField] private bool _isUpgradable = false;
@@ -88,7 +90,24 @@ namespace Angry_Girls
         public float DamageBonusPerLevel => _damageBonusPerLevel;
 
         [Header("Visual")]
-        [SerializeField] private AssetReferenceT<Sprite> _iconReference;
-        public AssetReferenceT<Sprite> IconReference => _iconReference;
+        [SerializeField] private Sprite _icon;
+        public Sprite Icon => _icon;
+
+#if UNITY_EDITOR
+        /// <summary>
+        /// Keeps the unique id in sync with the asset GUID (also covers duplicated assets).
+        /// </summary>
+        private void OnValidate()
+        {
+            var path = UnityEditor.AssetDatabase.GetAssetPath(this);
+            if (string.IsNullOrEmpty(path)) return;
+
+            var guid = UnityEditor.AssetDatabase.AssetPathToGUID(path);
+            if (_uniqueId == guid) return;
+
+            _uniqueId = guid;
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+#endif
     }
 }

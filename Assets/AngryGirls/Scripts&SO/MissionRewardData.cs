@@ -1,5 +1,4 @@
 using System;
-using UnityEngine.AddressableAssets;
 
 namespace Angry_Girls
 {
@@ -15,7 +14,7 @@ namespace Angry_Girls
         public int creditsAmount = 0;
 
         // For Item reward
-        public AssetReference assetReference;
+        public ItemSettings itemSettings;
         public int itemQuantity = 1;
 
         // For Character reward
@@ -29,7 +28,7 @@ namespace Angry_Girls
             return rewardType switch
             {
                 RewardType.Credits => creditsAmount > 0,
-                RewardType.Item => !string.IsNullOrEmpty(assetReference.AssetGUID),
+                RewardType.Item => itemSettings != null && itemQuantity > 0,
                 RewardType.Character => characterType != CharacterType.NULL,
                 RewardType.None => true,
                 _ => false
