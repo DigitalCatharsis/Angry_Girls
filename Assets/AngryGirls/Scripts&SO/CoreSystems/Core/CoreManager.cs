@@ -30,6 +30,11 @@ namespace Angry_Girls
         public InventoryManager InventoryManager { get; private set; }
         public ShopSettings ShopSettings => _shopSettings;
 
+        [Header("Progression")]
+        [SerializeField] private ProgressionConfig _progressionConfig;
+        public ProgressionConfig ProgressionConfig => _progressionConfig;
+        public ExperienceService ExperienceService { get; private set; }
+
         [Header("Default Save Template")]
         [SerializeField] private DefaultSaveTemplate _defaultSaveTemplate;
         public DefaultSaveTemplate DefaultSaveTemplate => _defaultSaveTemplate;
@@ -49,6 +54,13 @@ namespace Angry_Girls
                 PoolManager = new PoolManager();
                 CreditsManager = new CreditsManager();
                 ItemSettingsRepository.Initialize();
+
+                if (_progressionConfig == null)
+                {
+                    throw new InvalidOperationException("CoreManager: ProgressionConfig is not assigned!");
+                }
+
+                ExperienceService = new ExperienceService(_progressionConfig);
 
                 MissionsManager = GetComponentInChildren<MissionsManager>();
                 this.MissionsManager.Initialize(_defaultSaveTemplate);

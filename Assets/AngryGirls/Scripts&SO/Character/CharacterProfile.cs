@@ -13,6 +13,12 @@ namespace Angry_Girls
         public InventoryItemSaveData armorInventoryItemSaveData;
         public InventoryItemSaveData accessory1InventoryItemSaveData;
         public InventoryItemSaveData accessory2InventoryItemSaveData;
+
+        /// <summary>Character level. Defaults to 1 so saves created before the progression system still load.</summary>
+        public int level = 1;
+
+        /// <summary>Experience collected inside the current level.</summary>
+        public int experience = 0;
     }
 
     /// <summary>
@@ -102,7 +108,8 @@ namespace Angry_Girls
             CharactersStatsBase itemStats,
             Color totalColor,
             Color baseColor,
-            Color bonusColor)
+            Color bonusColor,
+            string levelLine = null)
         {
             baseStats ??= new CharactersStatsBase();
             itemStats ??= new CharactersStatsBase();
@@ -123,7 +130,9 @@ namespace Angry_Girls
                 baseColor,
                 bonusColor);
 
-            return $"Character Stats:\n\n{healthText}\n{damageText}";
+            var levelBlock = string.IsNullOrEmpty(levelLine) ? string.Empty : $"{levelLine}\n";
+
+            return $"Character Stats:\n\n{levelBlock}{healthText}\n{damageText}";
         }
 
         /// <summary>
@@ -218,7 +227,120 @@ namespace Angry_Girls
             }
         }
 
-        public CharactersStatsBase GetSettingsStats => _characterSettings.characterStats;
+        #region Progression
+
+        private float _healthMultiplier = 1f;
+        private float _damageMultiplier = 1f;
+
+        /// <summary>Current level, starts from 1.</summary>
+        public int Level { get; private set; } = 1;
+
+        /// <summary>Experience collected inside the current level.</summary>
+        public int Experience { get; private set; }
+
+        public event Action OnProgressChanged;
+
+        private static ProgressionConfig Config => CoreManager.Instance != null ? CoreManager.Instance.ProgressionConfig : null;
+
+        public int MaxLevel => Config != null ? Config.MaxLevel : 1;
+        public bool IsMaxLevel => Level >= MaxLevel;
+
+        /// <summary>Experience needed to reach the next level, zero on the maximum level.</summary>
+        public int XpToNextLevel => Config != null ? Config.GetXpToNextLevel(Level) : 0;
+
+        /// <summary>
+        /// Base stats of the character scaled to its level (and to the difficulty multipliers for enemies).
+        /// </summary>
+        public CharactersStatsBase GetSettingsStats
+        {
+            get
+            {
+                var baseStats = _characterSettings != null ? _characterSettings.characterStats : null;
+                var config = Config;
+
+                // Progression is not configured: behave like a plain level 1 character.
+                if (config == null)
+                    return new CharactersStatsBase(baseStats);
+
+                return config.CalculateLevelStats(baseStats, Level, _healthMultiplier, _damageMultiplier);
+            }
+        }
+
+        /// <summary>
+        /// Adds experience and performs all level ups it pays for. Returns the number of gained levels.
+        /// </summary>
+        public int AddExperience(int amount)
+        {
+            var config = Config;
+            if (amount <= 0 || config == null || IsMaxLevel)
+                return 0;
+
+            var gainedLevels = 0;
+            long pool = (long)Experience + amount;
+
+            while (Level < config.MaxLevel)
+            {
+                var needed = config.GetXpToNextLevel(Level);
+                if (pool < needed)
+                    break;
+
+                pool -= needed;
+                Level++;
+                gainedLevels++;
+            }
+
+            Experience = Level >= config.MaxLevel ? 0 : (int)pool;
+            OnProgressChanged?.Invoke();
+            return gainedLevels;
+        }
+
+        /// <summary>
+        /// Sets the level directly and clears the experience of the level.
+        /// </summary>
+        public void SetLevel(int level)
+        {
+            var config = Config;
+            Level = config != null ? config.ClampLevel(level) : Mathf.Max(1, level);
+            Experience = 0;
+            OnProgressChanged?.Invoke();
+        }
+
+        /// <summary>
+        /// Prepares the profile of an enemy: level plus the extra difficulty multipliers.
+        /// </summary>
+        public void ConfigureAsEnemy(int level, float healthMultiplier, float damageMultiplier)
+        {
+            SetLevel(level);
+            _healthMultiplier = Mathf.Max(0.01f, healthMultiplier);
+            _damageMultiplier = Mathf.Max(0.01f, damageMultiplier);
+        }
+
+        /// <summary>
+        /// Short level description for UI, for example "Level: 5 (XP 120 / 450)".
+        /// </summary>
+        public string GetLevelSummaryText()
+        {
+            return IsMaxLevel
+                ? $"Level: {Level} (MAX)"
+                : $"Level: {Level} (XP {Experience} / {XpToNextLevel})";
+        }
+
+        /// <summary>
+        /// Restores saved progress and repairs values that cannot be valid (corrupted or edited saves).
+        /// </summary>
+        private void RestoreProgress(int savedLevel, int savedExperience)
+        {
+            var config = Config;
+            Level = config != null ? config.ClampLevel(savedLevel) : Mathf.Max(1, savedLevel);
+
+            var xpLimit = config != null ? config.GetXpToNextLevel(Level) : 0;
+            Experience = xpLimit > 0 ? Mathf.Clamp(savedExperience, 0, xpLimit - 1) : 0;
+
+            _healthMultiplier = 1f;
+            _damageMultiplier = 1f;
+        }
+
+        #endregion
 
         public CharactersStatsBase GetCurrentStats
         {
@@ -257,6 +379,8 @@ namespace Angry_Girls
             return new CharacterProfileSaveData
             {
                 characterType = _characterSettings?.characterType ?? CharacterType.NULL,
+                level = Level,
+                experience = Experience,
                 weaponInventoryItemSaveData = Weapon != null && Weapon.ItemSettings != null
                     ? new InventoryItemSaveData(Weapon.ItemSettings.UniqueId)
                     : null,
@@ -294,6 +418,7 @@ namespace Angry_Girls
                 Debug.LogWarning($"CharacterProfile.UpdateFromSaveAsync: Failed to load settings for type {saveData.characterType}");
             }
 
+            RestoreProgress(saveData.level, saveData.experience);
             LoadEquipmentFromSave(saveData);
 
             await UniTask.CompletedTask;
@@ -332,6 +457,10 @@ namespace Angry_Girls
             Armor = null;
             Accessory1 = null;
             Accessory2 = null;
+            Level = 1;
+            Experience = 0;
+            _healthMultiplier = 1f;
+            _damageMultiplier = 1f;
             UpdateItemsList();
         }
 

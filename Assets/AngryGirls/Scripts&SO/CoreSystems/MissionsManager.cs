@@ -134,5 +134,30 @@ namespace Angry_Girls
 
         public IReadOnlyList<Mission> GetMissionsFromRepository() =>
             _missionsRepository?.Missions;
+
+        public Mission GetMission(SceneType missionId) =>
+            _missionsRepository?.GetMissionBySceneType(missionId);
+
+        /// <summary>
+        /// Level of the enemies of the mission on the given difficulty.
+        /// </summary>
+        public int GetEnemyLevel(Mission mission, MissionDifficulty difficulty)
+        {
+            var config = CoreManager.Instance.ProgressionConfig;
+            var baseLevel = mission != null ? mission.baseEnemyLevel : 1;
+            return config.GetEnemyLevel(baseLevel, difficulty);
+        }
+
+        /// <summary>
+        /// Enemy level of the mission that is currently being played.
+        /// </summary>
+        public int GetCurrentEnemyLevel() =>
+            GetEnemyLevel(GetMission(CurrentMission), CurrentDifficulty);
+
+        /// <summary>
+        /// Experience multiplier of the mission that is currently being played.
+        /// </summary>
+        public float GetCurrentMissionXpMultiplier() =>
+            GetMission(CurrentMission)?.xpMultiplier ?? 1f;
     }
 }

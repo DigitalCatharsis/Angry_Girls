@@ -49,6 +49,11 @@ MonoBehaviour:
       isMissionAvailable: 1
       isMissionCompleted: 0
       isRewardReceived: 0
+    baseEnemyLevel: 1
+    xpMultiplier: 1
+    stagesEasy: 0
+    stagesNormal: 0
+    stagesHard: 0
     icon: {fileID: 21300000, guid: ff697dd3e0c9f9a44bb3e47c39eb7682, type: 3}
     preview: {fileID: 21300000, guid: c7e3eeb4bca20684b9908e302e228424, type: 3}
   - missionName: 6
@@ -87,6 +92,11 @@ MonoBehaviour:
       isMissionAvailable: 0
       isMissionCompleted: 0
       isRewardReceived: 0
+    baseEnemyLevel: 3
+    xpMultiplier: 1
+    stagesEasy: 0
+    stagesNormal: 0
+    stagesHard: 0
     icon: {fileID: 21300000, guid: b545c566630055a4182c519c474e6e3b, type: 3}
     preview: {fileID: 21300000, guid: d989e2f0ed1cb614c8890fce2cef3285, type: 3}
   - missionName: 5
@@ -125,6 +135,11 @@ MonoBehaviour:
       isMissionAvailable: 0
       isMissionCompleted: 0
       isRewardReceived: 0
+    baseEnemyLevel: 5
+    xpMultiplier: 1
+    stagesEasy: 0
+    stagesNormal: 0
+    stagesHard: 0
     icon: {fileID: 21300000, guid: c7e3eeb4bca20684b9908e302e228424, type: 3}
     preview: {fileID: 21300000, guid: c7e3eeb4bca20684b9908e302e228424, type: 3}
   - missionName: 8
@@ -163,6 +178,11 @@ MonoBehaviour:
       isMissionAvailable: 0
       isMissionCompleted: 0
       isRewardReceived: 0
+    baseEnemyLevel: 7
+    xpMultiplier: 1
+    stagesEasy: 2
+    stagesNormal: 2
+    stagesHard: 2
     icon: {fileID: 21300000, guid: 1b4aca50b1cc5a64e88cba8e9cf3aea8, type: 3}
     preview: {fileID: 21300000, guid: 39ec0be99293ba04189c3ef3c8b1fdb5, type: 3}
   - missionName: 9
@@ -201,6 +221,11 @@ MonoBehaviour:
       isMissionAvailable: 0
       isMissionCompleted: 0
       isRewardReceived: 0
+    baseEnemyLevel: 9
+    xpMultiplier: 1
+    stagesEasy: 1
+    stagesNormal: 2
+    stagesHard: 2
     icon: {fileID: 21300000, guid: 8e792aa8425427f4390b870b83fbc0df, type: 3}
     preview: {fileID: 21300000, guid: 56d8f8bd114da594890b4fc00b03348b, type: 3}
   - missionName: 10
@@ -239,5 +264,10 @@ MonoBehaviour:
       isMissionAvailable: 0
       isMissionCompleted: 0
       isRewardReceived: 0
+    baseEnemyLevel: 12
+    xpMultiplier: 1.1
+    stagesEasy: 2
+    stagesNormal: 3
+    stagesHard: 3
     icon: {fileID: 21300000, guid: e336febe1290dde4da0f117d67c41bd7, type: 3}
     preview: {fileID: 21300000, guid: 19034736f6575f84daf35131dd1132f6, type: 3}

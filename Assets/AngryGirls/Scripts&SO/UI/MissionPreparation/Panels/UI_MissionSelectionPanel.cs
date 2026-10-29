@@ -229,7 +229,7 @@ namespace Angry_Girls
             {
                 var briefing = string.IsNullOrWhiteSpace(mission.description) ? string.Empty : $"\n\n{mission.description}";
                 _missionDescription.text =
-                    $"Mission: {mission.GetDisplayName()}\nDifficulty: {difficulty}{briefing}";
+                    $"Mission: {mission.GetDisplayName()}\nDifficulty: {difficulty}\n<size=60%>{BuildBalanceText(mission, difficulty, missionData)}{briefing}</size>";
             }
 
             // Show checkmark if reward was already claimed
@@ -237,6 +237,45 @@ namespace Angry_Girls
                 _rewardReceivedCheckmark.SetActive(missionData.isRewardReceived);
 
             UpdateRewardDisplay(missionData);
+        }
+
+        /// <summary>
+        /// Enemy level, stage count and the experience estimate of the mission on the given difficulty.
+        /// </summary>
+        private string BuildBalanceText(Mission mission, MissionDifficulty difficulty, MissionData missionData)
+        {
+            var core = CoreManager.Instance;
+            var config = core.ProgressionConfig;
+            var enemyLevel = _missionsManager.GetEnemyLevel(mission, difficulty);
+            var xp = config.CalculateBaseMissionXp(enemyLevel, difficulty, mission.xpMultiplier);
+
+            var text = $"Enemy level: {enemyLevel}";
+
+            var stages = mission.GetStageCount(difficulty);
+            if (stages > 0)
+                text += $"   Stages: {stages}";
+
+            text += $"\nXP per character: ~{xp}";
+            if (!missionData.isMissionCompleted)
+                text += $" (+{Mathf.RoundToInt(config.FirstClearXpBonus * 100f)}% first clear)";
+
+            var team = core.CharactersManager.CharactersData?.SelectedCharactersPool;
+            if (team != null)
+            {
+                var sum = 0;
+                var count = 0;
+                foreach (var profile in team)
+                {
+                    if (profile == null) continue;
+                    sum += profile.Level;
+                    count++;
+                }
+
+                if (count > 0)
+                    text += $"\nTeam average level: {Mathf.RoundToInt((float)sum / count)}";
+            }
+
+            return text;
         }
 
         /// <summary>

@@ -319,7 +319,8 @@ namespace Angry_Girls
                 itemsStats,
                 _statsTotalColor,
                 _statsBaseColor,
-                _statsBonusColor);
+                _statsBonusColor,
+                slot.Character.GetLevelSummaryText());
         }
 
         private void OnPointerExited(UI_CharacterSlot slot)
@@ -490,7 +491,8 @@ namespace Angry_Girls
                 itemsStats,
                 _statsTotalColor,
                 _statsBaseColor,
-                _statsBonusColor);
+                _statsBonusColor,
+                _selectedCharacter.GetLevelSummaryText());
         }
 
         /// <summary>

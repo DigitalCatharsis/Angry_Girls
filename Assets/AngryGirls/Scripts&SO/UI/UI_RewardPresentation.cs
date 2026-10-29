@@ -99,10 +99,17 @@ namespace Angry_Girls
             var rewarddata = missionData.rewardData;
             var alreadyReceived = missionData.isRewardReceived;
 
+            // Must be read before the mission is marked as completed.
+            var isFirstClear = !missionData.isMissionCompleted;
+
             RewardGrantResult rewardGrantResult = await _rewardService.GrantRewardAsync(rewarddata, coins, alreadyReceived);
+            var xpResults = AwardExperience(isFirstClear);
             _missionsManager.CompleteCurrentMission();
 
-            var presentationData = BuildPresentationData(rewardGrantResult, coins);
+            // Persist right away: experience and the reward must not be lost if the game is closed on this screen.
+            CoreManager.Instance.SaveLoadManager.SaveGame();
+
+            var presentationData = BuildPresentationData(rewardGrantResult, coins, xpResults);
 
             gameObject.SetActive(true);
             if (_continueButton != null) _continueButton.interactable = false;
@@ -170,7 +177,10 @@ namespace Angry_Girls
         /// <summary>
         /// Builds the data package for reward presentation display.
         /// </summary>
-        private RewardPresentationData BuildPresentationData(RewardGrantResult rewardResult, int collectedCoins)
+        private RewardPresentationData BuildPresentationData(
+            RewardGrantResult rewardResult,
+            int collectedCoins,
+            List<CharacterXpResult> xpResults)
         {
             var data = new RewardPresentationData
             {
@@ -179,25 +189,56 @@ namespace Angry_Girls
                 characterEntries = new List<CharacterRewardEntry>()
             };
 
-            var charactersData = CoreManager.Instance.CharactersManager.CharactersData;
-            if (charactersData != null)
+            foreach (var result in xpResults)
             {
-                foreach (var character in charactersData.SelectedCharactersPool)
+                data.characterEntries.Add(new CharacterRewardEntry
                 {
-                    if (character?.CharacterSettings == null) continue;
-
-                    data.characterEntries.Add(new CharacterRewardEntry
-                    {
-                        characterSettings = character.CharacterSettings,
-                        xpGained = UnityEngine.Random.Range(50, 200),
-                        currentLevel = UnityEngine.Random.Range(1, 10),
-                        currentXp = UnityEngine.Random.Range(100, 500),
-                        xpForNextLevel = 1000
-                    });
-                }
+                    characterSettings = result.Profile.CharacterSettings,
+                    xpGained = result.XpGained,
+                    survived = result.Survived,
+                    currentLevel = result.LevelAfter,
+                    currentXp = result.XpAfter,
+                    xpForNextLevel = result.XpToNextAfter,
+                    previousLevel = result.LevelBefore,
+                    previousXp = result.XpBefore,
+                    previousXpForNextLevel = result.XpToNextBefore,
+                    healthGain = result.HealthGain,
+                    damageGain = result.DamageGain
+                });
             }
 
             return data;
+        }
+
+        /// <summary>
+        /// Awards the experience of the completed mission to the team and returns the per character results.
+        /// </summary>
+        private List<CharacterXpResult> AwardExperience(bool isFirstClear)
+        {
+            var core = CoreManager.Instance;
+            var team = core.CharactersManager.CharactersData?.SelectedCharactersPool;
+            if (team == null)
+                return new List<CharacterXpResult>();
+
+            // Characters that are still alive on the field get a survivor bonus.
+            var survivors = new HashSet<CharacterProfile>();
+            var gameplayCharacters = GameplayCoreManager.Instance?.GameplayCharactersManager;
+            if (gameplayCharacters != null)
+            {
+                foreach (var unit in gameplayCharacters.GetAliveCharacters(PlayerOrAi.Player))
+                {
+                    if (unit != null && unit.profile != null)
+                        survivors.Add(unit.profile);
+                }
+            }
+
+            var context = new MissionXpContext(
+                _missionsManager.GetCurrentEnemyLevel(),
+                _missionsManager.CurrentDifficulty,
+                _missionsManager.GetCurrentMissionXpMultiplier(),
+                isFirstClear);
+
+            return core.ExperienceService.AwardMissionExperience(team, survivors, context);
         }
 
         /// <summary>

@@ -235,7 +235,13 @@ namespace Angry_Girls
             {
                 var baseStats = slot.Character.GetSettingsStats;
                 var itemsStats = slot.Character.GetItemsStats;
-                _statsText.text = CharactersStatsBase.GetColoredText(baseStats, itemsStats);
+                _statsText.text = CharactersStatsBase.GetColoredText(
+                    baseStats,
+                    itemsStats,
+                    Color.black,
+                    Color.grey,
+                    Color.green,
+                    slot.Character.GetLevelSummaryText());
             }
         }
 

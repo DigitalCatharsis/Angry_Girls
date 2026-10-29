@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 
@@ -32,6 +32,7 @@ namespace Angry_Girls
                 if (settings != null)
                 {
                     var profile = new CharacterProfile(settings);
+                    profile.SetLevel(template.startingCharacterLevel);
                     _charactersData.SetSelectedCharacter(slot, profile);
                     slot++;
                     Debug.Log($"CharactersManager: Added '{settings.name}' to selected slot {slot - 1}");
@@ -51,6 +52,7 @@ namespace Angry_Girls
                 if (settings != null)
                 {
                     var profile = new CharacterProfile(settings);
+                    profile.SetLevel(template.startingCharacterLevel);
                     _charactersData.AddCharacterToAvailable(profile);
                     Debug.Log($"CharactersManager: Added '{settings.name}' to available pool");
                 }

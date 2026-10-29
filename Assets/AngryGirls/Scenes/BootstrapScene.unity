@@ -1065,6 +1065,7 @@ MonoBehaviour:
   _itemSettingsRepository: {fileID: 11400000, guid: b9d4c958bdef7b84e9512da366dbbffd, type: 2}
   _shopSettings: {fileID: 11400000, guid: 5794edb213014034b9ea147ca2894578, type: 2}
   _platformSettingsCatalog: {fileID: 11400000, guid: 3031201671afce1419194f3e2757175e, type: 2}
+  _progressionConfig: {fileID: 11400000, guid: bb5c4ecd40ebde740aef9b5333e8904c, type: 2}
   _defaultSaveTemplate: {fileID: 11400000, guid: ae4ea7e3888a907498cea90b2b1672f1, type: 2}
   _characterSettingsCatalogSO: {fileID: 11400000, guid: ece468ce6ea70884ab7494d8f97ede89, type: 2}
 --- !u!1660057539 &9223372036854775807

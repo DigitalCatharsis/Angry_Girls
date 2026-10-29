@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Angry_Girls
@@ -117,6 +118,12 @@ namespace Angry_Girls
             if (!isObtained)
             {
                 var profile = new CharacterProfile(settings);
+
+                // A new character joins close to the level of the roster, so it is not useless on arrival.
+                var charactersData = _charactersManager.CharactersData;
+                var roster = charactersData.SelectedCharactersPool.Concat(charactersData.AvailableCharacterPool);
+                profile.SetLevel(CoreManager.Instance.ExperienceService.GetRecruitLevel(roster));
+
                 _charactersManager.AddCharacterToAvailablePool(profile);
             }
 

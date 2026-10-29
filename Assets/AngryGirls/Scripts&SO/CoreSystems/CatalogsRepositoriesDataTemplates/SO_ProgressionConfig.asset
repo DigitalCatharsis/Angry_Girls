@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 261beb63de23a9645be80669c388ca93, type: 3}
+  m_Name: SO_ProgressionConfig
+  m_EditorClassIdentifier: Angry_Girls::Angry_Girls.ProgressionConfig
+  _maxLevel: 30
+  _xpBase: 100
+  _xpExponent: 1.5
+  _xpRounding: 5
+  _healthGrowth:
+    linear: 0.1
+    quadratic: 0.0015
+  _damageGrowth:
+    linear: 0.07
+    quadratic: 0.001
+  _missionBaseXp: 55
+  _missionXpExponent: 1.2
+  _levelGapXpPerLevel: 0.12
+  _minLevelGapXpFactor: 0.2
+  _maxLevelGapXpFactor: 1.4
+  _firstClearXpBonus: 0.5
+  _survivorXpBonus: 0.25
+  _recruitLevelOffset: -2
+  _difficulties:
+  - difficulty: 0
+    enemyLevelOffset: 0
+    enemyHealthMultiplier: 1
+    enemyDamageMultiplier: 1
+    xpMultiplier: 1
+  - difficulty: 1
+    enemyLevelOffset: 4
+    enemyHealthMultiplier: 1.2
+    enemyDamageMultiplier: 1.15
+    xpMultiplier: 1.15
+  - difficulty: 2
+    enemyLevelOffset: 9
+    enemyHealthMultiplier: 1.45
+    enemyDamageMultiplier: 1.3
+    xpMultiplier: 1.3

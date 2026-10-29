@@ -16,7 +16,16 @@ namespace Angry_Girls
         //private TurnManager _turnManager;
         private GameplayCharactersManager _charactersManager;
 
+        // Stages that are active on the selected difficulty. Stage indices always refer to this list.
+        private readonly List<StageData> _activeStages = new();
+        private MissionDifficulty _difficulty = MissionDifficulty.Normal;
+        private int _enemyLevel = 1;
+        private DifficultyTuning _difficultyTuning = new();
+
         public int CurrentStageIndex => _currentStageIndex;
+        public int StageCount => _activeStages.Count;
+        public int EnemyLevel => _enemyLevel;
+        public MissionDifficulty Difficulty => _difficulty;
         public CharacterLauncher CurrentCharacterLauncher => _currentCharacterLauncher;
 
         public Action<int> TheStageIsSet;
@@ -27,14 +36,62 @@ namespace Angry_Girls
         {
             //_turnManager = GameplayCoreManager.Instance.TurnManager;
             _charactersManager = GameplayCoreManager.Instance.GameplayCharactersManager;
+
+            ResolveMissionSettings();
+            BuildActiveStages();
+
             isInitialized = true;
+        }
+
+        /// <summary>
+        /// Reads the selected mission and difficulty: they define the enemy level and the stage setup.
+        /// </summary>
+        private void ResolveMissionSettings()
+        {
+            var core = CoreManager.Instance;
+            var missions = core.MissionsManager;
+
+            _difficulty = missions.CurrentDifficulty;
+            _enemyLevel = missions.GetCurrentEnemyLevel();
+            _difficultyTuning = core.ProgressionConfig.GetDifficulty(_difficulty);
+
+            Debug.Log($"StageManager: mission {missions.CurrentMission}, difficulty {_difficulty}, enemy level {_enemyLevel}");
+        }
+
+        /// <summary>
+        /// Keeps only the stages that are enabled for the selected difficulty.
+        /// </summary>
+        private void BuildActiveStages()
+        {
+            _activeStages.Clear();
+
+            foreach (var stage in _stages)
+            {
+                if (stage == null || stage.minDifficulty > _difficulty)
+                    continue;
+
+                _activeStages.Add(stage);
+            }
+
+            if (_activeStages.Count == 0)
+            {
+                Debug.LogError($"StageManager: no stages are available for difficulty {_difficulty}.", this);
+                return;
+            }
+
+            var mission = CoreManager.Instance.MissionsManager.GetMission(CoreManager.Instance.MissionsManager.CurrentMission);
+            var configuredCount = mission != null ? mission.GetStageCount(_difficulty) : 0;
+            if (configuredCount > 0 && configuredCount != _activeStages.Count)
+            {
+                Debug.LogWarning($"StageManager: mission data says {configuredCount} stages for {_difficulty}, the scene has {_activeStages.Count}.", this);
+            }
         }
 
         public void SetupCurrentStage()
         {
             ClearCurrentScene();
             
-            var stage = _stages[_currentStageIndex];
+            var stage = _activeStages[_currentStageIndex];
             _currentCharacterLauncher = SpawnCharacterLauncher(stage).GetComponent<CharacterLauncher>();
             _currentCharacterLauncher.InitLauncher();
 
@@ -61,7 +118,7 @@ namespace Angry_Girls
 
         public bool HasNextStage()
         {
-            return _currentStageIndex + 1 < _stages.Count;
+            return _currentStageIndex + 1 < _activeStages.Count;
         }
 
         private void SpawnEnemies(StageData stage)
@@ -74,7 +131,15 @@ namespace Angry_Girls
                     continue;
                 }
 
+                // Enemies that belong to a higher difficulty only are not spawned here.
+                if (enemyData.minDifficulty > _difficulty)
+                    continue;
+
                 var characterProfile = new CharacterProfile(enemyData.CharacterSettings);
+                characterProfile.ConfigureAsEnemy(
+                    _enemyLevel,
+                    _difficultyTuning.enemyHealthMultiplier,
+                    _difficultyTuning.enemyDamageMultiplier);
                 characterProfile.ModifyBonusStats(enemyData.BonusStats);
 
                 var character = _charactersManager.SpawnEnemy(characterProfile, enemyData.spawnTransform);
@@ -99,6 +164,8 @@ namespace Angry_Girls
     [System.Serializable]
     public class StageData
     {
+        [Tooltip("The stage exists on this difficulty and on all harder ones.")]
+        public MissionDifficulty minDifficulty = MissionDifficulty.Easy;
         public List<EnemyStageData> enemies;
         public CharacterLauncherData characterLauncherData;
     }
@@ -106,6 +173,8 @@ namespace Angry_Girls
     [System.Serializable]
     public class EnemyStageData
     {
+        [Tooltip("The enemy spawns on this difficulty and on all harder ones.")]
+        public MissionDifficulty minDifficulty = MissionDifficulty.Easy;
         public CharactersStatsBase BonusStats;
         public CharacterSettings CharacterSettings;
         public Transform spawnTransform;

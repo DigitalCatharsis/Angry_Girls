@@ -24,6 +24,10 @@ namespace Angry_Girls
         [Header("Available Characters (pool to choose from)")]
         public List<CharacterType> availableCharacters = new List<CharacterType>();
 
+        [Header("Character Progression")]
+        [Tooltip("Level of the starting characters of a new game")]
+        [Min(1)] public int startingCharacterLevel = 1;
+
         [Header("Starting Inventory")]
         [Tooltip("Items that will be added to player inventory on new game")]
         public List<InventoryItemTemplate> startingInventory = new List<InventoryItemTemplate>();

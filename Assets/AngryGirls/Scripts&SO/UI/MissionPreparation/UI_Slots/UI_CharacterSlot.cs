@@ -23,6 +23,9 @@ namespace Angry_Girls
         [Header("UI Components")]
         [SerializeField] private Image _characterPortrait;
         [SerializeField] private Button _button;
+        [SerializeField] private TMPro.TextMeshProUGUI _levelText;
+        [Tooltip("Optional container of the level label, it is hidden together with the label.")]
+        [SerializeField] private GameObject _levelBadge;
 
         [Header("Selection")]
         [SerializeField] private GameObject _selectionHighlight;
@@ -47,6 +50,8 @@ namespace Angry_Girls
         /// </summary>
         public UniTask SetCharacter(CharacterProfile character, CharacterSlotType slotType)
         {
+            UnsubscribeFromCharacter();
+
             Character = character;
             SlotType = slotType;
 
@@ -57,6 +62,9 @@ namespace Angry_Girls
                 Clear();
                 return UniTask.CompletedTask;
             }
+
+            character.OnProgressChanged += RefreshLevelLabel;
+            RefreshLevelLabel();
 
             var portrait = character.CharacterSettings != null ? character.CharacterSettings.portrait : null;
 
@@ -75,7 +83,9 @@ namespace Angry_Girls
         /// </summary>
         public void Clear()
         {
+            UnsubscribeFromCharacter();
             Character = null;
+            RefreshLevelLabel();
             SetSelected(false);
 
             if (_characterPortrait != null)
@@ -117,8 +127,27 @@ namespace Angry_Girls
                 _button.interactable = Character != null;
         }
 
+        private void RefreshLevelLabel()
+        {
+            if (_levelText == null)
+                return;
+
+            var badge = _levelBadge != null ? _levelBadge : _levelText.gameObject;
+            badge.SetActive(Character != null);
+            if (Character != null)
+                _levelText.text = $"Lv.{Character.Level}";
+        }
+
+        private void UnsubscribeFromCharacter()
+        {
+            if (Character != null)
+                Character.OnProgressChanged -= RefreshLevelLabel;
+        }
+
         private void OnDestroy()
         {
+            UnsubscribeFromCharacter();
+
             if (_button != null)
                 _button.onClick.RemoveListener(HandleClick);
         }

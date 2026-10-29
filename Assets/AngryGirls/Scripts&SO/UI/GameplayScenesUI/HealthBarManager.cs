@@ -43,12 +43,13 @@ namespace Angry_Girls
 
             slider.maxValue = character.Health.MaxHealth;
             slider.value = character.Health.CurrentHealth;
-            text.text = $"{(int)character.Health.CurrentHealth}/{(int)character.Health.MaxHealth}";
+            var levelPrefix = character.profile != null ? $"Lv.{character.profile.Level} " : string.Empty;
+            text.text = $"{levelPrefix}{(int)character.Health.CurrentHealth}/{(int)character.Health.MaxHealth}";
 
             character.Health.OnHealthChanged += (newHealth) =>
             {
                 slider.value = newHealth;
-                text.text = $"{(int)newHealth}/{(int)character.Health.MaxHealth}";
+                text.text = $"{levelPrefix}{(int)newHealth}/{(int)character.Health.MaxHealth}";
             };
 
             character.Health.OnDeath += () =>
